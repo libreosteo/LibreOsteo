@@ -1,9 +1,8 @@
 ============
  LibreOsteo
 ============
-.. include:: <isonum.txt>
 
-|copy| Jean-Baptiste Gury (garthylou) 2011
+(C) Jean-Baptiste Gury (garthylou) 2011
 
 *LibreOsteo*
 

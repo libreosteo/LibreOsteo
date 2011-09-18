@@ -17,23 +17,28 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
-
-import pygtk
 import gtk
+import pygtk
+from views.contentview import HomeContent
+
+
 pygtk.require("2.0")
 
+
 class MainView(object):
+
     def __init__(self):
+
         builder = gtk.Builder()
-        builder.add_from_file("gtkbuilder/libreosteo-gui.glade")
+        builder.add_from_file("views/gtkbuilder/libreosteo-gui.glade")
         builder.connect_signals(self)
+        ## Init and attach home content
+        home_content = HomeContent(builder.get_object("hpanedLayoutContainer"))
+
+        ## show window
         self.windowMain = builder.get_object("windowMain")
         self.windowMain.show()
 
-    def on_windowMain_destroy(self,widget,data=None):
-      gtk.main_quit()
+    def on_windowMain_destroy(self, widget, data=None):
+        gtk.main_quit()
 
-if __name__ == "__main__":
-    print "test"
-    app = MainView()
-    gtk.main()

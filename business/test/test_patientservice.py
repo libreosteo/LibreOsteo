@@ -21,8 +21,8 @@
 import unittest
 import sys
 sys.path.append("..")
-from patientservice import Base
-from patientservice import Patient, RegularDoctor, Children
+from businessmodel import Base
+from patientmodel import Patient, RegularDoctor, Children
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import date
@@ -35,16 +35,16 @@ class TestPatientService(unittest.TestCase):
 
         self.child1_values = [u'Dupond', u'Marc', date(2001,1,5)]
         self.child2_values = [u'Dupond', u'Fredéric', date(2003, 5, 1)]
-        
+
         self.engine = create_engine('sqlite:///:memory:', echo=True)
         Base.metadata.create_all(self.engine)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
-        
+
 
     def test_init(self):
         patient = Patient(self.patient1_values[0], self.patient1_values[1], self.patient1_values[2], self.patient1_values[3], self.patient1_values[4], self.patient1_values[5], self.patient1_values[6], self.patient1_values[7], self.patient1_values[8])
-        
+
         self.assertEqual(self.patient1_values[0], patient.family_name)
         self.assertEqual(self.patient1_values[1], patient.firstname)
         self.assertEqual(self.patient1_values[2], patient.birth_date)
@@ -89,7 +89,7 @@ class TestPatientService(unittest.TestCase):
         patient.address_city = self.patient1_values[6]
         patient.phone = self.patient1_values[7]
         patient.family_situation = self.patient1_values[8]
-        
+
         self.session.add(patient)
         self.session.commit()
         self.assertTrue(patient.id)
@@ -114,7 +114,7 @@ class TestPatientService(unittest.TestCase):
         doctor.city = self.doctor1_values[3]
 
         patient.doctor = doctor
-        
+
         self.session.add(patient)
         self.session.commit()
 

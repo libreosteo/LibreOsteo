@@ -5,6 +5,8 @@
   <object class="GtkWindow" id="windowMain">
     <property name="title" translatable="yes">Libreosteo</property>
     <property name="window_position">center</property>
+    <property name="default_width">640</property>
+    <property name="default_height">480</property>
     <signal name="destroy" handler="on_windowMain_destroy" after="yes"/>
     <child>
       <object class="GtkVBox" id="vbox1">

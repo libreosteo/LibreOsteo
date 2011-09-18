@@ -22,18 +22,21 @@ import unittest
 import sys
 sys.path.append("..")
 from businessmodel import Base
-from examinationservice import Examination
-from patientservice import Patient, RegularDoctor
+from examinationmodel import Examination
+from patientmodel import Patient, RegularDoctor
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import date
 
+
 class TestExaminationService(unittest.TestCase):
 
     def setUp(self):
-        self.patient1_values = [u'Dupond', u'Jean', date(1980,3,12), u'123 avenue Champ Vert', u'', u'92000', u'TOINTOIN', u'0102030405', 1]
-        self.doctor1_values = [u'Alatete', u'Gémal', u'0102030405', u'TOINTOIN']
-        self.engine = create_engine('sqlite:///:memory:', echo = True)
+        self.patient1_values = [u'Dupond', u'Jean', date(1980, 3, 12),
+        u'123 avenue Champ Vert', u'', u'92000', u'TOINTOIN', u'0102030405', 1]
+        self.doctor1_values = [u'Alatete', u'Gémal', u'0102030405',
+        u'TOINTOIN']
+        self.engine = create_engine('sqlite:///:memory:', echo=True)
         Base.metadata.create_all(self.engine)
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
@@ -71,7 +74,8 @@ class TestExaminationService(unittest.TestCase):
         self.session.commit()
 
         self.assertTrue(examination.id)
-        self.assertEquals(self.doctor1_values[0], examination.patient.doctor.family_name)
+        self.assertEquals(self.doctor1_values[0],
+        examination.patient.doctor.family_name)
 
 
 if __name__ == '__main__':

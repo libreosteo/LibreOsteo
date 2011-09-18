@@ -24,6 +24,13 @@ from business.businessservice import BusinessService
 from business.patientmodel import Patient
 
 
+def match_patient(completion, key, iter, column):
+        model = completion.get_model()
+        text = model.get_value(iter, column)
+        print "Key is %s, current value = %s " % (key, text.lower())
+        return key in text.lower()
+
+
 class PatientService(BusinessService):
 
     def __init__(self, datalayer=None):
@@ -31,16 +38,10 @@ class PatientService(BusinessService):
         if datalayer is not None:
             self._datalayer = datalayer
 
-    def match_patient(completion, key, iter, column):
-        print "passe ici"
-        model = completion.get_model()
-        print "Key = " + key
-        return model[iter][COL_TEXT].startswith(self.get_text())
-        text = model.get_value(iter, column)
-        if text.startwith(key):
-            return True
-        return False
-
     def get_patient_list(self):
         return self.get_datalayer().query(Patient).all()
+
+    def get(self, id):
+        return self.get_datalayer().query(Patient).filter(
+            Patient.id == id).first()
 

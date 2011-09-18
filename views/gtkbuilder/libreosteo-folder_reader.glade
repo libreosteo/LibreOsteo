@@ -165,7 +165,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="vbox1">
+          <object class="GtkVBox" id="vbox_doctor">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
@@ -230,6 +230,7 @@
                 <property name="left_padding">12</property>
                 <child>
                   <object class="GtkTextView" id="textview_important">
+                    <property name="height_request">70</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>
@@ -354,7 +355,7 @@
                 <property name="hscrollbar_policy">automatic</property>
                 <property name="vscrollbar_policy">automatic</property>
                 <child>
-                  <object class="GtkTextView" id="textview1">
+                  <object class="GtkTextView" id="textview_ante_medic">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="editable">False</property>

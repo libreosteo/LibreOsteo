@@ -20,6 +20,8 @@
 import gtk
 import pygtk
 from business.patientservice import PatientService
+from business import patientservice
+from business import helperservice
 
 
 pygtk.require("2.0")
@@ -59,6 +61,12 @@ class HomeContent(object):
     _liststore = None
     _entry_search = None
     _tabbed_panel = None
+    _label_name_value = None
+    _label_firstname_value = None
+    _label_tel_value = None
+    _label_city_value = None
+    _textview_important = None
+    _selected_patient = None
 
     def __init__(self, parent=None):
         content_builder = ContentBuilder()
@@ -68,6 +76,7 @@ class HomeContent(object):
         self._init_tabbed_panel()
         self._tabbed_panel.set_current_page(1)
         self._init_completer()
+        self._init_infos()
         if parent is not None:
             content_builder.attach(parent, self._maincontent_name)
 
@@ -79,20 +88,38 @@ class HomeContent(object):
 
     def _init_completer(self):
         patient_completion = self._maincontent.get_object("completion_patient")
-        self._liststore = gtk.ListStore(str, str)
+        self._liststore = gtk.ListStore(str, int)
         for patient in PatientService().get_patient_list():
-            print "add patient " + patient.family_name
-            self._liststore.append([patient.family_name, patient.firstname])
+            self._liststore.append([patient.family_name + " "
+            + patient.firstname, patient.id])
         patient_completion.set_model(self._liststore)
         self._entry_search = self._maincontent.get_object("entry_search")
         self._entry_search.set_completion(patient_completion)
         patient_completion.set_text_column(0)
+        patient_completion.set_match_func(patientservice.match_patient, 0)
         patient_completion.connect('match-selected', self.match_cb)
 
+    def _init_infos(self):
+        self._label_name_value = self._maincontent.get_object(
+            "label_name_value")
+        self._label_firstname_value = self._maincontent.get_object(
+            "label_firstname_value")
+        self._label_tel_value = self._maincontent.get_object(
+            "label_tel_value")
+        self._label_city_value = self._maincontent.get_object(
+            "label_city_value")
+        self._textview_important = self._maincontent.get_object(
+            "textview_important")
+        if self._selected_patient is None:
+            self._maincontent.get_object("button_open_folder").set_sensitive(
+                False)
+        else:
+            self._maincontent.get_object("button_open_folder").set_sensitive(
+                True)
+
     def match_cb(self, completion, model, iter):
-        print model[iter][0], 'was selected'
-        print "curent page = " + str(self._tabbed_panel.get_current_page())
-        print "number of page = " + str(self._tabbed_panel.get_n_pages())
+        patient = PatientService().get(model[iter][1])
+        self.set_infos(patient)
         return
 
     def create_tab(self, title, tabbed_content):
@@ -136,21 +163,102 @@ class HomeContent(object):
         self._tabbed_panel.remove_page(pagenum)
 
     def button_open_folder_clicked_cb(self, sender):
-        self.create_tab("Test", FolderContent().get_widget())
+        self.create_tab(self._entry_search.get_text(), FolderContent(
+            patient=self._selected_patient).get_widget())
+
+    def entry_search_icon_press_cb(self, sender, icon_pos, event):
+        self._entry_search.set_text("")
+        self.set_infos(None)
+
+    def set_infos(self, patient):
+        self._selected_patient = patient
+        if self._selected_patient is None:
+            self._maincontent.get_object("button_open_folder").set_sensitive(
+                False)
+        else:
+            self._maincontent.get_object("button_open_folder").set_sensitive(
+                True)
+        if patient is None:
+            self._label_name_value.set_text("")
+            self._label_firstname_value.set_text("")
+            self._label_tel_value.set_text("")
+            self._label_city_value.set_text("")
+            self._selected_patient = None
+            return
+
+        if patient.family_name is not None:
+            self._label_name_value.set_text(patient.family_name.upper())
+        else:
+            self._label_name_value.set_text("")
+        if patient.firstname is not None:
+            self._label_firstname_value.set_text(patient.firstname)
+        else:
+            self._label_firstname_value.set_text("")
+        if patient.phone is not None:
+            self._label_tel_value.set_text(patient.phone)
+        else:
+            self._label_tel_value.set_text("")
+        if patient.address_city is not None:
+            self._label_city_value.set_text(patient.address_city.upper())
+        else:
+            self._label_city_value.set_text("")
 
 
 class FolderContent(object):
     _gladefile = "views/gtkbuilder/libreosteo-folder_reader.glade"
     _maincontent_name = "maincontent"
     _maincontent = None
+    _current_patient = None
 
-    def __init__(self, parent=None):
+    def __init__(self, patient=None, parent=None):
         content_builder = ContentBuilder()
         content_builder.gladefile = self._gladefile
         self._maincontent = content_builder.view
         self._maincontent.connect_signals(self)
         self._folder_content = self._maincontent.get_object(
             self._maincontent_name)
+        self._current_patient = patient
+        self._set_content()
+
+    def _set_content(self):
+        self._maincontent.get_object("label_name_value").set_text(
+            self._current_patient.family_name.upper())
+        self._maincontent.get_object("label_firstname_value").set_text(
+            self._current_patient.firstname)
+        self._maincontent.get_object("label_address_value").set_text(
+            helperservice.format_address(self._current_patient))
+        self._maincontent.get_object("label_age_value").set_text(
+            helperservice.format_age(self._current_patient))
+        if self._current_patient.phone is not None:
+            self._maincontent.get_object("label_phone_value").set_text(
+                self._current_patient.phone)
+        else:
+            self._maincontent.get_object("label_phone_value").set_text("")
+        if self._current_patient.mobile_phone is not None:
+            self._maincontent.get_object("label_phone_mobile_value").set_text(
+                self._current_patient.mobile_phone)
+        else:
+            self._maincontent.get_object("label_phone_mobile_value").set_text(
+                "")
+        if self._current_patient.family_situation is not None:
+            self._maincontent.get_object("label_family_status_value").set_text(
+                self._current_patient.family_situation)
+        else:
+            self._maincontent.get_object("label_family_status_value").set_text(
+                "")
+        if self._current_patient.doctor is not None:
+            self.set_doctor()
+        else:
+            self._maincontent.get_object(
+                "vbox_doctor").set_visible(False)
+        if len(self._current_patient.children) != 0:
+            self.set_children()
+        else:
+            self._maincontent.get_object("vbox_children").set_visible(False)
 
     def get_widget(self):
         return self._folder_content
+
+    def set_children(self):
+        print "passe ici :o"
+        print self._current_patient.children

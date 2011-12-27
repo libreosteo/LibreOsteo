@@ -22,16 +22,28 @@ import gtk
 import pygtk
 from business.businessservice import BusinessService
 from business.patientmodel import Patient
+import unicodedata
 
 
 def match_patient(completion, key, iter, column):
         model = completion.get_model()
         text = model.get_value(iter, column)
-        print "Key is %s, current value = %s " % (key, text.lower())
-        return key in text.lower()
+        if text:
+            return simplify_text(key) in simplify_text(text.lower())
+        return None
+
+
+def simplify_text(text):
+    if isinstance(text, str):
+        text = unicode(text, "utf8", "replace")
+        text = unicodedata.normalize('NFD', text)
+        return text.encode('ascii', 'ignore')
+    return text
 
 
 class PatientService(BusinessService):
+
+    EVENT_ADD_PATIENT = "add_patient_event"
 
     def __init__(self, datalayer=None):
         BusinessService.__init__(self)
@@ -44,4 +56,9 @@ class PatientService(BusinessService):
     def get(self, id):
         return self.get_datalayer().query(Patient).filter(
             Patient.id == id).first()
+
+    def save(self, patient):
+        self.get_datalayer().add(patient)
+        self.get_datalayer().commit()
+        self.emit(PatientService.EVENT_ADD_PATIENT, patient)
 

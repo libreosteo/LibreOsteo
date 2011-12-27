@@ -19,7 +19,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 import gtk
 import pygtk
-from views.contentview import HomeContent
+from views.addpatientcontent import AddPatientContent
+from views.homecontent import HomeContent
 
 
 pygtk.require("2.0")
@@ -27,17 +28,39 @@ pygtk.require("2.0")
 
 class MainView(object):
 
+    _home_content = None
+    _examination_content = None
+    _addpatient_content = None
+    _current_content = None
+    _container = None
+
     def __init__(self):
 
         builder = gtk.Builder()
         builder.add_from_file("views/gtkbuilder/libreosteo-gui.glade")
         builder.connect_signals(self)
+        self._container = builder.get_object("hpanedLayoutContainer")
         ## Init and attach home content
-        home_content = HomeContent(builder.get_object("hpanedLayoutContainer"))
+        self._home_content = HomeContent(self._container)
+        self._current_content = self._home_content
+
+        self._addpatient_content = AddPatientContent()
 
         ## show window
         self.windowMain = builder.get_object("windowMain")
         self.windowMain.show()
+
+    def on_button_new_patient_clicked(self, sender):
+        if self._current_content != self._addpatient_content:
+            self._container.remove(self._current_content.get_maincontent())
+            self._current_content = self._addpatient_content
+            self._container.add(self._current_content.get_maincontent())
+
+    def on_button_home_clicked(self, sender):
+        if self._current_content != self._home_content:
+            self._container.remove(self._current_content.get_maincontent())
+            self._current_content = self._home_content
+            self._container.add(self._current_content.get_maincontent())
 
     def on_windowMain_destroy(self, widget, data=None):
         gtk.main_quit()

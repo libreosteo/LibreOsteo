@@ -41,6 +41,8 @@ def format_address(patient):
 
 
 def format_age(patient):
+    if patient.birth_date is None:
+        return ""
     delta = datetime.date.today() - patient.birth_date
     age_year = int(delta.days / 365.25)
     if age_year == 0:
@@ -57,3 +59,33 @@ def format_age(patient):
         age_format = "%s ans" % (age_year)
     return age_format
 
+
+def get_date(string_date, format_date):
+    if len(string_date) != 0:
+        return datetime.datetime.strptime(string_date, format_date)
+    return None
+
+
+from business.patientservice import PatientService
+
+
+def get_services():
+    try:
+        helper_service = HelperService()
+    except HelperService, h:
+        helper_service = h
+    return helper_service
+
+
+class HelperService:
+
+    instance = None
+
+    def __init__(self):
+        if HelperService.instance:
+            raise HelperService.instance
+        HelperService.instance = self
+        self.patient_service = PatientService()
+
+    def get_patient_service(self):
+        return self.patient_service

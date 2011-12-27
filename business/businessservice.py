@@ -18,14 +18,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 
-internal_datalayer = None
+
+def internal_datalayer():
+    pass
+
 import logging
+
 
 class BusinessService(object):
 
     def __init__(self):
         self._datalayer = internal_datalayer()
         self._logger = logging.getLoggerClass()
+        self.listeners = dict()
 
     def get_datalayer(self):
         return self._datalayer
@@ -33,3 +38,15 @@ class BusinessService(object):
     def get_logger(self):
         return
 
+    def add_listener(self, listener, event):
+        try:
+            self.listeners[event].append(listener)
+        except:
+            self.listeners[event] = [listener]
+
+    def remove_listener(self, listener, event):
+        self.listeners[event].remove(listener)
+
+    def emit(self, event, *args):
+        for l in self.listeners[event]:
+            l.notify(event, args)

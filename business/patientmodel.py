@@ -23,6 +23,22 @@ from sqlalchemy import Column, Unicode, Integer, Date, ForeignKey
 from sqlalchemy.orm import relationship
 
 
+class Situation:
+
+    single = 0
+    married = 1
+    divorced = 2
+    widowed = 3
+
+    _list_description = ["Célibataire", "Marié(e)", "Divorcé(e)", "Veuf(Veuve)"]
+
+    def get_text(self, situation_id):
+        try:
+            return Situation._list_description[situation_id]
+        except:
+            return ""
+
+
 class RegularDoctor(Base):
     """
     This class implements bean object to represent
@@ -48,7 +64,7 @@ class RegularDoctor(Base):
         self.city = city
 
     def __repr__(self):
-        return u"<Doctor('%s','%s', '%s')" % (self.family_name,
+        return u"<Doctor('%s','%s', '%s')>" % (self.family_name,
          self.firstname, self.city)
 
 
@@ -89,7 +105,7 @@ class Patient(Base):
     birth_date = Column(Date)
     address_street = Column(Unicode)
     address_complement = Column(Unicode)
-    address_zipcode = Column(Integer)
+    address_zipcode = Column(Unicode)
     address_city = Column(Unicode)
     phone = Column(Unicode)
     mobile_phone = Column(Unicode, nullable=True)
@@ -117,6 +133,6 @@ class Patient(Base):
         self.family_situation = family_situation
 
     def __repr__(self):
-        return u"<Patient('%s','%s')" % (self.family_name, self.firstname)
+        return u"<Patient('%s','%s')>" % (self.family_name, self.firstname)
 
 

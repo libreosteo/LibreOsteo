@@ -62,8 +62,13 @@ def format_age(patient):
 
 def get_date(string_date, format_date):
     if len(string_date) != 0:
-        return datetime.datetime.strptime(string_date, format_date)
+        return datetime.datetime.strptime(string_date, format_date).date()
     return None
+
+def get_date_text(date, format_date):
+    if date:
+        return date.strftime(format_date)
+    return ""
 
 
 from business.patientservice import PatientService

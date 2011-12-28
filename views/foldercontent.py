@@ -21,7 +21,8 @@ import gtk
 import pygtk
 from views.contentview import ContentBuilder
 from business import helperservice
-from business.patientmodel import Situation
+from business.helperservice import get_services
+from business.patientmodel import Situation, Smoker
 
 
 class FolderContent(object):
@@ -39,6 +40,8 @@ class FolderContent(object):
             self._maincontent_name)
         self._current_patient = patient
         self._set_content()
+        self._patient_service = get_services().get_patient_service()
+        self._patient_service.add_listener(self, self._patient_service.EVENT_EDIT_PATIENT)
 
     def _set_content(self):
         self._maincontent.get_object("label_name_value").set_text(
@@ -69,8 +72,13 @@ class FolderContent(object):
         if self._current_patient.doctor is not None:
             self.set_doctor()
         else:
-            self._maincontent.get_object(
-                "vbox_doctor").set_visible(False)
+            if self._current_patient.smoker :
+                self._maincontent.get_object(
+                    "vbox_doctor").set_visible(True)
+                self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(self._current_patient.smoker))
+            else :
+                self._maincontent.get_object(
+                    "vbox_doctor").set_visible(False)
         if len(self._current_patient.children) != 0:
             self.set_children()
         else:
@@ -82,3 +90,13 @@ class FolderContent(object):
     def set_children(self):
         print "passe ici :o"
         print self._current_patient.children
+
+    def get_patient(self):
+        return self._current_patient
+    
+    def notify(self, event, *args):
+        if event == self._patient_service.EVENT_EDIT_PATIENT:
+            ((patient,),) =  args
+            if self._current_patient.id == patient.id:
+                self._current_patient = patient
+                self._set_content()

@@ -25,6 +25,7 @@ from views.homecontent import HomeContent
 
 pygtk.require("2.0")
 
+main_window = None
 
 class MainView(object):
 

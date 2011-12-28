@@ -19,7 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 
 from businessmodel import Base
-from sqlalchemy import Column, Unicode, Integer, Date, ForeignKey
+from sqlalchemy import Column, Unicode, Integer, Date, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 
@@ -37,6 +37,14 @@ class Situation:
             return Situation._list_description[situation_id]
         except:
             return ""
+
+class Smoker:
+    
+    def get_text(self, smoker_value):
+        if smoker_value:
+            return "fumeur"
+        else:
+            return "non fumeur"
 
 
 class RegularDoctor(Base):
@@ -113,6 +121,7 @@ class Patient(Base):
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
     doctor = relationship("RegularDoctor")
     children = relationship("Children")
+    smoker = Column(Boolean)
 
     def __init__(self, family_name=None, firstname=None, birth_date=None,
                  address_street=None, address_complement=None,

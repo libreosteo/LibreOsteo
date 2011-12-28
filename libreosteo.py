@@ -22,6 +22,7 @@ import pygtk
 from core.configuration import Configuration
 from optparse import OptionParser
 from core.datalayer import DatasourceFactory
+from views import mainview
 from views.mainview import MainView
 from business import businessservice
 
@@ -44,4 +45,5 @@ if __name__ == "__main__":
     datasource_factory = DatasourceFactory(configuration_object)
     businessservice.internal_datalayer = datasource_factory.get_datasource()
     app = MainView()
+    mainview.main_window = app.windowMain
     gtk.main()

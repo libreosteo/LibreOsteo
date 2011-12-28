@@ -440,6 +440,7 @@
                         <child>
                           <object class="GtkLabel" id="label_smoker_value">
                             <property name="visible">True</property>
+                            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
                             <property name="tooltip_text" translatable="yes">Cliquer pour changer la valeur</property>
                             <property name="xalign">0.019999999552965164</property>
                             <property name="label" translatable="yes">non fumeur</property>
@@ -717,26 +718,12 @@
             <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkButton" id="button_add">
-            <property name="label" translatable="yes">Ajouter</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="on_button_add_clicked"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
       </object>
     </child>
     <child type="label">
       <object class="GtkLabel" id="label_add_patient">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">&lt;u&gt;&lt;b&gt;Ajouter un nouveau patient&lt;/b&gt;&lt;/u&gt;</property>
+        <property name="label" translatable="yes">&lt;u&gt;&lt;b&gt;Modifier un patient&lt;/b&gt;&lt;/u&gt;</property>
         <property name="use_markup">True</property>
       </object>
     </child>

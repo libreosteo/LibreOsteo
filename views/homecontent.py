@@ -17,9 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 import gtk
-import pygtk
+import views
 from views.contentview import ContentBuilder
 from views.foldercontent import FolderContent
+from views.editpatientcontent import ModifyPatientContent
 from business.helperservice import get_services
 from business import patientservice
 
@@ -98,37 +99,51 @@ class HomeContent(object):
         self.set_infos(patient)
         return
 
-    def create_tab(self, title, tabbed_content):
-        if tabbed_content is None:
+    def create_tab(self, title, tabbed_widget):
+        if tabbed_widget is None or tabbed_widget.get_widget() is None:
             return
         hbox = gtk.HBox(False, 0)
         label = gtk.Label(title)
         hbox.pack_start(label)
+
+        #this reduces the size of the button
+        style = gtk.RcStyle()
+        style.xthickness = 0
+        style.ythickness = 0
+
+        # get a stock modify button image
+        edit_image = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+        # make the edit button
+        btn_edit = gtk.Button()
+        btn_edit.set_relief(gtk.RELIEF_NONE)
+        btn_edit.set_focus_on_click(False)
+        btn_edit.add(edit_image)
+        hbox.pack_start(btn_edit, False, False)
+
+        # Reduces the size of the button
+        btn_edit.modify_style(style)
+
         #get a stock close button image
         close_image = gtk.image_new_from_stock(gtk.STOCK_CLOSE,
         gtk.ICON_SIZE_MENU)
-        image_w, image_h = gtk.icon_size_lookup(gtk.ICON_SIZE_MENU)
         #make the close button
         btn = gtk.Button()
         btn.set_relief(gtk.RELIEF_NONE)
         btn.set_focus_on_click(False)
         btn.add(close_image)
         hbox.pack_start(btn, False, False)
-
-        #this reduces the size of the button
-        style = gtk.RcStyle()
-        style.xthickness = 0
-        style.ythickness = 0
         btn.modify_style(style)
 
         hbox.show_all()
 
         #add the tab
-        self._tabbed_panel.insert_page_menu(tabbed_content, hbox,
+        self._tabbed_panel.insert_page_menu(tabbed_widget.get_widget(), hbox,
         gtk.Label(title))
         #connect the close button
-        btn.connect('clicked', self.on_closetab_button_clicked, tabbed_content)
-         # Need to refresh the widget --
+        btn.connect('clicked', self.on_closetab_button_clicked, tabbed_widget.get_widget())
+        #connect the edit button
+        btn_edit.connect('clicked', self.on_edittab_button_clicked, tabbed_widget)
+        # Need to refresh the widget --
         # This forces the widget to redraw itself.
         self._tabbed_panel.queue_draw_area(0, 0, -1, -1)
 
@@ -138,9 +153,24 @@ class HomeContent(object):
         #and close it
         self._tabbed_panel.remove_page(pagenum)
 
+    def on_edittab_button_clicked(self, sender, widget):
+        # and ask to edit it
+        self.dialog_edit = gtk.Dialog("Modifier", views.mainview.main_window, gtk.DIALOG_DESTROY_WITH_PARENT,(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
+                      gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+        self.widget_edit = ModifyPatientContent(patient=widget.get_patient(), parent=self.dialog_edit)
+        self.dialog_edit.vbox.pack_start(self.widget_edit.get_maincontent())
+        self.widget_edit.get_maincontent().show()
+        self.dialog_edit.connect("response", self.cb_edit_patient)
+        self.dialog_edit.show_all()
+    
+    def cb_edit_patient(self, sender, response_id):
+        if response_id == gtk.RESPONSE_ACCEPT:
+            self.widget_edit.modify()
+        self.dialog_edit.destroy()
+
     def button_open_folder_clicked_cb(self, sender):
         self.create_tab(self._entry_search.get_text(), FolderContent(
-            patient=self._selected_patient).get_widget())
+            patient=self._selected_patient))
 
     def entry_search_icon_press_cb(self, sender, icon_pos, event):
         self._entry_search.set_text("")

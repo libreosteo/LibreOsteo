@@ -15,7 +15,7 @@ class CalendarEntry (gtk.HBox):
         "changed": (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT, ))
     }
 
-    def __init__(self, entryLabel, displayAge=False):
+    def __init__(self, entryLabel, displayAge=False, parent=None):
         gtk.HBox.__init__(self, False, 0)
         self.calendar = gtk.Calendar()
         self.entry = gtk.Entry()
@@ -31,6 +31,8 @@ class CalendarEntry (gtk.HBox):
         self.cwindow.set_decorated(False)
         self.cwindow.set_modal(False)
         self.cwindow.add(self.calendar)
+        self.calendar.show()
+        self.cwindow.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
 
         self.ageEntry.set_editable(False)
         self.ageEntry.set_width_chars(3)
@@ -122,8 +124,8 @@ class CalendarEntry (gtk.HBox):
 
     def show_widget(self, *args):
         self.cwindow.show_all()
-        self.entry.grab_focus(    )
-
+        self.entry.grab_focus()
+    
     def update_entry(self, *args):
         year, month, day = self.calendar.get_date()
         month = month + 1
@@ -146,5 +148,4 @@ class CalendarEntry (gtk.HBox):
 
     def focus_out_event(self, widget, event):
         self.update_calendar()
-        self.hide_widget()
 

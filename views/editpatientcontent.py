@@ -30,18 +30,19 @@ from views.ValidatedEntry import *
 __version__ = "$Rev$"
 
 
-class AddPatientContent(object):
+class ModifyPatientContent(object):
 
-    _gladefile = "views/gtkbuilder/libreosteo-add_patient.glade"
+    _gladefile = "views/gtkbuilder/libreosteo-edit_patient.glade"
     _maincontent_name = "maincontent"
     _maincontent = None
 
-    def __init__(self, parent=None):
+    def __init__(self, patient=None, parent=None):
         content_builder = ContentBuilder()
         content_builder.gladefile = self._gladefile
         self._maincontent = content_builder.view
         hbox = self._maincontent.get_object("hboxdatepicker")
-        self.birthdate_entry = CalendarEntry("Âge", False)
+        self.birthdate_entry = CalendarEntry("Âge", False, parent)
+        self.birthdate_entry.cwindow.set_transient_for(None)
         hbox.pack_end(self.birthdate_entry)
         hbox.show_all()
 
@@ -60,11 +61,42 @@ class AddPatientContent(object):
         hbox.show_all()
 
         self._maincontent.connect_signals(self)
+        self._patient = patient
+        self._fill()
 
     def get_maincontent(self):
         return self._maincontent.get_object(self._maincontent_name)
+    
+    def _fill(self):
+        self.reset_form()
+        if self._patient.family_name:
+            self._maincontent.get_object("entry_name").set_text(self._patient.family_name)
+        if self._patient.firstname:
+            self._maincontent.get_object("entry_firstname").set_text(self._patient.firstname)
+        if self._patient.birth_date:
+            self.birthdate_entry.set_date(self._patient.birth_date)
+        if self._patient.address_street :
+            self._maincontent.get_object(
+                "entry_street").set_text(self._patient.address_street)
+        if self._patient.address_complement:
+            self._maincontent.get_object(
+                "entry_complement").set_text(self._patient.address_complement)
+        if self._patient.address_zipcode:
+            self.zipcode_entry.set_text(self._patient.address_zipcode)
+        if self._patient.address_city:
+            self._maincontent.get_object("entry_city").set_text(self._patient.address_city)
+        if self._patient.mobile_phone:
+            self.mobile_entry.set_text(self._patient.mobile_phone)
+        if self._patient.phone:
+            self.phone_entry.set_text(self._patient.phone)
+        if not self._patient.family_situation is None:
+            self._maincontent.get_object(
+                "combobox_family_situation").set_active(self._patient.family_situation)
+        self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(self._patient.smoker))
+        original_name = None
+    
 
-    def on_button_add_clicked(self, sender):
+    def modify(self):
         #Get all data from form and populate patient model
         family_name = self._maincontent.get_object("entry_name").get_text()
         firstname = self._maincontent.get_object("entry_firstname").get_text()
@@ -93,30 +125,31 @@ class AddPatientContent(object):
                  phone, family_situation, original_name,
                  mobile_phone)
         patient.smoker = (self._maincontent.get_object("label_smoker_value").get_text() == Smoker().get_text(True))
-        get_services().get_patient_service().save(patient)
-        self.reset_form()
-
+        patient.id = self._patient.id
+        get_services().get_patient_service().update(patient)
+        
     def reset_form(self):
-        self._maincontent.get_object("entry_name").set_text('')
-        self._maincontent.get_object("entry_firstname").set_text('')
-        self.birthdate_entry.set_text('')
-        self._maincontent.get_object(
-            "entry_street").set_text('')
-        self._maincontent.get_object(
-            "entry_complement").set_text('')
-        self.zipcode_entry.set_text('')
-        self._maincontent.get_object("entry_city").set_text('')
-        self.mobile_entry.set_text('')
-        self.phone_entry.set_text('')
-        self._maincontent.get_object(
-            "combobox_family_situation").set_active(-1)
-        original_name = None
-        self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(False))
-
+            self._maincontent.get_object("entry_name").set_text('')
+            self._maincontent.get_object("entry_firstname").set_text('')
+            self.birthdate_entry.set_text('')
+            self._maincontent.get_object(
+                "entry_street").set_text('')
+            self._maincontent.get_object(
+                "entry_complement").set_text('')
+            self.zipcode_entry.set_text('')
+            self._maincontent.get_object("entry_city").set_text('')
+            self.mobile_entry.set_text('')
+            self.phone_entry.set_text('')
+            self._maincontent.get_object(
+                "combobox_family_situation").set_active(-1)
+            self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(False))
+            original_name = None
+    
     def on_label_smoker_value_button_press_event(self, sender, event):
+        print "event %s " % event
         label_smoker = self._maincontent.get_object("label_smoker_value")
         if label_smoker.get_text() == Smoker().get_text(True):
             label_smoker.set_text(Smoker().get_text(False))
         else :
             label_smoker.set_text(Smoker().get_text(True))
-
+    

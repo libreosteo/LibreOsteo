@@ -44,6 +44,7 @@ def simplify_text(text):
 class PatientService(BusinessService):
 
     EVENT_ADD_PATIENT = "add_patient_event"
+    EVENT_EDIT_PATIENT = "edit_patient_event"
 
     def __init__(self, datalayer=None):
         BusinessService.__init__(self)
@@ -61,4 +62,9 @@ class PatientService(BusinessService):
         self.get_datalayer().add(patient)
         self.get_datalayer().commit()
         self.emit(PatientService.EVENT_ADD_PATIENT, patient)
+
+    def update(self, patient):
+        self.get_datalayer().merge(patient)
+        self.get_datalayer().commit()
+        self.emit(PatientService.EVENT_EDIT_PATIENT, patient)
 

@@ -29,8 +29,9 @@ class Situation:
     married = 1
     divorced = 2
     widowed = 3
+    engaged = 4
 
-    _list_description = ["Célibataire", "Marié(e)", "Divorcé(e)", "Veuf(Veuve)"]
+    _list_description = ["Célibataire", "Marié(e)", "Divorcé(e)", "Veuf(Veuve)", "Fiancé(e)"]
 
     def get_text(self, situation_id):
         try:

@@ -481,7 +481,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="wrap_mode">word</property>
-                            <property name="indent">15</property>
+                            <property name="indent">17</property>
+                            <property name="buffer">textbuffer_important_info</property>
                           </object>
                         </child>
                       </object>
@@ -569,6 +570,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="indent">5</property>
+                            <property name="buffer">textbuffer_ante_chir</property>
                           </object>
                         </child>
                       </object>
@@ -600,6 +602,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="indent">5</property>
+                            <property name="buffer">textbuffer_ante_medic</property>
                           </object>
                         </child>
                       </object>
@@ -631,6 +634,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="indent">5</property>
+                            <property name="buffer">textbuffer_ante_familial</property>
                           </object>
                         </child>
                       </object>
@@ -662,6 +666,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="indent">5</property>
+                            <property name="buffer">textbuffer_ante_trauma</property>
                           </object>
                         </child>
                       </object>
@@ -732,4 +737,9 @@
       </object>
     </child>
   </object>
+  <object class="GtkTextBuffer" id="textbuffer_important_info"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_chir"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_medic"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_familial"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_trauma"/>
 </interface>

@@ -21,10 +21,7 @@
       </object>
     </child>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer_search_important">
-    <property name="text" translatable="yes">- important
-- important</property>
-  </object>
+  <object class="GtkTextBuffer" id="textbuffer_search_important"/>
   <object class="GtkEntryCompletion" id="completion_patient"/>
   <object class="GtkVBox" id="vboxHomeSearcher">
     <property name="visible">True</property>

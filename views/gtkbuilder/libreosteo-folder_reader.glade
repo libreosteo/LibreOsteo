@@ -4,30 +4,10 @@
   <!-- interface-naming-policy project-wide -->
   <object class="GtkListStore" id="liststore_docs"/>
   <object class="GtkListStore" id="liststore_consult"/>
-  <object class="GtkTextBuffer" id="textbuffer_important">
-    <property name="text" translatable="yes">- infos importante 1
-- infos importante 2</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer_ante_chir">
-    <property name="text" translatable="yes">- ant&#xE9;c&#xE9;dents 1
-- ant&#xE9;c&#xE9;dents 2</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer_ante_medic">
-    <property name="text" translatable="yes">- ante medic 1
-- ante medic 2</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer_ante_familial">
-    <property name="text" translatable="yes">- ante familial 1</property>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer_ante_trauma">
-    <property name="text" translatable="yes">- ante 1
-- ante 2
-- ante3
-- ante 4
-- ante 5
-- ante 6
-- ante 7</property>
-  </object>
+  <object class="GtkTextBuffer" id="textbuffer_ante_chir"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_medic"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_familial"/>
+  <object class="GtkTextBuffer" id="textbuffer_ante_trauma"/>
   <object class="GtkHBox" id="maincontent">
     <property name="visible">True</property>
     <child>
@@ -485,4 +465,5 @@
       </packing>
     </child>
   </object>
+  <object class="GtkTextBuffer" id="textbuffer_important"/>
 </interface>

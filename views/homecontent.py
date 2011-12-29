@@ -84,13 +84,16 @@ class HomeContent(object):
         self._label_city_value = self._maincontent.get_object(
             "label_city_value")
         self._textview_important = self._maincontent.get_object(
-            "textview_important")
+            "textbuffer_search_important")
         if self._selected_patient is None:
             self._maincontent.get_object("button_open_folder").set_sensitive(
                 False)
         else:
             self._maincontent.get_object("button_open_folder").set_sensitive(
                 True)
+        # listen on service
+        self._patient_service.add_listener(self,
+                    self._patient_service.EVENT_EDIT_PATIENT)
 
     def match_cb(self, completion, model, iter):
         """callback matcher on patient. It fills information about the patient.
@@ -190,6 +193,7 @@ class HomeContent(object):
             self._label_tel_value.set_text("")
             self._label_city_value.set_text("")
             self._selected_patient = None
+            self._textview_important.set_text("")
             return
 
         if patient.family_name is not None:
@@ -208,6 +212,8 @@ class HomeContent(object):
             self._label_city_value.set_text(patient.address_city.upper())
         else:
             self._label_city_value.set_text("")
+        if patient.important_info:
+            self._textview_important.set_text(patient.important_info)
 
     def get_maincontent(self):
         return self._maincontent.get_object(self._maincontent_name)
@@ -221,3 +227,7 @@ class HomeContent(object):
     def notify(self, event, *args):
         if event == self._patient_service.EVENT_ADD_PATIENT:
             self.refresh_patient_list()
+        if event == self._patient_service.EVENT_EDIT_PATIENT:
+            ((patient,),) =  args
+            if self._selected_patient.id == patient.id:          
+                self.set_infos(patient)

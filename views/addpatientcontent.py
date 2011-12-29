@@ -93,6 +93,16 @@ class AddPatientContent(object):
                  phone, family_situation, original_name,
                  mobile_phone)
         patient.smoker = (self._maincontent.get_object("label_smoker_value").get_text() == Smoker().get_text(True))
+        start, end = self._maincontent.get_object("textbuffer_important_info").get_bounds()
+        patient.important_info = self._maincontent.get_object("textbuffer_important_info").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_chir").get_bounds()
+        patient.surgical_history = self._maincontent.get_object("textbuffer_ante_chir").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_medic").get_bounds()
+        patient.medical_history = self._maincontent.get_object("textbuffer_ante_medic").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_familial").get_bounds()
+        patient.family_history = self._maincontent.get_object("textbuffer_ante_familial").get_slice(start, end, False)        
+        start, end = self._maincontent.get_object("textbuffer_ante_trauma").get_bounds()
+        patient.trauma_history = self._maincontent.get_object("textbuffer_ante_trauma").get_slice(start, end, False)        
         get_services().get_patient_service().save(patient)
         self.reset_form()
 
@@ -112,6 +122,11 @@ class AddPatientContent(object):
             "combobox_family_situation").set_active(-1)
         original_name = None
         self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(False))
+        self._maincontent.get_object("textbuffer_important_info").set_text('')
+        self._maincontent.get_object("textbuffer_ante_chir").set_text('')
+        self._maincontent.get_object("textbuffer_ante_medic").set_text('')
+        self._maincontent.get_object("textbuffer_ante_familial").set_text('')
+        self._maincontent.get_object("textbuffer_ante_trauma").set_text('')
 
     def on_label_smoker_value_button_press_event(self, sender, event):
         label_smoker = self._maincontent.get_object("label_smoker_value")

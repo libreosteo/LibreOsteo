@@ -70,6 +70,3 @@ class DatasourceFactory(object):
 
     def get_datasource(self):
         return self._datasource
-
-
-

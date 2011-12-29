@@ -81,6 +81,11 @@ def get_services():
         helper_service = h
     return helper_service
 
+def get_unicode(value):
+    if isinstance(value, str):
+        value = value.decode('utf-8')
+    return value
+
 
 class HelperService:
 

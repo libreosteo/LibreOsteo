@@ -93,6 +93,17 @@ class ModifyPatientContent(object):
             self._maincontent.get_object(
                 "combobox_family_situation").set_active(self._patient.family_situation)
         self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(self._patient.smoker))
+        
+        if self._patient.important_info:
+            self._maincontent.get_object("textbuffer_important_info").set_text(self._patient.important_info)
+        if self._patient.surgical_history:
+            self._maincontent.get_object("textbuffer_ante_chir").set_text(self._patient.surgical_history)
+        if self._patient.medical_history:
+            self._maincontent.get_object("textbuffer_ante_medic").set_text(self._patient.medical_history)
+        if self._patient.family_history:
+            self._maincontent.get_object("textbuffer_ante_familial").set_text(self._patient.family_history)
+        if self._patient.trauma_history:
+            self._maincontent.get_object("textbuffer_ante_trauma").set_text(self._patient.trauma_history)
         original_name = None
     
 
@@ -110,7 +121,6 @@ class ModifyPatientContent(object):
         address_city = self._maincontent.get_object("entry_city").get_text()
         phone = self.phone_entry.get_text()
         model_family_situation = self._maincontent.get_object("combobox_family_situation").get_model()
-        print str(model_family_situation)
         family_situation_iter = self._maincontent.get_object(
             "combobox_family_situation").get_active_iter()
         if family_situation_iter:
@@ -125,6 +135,16 @@ class ModifyPatientContent(object):
                  phone, family_situation, original_name,
                  mobile_phone)
         patient.smoker = (self._maincontent.get_object("label_smoker_value").get_text() == Smoker().get_text(True))
+        start, end = self._maincontent.get_object("textbuffer_important_info").get_bounds()
+        patient.important_info = self._maincontent.get_object("textbuffer_important_info").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_chir").get_bounds()
+        patient.surgical_history = self._maincontent.get_object("textbuffer_ante_chir").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_medic").get_bounds()
+        patient.medical_history = self._maincontent.get_object("textbuffer_ante_medic").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_familial").get_bounds()
+        patient.family_history = self._maincontent.get_object("textbuffer_ante_familial").get_slice(start, end, False)
+        start, end = self._maincontent.get_object("textbuffer_ante_trauma").get_bounds()
+        patient.trauma_history = self._maincontent.get_object("textbuffer_ante_trauma").get_slice(start, end, False)
         patient.id = self._patient.id
         get_services().get_patient_service().update(patient)
         
@@ -143,6 +163,13 @@ class ModifyPatientContent(object):
             self._maincontent.get_object(
                 "combobox_family_situation").set_active(-1)
             self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(False))
+            self._maincontent.get_object("textbuffer_important_info").set_text('')
+            self._maincontent.get_object("label_smoker_value").set_text(Smoker().get_text(False))
+            self._maincontent.get_object("textbuffer_important_info").set_text('')
+            self._maincontent.get_object("textbuffer_ante_chir").set_text('')
+            self._maincontent.get_object("textbuffer_ante_medic").set_text('')
+            self._maincontent.get_object("textbuffer_ante_familial").set_text('')
+            self._maincontent.get_object("textbuffer_ante_trauma").set_text('')            
             original_name = None
     
     def on_label_smoker_value_button_press_event(self, sender, event):

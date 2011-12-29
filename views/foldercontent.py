@@ -83,6 +83,18 @@ class FolderContent(object):
             self.set_children()
         else:
             self._maincontent.get_object("vbox_children").set_visible(False)
+        
+        if self._current_patient.important_info :
+            self._maincontent.get_object("textbuffer_important").set_text(self._current_patient.important_info)
+        if self._current_patient.surgical_history:
+            self._maincontent.get_object("textbuffer_ante_chir").set_text(self._current_patient.surgical_history)
+        if self._current_patient.medical_history:
+            self._maincontent.get_object("textbuffer_ante_medic").set_text(self._current_patient.medical_history)
+        if self._current_patient.family_history:
+            self._maincontent.get_object("textbuffer_ante_familial").set_text(self._current_patient.family_history)
+        if self._current_patient.trauma_history:
+            self._maincontent.get_object("textbuffer_ante_trauma").set_text(self._current_patient.trauma_history)
+            
 
     def get_widget(self):
         return self._folder_content

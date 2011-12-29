@@ -21,7 +21,7 @@
 from businessmodel import Base
 from sqlalchemy import Column, Unicode, Integer, Date, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
-
+from core.datatype import CoerceUTF8
 
 class Situation:
 
@@ -108,21 +108,26 @@ class Patient(Base):
     __tablename__ = 'patients'
 
     id = Column(Integer, primary_key=True)
-    family_name = Column(Unicode, nullable=False)
-    original_name = Column(Unicode, nullable=True)
-    firstname = Column(Unicode)
+    family_name = Column(CoerceUTF8, nullable=False)
+    original_name = Column(CoerceUTF8, nullable=True)
+    firstname = Column(CoerceUTF8)
     birth_date = Column(Date)
-    address_street = Column(Unicode)
-    address_complement = Column(Unicode)
-    address_zipcode = Column(Unicode)
-    address_city = Column(Unicode)
-    phone = Column(Unicode)
-    mobile_phone = Column(Unicode, nullable=True)
+    address_street = Column(CoerceUTF8)
+    address_complement = Column(CoerceUTF8)
+    address_zipcode = Column(CoerceUTF8)
+    address_city = Column(CoerceUTF8)
+    phone = Column(CoerceUTF8)
+    mobile_phone = Column(CoerceUTF8, nullable=True)
     family_situation = Column(Integer)
     doctor_id = Column(Integer, ForeignKey('doctors.id'))
     doctor = relationship("RegularDoctor")
     children = relationship("Children")
     smoker = Column(Boolean)
+    important_info = Column(CoerceUTF8)
+    surgical_history = Column(CoerceUTF8)
+    medical_history = Column(CoerceUTF8)
+    family_history = Column(CoerceUTF8)
+    trauma_history = Column(CoerceUTF8)
 
     def __init__(self, family_name=None, firstname=None, birth_date=None,
                  address_street=None, address_complement=None,

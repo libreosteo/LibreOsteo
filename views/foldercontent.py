@@ -39,10 +39,11 @@ class FolderContent(object):
         self._folder_content = self._maincontent.get_object(
             self._maincontent_name)
         self._current_patient = patient
+        self._tabbed_panel = None
         self._set_content()
         self._patient_service = get_services().get_patient_service()
         self._patient_service.add_listener(self, self._patient_service.EVENT_EDIT_PATIENT)
-
+        
     def _set_content(self):
         self._maincontent.get_object("label_name_value").set_text(
             self._current_patient.family_name.upper())
@@ -97,10 +98,12 @@ class FolderContent(object):
             
 
     def get_widget(self):
-        return self._folder_content
+        if self._tabbed_panel is None:
+            return self._folder_content
+        else:
+            return self._tabbed_panel
 
     def set_children(self):
-        print "passe ici :o"
         print self._current_patient.children
 
     def get_patient(self):
@@ -112,3 +115,4 @@ class FolderContent(object):
             if self._current_patient.id == patient.id:
                 self._current_patient = patient
                 self._set_content()
+        

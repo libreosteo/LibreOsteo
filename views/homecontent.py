@@ -50,6 +50,7 @@ class HomeContent(object):
         self._patient_service = get_services().get_patient_service()
         self._init_completer()
         self._init_infos()
+        self._open_folder = dict()
         if parent is not None:
             content_builder.attach(parent, self._maincontent_name)
 
@@ -58,6 +59,7 @@ class HomeContent(object):
             self._tabbed_panel = self._maincontent.get_object("tabbedpanel")
         home_searcher = self._maincontent.get_object("vboxHomeSearcher")
         self._tabbed_panel.insert_page(home_searcher, gtk.Label("Rechercher"))
+        self._tabbed_panel.connect("switch-page", self.on_change_tab)
 
     def _init_completer(self):
         patient_completion = self._maincontent.get_object("completion_patient")
@@ -155,6 +157,7 @@ class HomeContent(object):
         pagenum = self._tabbed_panel.page_num(widget)
         #and close it
         self._tabbed_panel.remove_page(pagenum)
+        del self._open_folder[widget]
 
     def on_edittab_button_clicked(self, sender, widget):
         # and ask to edit it
@@ -172,8 +175,9 @@ class HomeContent(object):
         self.dialog_edit.destroy()
 
     def button_open_folder_clicked_cb(self, sender):
-        self.create_tab(self._entry_search.get_text(), FolderContent(
-            patient=self._selected_patient))
+        folder = FolderContent(patient=self._selected_patient)
+        self._open_folder[folder.get_widget()] = self._selected_patient
+        self.create_tab(self._entry_search.get_text(), folder)
 
     def entry_search_icon_press_cb(self, sender, icon_pos, event):
         self._entry_search.set_text("")
@@ -214,6 +218,8 @@ class HomeContent(object):
             self._label_city_value.set_text("")
         if patient.important_info:
             self._textview_important.set_text(patient.important_info)
+        else:
+            self._textview_important.set_text("")
 
     def get_maincontent(self):
         return self._maincontent.get_object(self._maincontent_name)
@@ -231,3 +237,10 @@ class HomeContent(object):
             ((patient,),) =  args
             if self._selected_patient.id == patient.id:          
                 self.set_infos(patient)
+    
+    def on_change_tab(self, sender, page, pagenum):
+        try:
+            patient = self._open_folder[self._tabbed_panel.get_nth_page(pagenum)]
+            get_services().get_examination_service().set_current_patient(patient)
+        except KeyError:
+            get_services().get_examination_service().set_current_patient(None)

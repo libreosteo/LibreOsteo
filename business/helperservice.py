@@ -72,6 +72,7 @@ def get_date_text(date, format_date):
 
 
 from business.patientservice import PatientService
+from business.examinationservice import ExaminationService
 
 
 def get_services():
@@ -96,6 +97,10 @@ class HelperService:
             raise HelperService.instance
         HelperService.instance = self
         self.patient_service = PatientService()
+        self.examination_service = ExaminationService()
 
     def get_patient_service(self):
         return self.patient_service
+    
+    def get_examination_service(self):
+        return self.examination_service

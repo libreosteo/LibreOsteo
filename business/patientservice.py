@@ -29,7 +29,7 @@ def match_patient(completion, key, iter, column):
         model = completion.get_model()
         text = model.get_value(iter, column)
         if text:
-            return simplify_text(key) in simplify_text(text.lower())
+                return simplify_text(key) in simplify_text(text.lower())
         return None
 
 

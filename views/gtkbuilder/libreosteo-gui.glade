@@ -173,6 +173,7 @@
                 <child>
                   <object class="GtkButton" id="button_examination">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="clicked" handler="on_button_examination_clicked"/>
@@ -228,4 +229,5 @@
       </object>
     </child>
   </object>
+  <object class="GtkAction" id="action1"/>
 </interface>

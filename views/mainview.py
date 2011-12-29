@@ -21,6 +21,8 @@ import gtk
 import pygtk
 from views.addpatientcontent import AddPatientContent
 from views.homecontent import HomeContent
+from views.examinationcontent import ExaminationContent
+from business.helperservice import get_services
 
 
 pygtk.require("2.0")
@@ -44,9 +46,16 @@ class MainView(object):
         ## Init and attach home content
         self._home_content = HomeContent(self._container)
         self._current_content = self._home_content
+        
+        self._ui_builder = builder
 
         self._addpatient_content = AddPatientContent()
-
+        self._examination_content = ExaminationContent()
+        
+        self.examination_service = get_services().get_examination_service()
+        self.examination_service.add_listener(self, self.examination_service.EVENT_EXAMINATION_READY)
+        self.examination_service.add_listener(self, self.examination_service.EVENT_EXAMINATION_IDLE)
+        
         ## show window
         self.windowMain = builder.get_object("windowMain")
         self.windowMain.show()
@@ -62,7 +71,20 @@ class MainView(object):
             self._container.remove(self._current_content.get_maincontent())
             self._current_content = self._home_content
             self._container.add(self._current_content.get_maincontent())
+    
+    def on_button_examination_clicked(self, sender):
+        if self._current_content != self._examination_content:
+            self._container.remove(self._current_content.get_maincontent())
+            self._current_content = self._examination_content
+            self._container.add(self._current_content.get_maincontent())
+            self._examination_content.update()
 
     def on_windowMain_destroy(self, widget, data=None):
         gtk.main_quit()
+        
+    def notify(self, event, *args):
+        if event == self.examination_service.EVENT_EXAMINATION_IDLE:
+            self._ui_builder.get_object("button_examination").set_sensitive(False)
+        if event == self.examination_service.EVENT_EXAMINATION_READY:
+            self._ui_builder.get_object("button_examination").set_sensitive(True)
 

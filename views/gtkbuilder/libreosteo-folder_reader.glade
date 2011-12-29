@@ -8,6 +8,12 @@
   <object class="GtkTextBuffer" id="textbuffer_ante_medic"/>
   <object class="GtkTextBuffer" id="textbuffer_ante_familial"/>
   <object class="GtkTextBuffer" id="textbuffer_ante_trauma"/>
+  <object class="GtkTextBuffer" id="textbuffer_important"/>
+  <object class="GtkNotebook" id="tabbedpanel">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="enable_popup">True</property>
+  </object>
   <object class="GtkHBox" id="maincontent">
     <property name="visible">True</property>
     <child>
@@ -465,5 +471,4 @@
       </packing>
     </child>
   </object>
-  <object class="GtkTextBuffer" id="textbuffer_important"/>
 </interface>

@@ -21,6 +21,7 @@ from sqlalchemy import Column, Unicode, Integer, Date, ForeignKey
 from sqlalchemy.orm import relationship
 
 from businessmodel import Base
+from core.datatype import CoerceUTF8
 
 
 class Examination(Base):
@@ -32,14 +33,17 @@ class Examination(Base):
     __tablename__ = "examinations"
 
     id = Column(Integer, primary_key=True)
-    trauma_family = Column(Unicode, nullable=True)
-    trauma_medical = Column(Unicode, nullable=True)
-    trauma_surgical = Column(Unicode, nullable=True)
-    medical_examination = Column(Unicode, nullable=True)
-    tests = Column(Unicode)
-    diagnosis = Column(Unicode)
-    treatments = Column(Unicode)
-    conclusion = Column(Unicode)
+    orl = Column(CoerceUTF8, nullable=True)
+    visceral = Column(CoerceUTF8, nullable=True)
+    pulmo = Column(CoerceUTF8, nullable=True)
+    uro_gyneco = Column(CoerceUTF8, nullable=True)
+    periphery = Column(CoerceUTF8, nullable=True)
+    general_state = Column(CoerceUTF8, nullable=True)
+    medical_examination = Column(CoerceUTF8, nullable=True)
+    tests = Column(CoerceUTF8, nullable=True)
+    diagnosis = Column(CoerceUTF8, nullable=True)
+    treatments = Column(CoerceUTF8, nullable=True)
+    conclusion = Column(CoerceUTF8, nullable=True)
     date = Column(Date)
     facture_id = Column(Integer, ForeignKey('factures.id'))
     patients_id = Column(Integer, ForeignKey('patients.id'))

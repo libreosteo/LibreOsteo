@@ -25,64 +25,68 @@ from core.datatype import CoerceUTF8
 
 
 class Examination(Base):
-    """
-    This class implements bean object to represent
-    examination.
-    """
+	"""
+	This class implements bean object to represent
+	examination.
+	"""
 
-    __tablename__ = "examinations"
+	__tablename__ = "examinations"
 
-    id = Column(Integer, primary_key=True)
-    orl = Column(CoerceUTF8, nullable=True)
-    visceral = Column(CoerceUTF8, nullable=True)
-    pulmo = Column(CoerceUTF8, nullable=True)
-    uro_gyneco = Column(CoerceUTF8, nullable=True)
-    periphery = Column(CoerceUTF8, nullable=True)
-    general_state = Column(CoerceUTF8, nullable=True)
-    medical_examination = Column(CoerceUTF8, nullable=True)
-    tests = Column(CoerceUTF8, nullable=True)
-    diagnosis = Column(CoerceUTF8, nullable=True)
-    treatments = Column(CoerceUTF8, nullable=True)
-    conclusion = Column(CoerceUTF8, nullable=True)
-    date = Column(Date)
-    facture_id = Column(Integer, ForeignKey('factures.id'))
-    patients_id = Column(Integer, ForeignKey('patients.id'))
-    facture = relationship("Facture")
-    patient = relationship("Patient")
+	id = Column(Integer, primary_key=True)
+	orl = Column(CoerceUTF8, nullable=True)
+	visceral = Column(CoerceUTF8, nullable=True)
+	pulmo = Column(CoerceUTF8, nullable=True)
+	uro_gyneco = Column(CoerceUTF8, nullable=True)
+	periphery = Column(CoerceUTF8, nullable=True)
+	general_state = Column(CoerceUTF8, nullable=True)
+	medical_examination = Column(CoerceUTF8, nullable=True)
+	tests = Column(CoerceUTF8, nullable=True)
+	diagnosis = Column(CoerceUTF8, nullable=True)
+	treatments = Column(CoerceUTF8, nullable=True)
+	conclusion = Column(CoerceUTF8, nullable=True)
+	date = Column(Date)
+	status = Column(Integer)
+	facture_id = Column(Integer, ForeignKey('factures.id'))
+	patients_id = Column(Integer, ForeignKey('patients.id'))
+	facture = relationship("Facture")
+	patient = relationship("Patient")
 
-    def __init__(self, trauma_family=None, trauma_medical=None,
-                 trauma_surgical=None,
-                 medical_examination=None, tests=None, diagnosis=None,
-                 treatments=None, conclusion=None, date=None):
-        Base.__init__(self)
-        self.trauma_family = trauma_family
-        self.trauma_medical = trauma_medical
-        self.trauma_surgical = trauma_surgical
-        self.medical_examination = medical_examination
-        self.tests = tests
-        self.diagnosis = diagnosis
-        self.treatments = treatments
-        self.conclusion = conclusion
-        self.date = date
-        self.patient = None
+	STATUS_SOLD = 0
+	STATUS_WAIT = 1
+	STATUS_CANCELED = 2
 
-    def __repr__(self):
-        return u"<Examination('%s', '%s')" % (self.date, self.patient)
+	def __init__(self, trauma_family=None, trauma_medical=None,
+	             trauma_surgical=None,
+	             medical_examination=None, tests=None, diagnosis=None,
+	             treatments=None, conclusion=None, date=None):
+		Base.__init__(self)
+		self.trauma_family = trauma_family
+		self.trauma_medical = trauma_medical
+		self.trauma_surgical = trauma_surgical
+		self.medical_examination = medical_examination
+		self.tests = tests
+		self.diagnosis = diagnosis
+		self.treatments = treatments
+		self.conclusion = conclusion
+		self.date = date
+		self.patient = None
+		self.status = Examination.STATUS_SOLD
+
+	def __repr__(self):
+		return u"<Examination('%s', '%s')" % (self.date, self.patient)
 
 
 class Facture(Base):
-    """
-    This class implements bean object to represent
-    facturation.
-    """
+	"""
+	This class implements bean object to represent
+	facturation.
+	"""
 
-    __tablename__ = "factures"
+	__tablename__ = "factures"
 
-    id = Column(Integer, primary_key=True)
-    date = Column(Date)
+	id = Column(Integer, primary_key=True)
+	date = Column(Date)
 
-    def __init__(self, date=None):
-        Base.__init__(self)
-        self.date = date
-
-
+	def __init__(self, date=None):
+		Base.__init__(self)
+		self.date = date

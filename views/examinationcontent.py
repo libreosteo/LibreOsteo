@@ -196,3 +196,24 @@ class ExaminationContent(object):
         if orl != self._examination.orl:
             self._examination.orl = orl
             get_services().examination_service.save(self._examination)
+            
+            
+            
+class ExaminationReader(ExaminationContent):
+    
+    def __init__(self, examination, parent=None):
+        ExaminationContent.__init__(self)
+        self._examination = examination
+
+    def get_examination_name(self):
+        patient = self._examination.patient
+        if not patient is None:
+            return "%s %s - %s" % (patient.family_name.upper(), patient.firstname, get_date_text(self._examination.date, "%d/%m/%Y"))
+        return ""
+    
+    def update(self):
+        self._maincontent.get_object("label_patient_name").set_text(self.get_examination_name())
+        self._fill()   
+    
+    def get_widget(self):
+        return self.get_maincontent()

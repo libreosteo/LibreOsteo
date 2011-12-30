@@ -104,7 +104,7 @@ class HomeContent(object):
         self.set_infos(patient)
         return
 
-    def create_tab(self, title, tabbed_widget):
+    def create_tab(self, title, tabbed_widget, editable=False):
         if tabbed_widget is None or tabbed_widget.get_widget() is None:
             return
         hbox = gtk.HBox(False, 0)
@@ -116,17 +116,18 @@ class HomeContent(object):
         style.xthickness = 0
         style.ythickness = 0
 
-        # get a stock modify button image
-        edit_image = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
-        # make the edit button
-        btn_edit = gtk.Button()
-        btn_edit.set_relief(gtk.RELIEF_NONE)
-        btn_edit.set_focus_on_click(False)
-        btn_edit.add(edit_image)
-        hbox.pack_start(btn_edit, False, False)
+        if editable:
+            # get a stock modify button image
+            edit_image = gtk.image_new_from_stock(gtk.STOCK_EDIT, gtk.ICON_SIZE_MENU)
+            # make the edit button
+            btn_edit = gtk.Button()
+            btn_edit.set_relief(gtk.RELIEF_NONE)
+            btn_edit.set_focus_on_click(False)
+            btn_edit.add(edit_image)
+            hbox.pack_start(btn_edit, False, False)
 
-        # Reduces the size of the button
-        btn_edit.modify_style(style)
+            # Reduces the size of the button
+            btn_edit.modify_style(style)
 
         #get a stock close button image
         close_image = gtk.image_new_from_stock(gtk.STOCK_CLOSE,
@@ -175,9 +176,9 @@ class HomeContent(object):
         self.dialog_edit.destroy()
 
     def button_open_folder_clicked_cb(self, sender):
-        folder = FolderContent(patient=self._selected_patient)
+        folder = FolderContent(patient=self._selected_patient, tab_manager=self)
         self._open_folder[folder.get_widget()] = self._selected_patient
-        self.create_tab(self._entry_search.get_text(), folder)
+        self.create_tab(self._entry_search.get_text(), folder, editable=True)
 
     def entry_search_icon_press_cb(self, sender, icon_pos, event):
         self._entry_search.set_text("")

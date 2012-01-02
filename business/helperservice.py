@@ -40,10 +40,10 @@ def format_address(patient):
     return ""
 
 
-def format_age(patient):
-    if patient.birth_date is None:
+def format_age(birthday_date):
+    if birthday_date is None:
         return ""
-    delta = datetime.date.today() - patient.birth_date
+    delta = datetime.date.today() - birthday_date
     age_year = int(delta.days / 365.25)
     if age_year == 0:
         age_month = int(delta.days / 31.0)

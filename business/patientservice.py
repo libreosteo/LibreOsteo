@@ -21,50 +21,69 @@
 import gtk
 import pygtk
 from business.businessservice import BusinessService
-from business.patientmodel import Patient
+from business.patientmodel import Patient, Children
 import unicodedata
 
 
 def match_patient(completion, key, iter, column):
-        model = completion.get_model()
-        text = model.get_value(iter, column)
-        if text:
-                return simplify_text(key) in simplify_text(text.lower())
-        return None
+	model = completion.get_model()
+	text = model.get_value(iter, column)
+	if text:
+		return simplify_text(key) in simplify_text(text.lower())
+	return None
 
 
 def simplify_text(text):
-    if isinstance(text, str):
-        text = unicode(text, "utf8", "replace")
-        text = unicodedata.normalize('NFD', text)
-        return text.encode('ascii', 'ignore')
-    return text
+	if isinstance(text, str):
+		text = unicode(text, "utf8", "replace")
+		text = unicodedata.normalize('NFD', text)
+		return text.encode('ascii', 'ignore')
+	return text
 
 
 class PatientService(BusinessService):
 
-    EVENT_ADD_PATIENT = "add_patient_event"
-    EVENT_EDIT_PATIENT = "edit_patient_event"
+	EVENT_ADD_PATIENT = "add_patient_event"
+	EVENT_EDIT_PATIENT = "edit_patient_event"
+	EVENT_ADD_CHILD = "add_child_event"
+	EVENT_DELETE_CHILD = "delete_child_event"
 
-    def __init__(self, datalayer=None):
-        BusinessService.__init__(self)
-        if datalayer is not None:
-            self._datalayer = datalayer
+	def __init__(self, datalayer=None):
+		BusinessService.__init__(self)
+		if datalayer is not None:
+			self._datalayer = datalayer
 
-    def get_patient_list(self):
-        return self.get_datalayer().query(Patient).all()
+	def get_patient_list(self):
+		return self.get_datalayer().query(Patient).all()
 
-    def get(self, id):
-        return self.get_datalayer().query(Patient).filter(
-            Patient.id == id).first()
+	def get(self, id):
+		return self.get_datalayer().query(Patient).filter(
+		        Patient.id == id).first()
 
-    def save(self, patient):
-        self.get_datalayer().add(patient)
-        self.get_datalayer().commit()
-        self.emit(PatientService.EVENT_ADD_PATIENT, patient)
+	def save(self, patient):
+		self.get_datalayer().add(patient)
+		self.get_datalayer().commit()
+		self.emit(PatientService.EVENT_ADD_PATIENT, patient)
 
-    def update(self, patient):
-        self.get_datalayer().merge(patient)
-        self.get_datalayer().commit()
-        self.emit(PatientService.EVENT_EDIT_PATIENT, patient)
+	def update(self, patient):
+		self.get_datalayer().merge(patient)
+		self.get_datalayer().commit()
+		self.emit(PatientService.EVENT_EDIT_PATIENT, patient)
 
+	def get_children_list(self, patient):
+		return self.get_datalayer().query(Children).filter(Children.parent_id == patient.id).all()
+	
+	def save_child(self, child):
+		self.get_datalayer().add(child)
+		self.get_datalayer().commit()
+		self.emit(PatientService.EVENT_EDIT_PATIENT)
+		self.emit(PatientService.EVENT_ADD_CHILD)
+	
+	def delete_child(self, child):
+		self.get_datalayer().delete(child)
+		self.get_datalayer().commit()
+		self.emit(PatientService.EVENT_EDIT_PATIENT)
+		self.emit(PatientService.EVENT_DELETE_CHILD)
+	
+	def get_child(self, child_id):
+		return self.get_datalayer().query(Children).filter(Children.id == child_id).first()

@@ -44,6 +44,7 @@ class FolderContent(object):
 		self._set_content()
 		self._patient_service = get_services().get_patient_service()
 		self._patient_service.add_listener(self, self._patient_service.EVENT_EDIT_PATIENT)
+		get_services().examination_service.add_listener(self, get_services().examination_service.EVENT_NEW_EXAMINATION)
 
 	def _set_content(self):
 		self._maincontent.get_object("label_name_value").set_text(
@@ -53,7 +54,7 @@ class FolderContent(object):
 		self._maincontent.get_object("label_address_value").set_text(
 		        helperservice.format_address(self._current_patient))
 		self._maincontent.get_object("label_age_value").set_text(
-		        helperservice.format_age(self._current_patient))
+		        helperservice.format_age(self._current_patient.birth_date))
 		if self._current_patient.phone is not None:
 			self._maincontent.get_object("label_phone_value").set_text(
 			        self._current_patient.phone)
@@ -82,7 +83,7 @@ class FolderContent(object):
 				self._maincontent.get_object(
 				        "vbox_doctor").set_visible(False)
 		if len(self._current_patient.children) != 0:
-			self.set_children()
+			self._fill_children_list()
 		else:
 			self._maincontent.get_object("vbox_children").set_visible(False)
 
@@ -108,6 +109,12 @@ class FolderContent(object):
 				list_store.append(self._get_examination_desc(examination))
 		list_view = self._maincontent.get_object("treeview_consult")
 		self._maincontent.get_object("button_examination_read").set_sensitive(False)
+	
+	def _fill_children_list(self):
+		liststore = self._maincontent.get_object("liststore_children")
+		list_children = get_services().patient_service.get_children_list(self._current_patient)
+		for child in list_children :
+			liststore.append([ child.family_name.upper()+ " "+child.firstname, helperservice.format_age(child.birthday_date)])
 
 	def _get_examination_desc(self, examination):
 		return [ get_date_text(examination.date, "%d/%m/%Y"), examination.id, get_services().examination_service.get_status_text(examination.status)]        
@@ -151,6 +158,8 @@ class FolderContent(object):
 			if self._current_patient.id == patient.id:
 				self._current_patient = patient
 				self._set_content()
+		if event == get_services().examination_service.EVENT_NEW_EXAMINATION:
+			self._fill_examination_list()
 
 	def get_title_tab_for_examination(self, examination):
 		# title is composed of Name following date

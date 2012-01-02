@@ -104,8 +104,48 @@ class ModifyPatientContent(object):
             self._maincontent.get_object("textbuffer_ante_familial").set_text(self._patient.family_history)
         if self._patient.trauma_history:
             self._maincontent.get_object("textbuffer_ante_trauma").set_text(self._patient.trauma_history)
+	if len(self._patient.children) != 0:
+	    self._fill_children_list()        
         original_name = None
     
+    def _fill_children_list(self):
+	liststore = self._maincontent.get_object("liststore_children")
+	list_children = get_services().patient_service.get_children_list(self._patient)
+	for child in list_children :
+	    liststore.append([ child.family_name.upper()+ " "+child.firstname, helperservice.format_age(child.birthday_date), child.id])
+    
+    def on_treeview_children_cursor_changed(self, sender):
+        # When selection change on treeview for children.
+        self._update_button_child()
+    
+    def _update_button_child(self):
+        (tree_model, tree_iter) = self._maincontent.get_object("treeview_children").get_selection().get_selected()
+        if tree_iter is not None:
+            child_index = tree_model[tree_iter][2]
+            child = get_services().patient_service.get_child(child_index)
+            if child is not None:
+		# Update button to delete
+                self._maincontent.get_object("button_delete_child").set_sensitive(True)
+		self._maincontent.get_object("button_modify_child").set_sensitive(True)
+            else:
+                self._maincontent.get_object("button_delete_child").set_sensitive(False)
+		self._maincontent.get_object("button_modify_child").set_sensitive(False)
+        else:
+            self._maincontent.get_object("button_delete_child").set_sensitive(False)
+	    self._maincontent.get_object("button_modify_child").set_sensitive(False)
+        
+    def on_button_delete_child_clicked(self, sender):
+	(tree_model, tree_iter) = self._maincontent.get_object("treeview_children").get_selection().get_selected()
+	if tree_iter is not None:
+	    child_index = tree_model[tree_iter][2]
+	    child = get_services().patient_service.get_child(child_index)
+	    get_services().patient_service.delete_child(child)
+
+    def on_button_modify_child_clicked(self, sender):
+	print "TODO"
+
+    def on_button_add_child_clicked(self, sender):
+	print "TODO"
 
     def modify(self):
         #Get all data from form and populate patient model

@@ -147,8 +147,9 @@ class HomeContent(object):
         gtk.Label(title))
         #connect the close button
         btn.connect('clicked', self.on_closetab_button_clicked, tabbed_widget.get_widget())
-        #connect the edit button
-        btn_edit.connect('clicked', self.on_edittab_button_clicked, tabbed_widget)
+        if editable:
+            #connect the edit button
+            btn_edit.connect('clicked', self.on_edittab_button_clicked, tabbed_widget)
         # Need to refresh the widget --
         # This forces the widget to redraw itself.
         self._tabbed_panel.queue_draw_area(0, 0, -1, -1)
@@ -158,7 +159,10 @@ class HomeContent(object):
         pagenum = self._tabbed_panel.page_num(widget)
         #and close it
         self._tabbed_panel.remove_page(pagenum)
-        del self._open_folder[widget]
+        try:
+            del self._open_folder[widget]
+        except:
+            pass
 
     def on_edittab_button_clicked(self, sender, widget):
         # and ask to edit it

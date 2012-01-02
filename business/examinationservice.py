@@ -25,6 +25,7 @@ class ExaminationService(BusinessService):
 	EVENT_EXAMINATION_READY = "examination_ready"
 	EVENT_EXAMINATION_IDLE = "examination_idle"
 	EVENT_ASK_EXAMINATION = "ask_examination"
+	EVENT_NEW_EXAMINATION = "new_examination_event"
 
 	def __init__(self, datalayer=None):
 		BusinessService.__init__(self)
@@ -55,8 +56,11 @@ class ExaminationService(BusinessService):
 		self.emit(self.EVENT_ASK_EXAMINATION)
 
 	def save(self, examination):
+		new_examination = examination.id is None
 		self.get_datalayer().add(examination)
 		self.get_datalayer().commit()
+		if new_examination:
+			self.emit(self.EVENT_NEW_EXAMINATION)
 
 	def request_for_examination(self, patient_id, date):
 		return self.get_datalayer().query(Examination).filter(

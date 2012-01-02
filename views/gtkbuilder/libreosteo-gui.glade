@@ -3,6 +3,8 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkWindow" id="windowMain">
+    <property name="width_request">800</property>
+    <property name="height_request">600</property>
     <property name="title" translatable="yes">Libreosteo</property>
     <property name="window_position">center</property>
     <property name="default_width">640</property>
@@ -66,6 +68,7 @@
                         <property name="visible">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_windowMain_destroy"/>
                       </object>
                     </child>
                   </object>

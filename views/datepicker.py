@@ -6,6 +6,7 @@ import gtk
 import datetime
 import time
 import gobject
+import logging
 
 
 format_date = "%d/%m/%Y"
@@ -47,6 +48,7 @@ class CalendarEntry (gtk.HBox):
         self.__connect_signals()
         #self.update_entry()
         self.set_display_age(displayAge)
+        self._logger = logging.getLogger("libreosteo.views.datepicker.CalendarEntry")
 
     def __connect_signals(self):
         self.day_selected_handle = self.calendar.connect("day-selected", self.update_entry)
@@ -56,18 +58,26 @@ class CalendarEntry (gtk.HBox):
         self.focus_out = self.entry.connect("focus-out-event", self.focus_out_event)
 
     def __block_signals(self):
-        self.calendar.handler_block(self.day_selected_handle)
-        self.calendar.handler_block(self.day_selected_double_handle)
-        self.button.handler_block(self.clicked_handle)
-        self.entry.handler_block(self.activate)
-        self.entry.handler_block(self.focus_out)
+        try:
+            self.calendar.handler_block(self.day_selected_handle)
+            self.calendar.handler_block(self.day_selected_double_handle)
+            self.button.handler_block(self.clicked_handle)
+            self.entry.handler_block(self.activate)
+            self.entry.handler_block(self.focus_out)
+        except:
+            self._logger.error("exception on block signals from datepicker.", exc_info=1)
+            pass
 
     def __unblock_signals(self):
-        self.calendar.handler_unblock(self.day_selected_handle)
-        self.calendar.handler_unblock(self.day_selected_double_handle)
-        self.button.handler_unblock(self.clicked_handle)
-        self.entry.handler_unblock(self.activate)
-        self.entry.handler_unblock(self.focus_out)
+        try:
+            self.calendar.handler_unblock(self.day_selected_handle)
+            self.calendar.handler_unblock(self.day_selected_double_handle)
+            self.button.handler_unblock(self.clicked_handle)
+            self.entry.handler_unblock(self.activate)
+            self.entry.handler_unblock(self.focus_out)
+        except:
+            self._logger.error("exception on block signals from datepicker.", exc_info=1)
+            pass
 
     def calculateAge(self, born):
         """Calculate the age of a user."""
@@ -131,8 +141,10 @@ class CalendarEntry (gtk.HBox):
         month = month + 1
         self.currentDate = datetime.date(year, month, day)
         text = self.currentDate.strftime(format_date)
+        self.__block_signals()
         self.entry.set_text(text)
         self.update_age_display(self.currentDate)
+        self.__unblock_signals()
         self.emit("changed", self.currentDate)
 
     def update_calendar(self, *args):

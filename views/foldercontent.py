@@ -19,6 +19,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 import gtk
 import pygtk
+import logging
 from views.contentview import ContentBuilder
 from business import helperservice
 from business.helperservice import get_services, get_date_text
@@ -33,6 +34,7 @@ class FolderContent(object):
 	_current_patient = None
 
 	def __init__(self, patient=None, parent=None, tab_manager=None):
+		self._logger = logging.getLogger("libreosteo.views.foldercontent.FolderContent")
 		content_builder = ContentBuilder()
 		content_builder.gladefile = self._gladefile
 		self._maincontent = content_builder.view
@@ -44,6 +46,9 @@ class FolderContent(object):
 		self._set_content()
 		self._patient_service = get_services().get_patient_service()
 		self._patient_service.add_listener(self, self._patient_service.EVENT_EDIT_PATIENT)
+		self._patient_service.add_listener(self, self._patient_service.EVENT_ADD_CHILD)
+		self._patient_service.add_listener(self, self._patient_service.EVENT_DELETE_CHILD)
+		self._patient_service.add_listener(self, self._patient_service.EVENT_EDIT_CHILD)		
 		get_services().examination_service.add_listener(self, get_services().examination_service.EVENT_NEW_EXAMINATION)
 
 	def _set_content(self):
@@ -83,8 +88,10 @@ class FolderContent(object):
 				self._maincontent.get_object(
 				        "vbox_doctor").set_visible(False)
 		if len(self._current_patient.children) != 0:
+			self._maincontent.get_object("vbox_children").set_visible(True)
 			self._fill_children_list()
 		else:
+			self._fill_children_list()
 			self._maincontent.get_object("vbox_children").set_visible(False)
 
 		if self._current_patient.important_info :
@@ -111,11 +118,13 @@ class FolderContent(object):
 		self._maincontent.get_object("button_examination_read").set_sensitive(False)
 	
 	def _fill_children_list(self):
+		self._logger.info("fill children list")
 		liststore = self._maincontent.get_object("liststore_children")
+		liststore.clear()
 		list_children = get_services().patient_service.get_children_list(self._current_patient)
 		for child in list_children :
 			liststore.append([ child.family_name.upper()+ " "+child.firstname, helperservice.format_age(child.birthday_date)])
-
+ 
 	def _get_examination_desc(self, examination):
 		return [ get_date_text(examination.date, "%d/%m/%Y"), examination.id, get_services().examination_service.get_status_text(examination.status)]        
 
@@ -139,24 +148,25 @@ class FolderContent(object):
 
 	def on_button_examination_read_clicked(self, sender):
 		# open tab with a given examination
-		print "open examination"
+		self._logger.info("open examination")
 		(tree_model, tree_iter) = self._maincontent.get_object("treeview_consult").get_selection().get_selected()
 		examination_id = tree_model[tree_iter][1]
 		examination = get_services().examination_service.get_examination(examination_id)
-		print "retrieve examination object = " + str(examination)
+		self._logger.debug("retrieve examination object = " + str(examination))
 		if self._tab_manager is not None:
 			examination_reader = ExaminationReader(examination)
 			examination_reader.update()
 			self._tab_manager.create_tab(self.get_title_tab_for_examination(examination), examination_reader) 
 		else:
-			print "no tab manager to open it"
+			self._logger.error("no tab manager to open it")
 
 
 	def notify(self, event, *args):
-		if event == self._patient_service.EVENT_EDIT_PATIENT:
+		if event == self._patient_service.EVENT_EDIT_PATIENT or event == get_services().patient_service.EVENT_ADD_CHILD or event == get_services().patient_service.EVENT_DELETE_CHILD or event == get_services().patient_service.EVENT_EDIT_CHILD:
 			((patient,),) =  args
 			if self._current_patient.id == patient.id:
 				self._current_patient = patient
+				self._current_patient.children = get_services().patient_service.get_children_list(patient)
 				self._set_content()
 		if event == get_services().examination_service.EVENT_NEW_EXAMINATION:
 			self._fill_examination_list()

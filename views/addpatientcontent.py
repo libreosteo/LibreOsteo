@@ -173,7 +173,6 @@ class AddPatientContent(object):
         self._populate_liststore()
 
     def on_button_children_add_clicked(self, sender):
-        # TODO show dialog to edit child
         self._dialog_add = gtk.Dialog("Ajouter", views.mainview.main_window, gtk.DIALOG_DESTROY_WITH_PARENT,(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
                       gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
         self._widget_add_child = AddChildContent(self._maincontent.get_object("entry_name").get_text())

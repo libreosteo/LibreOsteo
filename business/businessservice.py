@@ -23,13 +23,15 @@ def internal_datalayer():
     pass
 
 import logging
+import sys
 
 
 class BusinessService(object):
 
     def __init__(self):
         self._datalayer = internal_datalayer()
-        self._logger = logging.getLoggerClass()
+        self._logger = logging.getLogger("libreosteo.business.businessservice.BusinessService")
+        self._logger.addHandler(logging.StreamHandler(sys.__stdout__))
         self.listeners = dict()
 
     def get_datalayer(self):
@@ -40,13 +42,23 @@ class BusinessService(object):
 
     def add_listener(self, listener, event):
         try:
-            self.listeners[event].append(listener)
+            if listener not in self.listeners[event]:
+                self.listeners[event].append(listener)
         except:
             self.listeners[event] = [listener]
 
     def remove_listener(self, listener, event):
-        self.listeners[event].remove(listener)
+        try:
+            self.listeners[event].remove(listener)
+        except:
+            pass
 
     def emit(self, event, *args):
         for l in self.listeners[event]:
-            l.notify(event, args)
+            if not l :
+                self.remove_listener(l, event)
+            try:
+                l.notify(event, args)
+            except:
+                self._logger.error("Exception when emitting signal %s to listener %s" % (event, l), exc_info=1)
+                pass

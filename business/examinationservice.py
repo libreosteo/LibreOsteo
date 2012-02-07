@@ -58,9 +58,12 @@ class ExaminationService(BusinessService):
 	def save(self, examination):
 		new_examination = examination.id is None
 		self.get_datalayer().add(examination)
-		self.get_datalayer().commit()
+		try:
+			self.get_datalayer().commit()
+		except:
+			self.get_datalayer().rollback()
 		if new_examination:
-			self.emit(self.EVENT_NEW_EXAMINATION)
+			self.emit(self.EVENT_NEW_EXAMINATION)		
 
 	def request_for_examination(self, patient_id, date):
 		return self.get_datalayer().query(Examination).filter(

@@ -47,7 +47,8 @@ class PatientService(BusinessService):
 	EVENT_EDIT_PATIENT = "edit_patient_event"
 	EVENT_ADD_CHILD = "add_child_event"
 	EVENT_DELETE_CHILD = "delete_child_event"
-
+	EVENT_EDIT_CHILD = "edit_child_event"
+	
 	def __init__(self, datalayer=None):
 		BusinessService.__init__(self)
 		if datalayer is not None:
@@ -62,12 +63,18 @@ class PatientService(BusinessService):
 
 	def save(self, patient):
 		self.get_datalayer().add(patient)
-		self.get_datalayer().commit()
+		try:
+			self.get_datalayer().commit()
+		except:
+			self.get_datalayer().rollback()
 		self.emit(PatientService.EVENT_ADD_PATIENT, patient)
 
 	def update(self, patient):
 		self.get_datalayer().merge(patient)
-		self.get_datalayer().commit()
+		try:
+			self.get_datalayer().commit()
+		except:
+			self.get_datalayer().rollback()
 		self.emit(PatientService.EVENT_EDIT_PATIENT, patient)
 
 	def get_children_list(self, patient):
@@ -75,15 +82,21 @@ class PatientService(BusinessService):
 	
 	def save_child(self, child):
 		self.get_datalayer().add(child)
-		self.get_datalayer().commit()
-		self.emit(PatientService.EVENT_EDIT_PATIENT)
-		self.emit(PatientService.EVENT_ADD_CHILD)
+		try:
+			self.get_datalayer().commit()
+			self.get_logger().debug("save child on this patient = %s"  % child.parent)
+		except:
+			self.get_datalayer().rollback()
+		self.emit(PatientService.EVENT_ADD_CHILD, child.parent)
 	
 	def delete_child(self, child):
 		self.get_datalayer().delete(child)
-		self.get_datalayer().commit()
-		self.emit(PatientService.EVENT_EDIT_PATIENT)
-		self.emit(PatientService.EVENT_DELETE_CHILD)
+		try:
+			self.get_datalayer().commit()
+		except:
+			self.get_datalayer().rollback()
+		self.emit(PatientService.EVENT_DELETE_CHILD, child.parent)
+
 	
 	def get_child(self, child_id):
 		return self.get_datalayer().query(Children).filter(Children.id == child_id).first()

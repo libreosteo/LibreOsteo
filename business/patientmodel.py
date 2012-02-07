@@ -90,7 +90,6 @@ class Children(Base):
 	firstname = Column(Unicode, nullable=False)
 	birthday_date = Column(Date)
 	parent_id = Column(Integer, ForeignKey('patients.id'))
-	parent = relationship("Patient")
 
 	def __init__(self, family_name=None, firstname=None,
 	             birthday_date=None):
@@ -122,7 +121,7 @@ class Patient(Base):
 	family_situation = Column(Integer)
 	doctor_id = Column(Integer, ForeignKey('doctors.id'))
 	doctor = relationship("RegularDoctor")
-	children = relationship("Children")
+	children = relationship("Children",  backref='parent')
 	smoker = Column(Boolean)
 	important_info = Column(CoerceUTF8)
 	surgical_history = Column(CoerceUTF8)

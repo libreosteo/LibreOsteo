@@ -144,7 +144,7 @@ class ModifyPatientContent(object):
 					self._maincontent.get_object("button_modify_child").set_sensitive(False)
 			else:
 				self._maincontent.get_object("button_delete_child").set_sensitive(False)
-			self._maincontent.get_object("button_modify_child").set_sensitive(False)
+				self._maincontent.get_object("button_modify_child").set_sensitive(False)
 
 	def on_button_delete_child_clicked(self, sender):
 		(tree_model, tree_iter) = self._maincontent.get_object("treeview_children").get_selection().get_selected()

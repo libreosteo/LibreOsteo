@@ -16,6 +16,46 @@
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkFrame" id="frame12">
+                <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">etched-out</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment12">
+                    <property name="visible">True</property>
+                    <property name="left_padding">2</property>
+                    <property name="right_padding">2</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="scrolledwindow12">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">automatic</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <child>
+                          <object class="GtkTextView" id="textview_examination_reason">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="buffer">textbuffer_examination_reason</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label_examination_reason">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Motif de consultation :&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkHBox" id="hbox1">
                 <property name="visible">True</property>
                 <property name="homogeneous">True</property>
@@ -227,7 +267,7 @@
               </object>
               <packing>
                 <property name="padding">2</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -270,7 +310,7 @@
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -402,7 +442,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -443,7 +483,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -525,7 +565,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
@@ -556,4 +596,5 @@
   <object class="GtkTextBuffer" id="textbuffer_diagnostic"/>
   <object class="GtkTextBuffer" id="textbuffer_treatment"/>
   <object class="GtkTextBuffer" id="textbuffer_conclusion"/>
+  <object class="GtkTextBuffer" id="textbuffer_examination_reason"/>
 </interface>

@@ -33,6 +33,7 @@ class Examination(Base):
 	__tablename__ = "examinations"
 
 	id = Column(Integer, primary_key=True)
+	reason = Column(CoerceUTF8, nullable=True)
 	orl = Column(CoerceUTF8, nullable=True)
 	visceral = Column(CoerceUTF8, nullable=True)
 	pulmo = Column(CoerceUTF8, nullable=True)

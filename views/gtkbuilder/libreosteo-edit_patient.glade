@@ -548,10 +548,28 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="label_regular_medecin_value">
+                      <object class="GtkHBox" id="hbox8">
                         <property name="visible">True</property>
-                        <property name="xalign">0.019999999552965164</property>
-                        <property name="label" translatable="yes">m&#xE9;decin traitant</property>
+                        <child>
+                          <object class="GtkLabel" id="label_doctor_value">
+                            <property name="visible">True</property>
+                            <property name="xalign">0.019999999552965164</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_choose_doctor">
+                            <property name="label" translatable="yes">Choisir</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

@@ -62,6 +62,10 @@ class ExaminationContent(object):
         self._fill()
         
     def _fill(self):
+        if self._examination.reason:
+            self._maincontent.get_object("textbuffer_examination_reason").set_text(self._examination.reason)
+        else:
+            self._maincontent.get_object("textbuffer_examination_reason").set_text('')
         if self._examination.orl:
             self._maincontent.get_object("textbuffer_orl").set_text(self._examination.orl)
         else :
@@ -213,7 +217,21 @@ class ExaminationReader(ExaminationContent):
     
     def update(self):
         self._maincontent.get_object("label_patient_name").set_text(self.get_examination_name())
-        self._fill()   
+        self._fill()
+        self._readonly()
     
+    def _readonly(self):
+        self._maincontent.get_object("textview_orl").set_editable(False)
+        self._maincontent.get_object("textview_visceral").set_editable(False)
+        self._maincontent.get_object("textview_pulmo").set_editable(False)
+        self._maincontent.get_object("textview_uro_gyneco").set_editable(False)
+        self._maincontent.get_object("textview_peripherie").set_editable(False)
+        self._maincontent.get_object("textview_general_state").set_editable(False)
+        self._maincontent.get_object("textview_medical_examination").set_editable(False)
+        self._maincontent.get_object("textview_test").set_editable(False)
+        self._maincontent.get_object("textview_diagnostic").set_editable(False)
+        self._maincontent.get_object("textview_treatment").set_editable(False)
+        self._maincontent.get_object("textview_conclusion").set_editable(False)
+
     def get_widget(self):
         return self.get_maincontent()

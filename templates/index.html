@@ -46,14 +46,14 @@
                         </div>
                     </form>
                 </li>
-                <li class="navbar-btn">
-                    <div class="btn-group">
+                <li>
+                    <div class="navbar-btn btn-group">
                         <a class="btn btn-primary" href="#"><i class="fa fa-user fa-fw"></i> {{ request.user.username }}
                         </a>
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <span class="fa fa-caret-down"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{% url 'accounts-logout' %}"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            <li><a href="{% url 'accounts-logout' %}"><i class="fa fa-sign-out fa-fw"></i>{% trans "Logout" %}</a>
                             </li>
                         </ul>
                     </div>
@@ -61,19 +61,6 @@
             </ul>
         </div>
         <!--/.navbar-collapse -->
-    </div>
-</div>
-
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-    <div class="container">
-        <h1>Hello, world!</h1>
-
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a
-            jumbotron and three supporting pieces of content. Use it as a starting point to create something more
-            unique.</p>
-
-        <p><a class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
     </div>
 </div>
 
@@ -123,6 +110,6 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script>
 <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="{{ STATIC_URL }}jsi18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+<!--script src="{{ STATIC_URL }}jsi18n/{{ LANGUAGE_CODE }}/djangojs.js"></script-->
 </body>
 </html>

@@ -7,6 +7,9 @@ from django.core.urlresolvers import reverse
  
 def get_login_url():
     return reverse(settings.LOGIN_URL_NAME)
+
+def get_logout_url():
+    return reverse(settings.LOGOUT_URL_NAME)
  
  
 def get_exempts():
@@ -35,6 +38,8 @@ class LoginRequiredMiddleware(object):
  'django.core.context_processors.auth'."
         if not request.user.is_authenticated():
             path = request.path.lstrip('/')
+            if get_logout_url().lstrip('/') == path :
+                request.path = ''
             if not any(m.match(path) for m in get_exempts()):
                 return HttpResponseRedirect(
                     get_login_url() + "?next=" + request.path)

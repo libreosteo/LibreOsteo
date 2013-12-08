@@ -26,14 +26,14 @@
 
     <div class="container">
     {% if form.errors %}
-        <p>Your username and password didn't match. Please try again.</p>
+        <p>{% trans "Your username and password didn't match. Please try again." %}</p>
     {% endif %}
 
       <form class="form-signin" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
           {% csrf_token %}
         <h2 class="form-signin-heading">{% trans "Please sign in" %}</h2>
-        <input type="text" name="username" class="form-control" placeholder="Your login" required="" autofocus="">
-        <input type="password" name="password" class="form-control" placeholder="Password" required="">
+        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus="">
+        <input type="password" name="password" class="form-control" placeholder="{%  trans "Password" %}" required="">
         <!--<label class="checkbox">
           <input type="checkbox" value="remember-me"> {% trans "Remember me" %}
         </label>-->

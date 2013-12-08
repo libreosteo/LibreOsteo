@@ -1,0 +1,134 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-12-08 18:27+0000\n"
+"PO-Revision-Date: 2013-12-08 19:32+0100\n"
+"Last-Translator: Gury Jean-Baptiste <jeanbaptiste.gury@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: libreosteoweb/models.py:12
+#: libreosteoweb/models.py:26
+#: libreosteoweb/models.py:54
+msgid "Family name"
+msgstr "Nom de famille"
+
+#: libreosteoweb/models.py:13
+#: libreosteoweb/models.py:28
+#: libreosteoweb/models.py:55
+msgid "Firstname"
+msgstr "Prénom"
+
+#: libreosteoweb/models.py:14
+#: libreosteoweb/models.py:34
+msgid "Phone"
+msgstr "Téléphone"
+
+#: libreosteoweb/models.py:15
+#: libreosteoweb/models.py:33
+msgid "City"
+msgstr "Ville"
+
+#: libreosteoweb/models.py:27
+msgid "Original name"
+msgstr "Nom de jeune fille"
+
+#: libreosteoweb/models.py:29
+#: libreosteoweb/models.py:56
+msgid "Birth date"
+msgstr "Date de naissance"
+
+#: libreosteoweb/models.py:30
+msgid "Street"
+msgstr "Rue"
+
+#: libreosteoweb/models.py:31
+msgid "Address complement"
+msgstr "Complément d'adresse"
+
+#: libreosteoweb/models.py:32
+msgid "Zipcode"
+msgstr "Code postal"
+
+#: libreosteoweb/models.py:35
+msgid "Mobile phone"
+msgstr "Mobile"
+
+#: libreosteoweb/models.py:37
+msgid "Regular doctor"
+msgstr "Médecin traitant"
+
+#: libreosteoweb/models.py:38
+msgid "Smoker"
+msgstr "Fumeur"
+
+#: libreosteoweb/models.py:39
+msgid "Important note"
+msgstr "Note importante"
+
+#: libreosteoweb/models.py:40
+msgid "Surgical history"
+msgstr "Antécédents chirurgicaux"
+
+#: libreosteoweb/models.py:41
+msgid "Medical history"
+msgstr "Antécédents médicaux"
+
+#: libreosteoweb/models.py:42
+msgid "Family history"
+msgstr "Antécédents familiaux"
+
+#: libreosteoweb/models.py:43
+msgid "Trauma history"
+msgstr "Antécédents traumatiques"
+
+#: libreosteoweb/models.py:57
+msgid "Parent"
+msgstr "Parent"
+
+#: templates/404.html:43
+msgid "Search"
+msgstr "Recherche"
+
+#: templates/index.html:56
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/account/login.html:10
+msgid "Signin on Libreosto"
+msgstr "Identifiez-vous sur Libreosteo"
+
+#: templates/account/login.html:29
+msgid "Your username and password didn't match. Please try again."
+msgstr "Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez réessayer s'il vous plaît."
+
+#: templates/account/login.html:34
+msgid "Please sign in"
+msgstr "Veuillez vous identifier"
+
+#: templates/account/login.html:35
+msgid "Your login"
+msgstr "Votre nom d'utilisateur"
+
+#: templates/account/login.html:36
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/account/login.html:38
+msgid "Remember me"
+msgstr "Se rappeler de moi"
+
+#: templates/account/login.html:41
+msgid "Sign in"
+msgstr "Identification"
+

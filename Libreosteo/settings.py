@@ -26,6 +26,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+
 
 # Application definition
 
@@ -92,7 +94,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'fr'
+LANGUAGE_CODE = 'fr-FR'
 
 TIME_ZONE = 'UTC'
 
@@ -129,6 +131,7 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'accounts-login'
+LOGOUT_URL_NAME = 'accounts-logout'
 LOGIN_REDIRECT_URL= '/'
 
 

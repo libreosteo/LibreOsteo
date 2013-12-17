@@ -37,17 +37,17 @@
             </button>
             <a class="navbar-brand" href="#">Libreosteo</a>
         </div>
-        <div class="navbar-collapse collapse">
-            <ul class="navbar-nav navbar-right">
-                <li>
-                    <form class="navbar-form" role="form">
+	<div class="navbar-collapse collapse">
+		<ul class="nav navbar-nav navbar-right">
+		<li>
+		<form class="navbar-form" role="form">
                         <div class="form-group">
                             <input type="text" placeholder="Rechercher" class="form-control"/>
                         </div>
-                    </form>
-                </li>
-                <li>
-                    <div class="navbar-btn btn-group">
+        	</form>
+		</li>
+		<li class="">
+		<div class="navbar-btn btn-group">
                         <a class="btn btn-primary" href="#"><i class="fa fa-user fa-fw"></i> {{ request.user.username }}
                         </a>
                         <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -56,11 +56,10 @@
                             <li><a href="{% url 'accounts-logout' %}"><i class="fa fa-sign-out fa-fw"></i>{% trans "Logout" %}</a>
                             </li>
                         </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <!--/.navbar-collapse -->
+         	</div>
+		</li>
+		</ul>
+	</div>
     </div>
 </div>
 

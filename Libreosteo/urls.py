@@ -6,28 +6,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-from libreosteoweb.models import RegularDoctor, Children, Patient
-from rest_framework import viewsets, routers
+from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet
+from rest_framework import  routers
 from django.views.generic.base import TemplateView
-
-
-
-# ViewSets define the view behavior.
-
-
-class PatientViewSet(viewsets.ModelViewSet):
-    model = Patient
-
-
-class RegularDoctorViewSet(viewsets.ModelViewSet):
-    model = RegularDoctor
 
 
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.SimpleRouter()
 router.register(r'patients', PatientViewSet)
 router.register(r'doctors', RegularDoctorViewSet)
-
 
 urlpatterns = patterns('',
     # Examples:
@@ -37,5 +24,8 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'account/login.html'}, name='accounts-login'),
     url(r'^accounts/logout', 'django.contrib.auth.views.logout', {'template_name' : 'account/login.html'}, name="accounts-logout"),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # Serve web-view
+    url(r'^web-view/partials/patient', TemplateView.as_view(template_name='partials/patient-detail.html'))
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

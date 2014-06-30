@@ -1,0 +1,18 @@
+{
+  "name": "libreosteo",
+  "description": "Libreosteo",
+  "version": "0.0.1",
+  "homepage": "https://github.com/garthylou/Libreosteo",
+  "license": "GNU-GPL",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "html5-boilerplate": "~4.3.0",
+    "angular-resource": "1.2.x",
+    "angular-xeditable": "0.1.x",
+    "angular-cookies": "1.2.x"
+  }
+}

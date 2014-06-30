@@ -41,7 +41,9 @@ INSTALLED_APPS = (
     'libreosteoweb',
     'django.contrib.admin',
     'rest_framework',
+    'django_filters',
     'statici18n',
+    'djangular',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -125,8 +127,11 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
-    ]
+    ],
+
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
+
 
 
 LOGIN_URL = 'accounts/login'

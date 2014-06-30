@@ -1,0 +1,7 @@
+<h1 class="page-header">
+    <span editable-text="patient.family_name" onaftersave="savePatient()">{$ patient.family_name $}</span>
+    <span ng-show="patient.original_name">(<span editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
+    </span>
+    <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
+</h1>
+

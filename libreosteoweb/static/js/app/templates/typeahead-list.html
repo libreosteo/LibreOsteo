@@ -1,0 +1,5 @@
+<div class="typeahead-list" ng-class="{'typeahead-list-open': items.length}">
+	<div class="typeahead-item" ng-repeat="item in items " ng-click="handleSelection(item)" style="cursor:pointer" ng-class="{'typeahead-active':isCurrent($index)}" ng-mouseenter="setCurrent($index)">
+		{$item.family_name$} <span ng-show="item.original_name">({$ item.original_name $})</span> {$item.first_name$}
+	</div>
+</div>

@@ -1,15 +1,5 @@
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-  padding-top: 50px;
-  padding-bottom: 20px;
-}
-
-.nav .open>a 
-{
-  background-color : #428bca;
-}
-
-.nav .open>a:hover
-{
-  background-color : #428bca;
+.editable-click {
+    !important;
+    color : black;
+    border-bottom : none;
 }

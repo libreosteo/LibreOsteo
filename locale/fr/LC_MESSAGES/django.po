@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-08 18:27+0000\n"
-"PO-Revision-Date: 2013-12-08 19:32+0100\n"
-"Last-Translator: Gury Jean-Baptiste <jeanbaptiste.gury@gmail.com>\n"
+"POT-Creation-Date: 2014-06-18 08:05+0000\n"
+"PO-Revision-Date: 2014-06-18 10:07+0100\n"
+"Last-Translator: GURY Jean-Baptiste <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -100,9 +100,21 @@ msgstr "Parent"
 msgid "Search"
 msgstr "Recherche"
 
-#: templates/index.html:56
+#: templates/index.html:235
+msgid "User Profile"
+msgstr "Profil utilisateur"
+
+#: templates/index.html:237
+msgid "Settings"
+msgstr "Paramètres"
+
+#: templates/index.html:240
 msgid "Logout"
 msgstr "Déconnexion"
+
+#: templates/index.html:257
+msgid "Search..."
+msgstr "Recherche..."
 
 #: templates/account/login.html:10
 msgid "Signin on Libreosto"

@@ -13,6 +13,8 @@
     "html5-boilerplate": "~4.3.0",
     "angular-resource": "1.2.x",
     "angular-xeditable": "0.1.x",
-    "angular-cookies": "1.2.x"
+    "angular-cookies": "1.2.x",
+    "angular-i18n": "1.2.x",
+    "angular-bootstrap": "0.6.x"
   }
 }

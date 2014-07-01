@@ -2,6 +2,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'ngRoute',
     'ngCookies',
     'xeditable',
+    'ui.bootstrap',
     'loTypeAhead',
     'loPatient'
 ]);
@@ -15,7 +16,7 @@ libreosteoApp.run(function (editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
-libreosteoApp.run(['$http','$cookies', function ($http, $cookies) {
+libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
     $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
     //$http.defaults.headers.delete['X-CSRFToken'] = $cookies.csrftoken;

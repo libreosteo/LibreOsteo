@@ -1,3 +1,4 @@
+{% load i18n %}
 <h1 class="page-header">
     <span editable-text="patient.family_name" onaftersave="savePatient()">{$ patient.family_name $}</span>
     <span ng-show="patient.original_name">(<span editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
@@ -5,3 +6,6 @@
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
 </h1>
 
+<div>
+    {{ patient.birth_date }} : <span editable-bsdate="patient.birth_date"  e-datepicker-popup="dd/MM/yyyy" onaftersave="savePatient()" e-starting-day="1">{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span> <span> ( {$ age | format_age $} )</span>
+</div>

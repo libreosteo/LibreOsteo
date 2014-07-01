@@ -9,6 +9,7 @@ admin.autodiscover()
 from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet
 from rest_framework import  routers
 from django.views.generic.base import TemplateView
+from libreosteoweb.api import displays
 
 
 # Routers provide an easy way of automatically determining the URL conf
@@ -26,6 +27,6 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # Serve web-view
-    url(r'^web-view/partials/patient', TemplateView.as_view(template_name='partials/patient-detail.html'))
+    url(r'^web-view/partials/patient', displays.display_patient)
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

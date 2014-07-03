@@ -15,6 +15,9 @@
     "angular-xeditable": "0.1.x",
     "angular-cookies": "1.2.x",
     "angular-i18n": "1.2.x",
-    "angular-bootstrap": "0.6.x"
+    "angular-bootstrap": "0.9.x"
+  },
+  "resolutions": {
+    "angular": "1.2.18"
   }
 }

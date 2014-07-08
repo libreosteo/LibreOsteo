@@ -3,3 +3,9 @@
     color : black;
     border-bottom : none;
 }
+
+pre {
+    background-color : transparent;
+    border : none;
+    font-family: Arial, Helvetica, sans-serif;
+}

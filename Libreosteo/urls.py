@@ -13,7 +13,7 @@ from libreosteoweb.api import displays
 
 
 # Routers provide an easy way of automatically determining the URL conf
-router = routers.SimpleRouter()
+router = routers.SimpleRouter(trailing_slash = False)
 router.register(r'patients', PatientViewSet)
 router.register(r'doctors', RegularDoctorViewSet)
 
@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     # Serve web-view
-    url(r'^web-view/partials/patient', displays.display_patient)
+    url(r'^web-view/partials/patient', displays.display_patient),
+    url(r'^web-view/partials/doctor-modal', displays.display_doctor),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

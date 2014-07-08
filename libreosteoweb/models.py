@@ -58,3 +58,13 @@ class Children(models.Model):
 
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
+
+# For the examination model
+# Todo :
+# - Motif de consultation
+# -sphères (ORL, Cardio-pulmonaire, digestive, génito-urinaire, périphéries)
+# - traitement
+# - conclusion
+# - date
+# - praticien
+# -

@@ -1,0 +1,28 @@
+{% load i18n %}
+<div class="modal-header">
+    <h3 class="modal-title">{% trans 'Ajouter un médecin' %}</h3>
+</div>
+<form novalidate name="form">
+<div class="modal-body">
+    <div class="form-group">
+        <label>{{ doctor.family_name }}</label>
+        <input class="form-control" ng-model="doctor.family_name" required name="family_name">
+    </div>
+    <div class="form-group">
+        <label>{{ doctor.first_name }}</label>
+        <input class="form-control" ng-model="doctor.first_name" required name="first_name">
+    </div>
+    <div class="form-group">
+        <label>{{ doctor.phone }}</label>
+        <input type="tel" ng-pattern="/^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/" class="form-control" ng-model="doctor.phone" required name="phone">
+    </div>
+    <div class="form-group">
+        <label>{{ doctor.city }}</label>
+        <input class="form-control" ng-model="doctor.city" required name="city">
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">Ajouter</button>
+    <button class="btn btn-warning" ng-click="cancel()">Annuler</button>
+</div>
+</form>

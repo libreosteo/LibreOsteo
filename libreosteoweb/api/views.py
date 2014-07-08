@@ -14,7 +14,6 @@ class SearchFilter(filters.SearchFilter):
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = Patient
-    serializer_class = PatientSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('family_name', 'original_name', 'first_name')
 

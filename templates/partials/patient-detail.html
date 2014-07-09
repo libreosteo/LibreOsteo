@@ -124,7 +124,7 @@
                         </div>
                         <div class="col-md-8">
                             {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"
-                                                         e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors"
+                                                         e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
                                                          onaftersave="savePatient()"
                                                          tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"
                                                          tooltip-trigger="mouseenter"

@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="modal-header">
-    <h3 class="modal-title">{% trans 'Ajouter un médecin' %}</h3>
+    <h3 class="modal-title">{% trans 'Add a doctor' %}</h3>
 </div>
 <form novalidate name="form">
 <div class="modal-body">
@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">Ajouter</button>
-    <button class="btn btn-warning" ng-click="cancel()">Annuler</button>
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid">{% trans 'Add' %}</button>
+    <button class="btn btn-warning" ng-click="cancel()">{% trans 'Cancel' %}</button>
 </div>
 </form>

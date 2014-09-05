@@ -35,7 +35,7 @@ class Patient(models.Model):
         mobile_phone = models.CharField(_('Mobile phone'), max_length=200, blank=True)
         #family_situation = Column(Integer)
         doctor = models.ForeignKey(RegularDoctor, verbose_name=_('Regular doctor'), blank=True, null=True)
-        smoker = models.BooleanField(_('Smoker'))
+        smoker = models.BooleanField(_('Smoker'), default=False)
         important_info = models.TextField(_('Important note'), blank=True)
         surgical_history = models.TextField(_('Surgical history'), blank=True)
         medical_history = models.TextField(_('Medical history'), blank=True)

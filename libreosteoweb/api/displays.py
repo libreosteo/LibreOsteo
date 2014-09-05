@@ -23,6 +23,10 @@ def display_patient(request):
     display = PatientDisplay()
     return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields})
 
+def display_newpatient(request):
+    display = PatientDisplay()
+    return render_to_response('partials/add-patient.html', {'patient' : display.display_fields})
+
 def display_doctor(request):
     display = RegularDoctorDisplay();
     return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields})

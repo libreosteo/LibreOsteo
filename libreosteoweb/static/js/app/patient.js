@@ -141,3 +141,21 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
         $modalInstance.dismiss('cancel');
     };
 };
+
+
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'PatientServ', 'DoctorServ',
+    function($scope, $location, PatientServ, DoctorServ ) {
+        "use strict";
+
+        $scope.initPatient = function(patient) {
+            PatientServ.add(patient, function(data)
+            {
+                console.log('OK '+data);
+                $location.path('/patient/'+data.id);
+            },
+            function(data)
+            {
+                console.log('error ' + data);
+            });
+        };
+    }]);

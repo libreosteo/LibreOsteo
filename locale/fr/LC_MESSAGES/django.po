@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-02 11:54+0000\n"
-"PO-Revision-Date: 2014-07-02 13:58+0100\n"
-"Last-Translator: Jean-Baptiste Gury <jeanbaptiste.gury@gmail.com>\n"
+"POT-Creation-Date: 2014-07-09 08:24+0000\n"
+"PO-Revision-Date: 2014-07-09 10:25+0100\n"
+"Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -100,21 +100,25 @@ msgstr "Parent"
 msgid "Search"
 msgstr "Recherche"
 
-#: templates/index.html:246
+#: templates/index.html:247
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/index.html:248
+#: templates/index.html:249
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/index.html:251
+#: templates/index.html:252
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/index.html:269
+#: templates/index.html:270
 msgid "Search..."
 msgstr "Recherche..."
+
+#: templates/index.html:283
+msgid "New patient"
+msgstr "Nouveau patient"
 
 #: templates/account/login.html:10
 msgid "Signin on Libreosto"
@@ -144,30 +148,55 @@ msgstr "Se rappeler de moi"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/partials/patient-detail.html:13
+#: templates/partials/doctor-modal-add.html:3
+#: templates/partials/patient-detail.html:133
+msgid "Add a doctor"
+msgstr "Ajouter un médecin"
+
+#: templates/partials/doctor-modal-add.html:25
+msgid "Add"
+msgstr "Ajouter"
+
+#: templates/partials/doctor-modal-add.html:26
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/partials/patient-detail.html:11
+msgid "General infos"
+msgstr "Infos générales"
+
+#: templates/partials/patient-detail.html:16
 msgid "Patient infos"
 msgstr "Infos patient"
 
-#: templates/partials/patient-detail.html:21
+#: templates/partials/patient-detail.html:25
 msgid "not documented"
 msgstr "non renseigné"
 
-#: templates/partials/patient-detail.html:29
-#: templates/partials/patient-detail.html:36
-#: templates/partials/patient-detail.html:42
-#: templates/partials/patient-detail.html:49
-#: templates/partials/patient-detail.html:57
-#: templates/partials/patient-detail.html:64
-#: templates/partials/patient-detail.html:70
-#: templates/partials/patient-detail.html:77
-#: templates/partials/patient-detail.html:86
+#: templates/partials/patient-detail.html:33
+#: templates/partials/patient-detail.html:40
+#: templates/partials/patient-detail.html:46
+#: templates/partials/patient-detail.html:53
+#: templates/partials/patient-detail.html:61
+#: templates/partials/patient-detail.html:68
+#: templates/partials/patient-detail.html:74
+#: templates/partials/patient-detail.html:81
 #: templates/partials/patient-detail.html:91
-#: templates/partials/patient-detail.html:99
-#: templates/partials/patient-detail.html:105
+#: templates/partials/patient-detail.html:97
+#: templates/partials/patient-detail.html:106
+#: templates/partials/patient-detail.html:113
 msgid " "
 msgstr " "
 
-#: templates/partials/patient-detail.html:113
+#: templates/partials/patient-detail.html:123
 msgid "Not smoker"
 msgstr "Non fumeur"
+
+#: templates/partials/patient-detail.html:170
+msgid "History"
+msgstr "Antécédents"
+
+#: templates/partials/patient-detail.html:285
+msgid "Examinations"
+msgstr "Consultations"
 

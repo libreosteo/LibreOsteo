@@ -27,9 +27,15 @@ libreosteoApp.config(['$routeProvider',
         $routeProvider.
             when('/patient/:patientId',
             {
-                templateUrl : 'web-view/partials/patient-detail.html',
+                templateUrl : 'web-view/partials/patient-detail',
                 controller : 'PatientCtrl'
             }).
+            when('/addPatient',
+            {
+                templateUrl : 'web-view/partials/add-patient',
+                controller : 'AddPatientCtrl'
+            }
+            ).
             otherwise({
                redirectTo : '/'
             });

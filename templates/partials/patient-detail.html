@@ -20,8 +20,8 @@
                         <div class="col-md-2">
                             {{ patient.birth_date }} :
                         </div>
-                        <div class="col-md-6"><span editable-bsdate="patient.birth_date" e-datepicker-popup="dd/MM/yyyy"
-                                                    onaftersave="savePatient()" e-starting-day="1"
+                        <div class="col-md-6"><span editable-date="patient.birth_date"
+                                                    onaftersave="savePatient()"
                                 >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
                         </div>
                         <div class="col-md-4"><span> ( {$ age | format_age $} )</span></div>
@@ -129,8 +129,8 @@
                                                          tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"
                                                          tooltip-trigger="mouseenter"
                                 >{$ doctor.family_name $} - {$ doctor.city $}</span>
-                            <button class="btn btn-default btn-xs glyphicon glyphicon-plus"
-                                    title="{% trans 'Ajouter un médecin' %}" ng-click="formAddDoctor()"></button>
+                            <button class="btn btn-default btn-xs fa fa-plus"
+                                    title="{% trans 'Add a doctor' %}" ng-click="formAddDoctor()"></button>
                         </div>
                     </div>
                 </div>

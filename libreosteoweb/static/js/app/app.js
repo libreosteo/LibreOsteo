@@ -4,7 +4,8 @@ var libreosteoApp = angular.module('libreosteo', [
     'xeditable',
     'ui.bootstrap',
     'loTypeAhead',
-    'loPatient'
+    'loPatient',
+    'loInlineEdit'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

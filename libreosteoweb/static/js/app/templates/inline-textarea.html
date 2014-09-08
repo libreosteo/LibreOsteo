@@ -1,0 +1,20 @@
+<div style="margin-left: 5px; margin-right: 5px" ng-switch="model[property].length">
+    <div ng-switch-when="0" ng-mouseenter="displayButton = true"
+                      ng-mouseleave="displayButton = false">
+                <span editable-textarea="model[property]"
+                      e-placeholder="{$ placeholder $}" onaftersave="saveModel()" e-form="editform"
+                      e-rows="{$ row $}" e-cols="{$ col $}"
+                        >
+                    <pre class="inlineedit" style="display:inline">{$ model[property] || '&nbsp;&nbsp;' $}</pre>
+        <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
+                ng-click="editform.$show()"
+                ng-show="displayButton && !editform.$visible"
+                ></button></span>
+    </div>
+    <div ng-switch-default>
+                <span editable-textarea="model[property]"
+                      e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
+                      e-rows="{$ row $}" e-cols="{$ col $}"
+                        ><pre class="inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</pre></span>
+    </div>
+</div>

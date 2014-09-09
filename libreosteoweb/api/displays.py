@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 from django.forms.models import ModelForm
-from libreosteoweb.models import Patient, Children, RegularDoctor
+from libreosteoweb.models import Patient, Children, RegularDoctor, Examination
 
 
 def filter_fields(f):
@@ -18,6 +18,11 @@ class RegularDoctorDisplay(ModelForm):
 
     display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, RegularDoctor._meta.fields)])
 
+class ExaminationDisplay(ModelForm):
+    class Meta:
+        model = Examination
+
+    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, Examination._meta.fields)])
 
 def display_patient(request):
     display = PatientDisplay()
@@ -28,5 +33,5 @@ def display_newpatient(request):
     return render_to_response('partials/add-patient.html', {'patient' : display.display_fields})
 
 def display_doctor(request):
-    display = RegularDoctorDisplay();
+    display = RegularDoctorDisplay()
     return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields})

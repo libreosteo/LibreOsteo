@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet
+from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet, ExaminationViewSet
 from rest_framework import  routers
 from django.views.generic.base import TemplateView
 from libreosteoweb.api import displays
@@ -16,6 +16,7 @@ from libreosteoweb.api import displays
 router = routers.SimpleRouter(trailing_slash = False)
 router.register(r'patients', PatientViewSet)
 router.register(r'doctors', RegularDoctorViewSet)
+router.register(r'examinations', ExaminationViewSet)
 
 urlpatterns = patterns('',
     # Examples:

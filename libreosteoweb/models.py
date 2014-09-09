@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -59,12 +60,25 @@ class Children(models.Model):
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
 
-# For the examination model
-# Todo :
-# - Motif de consultation
-# -sphères (ORL, Cardio-pulmonaire, digestive, génito-urinaire, périphéries)
-# - traitement
-# - conclusion
-# - date
-# - praticien
-# -
+class Examination(models.Model):
+    """
+    This class implements bean object to represent
+    examination on a patient
+    """
+    reason = models.TextField(_('Reason'), blank=True)
+    orl = models.TextField(_('ORL Sphere'), blank=True)
+    visceral = models.TextField(_('Visceral Sphere'), blank=True)
+    pulmo = models.TextField(_('Cardio-Pulmo Sphere'), blank=True)
+    uro_gyneco = models.TextField(_('Uro-gyneco Sphere'), blank=True)
+    periphery = models.TextField(_('Periphery Sphere'), blank=True)
+    general_state = models.TextField(_('General state'), blank=True)
+    medical_examination = models.TextField(_('Medical examination'), blank=True)
+    tests = models.TextField(_('Tests'), blank=True)
+    diagnosis = models.TextField(_('Diagnosis'), blank=True)
+    treatments = models.TextField(_('Treatments'), blank=True)
+    conclusion = models.TextField(_('Conclusion'), blank=True)
+    date = models.DateField(_('Date'))
+    status = models.SmallIntegerField(_('Status'))
+    #invoice =
+    patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
+    therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'))

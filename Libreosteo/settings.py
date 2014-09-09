@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'libreosteoweb',
-    'django.contrib.admin',
     'rest_framework',
     'django_filters',
     'statici18n',

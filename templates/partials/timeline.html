@@ -1,0 +1,29 @@
+{% load i18n %}
+<div ng-switch="examinations.length > 0">
+
+    <div style="margin:20px">
+        <button class="btn btn-primary center-block"
+                    ng-click="">{% trans 'Start an examination' %}</button>
+    </div>
+    <ul class="timeline" ng-switch-when="true">
+        <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': $odd }">
+            <div class="timeline-badge success"><i class="fa fa-check"></i>
+            </div>
+            <div class="timeline-panel">
+                <div class="timeline-heading">
+                    <h4 class="timeline-title">{% trans 'Session of ' %} {$ examination.date | date : 'longDate' $}</h4>
+
+                    <p>
+                        <small class="text-muted"><i class="fa fa-time"></i>{$ examination.date | timeAgo $} {% trans 'by' %} <span class="text-uppercase">{$ examination.therapeut.last_name $}</span> {$ examination.therapeut.first_name $}</small>
+                    </p>
+                </div>
+                <div class="timeline-body">
+                    <p>{$ examination.reason $}</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div ng-switch-default class="no-session bg-warning">
+        <p class="text-center text-muted" style="padding-top:98px;">{% trans 'No session for this patient' %}</p>
+    </div>
+</div>

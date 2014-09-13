@@ -3,7 +3,7 @@ var inlineEdit = angular.module('loInlineEdit', []);
 inlineEdit.directive('inlineedit', function() {
   return {
     restrict: 'E',
-    transclude : true,
+    //transclude : true,
     scope: {
         model : '=',
         property: '@',
@@ -16,14 +16,11 @@ inlineEdit.directive('inlineedit', function() {
     {
         "use strict";
         $scope.displayButton = false;
-    },
-	link:function(scope,elem,attrs){
 
-        scope.saveModel = function() {
-            "use strict";
-          scope.onSave();
+        $scope.saveModel = function() {
+          $scope.onSave();
         };
-	 },
+    },
       compile: function(element, attrs){
        if (!attrs.width) { attrs.width = '100%'; }
     },
@@ -35,7 +32,7 @@ inlineEdit.directive('inlineedit', function() {
 inlineEdit.directive('inlinetel', function() {
   return {
     restrict: 'E',
-    transclude : true,
+    //transclude : true,
     scope: {
         model : '=',
         property: '@',
@@ -49,14 +46,11 @@ inlineEdit.directive('inlinetel', function() {
     {
         "use strict";
         $scope.displayButton = false;
-    },
-	link:function(scope,elem,attrs){
-        scope.saveModel = function() {
-            "use strict";
-          scope.onSave();
-        };
 
-	 },
+        $scope.saveModel = function() {
+          $scope.onSave();
+        };
+    },
     compile: function(element, attrs){
        if (!attrs.width) { attrs.width = '100%'; }
     },
@@ -70,7 +64,7 @@ inlineEdit.directive('inlinetel', function() {
 inlineEdit.directive('inlinetextarea', function() {
   return {
     restrict: 'E',
-    transclude : true,
+    //transclude : true,
     scope: {
         model : '=',
         property: '@',
@@ -85,14 +79,11 @@ inlineEdit.directive('inlinetextarea', function() {
     {
         "use strict";
         $scope.displayButton = false;
-    },
-	link:function(scope,elem,attrs){
-        scope.saveModel = function() {
-            "use strict";
-          scope.onSave();
-        };
 
-	 },
+        $scope.saveModel = function() {
+          $scope.onSave();
+        };
+    },
     compile: function(element, attrs){
        if (!attrs.width) { attrs.width = '100%'; }
     },

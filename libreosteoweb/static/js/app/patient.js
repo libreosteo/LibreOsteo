@@ -22,6 +22,20 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ',
     }
 ]);
 
+patient.factory('PatientExaminationsServ', ['$resource',
+    function($resource) {
+        "use strict";
+        return $resource('api/patients/:patient/examinations', null,
+            {
+                get: {
+                    method: 'GET',
+                    params: { patient: 'patient'},
+                    isArray: true,
+                }
+            });
+
+}]);
+
 patient.filter('format_age', function () {
     "use strict";
     return function(input) {
@@ -59,8 +73,8 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', 'PatientServ', 'DoctorServ',
-    function($scope, $routeParams, $filter, $modal, PatientServ, DoctorServ ) {
+patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'PatientServ', 'DoctorServ', 'PatientExaminationsServ',
+    function($scope, $routeParams, $filter, $modal, $http, PatientServ, DoctorServ, PatientExaminationsServ) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
@@ -103,6 +117,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         });
 
         $scope.savePatient = function () {
+            console.log('Try to save');
             $scope.patient.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
             return PatientServ.save({patientId:$scope.patient.id}, $scope.patient);
         };
@@ -121,6 +136,8 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
               DoctorServ.add(newDoctor);
            });
         };
+
+       $scope.examinations = PatientExaminationsServ.get( { patient : $routeParams.patientId });
 }]);
 
 

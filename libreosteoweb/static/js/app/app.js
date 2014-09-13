@@ -5,7 +5,9 @@ var libreosteoApp = angular.module('libreosteo', [
     'ui.bootstrap',
     'loTypeAhead',
     'loPatient',
-    'loInlineEdit'
+    'loInlineEdit',
+    'loTimeline',
+    'yaru22.angular-timeago'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

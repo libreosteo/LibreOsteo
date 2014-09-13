@@ -42,6 +42,7 @@ class Patient(models.Model):
         medical_history = models.TextField(_('Medical history'), blank=True)
         family_history = models.TextField(_('Family history'), blank=True)
         trauma_history = models.TextField(_('Trauma history'), blank=True)
+        medical_reports = models.TextField(_('Medical reports'), blank=True)
 
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
@@ -66,6 +67,7 @@ class Examination(models.Model):
     examination on a patient
     """
     reason = models.TextField(_('Reason'), blank=True)
+    reason_description = models.TextField(_('Reason description'), blank=True)
     orl = models.TextField(_('ORL Sphere'), blank=True)
     visceral = models.TextField(_('Visceral Sphere'), blank=True)
     pulmo = models.TextField(_('Cardio-Pulmo Sphere'), blank=True)
@@ -79,6 +81,7 @@ class Examination(models.Model):
     conclusion = models.TextField(_('Conclusion'), blank=True)
     date = models.DateField(_('Date'))
     status = models.SmallIntegerField(_('Status'))
+    type = models.SmallIntegerField(_('Type'))
     #invoice =
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'))

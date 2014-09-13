@@ -9,3 +9,7 @@ pre {
     border : none;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.no-session {
+    height : 200px;
+}

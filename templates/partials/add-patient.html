@@ -26,11 +26,10 @@
                        name="first_name" placeholder="{{ patient.first_name }}">
             </div>
             <div class="form-group">
-                <p class="input-group">
-                    <input type="date" class="form-control  input-lg"
+                    <input type="text" class="form-control  input-lg"
                            ng-model="patient.birth_date"  ng-required="true"
-                           placeholder="{{ patient.birth_date }}"/>
-                </p>
+                           placeholder="{{ patient.birth_date }}"
+                            onfocus="(this.type='date')" onblur="(this.type='text')"/>
             </div>
             <button class="btn btn-primary"
                     ng-click="initPatient(patient)">{% trans 'Init the patient file' %}</button>

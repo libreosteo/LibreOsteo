@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/patient-detail', displays.display_patient),
     url(r'^web-view/partials/doctor-modal', displays.display_doctor),
     url(r'^web-view/partials/add-patient', displays.display_newpatient),
-    url(r'^web-view/partials/examinations-timeline', displays.display_examination_timeline)
+    url(r'^web-view/partials/examinations-timeline', displays.display_examination_timeline),
+    url(r'^web-view/partials/examination', displays.display_examination),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

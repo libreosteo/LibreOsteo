@@ -4,17 +4,20 @@
                 <span editable-textarea="model[property]"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()" e-form="editform"
                       e-rows="{$ row $}" e-cols="{$ col $}"
+                      blur="submit"
                         >
                     <pre class="inlineedit" style="display:inline">{$ model[property] || '&nbsp;&nbsp;' $}</pre>
+                    </span>
         <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
                 ng-click="editform.$show()"
                 ng-show="displayButton && !editform.$visible"
-                ></button></span>
+                ></button>
     </div>
     <div ng-switch-default>
                 <span editable-textarea="model[property]"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-rows="{$ row $}" e-cols="{$ col $}"
+                      blur="submit"
                         ><pre class="inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</pre></span>
     </div>
 </div>

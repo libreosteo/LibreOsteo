@@ -26,7 +26,9 @@ class ExaminationDisplay(ModelForm):
 
 def display_patient(request):
     display = PatientDisplay()
-    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields})
+    displayExamination = ExaminationDisplay()
+    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields,
+                                                               'examination' : displayExamination.display_fields})
 
 def display_newpatient(request):
     display = PatientDisplay()
@@ -39,3 +41,7 @@ def display_doctor(request):
 def display_examination_timeline(request):
     display = ExaminationDisplay()
     return render_to_response('partials/timeline.html', {'examination' : display.display_fields})
+
+def display_examination(request):
+    displayExamination = ExaminationDisplay()
+    return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields})

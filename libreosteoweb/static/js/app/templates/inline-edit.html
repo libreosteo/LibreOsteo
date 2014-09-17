@@ -4,6 +4,7 @@
                 <span editable-text="model[property]"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()" e-form="editform"
                       e-style="width:{$ width $}" class="inlineedit"
+                      blur="submit"
                         >{$ model[property] || '&nbsp;&nbsp;' $}</span>
         <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
                 ng-click="editform.$show()"
@@ -14,6 +15,7 @@
                 <span editable-text="model[property]"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-style="width:{$ width $}" class="inlineedit"
+                      blur="submit"
                         >{$ model[property] || '&nbsp;&nbsp;' $}</span>
     </div>
 </div>

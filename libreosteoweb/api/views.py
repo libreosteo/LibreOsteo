@@ -32,3 +32,10 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
 
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = Examination
+
+    def pre_save(self, obj):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+
+        if not obj.therapeut:
+            setattr(obj, 'therapeut', self.request.user)

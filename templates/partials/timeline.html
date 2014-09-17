@@ -1,15 +1,15 @@
 {% load i18n %}
 <div ng-switch="examinations.length > 0">
 
-    <div style="margin:20px">
+    <div style="margin-top:20px">
         <button class="btn btn-primary center-block"
-                    ng-click="">{% trans 'Start an examination' %}</button>
+                    ng-click="startExamination()" ng-disabled="examinationIsActive">{% trans 'Start an examination' %}</button>
     </div>
     <ul class="timeline" ng-switch-when="true">
-        <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': $odd }">
-            <div class="timeline-badge success"><i class="fa fa-check"></i>
+        <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': examination.order %2 == 0 }">
+            <div class="timeline-badge success"><i class="fa fa-check" ></i>
             </div>
-            <div class="timeline-panel">
+            <div class="timeline-panel" ng-click="loadExamination(examination.id)">
                 <div class="timeline-heading">
                     <h4 class="timeline-title">{% trans 'Session of ' %} {$ examination.date | date : 'longDate' $}</h4>
 

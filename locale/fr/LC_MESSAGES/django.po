@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 15:35+0000\n"
-"PO-Revision-Date: 2014-09-12 17:36+0100\n"
+"POT-Creation-Date: 2014-09-17 19:34+0000\n"
+"PO-Revision-Date: 2014-09-17 21:35+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -94,7 +94,6 @@ msgstr "Antécédents traumatiques"
 
 #: libreosteoweb/models.py:45
 #: templates/partials/patient-detail.html:147
-#| msgid "Medical history"
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
@@ -139,38 +138,34 @@ msgid "Medical examination"
 msgstr "Examen médical"
 
 #: libreosteoweb/models.py:78
-msgid "Tests"
-msgstr "Tests"
-
-#: libreosteoweb/models.py:79
 msgid "Diagnosis"
 msgstr "Diagnostic ostéopathique"
 
-#: libreosteoweb/models.py:80
+#: libreosteoweb/models.py:79
 msgid "Treatments"
 msgstr "Traitements"
 
-#: libreosteoweb/models.py:81
+#: libreosteoweb/models.py:80
 msgid "Conclusion"
 msgstr "Conclusion"
 
-#: libreosteoweb/models.py:82
+#: libreosteoweb/models.py:81
 msgid "Date"
 msgstr "Date"
 
-#: libreosteoweb/models.py:83
+#: libreosteoweb/models.py:82
 msgid "Status"
 msgstr "État"
 
-#: libreosteoweb/models.py:84
+#: libreosteoweb/models.py:83
 msgid "Type"
 msgstr "Type"
 
-#: libreosteoweb/models.py:86
+#: libreosteoweb/models.py:85
 msgid "Patient"
 msgstr "Patient"
 
-#: libreosteoweb/models.py:87
+#: libreosteoweb/models.py:86
 msgid "Therapeut"
 msgstr "Thérapeute"
 
@@ -227,7 +222,7 @@ msgstr "Recherche..."
 msgid "New patient"
 msgstr "Nouveau patient"
 
-#: templates/partials/add-patient.html:36
+#: templates/partials/add-patient.html:35
 msgid "Init the patient file"
 msgstr "Initialiser la fiche patient"
 
@@ -243,6 +238,15 @@ msgstr "Ajouter"
 #: templates/partials/doctor-modal-add.html:26
 msgid "Cancel"
 msgstr "Annuler"
+
+#: templates/partials/examination.html:6
+#: templates/partials/timeline.html:14
+msgid "Session of "
+msgstr "Séance du"
+
+#: templates/partials/examination.html:171
+msgid "Invoice"
+msgstr "Facturer"
 
 #: templates/partials/patient-detail.html:11
 msgid "General infos"
@@ -265,18 +269,17 @@ msgstr "Non fumeur"
 msgid "History"
 msgstr "Antécédents"
 
-#: templates/partials/patient-detail.html:151
+#: templates/partials/patient-detail.html:160
 msgid "Examinations"
 msgstr "Consultations"
 
+#: templates/partials/patient-detail.html:168
+msgid "New Examination"
+msgstr "Nouvelle consultation"
+
 #: templates/partials/timeline.html:6
-#| msgid "Medical examination"
 msgid "Start an examination"
 msgstr "Démarrer une consultation"
-
-#: templates/partials/timeline.html:14
-msgid "Session of "
-msgstr "Séance du"
 
 #: templates/partials/timeline.html:17
 msgid "by"
@@ -285,6 +288,9 @@ msgstr "par"
 #: templates/partials/timeline.html:27
 msgid "No session for this patient"
 msgstr "Pas de séance pour ce patient"
+
+#~ msgid "Tests"
+#~ msgstr "Tests"
 
 #~ msgid " "
 #~ msgstr " "

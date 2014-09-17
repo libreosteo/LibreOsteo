@@ -10,7 +10,7 @@ inlineEdit.directive('inlineedit', function() {
         onSave : '&',
         placeholder : '@',
         editclass : '@',
-        width: '@'
+        width: '@',
 	},
     controller: function($scope)
     {
@@ -22,7 +22,8 @@ inlineEdit.directive('inlineedit', function() {
         };
     },
       compile: function(element, attrs){
-       if (!attrs.width) { attrs.width = '100%'; }
+          if (!attrs.width) { attrs.width = '100%'; }
+
     },
 
     templateUrl: 'static/js/app/templates/inline-edit.html'

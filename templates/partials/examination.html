@@ -1,0 +1,173 @@
+{% load i18n %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Session of ' %} {$ model.date | date : 'longDate' $}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <!--<span editable-select="model.type" e-ng-options="t.value as t.text for t in types">
+                    </span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    {{ examination.reason }}
+                </div>
+                <div class="panel-body row" style="margin-left: 1px; margin-right: 1px">
+                    <div>
+                        <inlineedit class="col-md-12" model="model" property="reason" on-save="saveModel()"
+                            placeholder="{{ examination.reason }}"
+                            ></inlineedit>
+                    </div>
+                    <div style="padding-top: 45px">
+                        <inlinetextarea class="col-md-5" model="model" property="reason_description" on-save="saveModel()"
+                                    placeholder="{{ examination.reason_description }}"
+                                row="5" col="40"/>
+                        <span class="col-md-1">{{ examination.medical_examination }}</span>
+                        <inlinetextarea class="col-md-6" model="model" property="medical_examination" on-save="saveModel()"
+                                    placeholder="{{ examination.medical_examination }}"
+                                row="5" col="50"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+
+     <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.orl }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="orl" on-save="saveModel()"
+                            placeholder="{{ examination.orl }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.visceral }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
+                    <inlinetextarea model="model" property="visceral" on-save="saveModel()"
+                            placeholder="{{ examination.visceral }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.pulmo }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="pulmo" on-save="saveModel()"
+                            placeholder="{{ examination.pulmo }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.uro_gyneco }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
+                    <inlinetextarea model="model" property="uro_gyneco" on-save="saveModel()"
+                            placeholder="{{ examination.uro_gyneco }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.periphery }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="periphery" on-save="saveModel()"
+                            placeholder="{{ examination.periphery }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.general_state }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
+                    <inlinetextarea model="model" property="general_state" on-save="saveModel()"
+                            placeholder="{{ examination.general_state }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.diagnosis }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="diagnosis" on-save="saveModel()"
+                            placeholder="{{ examination.diagnosis }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    {{ examination.treatments }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="treatments" on-save="saveModel()"
+                            placeholder="{{ examination.treatments }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    {{ examination.conclusion }}
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <inlinetextarea model="model" property="conclusion" on-save="saveModel()"
+                            placeholder="{{ examination.conclusion }}"
+                            row="5" col="50"></inlinetextarea>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <button class="btn btn-success right"
+                    ng-click="invoice(model)">{% trans 'Invoice' %}</button>
+        </div>
+    </div>

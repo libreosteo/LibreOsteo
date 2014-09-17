@@ -1,4 +1,4 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ',
@@ -73,13 +73,15 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'PatientServ', 'DoctorServ', 'PatientExaminationsServ',
-    function($scope, $routeParams, $filter, $modal, $http, PatientServ, DoctorServ, PatientExaminationsServ) {
+patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'PatientServ', 'DoctorServ',
+    'PatientExaminationsServ', 'ExaminationServ',
+    function($scope, $routeParams, $filter, $modal, $http, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
         });
 
+        // Display the formated age
         $scope.get_age = function () {
             var birthDate = $scope.patient.birth_date;
             if(birthDate)
@@ -110,23 +112,27 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
            $scope.age = $scope.get_age();
         });
 
+        // Handle the doctor of the patient.
         $scope.$watch('patient.doctor', function(newValue, oldValue){
             if (newValue){
                 $scope.doctor = DoctorServ.get({doctorId : newValue});
             }
         });
 
+        // Handle the patient object to be saved.
         $scope.savePatient = function () {
-            console.log('Try to save');
+            // Be sure that the birth_date has a correct format to be registered.
             $scope.patient.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
             return PatientServ.save({patientId:$scope.patient.id}, $scope.patient);
         };
 
+        // Prepare the doctors function to be selected.
         $scope.doctors = null;
         $scope.loadDoctors = function() {
             $scope.doctors = DoctorServ.query();
         };
 
+        // Prepare and define the modal function to add doctor.
        $scope.formAddDoctor = function() {
             var modalInstance = $modal.open({
                 templateUrl: 'web-view/partials/doctor-modal',
@@ -137,7 +143,84 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
            });
         };
 
-       $scope.examinations = PatientExaminationsServ.get( { patient : $routeParams.patientId });
+        //Handle examinations
+
+        $scope.getOrderedExaminations = function(patientId)
+        {
+            var examinationsList = PatientExaminationsServ.get( { patient : patientId }, function()
+                {
+                    angular.forEach(examinationsList, function(value, index, obj)
+                    {
+                        value.order =  obj.length - index;
+                    });
+                }
+                );
+            return examinationsList;
+
+        };
+
+       $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+        // The futur examination of the patient, if a new examination is started.
+        $scope.newExamination = {};
+        // To display examination in the patient file.
+        $scope.archiveExamination = {};
+
+        $scope.newExaminationDisplay = false;
+        $scope.newExaminationActive = false;
+        $scope.examinationsListActive = false;
+        $scope.startExamination = function() {
+            $scope.newExaminationDisplay = true;
+            $scope.newExaminationActive = true;
+
+            $scope.newExamination = {
+                reason : '',
+                reason_description : '',
+                medical_examination : '',
+                orl : '',
+                visceral : '',
+                pulmo : '',
+                uro_gyneco : '',
+                periphery : '',
+                general_state : '',
+                tests : '',
+                diagnosis : '',
+                treatments : '',
+                conclusion : '',
+                status : 0,
+                type : 0,
+                date : new Date(),
+                patient : $scope.patient.id,
+                therapeut : '',
+            };
+        };
+
+        // Handle the examination object to be saved.
+        $scope.saveExamination = function () {
+            //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
+            var localExamination;
+            if( !$scope.newExamination.id ) {
+                localExamination = ExaminationServ.add($scope.newExamination, function()
+                {
+                   $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+                });
+            } else {
+                localExamination = ExaminationServ.save({examinationId: $scope.newExamination.id}, $scope.newExamination);
+            }
+            $scope.newExamination = localExamination;
+            return localExamination;
+        };
+
+        // Handle the invoice function
+        $scope.invoice = function(examination)
+        {
+            // Hide the new examination function
+            $scope.newExamination = {};
+            $scope.newExaminationDisplay = false;
+            $scope.newExaminationActive = false;
+            $scope.examinationsListActive = true;
+        };
+
+
 }]);
 
 
@@ -167,7 +250,6 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'PatientServ', 'Doc
         $scope.initPatient = function(patient) {
             PatientServ.add(patient, function(data)
             {
-                console.log('OK '+data);
                 $location.path('/patient/'+data.id);
             },
             function(data)

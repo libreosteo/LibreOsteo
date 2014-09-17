@@ -157,8 +157,15 @@
             </div>
 </tab>
 
-<tab heading="{% trans 'Examinations' %}">
-    <timeline examinations="examinations" />
+<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive">
 
+    <timeline examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay"/>
+
+    <examination model="archiveExamination" read-only="true"/>
+
+</tab>
+
+<tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
+    <examination model="newExamination" save-model="saveExamination()" invoice="invoice(newExamination)"/>
 </tab>
 </tabset>

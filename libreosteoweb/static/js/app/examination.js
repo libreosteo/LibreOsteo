@@ -28,7 +28,27 @@ examination.directive('examination', function(){
             model: '=',
             saveModel : '&',
             invoice : '&',
-            readOnly : '@',
+            readOnly : '=',
+        },
+      compile: function(element, attrs){
+          if (!attrs.readOnly) { attrs.readOnly = false; }
+
+        },
+        controller : function($scope, $filter)
+        {
+            $scope.types = [
+                { value : 1, text : 'Consultation normale' },
+                { value : 2, text : 'Retour programmé (Contrôle)' },
+                { value : 3, text : 'Retour non programmé (Urgence)' },
+            ];
+            $scope.showTypes = function() {
+                if($scope.model) {
+                    var selected = $filter('filter')($scope.types, {value: $scope.model.type});
+                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : 'Non renseigné';
+                } else {
+                    return 'Non renseigné';
+                }
+            };
         },
         templateUrl: 'web-view/partials/examination'
     }

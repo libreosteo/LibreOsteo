@@ -7,7 +7,7 @@
     </div>
     <ul class="timeline" ng-switch-when="true">
         <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': examination.order %2 == 0 }">
-            <div class="timeline-badge success"><i class="fa fa-check" ></i>
+            <div class="timeline-badge" ng-class="{'success' : examination.type == 1, 'warning' : examination.type == 2, 'danger' : examination.type == 3 }"><i class="fa fa-check" ></i>
             </div>
             <div class="timeline-panel" ng-click="loadExamination(examination.id)">
                 <div class="timeline-heading">

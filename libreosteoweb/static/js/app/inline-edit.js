@@ -11,6 +11,7 @@ inlineEdit.directive('inlineedit', function() {
         placeholder : '@',
         editclass : '@',
         width: '@',
+        readOnly : '=',
 	},
     controller: function($scope)
     {
@@ -23,6 +24,7 @@ inlineEdit.directive('inlineedit', function() {
     },
       compile: function(element, attrs){
           if (!attrs.width) { attrs.width = '100%'; }
+          if (!attrs.readOnly) { attrs.readOnly = false; }
 
     },
 
@@ -41,7 +43,8 @@ inlineEdit.directive('inlinetel', function() {
         placeholder : '@',
         editclass : '@',
         width: '@',
-        icon : '@'
+        icon : '@',
+        readOnly : '=',
 	},
     controller: function($scope)
     {
@@ -54,6 +57,7 @@ inlineEdit.directive('inlinetel', function() {
     },
     compile: function(element, attrs){
        if (!attrs.width) { attrs.width = '100%'; }
+       if (!attrs.readOnly) { attrs.readOnly = false; }
     },
 
     templateUrl: 'static/js/app/templates/inline-tel.html'
@@ -74,7 +78,8 @@ inlineEdit.directive('inlinetextarea', function() {
         editclass : '@',
         width: '@',
         row : '@',
-        col : '@'
+        col : '@',
+        readOnly : '=',
 	},
     controller: function($scope)
     {
@@ -87,6 +92,7 @@ inlineEdit.directive('inlinetextarea', function() {
     },
     compile: function(element, attrs){
        if (!attrs.width) { attrs.width = '100%'; }
+       if (!attrs.readOnly) { attrs.readOnly = false; }
     },
 
     templateUrl: 'static/js/app/templates/inline-textarea.html'

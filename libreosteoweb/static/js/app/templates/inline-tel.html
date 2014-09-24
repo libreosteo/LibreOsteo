@@ -1,5 +1,5 @@
 <!--e-ng-pattern="/^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/"-->
-<div class="{$ editclass $}" ng-switch="model[property].length">
+<div class="{$ editclass $}" ng-switch="model[property].length" ng-if="!readOnly">
     <div ng-switch-when="0" ng-mouseenter="displayButton = true"
                       ng-mouseleave="displayButton = false">
                 <span class="{$ icon $}"></span>
@@ -19,6 +19,15 @@
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-style="width:{$ width $}"
                       blur="submit"
+                        class=" inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</span>
+    </div>
+</div>
+
+<div class="{$ editclass $}" ng-if="readOnly">
+    <div>
+                <span class="{$ icon $}"></span>
+                <span
+                      e-style="width:{$ width $}"
                         class=" inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</span>
     </div>
 </div>

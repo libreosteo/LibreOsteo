@@ -1,4 +1,4 @@
-<div class="{$ editclass $}" ng-switch="model[property].length">
+<div class="{$ editclass $}" ng-switch="model[property].length" ng-if="!readOnly">
     <div ng-switch-when="0" ng-mouseenter="displayButton = true"
                       ng-mouseleave="displayButton = false">
                 <span editable-text="model[property]"
@@ -16,6 +16,14 @@
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-style="width:{$ width $}" class="inlineedit"
                       blur="submit"
+                        >{$ model[property] || '&nbsp;&nbsp;' $}</span>
+    </div>
+</div>
+
+<div class="{$ editclass $}" ng-if="readOnly">
+    <div>
+                <span
+                      e-style="width:{$ width $}" class="inlineedit"
                         >{$ model[property] || '&nbsp;&nbsp;' $}</span>
     </div>
 </div>

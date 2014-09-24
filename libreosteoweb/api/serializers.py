@@ -20,7 +20,7 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserSerializer(source = 'therapeut')
     class Meta:
         model = Examination
-        fields = ('id', 'reason', 'date', 'status', 'therapeut')
+        fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type')
         depth = 1
 
 

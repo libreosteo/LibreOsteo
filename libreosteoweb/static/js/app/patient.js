@@ -147,11 +147,12 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
 
         $scope.getOrderedExaminations = function(patientId)
         {
-            var examinationsList = PatientExaminationsServ.get( { patient : patientId }, function()
+            var examinationsList = PatientExaminationsServ.get( { patient : patientId }, function(data)
                 {
+                    examinationsList = data;
                     angular.forEach(examinationsList, function(value, index, obj)
                     {
-                        value.order =  obj.length - index;
+                        value.order = examinationsList.length - index;
                     });
                 }
                 );
@@ -163,7 +164,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         // The futur examination of the patient, if a new examination is started.
         $scope.newExamination = {};
         // To display examination in the patient file.
-        $scope.archiveExamination = {};
+       // $scope.archiveExamination = null;
 
         $scope.newExaminationDisplay = false;
         $scope.newExaminationActive = false;
@@ -171,6 +172,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         $scope.startExamination = function() {
             $scope.newExaminationDisplay = true;
             $scope.newExaminationActive = true;
+            $scope.examinationsListActive = false;
 
             $scope.newExamination = {
                 reason : '',
@@ -187,11 +189,15 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
                 treatments : '',
                 conclusion : '',
                 status : 0,
-                type : 0,
+                type : 1,
                 date : new Date(),
                 patient : $scope.patient.id,
                 therapeut : '',
             };
+        };
+
+        $scope.previousExamination = {
+            data : null,
         };
 
         // Handle the examination object to be saved.
@@ -258,3 +264,13 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'PatientServ', 'Doc
             });
         };
     }]);
+
+
+patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
+    function($scope) {
+        "use strict";
+        $scope.previousExamination = {
+            data : null,
+        };
+    }
+]);

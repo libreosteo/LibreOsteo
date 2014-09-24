@@ -11,13 +11,13 @@ timeline.directive('timeline', function()
             examinations: '=',
             startExamination : '&',
             examinationIsActive : '=',
+            archiveExamination : '=',
         },
         controller : function($scope, ExaminationServ) {
           $scope.loadExamination = function(examinationId) {
-              $scope.$parent.archiveExamination = ExaminationServ.get({examinationId : examinationId}, function(e)
-                {
-                    console.log(angular.toJson($scope.$parent.archiveExamination));
-                });
+              ExaminationServ.get({examinationId : examinationId}, function(data){
+                  $scope.archiveExamination.data = data;
+              });
           }  ;
         },
         templateUrl: 'web-view/partials/examinations-timeline'

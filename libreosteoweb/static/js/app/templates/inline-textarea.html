@@ -1,4 +1,4 @@
-<div style="margin-left: 5px; margin-right: 5px" ng-switch="model[property].length">
+<div style="margin-left: 5px; margin-right: 5px" ng-switch="model[property].length" ng-if="!readOnly">
     <div ng-switch-when="0" ng-mouseenter="displayButton = true"
                       ng-mouseleave="displayButton = false">
                 <span editable-textarea="model[property]"
@@ -19,5 +19,11 @@
                       e-rows="{$ row $}" e-cols="{$ col $}"
                       blur="submit"
                         ><pre class="inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</pre></span>
+    </div>
+</div>
+
+<div style="margin-left: 5px; margin-right: 5px" ng-if="readOnly">
+    <div>
+                <span><pre class="inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</pre></span>
     </div>
 </div>

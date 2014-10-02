@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
@@ -5,18 +6,46 @@ from libreosteoweb.models import RegularDoctor, Patient, Examination
 from rest_framework.decorators import action, detail_route
 from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer
 from rest_framework.response import Response
+from haystack.query import SearchQuerySet
+from django.core import serializers
+from django.http import HttpResponse
+from django.views.generic import View
+from django.core import serializers
+from haystack.utils import Highlighter
+from haystack.views import SearchView
+import json
+
 
 # Create your views here.
 
 # ViewSets define the view behavior.
-class SearchFilter(filters.SearchFilter):
-    search_param = 'q'
+#class SearchFilter(filters.SearchFilter):
+#    search_param = 'q'
+
+
+class SearchViewJson(View):
+
+    def get(self, request, *args, **kwargs):
+        # Get the query
+        search_query = self.request.GET['q']
+        # Build the query set for result
+        sqs = SearchQuerySet().auto_query(search_query)
+        # Get the results only
+        data_results = [ result.object for result in sqs ]
+
+        json_data = serializers.serialize('json', data_results, fields=('family_name', 'first_name', 'original_name'))
+
+        return HttpResponse(json_data, content_type='application/json')
+
+class SearchViewHtml(SearchView):
+    template = 'partials/search-result.html'
+    results_per_page = 10
 
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = Patient
-    filter_backends = (SearchFilter,)
-    search_fields = ('family_name', 'original_name', 'first_name')
+    #filter_backends = (SearchFilter,)
+    #search_fields = ('family_name', 'original_name', 'first_name')
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):

@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet, ExaminationViewSet
+from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet, ExaminationViewSet, SearchViewHtml
+
 from rest_framework import  routers
 from django.views.generic.base import TemplateView
 from libreosteoweb.api import displays
@@ -33,5 +34,6 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/add-patient', displays.display_newpatient),
     url(r'^web-view/partials/examinations-timeline', displays.display_examination_timeline),
     url(r'^web-view/partials/examination', displays.display_examination),
+    url(r'^web-view/partials/search-result', SearchViewHtml(), name='search_view'),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -45,3 +45,7 @@ def display_examination_timeline(request):
 def display_examination(request):
     displayExamination = ExaminationDisplay()
     return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields})
+
+def display_search_result(request):
+    return render_to_response('partials/search-result.html', {})
+

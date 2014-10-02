@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-17 19:34+0000\n"
-"PO-Revision-Date: 2014-09-17 21:35+0100\n"
+"POT-Creation-Date: 2014-10-02 02:19+0000\n"
+"PO-Revision-Date: 2014-10-02 04:21+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -217,7 +217,7 @@ msgstr "Déconnexion"
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/index.html:286
+#: templates/index.html:285
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -239,12 +239,12 @@ msgstr "Ajouter"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/partials/examination.html:6
+#: templates/partials/examination.html:10
 #: templates/partials/timeline.html:14
 msgid "Session of "
 msgstr "Séance du"
 
-#: templates/partials/examination.html:171
+#: templates/partials/examination.html:177
 msgid "Invoice"
 msgstr "Facturer"
 
@@ -273,9 +273,18 @@ msgstr "Antécédents"
 msgid "Examinations"
 msgstr "Consultations"
 
-#: templates/partials/patient-detail.html:168
+#: templates/partials/patient-detail.html:165
 msgid "New Examination"
 msgstr "Nouvelle consultation"
+
+#: templates/partials/search-result.html:4
+#| msgid "Search for "
+msgid "Search for"
+msgstr "Recherche de"
+
+#: templates/partials/search-result.html:13
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
 
 #: templates/partials/timeline.html:6
 msgid "Start an examination"

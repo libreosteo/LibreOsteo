@@ -1,0 +1,15 @@
+{{ object.family_name }}
+{{ object.original_name }}
+{{ object.first_name }}
+{{ object.birth_date }}
+{{ object.address_zipcode }}
+{{ object.address_city }}
+{{ object.phone }}
+{{ object.doctor.family_name}}
+{{ object.mobile_phone }}
+{{ object.important_info }}
+{{ object.surgical_history }}
+{{ object.medical_history }}
+{{ object.family_history }}
+{{ object.trauma_history }}
+{{ object.medical_reports }}

@@ -267,18 +267,17 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
-            <li class="sidebar-search" ng-controller="TypeAheadController">
+            <li class="sidebar-search" ng-controller="SearchCtrl">
                 <div class="search-container">
                     <div class="input-group custom-search-form">
                         <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
-                               ng-model="queryFragment" ng-keydown="selected=false">
+                               ng-model="query" ng-keydown="onEnterKeyDown($event)">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
+                                <button class="btn btn-default" type="button" ng-click="search()">
                                     <i class="fa fa-search"></i>
                                 </button>
                             </span>
                     </div>
-                    <typeahead model="patient" query="queryFragment" items="items" on-select="onItemSelected()"/>
                 </div>
                 <!-- /input-group -->
             </li>
@@ -421,9 +420,9 @@
 <script src="{{ STATIC_URL }}js/app/patient.js"></script>
 <script src="{{ STATIC_URL }}js/app/doctor.js"></script>
 <script src="{{ STATIC_URL }}js/app/examination.js"></script>
-<script src="{{ STATIC_URL }}js/app/typeahead.js"></script>
 <script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
 <script src="{{ STATIC_URL }}js/app/timeline.js"></script>
+<script src="{{ STATIC_URL }}js/app/search.js"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

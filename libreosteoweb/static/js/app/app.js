@@ -3,13 +3,13 @@ var libreosteoApp = angular.module('libreosteo', [
     'ngCookies',
     'xeditable',
     'ui.bootstrap',
-    'loTypeAhead',
     'loPatient',
     'loInlineEdit',
     'loTimeline',
     'yaru22.angular-timeago',
     'ngAnimate',
      'duScroll',
+    'loSearch',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -41,6 +41,23 @@ libreosteoApp.config(['$routeProvider',
                 controller : 'AddPatientCtrl'
             }
             ).
+            when('/search/:query',
+            {
+                templateUrl : function(params) {
+                    return 'web-view/partials/search-result?q='+params.query ;
+                },
+                controller : 'SearchResultCtrl'
+            }).
+            when('/search/:query/:page',
+            {
+                templateUrl : function(params) {
+                    page = '';
+                    if(params.page)
+                    {  page="&page="+params.page  }
+                    return 'web-view/partials/search-result?q='+params.query+page ;
+                },
+                controller : 'SearchResultCtrl'
+            }).
             otherwise({
                redirectTo : '/'
             });

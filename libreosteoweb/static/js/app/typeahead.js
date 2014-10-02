@@ -3,7 +3,7 @@ var typeAhead = angular.module('loTypeAhead', []);
 typeAhead.factory('searchFactory', function($http) {
   return {
     get: function(query) {
-      return $http.get("/api/patients?q=" + query).then(function(resp) {
+      return $http.get("/search/?q=" + query).then(function(resp) {
         return resp.data;
       });
     }

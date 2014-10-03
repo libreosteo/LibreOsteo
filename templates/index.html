@@ -44,6 +44,7 @@
 <!-- /.navbar-header -->
 
 <ul class="nav navbar-top-links navbar-right">
+<!--
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -92,9 +93,10 @@
             </a>
         </li>
     </ul>
-    <!-- /.dropdown-messages -->
-</li>
+    <!-- /.dropdown-messages
+</li> -->
 <!-- /.dropdown -->
+<!--
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -179,9 +181,10 @@
             </a>
         </li>
     </ul>
-    <!-- /.dropdown-tasks -->
-</li>
+    <!-- /.dropdown-tasks
+</li> -->
 <!-- /.dropdown -->
+<!--
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -239,8 +242,8 @@
             </a>
         </li>
     </ul>
-    <!-- /.dropdown-alerts -->
-</li>
+    <!-- /.dropdown-alerts
+</li> -->
 <!-- /.dropdown -->
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -249,8 +252,8 @@
     <ul class="dropdown-menu dropdown-user">
         <li><a href="accounts/user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
         </li>
-        <li><a href="accounts/settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
-        </li>
+        <!--li><a href="accounts/settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
+        </li-->
         <li class="divider"></li>
         <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
         </li>
@@ -377,8 +380,8 @@
     <!-- /.sidebar-collapse -->
 </nav>
 <!-- /.navbar-static-side -->
-
 <div id="page-wrapper">
+    <div growl></div>
     <div class="row">
         <div class="col-lg-12" ng-view>
             <h1 class="page-header">Blank</h1>
@@ -414,6 +417,10 @@
 <script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 <script src="{{ STATIC_URL }}js/plugins/timeAgo.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-scroll/angular-scroll.min.js"></script>
+<link href="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+<link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>

@@ -249,8 +249,8 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 };
 
 
-patient.controller('AddPatientCtrl', ['$scope', '$location', 'PatientServ', 'DoctorServ',
-    function($scope, $location, PatientServ, DoctorServ ) {
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', 'PatientServ', 'DoctorServ',
+    function($scope, $location, growl, PatientServ, DoctorServ ) {
         "use strict";
 
         $scope.initPatient = function(patient) {
@@ -260,7 +260,9 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'PatientServ', 'Doc
             },
             function(data)
             {
-                console.log('error ' + data);
+                // Should display the error
+                console.log(angular.toJson(data));
+                growl.addErrorMessage(data.data.detail);
             });
         };
     }]);

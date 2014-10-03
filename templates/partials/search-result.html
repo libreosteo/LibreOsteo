@@ -4,20 +4,21 @@
             <h3 class="page-header">{% trans 'Search for' %} "{{ query }}"</h3>
 
             {% for result in page.object_list %}
-                <p>
-                    <a href="#/patient/{{ result.object.id }}">{{ result.object.family_name }} {{ result.object.first_name }}</a>
-                    <p><span>{% highlight result.text with query max_length 200 %}</span></p>
-
-                </p>
+                <div class="search-entry">
+                <h4>
+                    <a class="" href="#/patient/{{ result.object.id }}">{{ result.object.family_name }} {{ result.object.first_name }}</a>
+                </h4>
+                <p class="extract"><span>{% highlight result.text with query max_length 80 %}</span></p>
+                </div>
             {% empty %}
                 <p>{% trans 'No results found' %}.</p>
             {% endfor %}
 
             {% if page.has_previous or page.has_next %}
                 <div>
-                    {% if page.has_previous %}<a href="#/search/{{ query }}/{{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                    {% if page.has_previous %}<a href="#/search/{{ query }}/{{ page.previous_page_number }}">{% endif %}&laquo; {% trans 'Previous' %} {% if page.has_previous %}</a>{% endif %}
                     |
-                    {% if page.has_next %}<a href="#/search/{{ query }}/{{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+                    {% if page.has_next %}<a href="#/search/{{ query }}/{{ page.next_page_number }}">{% endif %}{% trans 'Next' %} &raquo;{% if page.has_next %}</a>{% endif %}
                 </div>
             {% endif %}
         {% else %}

@@ -32,3 +32,24 @@ pre {
 {
     opacity: 0;
 }
+
+.highlighted
+{
+    font-weight: bold;
+}
+
+.extract
+{
+    margin-top : -7px;
+    margin-left : 10px;
+}
+
+.search-entry
+{
+    margin-bottom : 25px;
+}
+
+.growl
+{
+    z-index : 1000;
+}

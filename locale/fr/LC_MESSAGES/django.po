@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-02 02:19+0000\n"
-"PO-Revision-Date: 2014-10-02 04:21+0100\n"
+"POT-Creation-Date: 2014-10-03 09:52+0000\n"
+"PO-Revision-Date: 2014-10-03 11:56+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: libreosteoweb/api/exceptions.py:6
+msgid "This patient already exists"
+msgstr "Ce patient existe déjà"
 
 #: libreosteoweb/models.py:13
 #: libreosteoweb/models.py:27
@@ -201,23 +205,23 @@ msgstr "Se rappeler de moi"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:250
+#: templates/index.html:254
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/index.html:252
+#: templates/index.html:256
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/index.html:255
+#: templates/index.html:259
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/index.html:273
+#: templates/index.html:277
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/index.html:285
+#: templates/index.html:289
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -278,13 +282,20 @@ msgid "New Examination"
 msgstr "Nouvelle consultation"
 
 #: templates/partials/search-result.html:4
-#| msgid "Search for "
 msgid "Search for"
 msgstr "Recherche de"
 
-#: templates/partials/search-result.html:13
+#: templates/partials/search-result.html:14
 msgid "No results found"
 msgstr "Aucun résultat trouvé"
+
+#: templates/partials/search-result.html:19
+msgid "Previous"
+msgstr "Précédent"
+
+#: templates/partials/search-result.html:21
+msgid "Next"
+msgstr "Suivant"
 
 #: templates/partials/timeline.html:6
 msgid "Start an examination"

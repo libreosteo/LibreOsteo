@@ -10,6 +10,8 @@ var libreosteoApp = angular.module('libreosteo', [
     'ngAnimate',
      'duScroll',
     'loSearch',
+    'angular-growl',
+    'angular-loading-bar',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -25,6 +27,11 @@ libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
     $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
     //$http.defaults.headers.delete['X-CSRFToken'] = $cookies.csrftoken;
+}]);
+
+libreosteoApp.config(['growlProvider', function(growlProvider) {
+    growlProvider.globalTimeToLive(5000);
+    growlProvider.onlyUniqueMessages(false);
 }]);
 
 libreosteoApp.config(['$routeProvider',

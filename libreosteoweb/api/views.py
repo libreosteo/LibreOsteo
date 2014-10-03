@@ -13,14 +13,12 @@ from django.views.generic import View
 from django.core import serializers
 from haystack.utils import Highlighter
 from haystack.views import SearchView
+from libreosteoweb.api.exceptions import AlreadyExistsException
 import json
+import logging
 
-
-# Create your views here.
-
-# ViewSets define the view behavior.
-#class SearchFilter(filters.SearchFilter):
-#    search_param = 'q'
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class SearchViewJson(View):
@@ -44,8 +42,17 @@ class SearchViewHtml(SearchView):
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = Patient
-    #filter_backends = (SearchFilter,)
-    #search_fields = ('family_name', 'original_name', 'first_name')
+
+    def create(self, request, *args, **kwargs):
+        found = Patient.objects.filter(family_name__iexact=request.DATA['family_name'])\
+            .filter( first_name__iexact=request.DATA['first_name'] )\
+            .filter( birth_date__iexact=request.DATA['birth_date'] )\
+            .exists()
+
+        if ( not found):
+            return super(PatientViewSet, self).create(request, *args, **kwargs)
+        else :
+            raise AlreadyExistsException
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):

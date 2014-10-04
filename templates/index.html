@@ -250,7 +250,7 @@
         <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
-        <li><a href="accounts/user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
+        <li><a href="#/accounts/user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
         </li>
         <!--li><a href="accounts/settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
         </li-->
@@ -430,6 +430,7 @@
 <script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
 <script src="{{ STATIC_URL }}js/app/timeline.js"></script>
 <script src="{{ STATIC_URL }}js/app/search.js"></script>
+<script src="{{ STATIC_URL }}js/app/user.js"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

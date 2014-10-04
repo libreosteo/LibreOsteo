@@ -10,6 +10,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'ngAnimate',
      'duScroll',
     'loSearch',
+    'loUser',
     'angular-growl',
     'angular-loading-bar',
 ]);
@@ -64,6 +65,11 @@ libreosteoApp.config(['$routeProvider',
                     return 'web-view/partials/search-result?q='+params.query+page ;
                 },
                 controller : 'SearchResultCtrl'
+            }).
+            when('/accounts/user-profile',
+            {
+               templateUrl : 'web-view/partials/user-profile',
+                controller : 'UserProfileCtrl'
             }).
             otherwise({
                redirectTo : '/'

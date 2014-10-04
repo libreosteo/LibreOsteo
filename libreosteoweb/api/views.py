@@ -4,7 +4,7 @@ from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb.models import RegularDoctor, Patient, Examination
 from rest_framework.decorators import action, detail_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer
+from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
@@ -16,6 +16,8 @@ from haystack.views import SearchView
 from libreosteoweb.api.exceptions import AlreadyExistsException
 import json
 import logging
+from django.contrib.auth.models import User
+from .permissions import IsStaffOrTargetUser
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -75,3 +77,8 @@ class ExaminationViewSet(viewsets.ModelViewSet):
 
         if not obj.therapeut:
             setattr(obj, 'therapeut', self.request.user)
+
+class UserViewSet(viewsets.ModelViewSet):
+    model = User
+    serializer_class =  UserInfoSerializer
+    permission_classes = [IsStaffOrTargetUser]

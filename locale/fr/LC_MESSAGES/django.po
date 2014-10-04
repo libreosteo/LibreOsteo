@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-03 09:52+0000\n"
-"PO-Revision-Date: 2014-10-03 11:56+0100\n"
+"POT-Creation-Date: 2014-10-04 08:39+0000\n"
+"PO-Revision-Date: 2014-10-04 10:45+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -205,23 +205,23 @@ msgstr "Se rappeler de moi"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:254
+#: templates/index.html:253
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/index.html:256
+#: templates/index.html:255
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/index.html:259
+#: templates/index.html:258
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/index.html:277
+#: templates/index.html:276
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/index.html:289
+#: templates/index.html:288
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -308,6 +308,19 @@ msgstr "par"
 #: templates/partials/timeline.html:27
 msgid "No session for this patient"
 msgstr "Pas de séance pour ce patient"
+
+#: templates/partials/user-profile.html:3
+#| msgid "User Profile"
+msgid "User profile"
+msgstr "Profil utilisateur"
+
+#: templates/partials/user-profile.html:28
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: templates/partials/user-profile.html:33
+msgid "Profile was updated"
+msgstr "Profil mis à jour"
 
 #~ msgid "Tests"
 #~ msgstr "Tests"

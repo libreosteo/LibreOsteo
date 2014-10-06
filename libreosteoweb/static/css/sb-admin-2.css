@@ -1,16 +1,14 @@
-/* Global Styles */
+/*!
+ * Start Bootstrap - SB Admin 2 Bootstrap Admin Theme (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
 
-/* ------------------------------- */
-
- body {
+body {
     background-color: #f8f8f8;
 }
 
-/* Wrappers */
-
-/* ------------------------------- */
-
- #wrapper {
+#wrapper {
     width: 100%;
 }
 
@@ -25,22 +23,11 @@
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
-        min-height: 1300px;
         border-left: 1px solid #e7e7e7;
     }
 }
 
-.navbar-static-side ul li {
-    border-bottom: 1px solid #e7e7e7;
-}
-
-/* Navigation */
-
-/* ------------------------------- */
-
-/* Top Right Navigation Dropdown Styles */
-
- .navbar-top-links li {
+.navbar-top-links li {
     display: inline-block;
 }
 
@@ -94,42 +81,54 @@
     left: auto;
 }
 
-/* Sidebar Menu Styles */
+.sidebar .sidebar-nav.navbar-collapse {
+    padding-right: 0;
+    padding-left: 0;
+}
 
- .sidebar-search {
+.sidebar .sidebar-search {
     padding: 15px;
 }
 
-.arrow {
+.sidebar ul li {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.sidebar ul li a.active {
+    background-color: #eee;
+}
+
+.sidebar .arrow {
     float: right;
 }
 
-.fa.arrow:before {
+.sidebar .fa.arrow:before {
     content: "\f104";
 }
 
-.active > a > .fa.arrow:before {
+.sidebar .active>a>.fa.arrow:before {
     content: "\f107";
 }
 
-.nav-second-level li,
-.nav-third-level li {
-    border-bottom: none !important;
+.sidebar .nav-second-level li,
+.sidebar .nav-third-level li {
+    border-bottom: 0!important;
 }
 
-.nav-second-level li a {
+.sidebar .nav-second-level li a {
     padding-left: 37px;
 }
 
-.nav-third-level li a {
+.sidebar .nav-third-level li a {
     padding-left: 52px;
 }
 
 @media(min-width:768px) {
-    .navbar-static-side {
+    .sidebar {
         z-index: 1;
         position: absolute;
         width: 250px;
+        margin-top: 51px;
     }
 
     .navbar-top-links .dropdown-messages,
@@ -139,11 +138,7 @@
     }
 }
 
-/* Buttons */
-
-/* ------------------------------- */
-
- .btn-outline {
+.btn-outline {
     color: inherit;
     background-color: transparent;
     transition: all .5s;
@@ -177,13 +172,7 @@
     color: #fff;
 }
 
-/* Pages */
-
-/* ------------------------------- */
-
-/* Dashboard Chat */
-
- .chat {
+.chat {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -192,7 +181,7 @@
 .chat li {
     margin-bottom: 10px;
     padding-bottom: 5px;
-    border-bottom: 1px dotted #B3A9A9;
+    border-bottom: 1px dotted #999;
 }
 
 .chat li.left .chat-body {
@@ -205,7 +194,6 @@
 
 .chat li .chat-body p {
     margin: 0;
-    color: #777777;
 }
 
 .panel .slidedown .glyphicon,
@@ -218,15 +206,11 @@
     overflow-y: scroll;
 }
 
-/* Login Page */
-
- .login-panel {
+.login-panel {
     margin-top: 25%;
 }
 
-/* Flot Chart Containers */
-
- .flot-chart {
+.flot-chart {
     display: block;
     height: 400px;
 }
@@ -236,14 +220,12 @@
     height: 100%;
 }
 
-/* DataTables Overrides */
-
- table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
 table.dataTable thead .sorting_desc_disabled {
-    background: transparent;
+    background: 0 0;
 }
 
 table.dataTable thead .sorting_asc:after {
@@ -265,9 +247,7 @@ table.dataTable thead .sorting:after {
     color: rgba(50,50,50,.5);
 }
 
-/* Circle Buttons */
-
- .btn-circle {
+.btn-circle {
     width: 30px;
     height: 30px;
     padding: 6px 0;
@@ -295,13 +275,71 @@ table.dataTable thead .sorting:after {
     line-height: 1.33;
 }
 
-.show-grid [class^="col-"] {
+.show-grid [class^=col-] {
     padding-top: 10px;
     padding-bottom: 10px;
     border: 1px solid #ddd;
-    background-color: #eee !important;
+    background-color: #eee!important;
 }
 
 .show-grid {
     margin: 15px 0;
+}
+
+.huge {
+    font-size: 40px;
+}
+
+.panel-green {
+    border-color: #5cb85c;
+}
+
+.panel-green .panel-heading {
+    border-color: #5cb85c;
+    color: #fff;
+    background-color: #5cb85c;
+}
+
+.panel-green a {
+    color: #5cb85c;
+}
+
+.panel-green a:hover {
+    color: #3d8b3d;
+}
+
+.panel-red {
+    border-color: #d9534f;
+}
+
+.panel-red .panel-heading {
+    border-color: #d9534f;
+    color: #fff;
+    background-color: #d9534f;
+}
+
+.panel-red a {
+    color: #d9534f;
+}
+
+.panel-red a:hover {
+    color: #b52b27;
+}
+
+.panel-yellow {
+    border-color: #f0ad4e;
+}
+
+.panel-yellow .panel-heading {
+    border-color: #f0ad4e;
+    color: #fff;
+    background-color: #f0ad4e;
+}
+
+.panel-yellow a {
+    color: #f0ad4e;
+}
+
+.panel-yellow a:hover {
+    color: #df8a13;
 }

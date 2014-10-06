@@ -11,13 +11,15 @@
 
     <!-- Core CSS - Include with every page -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Blank -->
      <link href="{{ STATIC_URL }}css/plugins/timeline/timeline.css" rel="stylesheet">
+     <!-- MetisMenu CSS -->
+    <link href="{{ STATIC_URL }}css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="{{ STATIC_URL }}css/sb-admin.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/sb-admin-2.css" rel="stylesheet">
 
     <!-- TypeAHead component -->
     <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
@@ -264,11 +266,9 @@
 </ul>
 <!-- /.navbar-top-links -->
 
-</nav>
-<!-- /.navbar-static-top -->
 
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
+    <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav sidebar-collapse">
         <ul class="nav" id="side-menu">
             <li class="sidebar-search" ng-controller="SearchCtrl">
                 <div class="search-container">
@@ -377,6 +377,7 @@
         </ul>
         <!-- /#side-menu -->
     </div>
+    </div>
     <!-- /.sidebar-collapse -->
 </nav>
 <!-- /.navbar-static-side -->
@@ -396,13 +397,15 @@
 <!-- /#wrapper -->
 
 <!-- Core Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/jquery-1.10.2.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-1.11.0.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 
 <!-- Page-Level Plugin Scripts - Blank -->
 
 <!-- SB Admin Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/sb-admin.js"></script>
+<script src="{{ STATIC_URL }}js/sb-admin-2.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ STATIC_URL }}js/plugins/metisMenu/metisMenu.min.js"></script>
 
 <!-- Angular framework -->
 <script src="{{ STATIC_URL }}bower_components/angular/angular.min.js"></script>

@@ -40,6 +40,7 @@ Initialize the database ::
 It should ask for the administrateur user.
 
 Compile the translations ::
+
     python manage.py compilemessages
 
 Now you can start the server with ::

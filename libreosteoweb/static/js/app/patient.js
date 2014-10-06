@@ -112,6 +112,15 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
            $scope.age = $scope.get_age();
         });
 
+        $scope.updateComponentPolyfill = function() {
+            // To be compliant with all browser.
+            var els = angular.element(".polyfill-updatable");
+            for (var i = 0; i < els.length; ++i)
+            {
+                $(els[i]).updatePolyfill();
+            }
+        }
+
         // Handle the doctor of the patient.
         $scope.$watch('patient.doctor', function(newValue, oldValue){
             if (newValue){

@@ -17,19 +17,19 @@
                 <div class="col-xs-6 col-sm-6 col-md-6">
                     <div class="form-group">
                         <input type="text" class="form-control  input-lg" ng-model="patient.original_name"
-                               name="original_name" placeholder="{{ patient.original_name }}">
+                               name="original_name" placeholder="{{ patient.original_name }}"/>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <input type="text" class="form-control  input-lg" ng-model="patient.first_name" required
-                       name="first_name" placeholder="{{ patient.first_name }}">
+                       name="first_name" placeholder="{{ patient.first_name }}"/>
             </div>
             <div class="form-group">
                     <input type="text" class="form-control  input-lg"
                            ng-model="patient.birth_date"  ng-required="true"
                            placeholder="{{ patient.birth_date }}"
-                            onfocus="(this.type='date')" onblur="(this.type='text')"/>
+                            onfocus="(this.type='date'); $(this).updatePolyfill();" onblur="(this.type='text')"/>
             </div>
             <button class="btn btn-primary"
                     ng-click="initPatient(patient)">{% trans 'Init the patient file' %}</button>

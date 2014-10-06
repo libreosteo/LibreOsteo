@@ -76,3 +76,12 @@ libreosteoApp.config(['$routeProvider',
             });
     }
 ]);
+
+// WEBShim configuration
+webshim.polyfill('forms forms-ext');
+
+libreosteoApp.controller('MainController', ['$scope', function($scope) {
+	$scope.$on('$viewContentLoaded', function() {
+                $('body').updatePolyfill();
+            });
+}]);

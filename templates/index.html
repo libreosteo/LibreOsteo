@@ -26,12 +26,14 @@
 
     <!-- InlineEdit component -->
     <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
+    <!-- compatibility for date input with all browsers -->
+    
 
 </head>
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper" ng-controller="MainController">
 
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 <div class="navbar-header">
@@ -424,6 +426,7 @@
 <script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 <link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>

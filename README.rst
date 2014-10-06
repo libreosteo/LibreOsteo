@@ -25,22 +25,26 @@ Requirements :
 
 Retrieve the content of the project from Git repository.
 
-Then retrieve the python requierements with :
+Then retrieve the python requierements with ::
 
-`pip install -r requirements.txt`
+    pip install -r requirements.txt
 
-Install Javascript dependencies with bower
+Install Javascript dependencies with bower ::
 
-`bower install`
+    bower install
 
-Initialize the database :
+Initialize the database ::
 
-`python manage.py syncdb`
+    python manage.py syncdb
+    
 It should ask for the administrateur user.
 
-Now you can start the server with 
+Compile the translations ::
+    python manage.py compilemessages
 
-`python manage.py runserver`
+Now you can start the server with ::
+
+python manage.py runserver
 
 Point your browser on : http://localhost:8000/
 

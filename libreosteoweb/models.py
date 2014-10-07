@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS
+from datetime import date
 
 
 class RegularDoctor(models.Model):
@@ -46,6 +49,28 @@ class Patient(models.Model):
 
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
+
+        def validate_unique(self, *args, **kwargs):
+            super(Patient, self).validate_unique(*args, **kwargs)
+            found = Patient.objects.filter(family_name__iexact=self.family_name)\
+                    .filter( first_name__iexact=self.first_name )\
+                    .filter( birth_date__iexact=self.birth_date )\
+                    .exclude( id = self.id)\
+                    .exists()
+            if found:
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS:
+                        _('This patient already exists')
+                    }
+                )
+
+        def clean(self):
+            if self.birth_date > date.today():
+                raise ValidationError({
+                    'birth_date' :
+                        _('Birth date is invalid')
+                })
 
 
 class Children(models.Model):

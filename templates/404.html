@@ -1,53 +1,390 @@
 {% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html xmlns:ng="http://angularjs.org" ng-app="libreosteo">
+
+<head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Libreosteo">
-    <meta name="author" content="Libreosteo">
-    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.png">
 
-    <title>Libreosteo - 404</title>
+    <title>Libreosteo</title>
 
-    <!-- Bootstrap core CSS -->
+    <!-- Core CSS - Include with every page -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet">
+    <!-- Page-Level Plugin CSS - Blank -->
+     <link href="{{ STATIC_URL }}css/plugins/timeline/timeline.css" rel="stylesheet">
+     <!-- MetisMenu CSS -->
+    <link href="{{ STATIC_URL }}css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="{{ STATIC_URL }}css/sb-admin-2.css" rel="stylesheet">
 
-  <body>
+    <!-- TypeAHead component -->
+    <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Libreosteo</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-              <div class="form-group">
-                <input type="text" placeholder="{% trans "Search" %}" class="form-control"/>
-              </div>
-          </form>
-        </div><!--/.navbar-collapse -->
-      </div>
+    <!-- InlineEdit component -->
+    <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
+    <!-- compatibility for date input with all browsers -->
+
+
+</head>
+
+<body>
+
+<div id="wrapper" ng-controller="MainController">
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="/">Libreosteo</a>
+</div>
+<!-- /.navbar-header -->
+
+<ul class="nav navbar-top-links navbar-right">
+<!--
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-messages">
+        <li>
+            <a href="#">
+                <div>
+                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                </div>
+                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                </div>
+                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                </div>
+                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a class="text-center" href="#">
+                <strong>Read All Messages</strong>
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+    <!-- /.dropdown-messages
+</li> -->
+<!-- /.dropdown -->
+<!--
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-tasks">
+        <li>
+            <a href="#">
+                <div>
+                    <p>
+                        <strong>Task 1</strong>
+                        <span class="pull-right text-muted">40% Complete</span>
+                    </p>
+
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                            <span class="sr-only">40% Complete (success)</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <p>
+                        <strong>Task 2</strong>
+                        <span class="pull-right text-muted">20% Complete</span>
+                    </p>
+
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                            <span class="sr-only">20% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <p>
+                        <strong>Task 3</strong>
+                        <span class="pull-right text-muted">60% Complete</span>
+                    </p>
+
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                            <span class="sr-only">60% Complete (warning)</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <p>
+                        <strong>Task 4</strong>
+                        <span class="pull-right text-muted">80% Complete</span>
+                    </p>
+
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                            <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a class="text-center" href="#">
+                <strong>See All Tasks</strong>
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+    <!-- /.dropdown-tasks
+</li> -->
+<!-- /.dropdown -->
+<!--
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-alerts">
+        <li>
+            <a href="#">
+                <div>
+                    <i class="fa fa-comment fa-fw"></i> New Comment
+                    <span class="pull-right text-muted small">4 minutes ago</span>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                    <span class="pull-right text-muted small">12 minutes ago</span>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                    <span class="pull-right text-muted small">4 minutes ago</span>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <i class="fa fa-tasks fa-fw"></i> New Task
+                    <span class="pull-right text-muted small">4 minutes ago</span>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a href="#">
+                <div>
+                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                    <span class="pull-right text-muted small">4 minutes ago</span>
+                </div>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a class="text-center" href="#">
+                <strong>See All Alerts</strong>
+                <i class="fa fa-angle-right"></i>
+            </a>
+        </li>
+    </ul>
+    <!-- /.dropdown-alerts
+</li> -->
+<!-- /.dropdown -->
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-user">
+        <li><a href="#/accounts/user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
+        </li>
+        <!--li><a href="accounts/settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
+        </li-->
+        <li class="divider"></li>
+        <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
+        </li>
+    </ul>
+    <!-- /.dropdown-user -->
+</li>
+<!-- /.dropdown -->
+</ul>
+<!-- /.navbar-top-links -->
+
+
+    <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="sidebar-search" ng-controller="SearchCtrl">
+                <div class="search-container">
+                    <div class="input-group custom-search-form">
+                        <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
+                               ng-model="query" ng-keydown="onEnterKeyDown($event)">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="search()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                    </div>
+                </div>
+                <!-- /input-group -->
+            </li>
+            <li>
+                <a href="#/addPatient"><i class="fa fa-pencil-square-o"></i> {% trans 'New patient' %}</a>
+            </li>
+            <!--
+            <li>
+                <a href="{{ STATIC_URL }}index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{ STATIC_URL }}flot.html">Flot Charts</a>
+                    </li>
+                    <li>
+                        <a href="{{ STATIC_URL }}morris.html">Morris.js Charts</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            <!--
+            </li>
+            <li>
+                <a href="{{ STATIC_URL }}tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+            </li>
+            <li>
+                <a href="{{ STATIC_URL }}forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="{{ STATIC_URL }}panels-wells.html">Panels and Wells</a>
+                    </li>
+                    <li>
+                        <a href="{{ STATIC_URL }}buttons.html">Buttons</a>
+                    </li>
+                    <li>
+                        <a href="{{ STATIC_URL }}notifications.html">Notifications</a>
+                    </li>
+                    <li>
+                        <a href="{{ STATIC_URL }}typography.html">Typography</a>
+                    </li>
+                    <li>
+                        <a href="{{ STATIC_URL }}grid.html">Grid</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+           <!--
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="#">Second Level Item</a>
+                    </li>
+                    <li>
+                        <a href="#">Second Level Item</a>
+                    </li>
+                    <li>
+                        <a href="#">Third Level <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                            <li>
+                                <a href="#">Third Level Item</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-third-level -->
+                    <!--</li>
+                </ul>
+                <!-- /.nav-second-level -->
+            <!--</li>
+            <li class="active">
+                <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a href="blank.html">Blank Page</a>
+                    </li>
+                    <li>
+                        <a href="account/login.html">Login Page</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            <!--/li-->
+        </ul>
+        <!-- /#side-menu -->
     </div>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
+    </div>
+    <!-- /.sidebar-collapse -->
+</nav>
+<!-- /.navbar-static-side -->
+<div id="page-wrapper">
+    <div growl></div>
     <div class="jumbotron">
       <div class="container">
         <h1>Ooops !</h1>
@@ -72,16 +409,63 @@
       <hr>
 
       <footer>
-        <p>&copy; Libreosteo 2013</p>
+        <p>&copy; Libreosteo 2014</p>
       </footer>
     </div> <!-- /container -->
 
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ STATIC_URL }}vendor/jquery-1.10.2.min.js"></script>
-    <script src="{{ STATIC_URL }}vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}jsi18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
-  </body>
+</div>
+<!-- /#wrapper -->
+
+<!-- Core Scripts - Include with every page -->
+<script src="{{ STATIC_URL }}js/jquery-1.11.0.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+
+<!-- Page-Level Plugin Scripts - Blank -->
+
+<!-- SB Admin Scripts - Include with every page -->
+<script src="{{ STATIC_URL }}js/sb-admin-2.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ STATIC_URL }}js/plugins/metisMenu/metisMenu.min.js"></script>
+
+<!-- Angular framework -->
+<script src="{{ STATIC_URL }}bower_components/angular/angular.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-resource/angular-resource.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-route/angular-route.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-i18n/angular-locale_fr-fr.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-animate/angular-animate.min.js"></script>
+<link href="{{ STATIC_URL }}bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="{{ STATIC_URL }}js/plugins/timeAgo.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-scroll/angular-scroll.min.js"></script>
+<link href="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+<link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
+
+<!-- web Application -->
+<script src="{{ STATIC_URL }}js/app/app.js"></script>
+<script src="{{ STATIC_URL }}js/app/patient.js"></script>
+<script src="{{ STATIC_URL }}js/app/doctor.js"></script>
+<script src="{{ STATIC_URL }}js/app/examination.js"></script>
+<script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
+<script src="{{ STATIC_URL }}js/app/timeline.js"></script>
+<script src="{{ STATIC_URL }}js/app/search.js"></script>
+<script src="{{ STATIC_URL }}js/app/user.js"></script>
+
+<!--Specific libreosteo CSS -->
+<link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>
+
+
+</body>
+
 </html>
+
+

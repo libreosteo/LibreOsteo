@@ -32,7 +32,7 @@
                             onfocus="(this.type='date'); $(this).updatePolyfill();" onblur="(this.type='text')"/>
             </div>
             <button class="btn btn-primary"
-                    ng-click="initPatient(patient)">{% trans 'Init the patient file' %}</button>
+                    ng-click="initPatient(patient)" ng-disabled="form.$invalid">{% trans 'Init the patient file' %}</button>
         </form>
     </div>
 </div>

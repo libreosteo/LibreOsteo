@@ -1,4 +1,4 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ',
@@ -258,8 +258,8 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 };
 
 
-patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', 'PatientServ', 'DoctorServ',
-    function($scope, $location, growl, PatientServ, DoctorServ ) {
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', 'DoctorServ',
+    function($scope, $location, growl, $sce, PatientServ, DoctorServ ) {
         "use strict";
 
         $scope.initPatient = function(patient) {
@@ -270,8 +270,11 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', 'PatientSe
             function(data)
             {
                 // Should display the error
-                console.log(angular.toJson(data));
-                growl.addErrorMessage(data.data.detail);
+                if(data.data.detail) {
+                    growl.addErrorMessage(data.data.detail);
+                } else {
+                    growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
+                }
             });
         };
     }]);

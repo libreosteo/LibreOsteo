@@ -2,13 +2,22 @@
  LibreOsteo
 ============
 
-(C) Jean-Baptiste Gury (garthylou) 2014
+&copy; Jean-Baptiste Gury (garthylou) 2014
 
 *LibreOsteo*
 
 Libreosteo is a business application designed for osteopaths.
 
 It manages patients, folder and runs as a work portal on a folder patient.
+
+Browser supported :
+  - Google Chrome or Chromium
+  - Firefox 
+Please use the last version of these browsers.
+
+You can try the online demo at http://garthylou.pythonanywhere.com
+login : demo
+password : demo
 
 Contact
 =======
@@ -20,8 +29,9 @@ HOW-TO try it ?
 
 Requirements :
   - Python 2.7+ or Python 3.3+
-  - pip installed
-  - nodejs and bower installed
+  - pip 
+  - nodejs
+  - bower
 
 Retrieve the content of the project from Git repository.
 
@@ -37,7 +47,7 @@ Initialize the database ::
 
     python manage.py syncdb
     
-It should ask for the administrateur user.
+It should ask for the administrator user.
 
 Compile the translations ::
 

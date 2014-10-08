@@ -46,6 +46,7 @@ class Patient(models.Model):
         family_history = models.TextField(_('Family history'), blank=True)
         trauma_history = models.TextField(_('Trauma history'), blank=True)
         medical_reports = models.TextField(_('Medical reports'), blank=True)
+        creation_date = models.DateField(_('Creation date'), blank=True, null=True, editable=False)
 
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
@@ -71,6 +72,9 @@ class Patient(models.Model):
                     'birth_date' :
                         _('Birth date is invalid')
                 })
+
+            if self.creation_date is None:
+                self.creation_date = date.today()
 
 
 class Children(models.Model):

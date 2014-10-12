@@ -109,6 +109,9 @@ class Examination(models.Model):
     conclusion = models.TextField(_('Conclusion'), blank=True)
     date = models.DateTimeField(_('Date'))
     status = models.SmallIntegerField(_('Status'))
+    # Type : 1 -> normal examination
+    # Type : 2 -> Scheduled return
+    # Type : 3 -> Urgent return
     type = models.SmallIntegerField(_('Type'))
     #invoice =
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))

@@ -10,7 +10,7 @@
                     <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $}</span>
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div class="badge" ng-class="{'alert-success' : model.type == 1, 'alert-warning' : model.type == 2, 'alert-danger' : model.type == 3 }"><i class="fa fa-check" ></i></div>
+                    <div class="badge" ng-class="{'alert-success' : model.type == 1, 'alert-warning' : model.type == 2, 'alert-danger' : model.type >= 3 }"><i class="fa fa-check" ></i></div>
                     <span ng-if="!readOnly"><span editable-select="model.type" e-ng-options="t.value as t.text for t in types" onaftersave="saveModel()">{$ showTypes() $}
                     </span></span>
                     <span ng-if="readOnly">{$ showTypes() $}</span>

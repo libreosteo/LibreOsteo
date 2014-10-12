@@ -38,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/examination', displays.display_examination),
     url(r'^web-view/partials/search-result', SearchViewHtml(), name='search_view'),
     url(r'^web-view/partials/user-profile', displays.display_userprofile),
+    url(r'^web-view/partials/dashboard', displays.display_dashboard),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

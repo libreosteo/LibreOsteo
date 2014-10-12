@@ -13,11 +13,13 @@ from django.views.generic import View
 from django.core import serializers
 from haystack.utils import Highlighter
 from haystack.views import SearchView
-from libreosteoweb.api.exceptions import AlreadyExistsException
 import json
 import logging
 from django.contrib.auth.models import User
 from .permissions import IsStaffOrTargetUser
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -45,17 +47,6 @@ class SearchViewHtml(SearchView):
 class PatientViewSet(viewsets.ModelViewSet):
     model = Patient
 
-    def create(self, request, *args, **kwargs):
-        found = Patient.objects.filter(family_name__iexact=request.DATA['family_name'])\
-            .filter( first_name__iexact=request.DATA['first_name'] )\
-            .filter( birth_date__iexact=request.DATA['birth_date'] )\
-            .exists()
-
-        if ( not found):
-            return super(PatientViewSet, self).create(request, *args, **kwargs)
-        else :
-            raise AlreadyExistsException
-
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
@@ -82,3 +73,14 @@ class UserViewSet(viewsets.ModelViewSet):
     model = User
     serializer_class =  UserInfoSerializer
     permission_classes = [IsStaffOrTargetUser]
+
+
+from .statistics import Statistics
+
+class StatisticsView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        myStats = Statistics(*args, **kwargs)
+        result = myStats.compute()
+        response = Response(result, status=status.HTTP_200_OK)
+        return response

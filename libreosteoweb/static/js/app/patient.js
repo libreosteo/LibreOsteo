@@ -1,4 +1,4 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ',
@@ -73,9 +73,9 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'PatientServ', 'DoctorServ',
+patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
     'PatientExaminationsServ', 'ExaminationServ',
-    function($scope, $routeParams, $filter, $modal, $http, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
+    function($scope, $routeParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
@@ -112,6 +112,15 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
            $scope.age = $scope.get_age();
         });
 
+        $scope.updateComponentPolyfill = function() {
+            // To be compliant with all browser.
+            var els = angular.element(".polyfill-updatable");
+            for (var i = 0; i < els.length; ++i)
+            {
+                $(els[i]).updatePolyfill();
+            }
+        }
+
         // Handle the doctor of the patient.
         $scope.$watch('patient.doctor', function(newValue, oldValue){
             if (newValue){
@@ -123,7 +132,18 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         $scope.savePatient = function () {
             // Be sure that the birth_date has a correct format to be registered.
             $scope.patient.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
-            return PatientServ.save({patientId:$scope.patient.id}, $scope.patient);
+            return PatientServ.save({patientId:$scope.patient.id}, $scope.patient, null, function(data)
+            {
+                // Should display the error
+                if(data.data.detail) {
+                    growl.addErrorMessage(data.data.detail);
+                } else {
+                    growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
+                }
+                $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
+                     p.doctor_detail(function (detail) {$scope.doctor = detail; });
+                });
+            });
         };
 
         // Prepare the doctors function to be selected.
@@ -249,8 +269,8 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 };
 
 
-patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', 'PatientServ', 'DoctorServ',
-    function($scope, $location, growl, PatientServ, DoctorServ ) {
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', 'DoctorServ',
+    function($scope, $location, growl, $sce, PatientServ, DoctorServ ) {
         "use strict";
 
         $scope.initPatient = function(patient) {
@@ -261,8 +281,11 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', 'PatientSe
             function(data)
             {
                 // Should display the error
-                console.log(angular.toJson(data));
-                growl.addErrorMessage(data.data.detail);
+                if(data.data.detail) {
+                    growl.addErrorMessage(data.data.detail);
+                } else {
+                    growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
+                }
             });
         };
     }]);

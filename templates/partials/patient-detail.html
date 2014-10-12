@@ -20,8 +20,8 @@
                         <div class="col-md-2">
                             {{ patient.birth_date }} :
                         </div>
-                        <div class="col-md-6"><span editable-date="patient.birth_date"
-                                                    onaftersave="savePatient()"
+                        <div class="col-md-6"><span e-class="polyfill-updatable" editable-date="patient.birth_date"
+                                                    onaftersave="savePatient()" onshow="updateComponentPolyfill()"
                                 >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
                         </div>
                         <div class="col-md-4"><span> ( {$ age | format_age $} )</span></div>

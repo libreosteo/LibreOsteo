@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-04 08:39+0000\n"
-"PO-Revision-Date: 2014-10-04 10:45+0100\n"
+"POT-Creation-Date: 2014-10-11 20:58+0000\n"
+"PO-Revision-Date: 2014-10-12 07:39+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -17,165 +17,195 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: libreosteoweb/api/exceptions.py:6
-msgid "This patient already exists"
-msgstr "Ce patient existe déjà"
-
-#: libreosteoweb/models.py:13
-#: libreosteoweb/models.py:27
-#: libreosteoweb/models.py:56
+#: libreosteoweb/models.py:16
+#: libreosteoweb/models.py:30
+#: libreosteoweb/models.py:85
 msgid "Family name"
 msgstr "Nom de famille"
 
-#: libreosteoweb/models.py:14
-#: libreosteoweb/models.py:29
-#: libreosteoweb/models.py:57
+#: libreosteoweb/models.py:17
+#: libreosteoweb/models.py:32
+#: libreosteoweb/models.py:86
 msgid "Firstname"
 msgstr "Prénom"
 
-#: libreosteoweb/models.py:15
-#: libreosteoweb/models.py:35
+#: libreosteoweb/models.py:18
+#: libreosteoweb/models.py:38
 msgid "Phone"
 msgstr "Téléphone"
 
-#: libreosteoweb/models.py:16
-#: libreosteoweb/models.py:34
+#: libreosteoweb/models.py:19
+#: libreosteoweb/models.py:37
 msgid "City"
 msgstr "Ville"
 
-#: libreosteoweb/models.py:28
+#: libreosteoweb/models.py:31
 msgid "Original name"
 msgstr "Nom de jeune fille"
 
-#: libreosteoweb/models.py:30
-#: libreosteoweb/models.py:58
+#: libreosteoweb/models.py:33
+#: libreosteoweb/models.py:87
 msgid "Birth date"
 msgstr "Date de naissance"
 
-#: libreosteoweb/models.py:31
+#: libreosteoweb/models.py:34
 msgid "Street"
 msgstr "Rue"
 
-#: libreosteoweb/models.py:32
+#: libreosteoweb/models.py:35
 msgid "Address complement"
 msgstr "Complément d'adresse"
 
-#: libreosteoweb/models.py:33
+#: libreosteoweb/models.py:36
 msgid "Zipcode"
 msgstr "Code postal"
 
-#: libreosteoweb/models.py:36
+#: libreosteoweb/models.py:39
 msgid "Mobile phone"
 msgstr "Mobile"
 
-#: libreosteoweb/models.py:38
+#: libreosteoweb/models.py:41
 msgid "Regular doctor"
 msgstr "Médecin traitant"
 
-#: libreosteoweb/models.py:39
+#: libreosteoweb/models.py:42
 msgid "Smoker"
 msgstr "Fumeur"
 
-#: libreosteoweb/models.py:40
+#: libreosteoweb/models.py:43
 msgid "Important note"
 msgstr "Note importante"
 
-#: libreosteoweb/models.py:41
+#: libreosteoweb/models.py:44
 msgid "Surgical history"
 msgstr "Antécédents chirurgicaux"
 
-#: libreosteoweb/models.py:42
+#: libreosteoweb/models.py:45
 msgid "Medical history"
 msgstr "Antécédents médicaux"
 
-#: libreosteoweb/models.py:43
+#: libreosteoweb/models.py:46
 msgid "Family history"
 msgstr "Antécédents familiaux"
 
-#: libreosteoweb/models.py:44
+#: libreosteoweb/models.py:47
 msgid "Trauma history"
 msgstr "Antécédents traumatiques"
 
-#: libreosteoweb/models.py:45
+#: libreosteoweb/models.py:48
 #: templates/partials/patient-detail.html:147
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
-#: libreosteoweb/models.py:59
+#: libreosteoweb/models.py:49
+msgid "Creation date"
+msgstr "Date de création"
+
+#: libreosteoweb/models.py:65
+msgid "This patient already exists"
+msgstr "Ce patient existe déjà"
+
+#: libreosteoweb/models.py:73
+msgid "Birth date is invalid"
+msgstr "La date de naissance est invalide"
+
+#: libreosteoweb/models.py:88
 msgid "Parent"
 msgstr "Parent"
 
-#: libreosteoweb/models.py:69
+#: libreosteoweb/models.py:98
 msgid "Reason"
 msgstr "Motif"
 
-#: libreosteoweb/models.py:70
+#: libreosteoweb/models.py:99
 msgid "Reason description"
 msgstr "Description du motif"
 
-#: libreosteoweb/models.py:71
+#: libreosteoweb/models.py:100
 msgid "ORL Sphere"
 msgstr "Sphère ORL"
 
-#: libreosteoweb/models.py:72
+#: libreosteoweb/models.py:101
 msgid "Visceral Sphere"
 msgstr "Sphère viscérale"
 
-#: libreosteoweb/models.py:73
+#: libreosteoweb/models.py:102
 msgid "Cardio-Pulmo Sphere"
 msgstr "Sphère cardio-pulmonaire"
 
-#: libreosteoweb/models.py:74
+#: libreosteoweb/models.py:103
 msgid "Uro-gyneco Sphere"
 msgstr "Sphère uro-gynéco"
 
-#: libreosteoweb/models.py:75
+#: libreosteoweb/models.py:104
 msgid "Periphery Sphere"
 msgstr "Sphère périphérique"
 
-#: libreosteoweb/models.py:76
+#: libreosteoweb/models.py:105
 msgid "General state"
 msgstr "État général"
 
-#: libreosteoweb/models.py:77
+#: libreosteoweb/models.py:106
 msgid "Medical examination"
 msgstr "Examen médical"
 
-#: libreosteoweb/models.py:78
+#: libreosteoweb/models.py:107
 msgid "Diagnosis"
 msgstr "Diagnostic ostéopathique"
 
-#: libreosteoweb/models.py:79
+#: libreosteoweb/models.py:108
 msgid "Treatments"
 msgstr "Traitements"
 
-#: libreosteoweb/models.py:80
+#: libreosteoweb/models.py:109
 msgid "Conclusion"
 msgstr "Conclusion"
 
-#: libreosteoweb/models.py:81
+#: libreosteoweb/models.py:110
 msgid "Date"
 msgstr "Date"
 
-#: libreosteoweb/models.py:82
+#: libreosteoweb/models.py:111
 msgid "Status"
 msgstr "État"
 
-#: libreosteoweb/models.py:83
+#: libreosteoweb/models.py:115
 msgid "Type"
 msgstr "Type"
 
-#: libreosteoweb/models.py:85
+#: libreosteoweb/models.py:117
 msgid "Patient"
 msgstr "Patient"
 
-#: libreosteoweb/models.py:86
+#: libreosteoweb/models.py:118
 msgid "Therapeut"
 msgstr "Thérapeute"
 
-#: templates/404.html:43
-msgid "Search"
-msgstr "Recherche"
+#: templates/404.html:257
+#: templates/index.html:257
+msgid "User Profile"
+msgstr "Profil utilisateur"
+
+#: templates/404.html:259
+#: templates/index.html:259
+msgid "Settings"
+msgstr "Paramètres"
+
+#: templates/404.html:262
+#: templates/index.html:262
+msgid "Logout"
+msgstr "Déconnexion"
+
+#: templates/404.html:278
+#: templates/index.html:278
+msgid "Search..."
+msgstr "Recherche..."
+
+#: templates/404.html:290
+#: templates/index.html:290
+#: templates/partials/add-patient.html:3
+msgid "New patient"
+msgstr "Nouveau patient"
 
 #: templates/account/login.html:10
 msgid "Signin on Libreosto"
@@ -205,30 +235,44 @@ msgstr "Se rappeler de moi"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:253
-msgid "User Profile"
-msgstr "Profil utilisateur"
-
-#: templates/index.html:255
-msgid "Settings"
-msgstr "Paramètres"
-
-#: templates/index.html:258
-msgid "Logout"
-msgstr "Déconnexion"
-
-#: templates/index.html:276
-msgid "Search..."
-msgstr "Recherche..."
-
-#: templates/index.html:288
-#: templates/partials/add-patient.html:3
-msgid "New patient"
-msgstr "Nouveau patient"
-
 #: templates/partials/add-patient.html:35
 msgid "Init the patient file"
 msgstr "Initialiser la fiche patient"
+
+#: templates/partials/dashboard.html:3
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: templates/partials/dashboard.html:9
+msgid "Week"
+msgstr "Semaine"
+
+#: templates/partials/dashboard.html:10
+msgid "Month"
+msgstr "Mois"
+
+#: templates/partials/dashboard.html:11
+msgid "Year"
+msgstr "Année"
+
+#: templates/partials/dashboard.html:26
+msgid "New patients"
+msgstr "Nouveaux patients"
+
+#: templates/partials/dashboard.html:32
+#: templates/partials/dashboard.html:54
+#: templates/partials/dashboard.html:98
+msgid "View Details"
+msgstr "Afficher les détails"
+
+#: templates/partials/dashboard.html:48
+#: templates/partials/patient-detail.html:160
+msgid "Examinations"
+msgstr "Consultations"
+
+#: templates/partials/dashboard.html:92
+msgid "Urgent return"
+msgstr "Retour"
 
 #: templates/partials/doctor-modal-add.html:3
 #: templates/partials/patient-detail.html:70
@@ -273,10 +317,6 @@ msgstr "Non fumeur"
 msgid "History"
 msgstr "Antécédents"
 
-#: templates/partials/patient-detail.html:160
-msgid "Examinations"
-msgstr "Consultations"
-
 #: templates/partials/patient-detail.html:165
 msgid "New Examination"
 msgstr "Nouvelle consultation"
@@ -310,17 +350,19 @@ msgid "No session for this patient"
 msgstr "Pas de séance pour ce patient"
 
 #: templates/partials/user-profile.html:3
-#| msgid "User Profile"
 msgid "User profile"
 msgstr "Profil utilisateur"
 
-#: templates/partials/user-profile.html:28
+#: templates/partials/user-profile.html:32
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/partials/user-profile.html:33
+#: templates/partials/user-profile.html:37
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+#~ msgid "Search"
+#~ msgstr "Recherche"
 
 #~ msgid "Tests"
 #~ msgstr "Tests"

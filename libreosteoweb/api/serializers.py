@@ -32,5 +32,3 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
         model = Examination
         fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type')
         depth = 1
-
-

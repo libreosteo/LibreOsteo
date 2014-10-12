@@ -11,25 +11,29 @@
 
     <!-- Core CSS - Include with every page -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Blank -->
      <link href="{{ STATIC_URL }}css/plugins/timeline/timeline.css" rel="stylesheet">
+     <!-- MetisMenu CSS -->
+    <link href="{{ STATIC_URL }}css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="{{ STATIC_URL }}css/sb-admin.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/sb-admin-2.css" rel="stylesheet">
 
     <!-- TypeAHead component -->
     <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
 
     <!-- InlineEdit component -->
     <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
+    <!-- compatibility for date input with all browsers -->
+    
 
 </head>
 
 <body>
 
-<div id="wrapper">
+<div id="wrapper" ng-controller="MainController">
 
 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
 <div class="navbar-header">
@@ -264,11 +268,9 @@
 </ul>
 <!-- /.navbar-top-links -->
 
-</nav>
-<!-- /.navbar-static-top -->
 
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
+    <div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav sidebar-collapse">
         <ul class="nav" id="side-menu">
             <li class="sidebar-search" ng-controller="SearchCtrl">
                 <div class="search-container">
@@ -377,6 +379,7 @@
         </ul>
         <!-- /#side-menu -->
     </div>
+    </div>
     <!-- /.sidebar-collapse -->
 </nav>
 <!-- /.navbar-static-side -->
@@ -396,13 +399,15 @@
 <!-- /#wrapper -->
 
 <!-- Core Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/jquery-1.10.2.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-1.11.0.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 
 <!-- Page-Level Plugin Scripts - Blank -->
 
 <!-- SB Admin Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/sb-admin.js"></script>
+<script src="{{ STATIC_URL }}js/sb-admin-2.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ STATIC_URL }}js/plugins/metisMenu/metisMenu.min.js"></script>
 
 <!-- Angular framework -->
 <script src="{{ STATIC_URL }}bower_components/angular/angular.min.js"></script>
@@ -411,6 +416,7 @@
 <script src="{{ STATIC_URL }}bower_components/angular-cookies/angular-cookies.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-i18n/angular-locale_fr-fr.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <link href="{{ STATIC_URL }}bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
 <script src="{{ STATIC_URL }}bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
@@ -421,9 +427,11 @@
 <script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 <link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>
+<script src="{{ STATIC_URL }}js/app/utils.js"></script>
 <script src="{{ STATIC_URL }}js/app/patient.js"></script>
 <script src="{{ STATIC_URL }}js/app/doctor.js"></script>
 <script src="{{ STATIC_URL }}js/app/examination.js"></script>
@@ -431,6 +439,7 @@
 <script src="{{ STATIC_URL }}js/app/timeline.js"></script>
 <script src="{{ STATIC_URL }}js/app/search.js"></script>
 <script src="{{ STATIC_URL }}js/app/user.js"></script>
+<script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 admin.autodiscover()
 
-from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet, ExaminationViewSet, SearchViewHtml, UserViewSet
+from libreosteoweb.api.views import PatientViewSet, RegularDoctorViewSet, ExaminationViewSet, SearchViewHtml, UserViewSet, StatisticsView
 
 from rest_framework import  routers
 from django.views.generic.base import TemplateView
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'account/login.html'}, name='accounts-login'),
     url(r'^accounts/logout', 'django.contrib.auth.views.logout', {'template_name' : 'account/login.html'}, name="accounts-logout"),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/statistics[/]?$', StatisticsView.as_view(), name='statistics_view'),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),
@@ -37,6 +38,7 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/examination', displays.display_examination),
     url(r'^web-view/partials/search-result', SearchViewHtml(), name='search_view'),
     url(r'^web-view/partials/user-profile', displays.display_userprofile),
+    url(r'^web-view/partials/dashboard', displays.display_dashboard),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

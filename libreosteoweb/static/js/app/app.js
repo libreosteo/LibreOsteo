@@ -6,6 +6,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loPatient',
     'loInlineEdit',
     'loTimeline',
+    'loDashboard',
     'yaru22.angular-timeago',
     'ngAnimate',
      'duScroll',
@@ -71,8 +72,22 @@ libreosteoApp.config(['$routeProvider',
                templateUrl : 'web-view/partials/user-profile',
                 controller : 'UserProfileCtrl'
             }).
+            when('/',
+            {
+                templateUrl : 'web-view/partials/dashboard',
+                controller : 'DashboardCtrl'
+            }).
             otherwise({
                redirectTo : '/'
             });
     }
 ]);
+
+// WEBShim configuration
+webshim.polyfill('forms forms-ext');
+
+libreosteoApp.controller('MainController', ['$scope', function($scope) {
+	$scope.$on('$viewContentLoaded', function() {
+                $('body').updatePolyfill();
+            });
+}]);

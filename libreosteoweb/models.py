@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS
+from datetime import date
 
 
 class RegularDoctor(models.Model):
@@ -43,9 +46,35 @@ class Patient(models.Model):
         family_history = models.TextField(_('Family history'), blank=True)
         trauma_history = models.TextField(_('Trauma history'), blank=True)
         medical_reports = models.TextField(_('Medical reports'), blank=True)
+        creation_date = models.DateField(_('Creation date'), blank=True, null=True, editable=False)
 
         def __unicode__(self):
                 return "%s %s" % (self.family_name, self.first_name)
+
+        def validate_unique(self, *args, **kwargs):
+            super(Patient, self).validate_unique(*args, **kwargs)
+            found = Patient.objects.filter(family_name__iexact=self.family_name)\
+                    .filter( first_name__iexact=self.first_name )\
+                    .filter( birth_date__iexact=self.birth_date )\
+                    .exclude( id = self.id)\
+                    .exists()
+            if found:
+                raise ValidationError(
+                    {
+                        NON_FIELD_ERRORS:
+                        _('This patient already exists')
+                    }
+                )
+
+        def clean(self):
+            if self.birth_date > date.today():
+                raise ValidationError({
+                    'birth_date' :
+                        _('Birth date is invalid')
+                })
+
+            if self.creation_date is None:
+                self.creation_date = date.today()
 
 
 class Children(models.Model):
@@ -80,6 +109,9 @@ class Examination(models.Model):
     conclusion = models.TextField(_('Conclusion'), blank=True)
     date = models.DateTimeField(_('Date'))
     status = models.SmallIntegerField(_('Status'))
+    # Type : 1 -> normal examination
+    # Type : 2 -> Scheduled return
+    # Type : 3 -> Urgent return
     type = models.SmallIntegerField(_('Type'))
     #invoice =
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))

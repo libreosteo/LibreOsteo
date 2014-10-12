@@ -59,3 +59,6 @@ def display_search_result(request):
 def display_userprofile(request):
     displayUser = UserDisplay()
     return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields})
+
+def display_dashboard(request):
+    return render_to_response('partials/dashboard.html', {})

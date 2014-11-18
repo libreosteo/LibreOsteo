@@ -32,6 +32,7 @@ if sys.platform in ['win32']:
     copyDependentFiles = True
     includes = [
         'django.template.loader_tags',
+        'django.core.management',
         'Libreosteo.urls',
         'Libreosteo.settings',
         'Libreosteo.wsgi',
@@ -52,6 +53,7 @@ if sys.platform in ['win32']:
         "django",
         "htmlentitydefs",
         "HTMLParser",
+        "Cookie",
         "rest_framework",
         "haystack",
         "sqlite3",
@@ -64,7 +66,10 @@ if sys.platform in ['win32']:
         "include_files": include_files,
         "zip_includes" : zip_includes,
         "excludes" : ['cStringIO','tcl','Tkinter'],
-        "compressed" : True,
+        "compressed" : False,
+        "create_shared_zip": False,
+        "append_script_to_exe": True,
+        "include_in_shared_zip" : False,
         "optimize" : 2,
     }
 
@@ -73,4 +78,4 @@ setup(  name = "libreosteo",
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
         executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
-                       Executable("manage.py", base=base)])
+                       Executable("migrate.py", base=base)])

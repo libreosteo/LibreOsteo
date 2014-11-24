@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     original_function = django.core.management.find_commands
 
-    def _find_commands(management_dir):
+    def _find_commands(path):
         """
         Given a path to a management directory, returns a list of all the command
         names that are available.
@@ -21,9 +21,11 @@ if __name__ == "__main__":
         """
         (head, management_dir) = os.path.split(path)
         if head.endswith(os.path.join('django', 'core')) :
-            return """compilemessages createcachetable dbshell shell runfcgi runserver""".split()
+            return """compilemessages createcachetable dbshell shell runfcgi migrate runfcgi""".split()
         elif head.endswith(os.path.join('django', 'contrib', 'staticfiles')):
-            return """runserver""".split()
+            return ["runserver",]
+        elif head.endswith(os.path.join('django','contrib','auth')):
+            return """changepassword createsuperuser""".split()
         else :
             return []
 

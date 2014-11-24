@@ -7,6 +7,16 @@ base=None
 
 import os
 
+def get_sourcepath(module_path):
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings")
+    import importlib
+    module = importlib.import_module(module_path)
+    path = module.__file__
+    return [(os.path.dirname(path), module_path.replace('.','/')),]
+    
+    
+    
+
 def get_filepaths(directory):
     """
     This function will generate the file names in a directory 
@@ -46,7 +56,7 @@ if sys.platform in ['win32']:
         'libreosteoweb.migrations',
         'email.mime.image',
     ]
-    include_files = get_filepaths('static') + get_filepaths('locale')
+    include_files = get_filepaths('static') + get_filepaths('locale')+get_filepaths('libreosteoweb/migrations') + get_sourcepath('django.contrib.admin.migrations') 
     zip_includes = get_filepaths('templates')
     packages = [
         "os",
@@ -78,4 +88,4 @@ setup(  name = "libreosteo",
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
         executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
-                       Executable("migrate.py", base=base)])
+                       Executable("manager.py", base=base)])

@@ -53,9 +53,11 @@ if __name__ == "__main__":
             # Issue with that when frozen into an executable
             # List the content of the package
             ### BEGIN OF THE REWRITTEN CODE ###
-            migration_names = set()
-            for (module_loader, name, ispkg) in pkgutil.iter_modules(module.__path__):
-                migration_names.add(name)
+            migration_names = None
+            print "module = %s " %module
+            print "module.__path__ = %s " % module.__path__
+            migration_names = [modname for importer, modname, ispkg in pkgutil.iter_modules(module.__path__)]
+            print "migration_names = %s" % migration_names
             ### END OF THE REWRITTEN CODE ###
             # Load them
             south_style_migrations = False
@@ -94,6 +96,7 @@ if __name__ == "__main__":
         except LookupError: # It's a fake app.
             return self.defaults.get("ask_initial", False)
         migrations_import_path = "%s.%s" % (app_config.name, MIGRATIONS_MODULE_NAME)
+        print "migrations_import_path = %s" %migrations_import_path
         filenames = set()
         try:
             migrations_module = import_module(migrations_import_path)
@@ -101,31 +104,29 @@ if __name__ == "__main__":
             return self.defaults.get("ask_initial", False)
         else:
             if hasattr(migrations_module, "__file__"):
-                for (module_loader, name, ispkg) in pkgutil.iter_modules(migrations_module.__file__):
+                for module_loader, name, ispkg in pkgutil.iter_modules(migrations_module.__file__):
+                    print "module file : name = %s" % name
                     filenames.add(name)
             elif hasattr(migrations_module, "__path__"):
                 if len(migrations_module.__path__) > 1:
+                    print "migrations_module.__path__ = %s" % migrations_module.__path__
                     return False
                 for (module_loader, name, ispkg) in pkgutil.iter_modules(migrations_module.__path__):
+                    "module path : name = %s" % name
                     filenames.add(name)
-            return len(filenames) > 0
+            print "filenames = %s " % filenames
+            return len(filenames) <= 0
 
-    def _find_commands(path):
+    def _find_commands(management_dir):
         """
         Given a path to a management directory, returns a list of all the command
         names that are available.
 
         Returns an empty list if no commands are defined.
         """
-        (head, management_dir) = os.path.split(path)
-        if head.endswith(os.path.join('django', 'core')) :
-            return """compilemessages createcachetable dbshell shell runfcgi migrate loaddata runfcgi""".split()
-        elif head.endswith(os.path.join('django', 'contrib', 'staticfiles')):
-            return ["runserver",]
-        elif head.endswith(os.path.join('django','contrib','auth')):
-            return """changepassword createsuperuser""".split()
-        else :
-            return []
+        print "management_dir and commands = %s" % [os.path.join(management_dir, 'commands')]
+        return [modname for importer, modname, ispkg in pkgutil.iter_modules(
+                [os.path.join(management_dir, 'commands')]) if not ispkg]
 
 
     old_restart_with_reloader = django.utils.autoreload.restart_with_reloader

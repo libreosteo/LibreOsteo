@@ -51,8 +51,14 @@ if sys.platform in ['win32']:
         'libreosteoweb.models',
         'libreosteoweb.search_indexes',
         'libreosteoweb.api',
-        'libreosteoweb.migrations',
         'email.mime.image',
+        "django.contrib.admin.migrations.0001_initial",
+        "django.contrib.auth.migrations.0001_initial",
+        "django.contrib.contenttypes.migrations.0001_initial",
+        "django.contrib.sessions.migrations.0001_initial",
+        "libreosteoweb.migrations.0001_initial",
+        "libreosteoweb.migrations.0002_remove_examination_tests",
+        "libreosteoweb.migrations.0003_patient_creation_date",
     ]
     include_files = get_filepaths('static') + get_filepaths('locale')+get_filepaths('libreosteoweb/migrations') +get_djangolocale()
     zip_includes = get_filepaths('templates')
@@ -67,6 +73,8 @@ if sys.platform in ['win32']:
         "sqlite3",
         "statici18n",
         "email",
+        
+        
     ]
     build_exe_options = {
         "packages": packages,

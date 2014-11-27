@@ -53,7 +53,7 @@ class DjangoAppPlugin(plugins.SimplePlugin):
         #settings.configure(**app_settings)
  
         self.bus.log("Mounting the Django application")
-        cherrypy.tree.graft(application, "/")
+        cherrypy.tree.graft(HTTPLogger(application), "/")
  
         self.bus.log("Setting up the static directory to be served")
         # We server static files through CherryPy directly

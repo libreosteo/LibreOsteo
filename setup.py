@@ -7,13 +7,11 @@ base=None
 
 import os
 
-def get_sourcepath(module_path):
+def get_djangolocale():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings")
-    import importlib
-    module = importlib.import_module(module_path)
-    path = module.__file__
-    return [(os.path.dirname(path), module_path.replace('.','/')),]
-    
+    import django
+    directory = os.path.join(django.__path__[0], 'conf', 'locale')
+    return [(directory, 'django/conf/locale')]
     
     
 
@@ -56,7 +54,7 @@ if sys.platform in ['win32']:
         'libreosteoweb.migrations',
         'email.mime.image',
     ]
-    include_files = get_filepaths('static') + get_filepaths('locale')+get_filepaths('libreosteoweb/migrations') + get_sourcepath('django.contrib.admin.migrations') 
+    include_files = get_filepaths('static') + get_filepaths('locale')+get_filepaths('libreosteoweb/migrations') +get_djangolocale()
     zip_includes = get_filepaths('templates')
     packages = [
         "os",
@@ -77,8 +75,8 @@ if sys.platform in ['win32']:
         "zip_includes" : zip_includes,
         "excludes" : ['cStringIO','tcl','Tkinter'],
         "compressed" : False,
-        "create_shared_zip": False,
-        "append_script_to_exe": True,
+        "create_shared_zip": True,
+        "append_script_to_exe": False,
         "include_in_shared_zip" : False,
         "optimize" : 2,
     }
@@ -89,3 +87,7 @@ setup(  name = "libreosteo",
         options = {"build_exe": build_exe_options},
         executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
+
+
+
+# Remove init.py into locale directory

@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOCALE_PATHS = (os.path.join(SITE_ROOT, 'locale'),)
+LOCALE_PATHS = (os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'),)
 
 APPEND_SLASH = False
 

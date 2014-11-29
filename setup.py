@@ -60,7 +60,7 @@ if sys.platform in ['win32']:
         "libreosteoweb.migrations.0002_remove_examination_tests",
         "libreosteoweb.migrations.0003_patient_creation_date",
     ]
-    include_files = get_filepaths('static') + get_filepaths('locale')+get_filepaths('libreosteoweb/migrations') +get_djangolocale()
+    include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale()
     zip_includes = get_filepaths('templates')
     packages = [
         "os",
@@ -82,10 +82,10 @@ if sys.platform in ['win32']:
         "include_files": include_files,
         "zip_includes" : zip_includes,
         "excludes" : ['cStringIO','tcl','Tkinter'],
-        "compressed" : False,
+        "compressed" : True,
         "create_shared_zip": True,
-        "append_script_to_exe": False,
-        "include_in_shared_zip" : False,
+        "append_script_to_exe": True,
+        "include_in_shared_zip" : True,
         "optimize" : 2,
     }
 

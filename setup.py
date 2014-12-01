@@ -96,6 +96,10 @@ setup(  name = "libreosteo",
         executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
 
-
-
 # Remove init.py into locale directory
+# Create a web shorcut link
+shortlink = open("build/exe.win32-2.7/Libreosteo.url","w")
+shortlink.write("[InternetShortcut]\n")
+shortlink.write("URL=http://localhost/\n")
+shortlink.write("\n")
+shortlink.write("\n")

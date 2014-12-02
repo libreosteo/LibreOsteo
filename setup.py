@@ -87,6 +87,7 @@ if sys.platform in ['win32']:
         "append_script_to_exe": True,
         "include_in_shared_zip" : True,
         "optimize" : 2,
+        "include_msvcr" : True,
     }
 
 setup(  name = "libreosteo",

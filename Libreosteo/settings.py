@@ -9,9 +9,12 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os,sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
+if getattr(sys, 'frozen', False):
+    SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
+else :
+    SITE_ROOT = BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production

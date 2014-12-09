@@ -95,9 +95,6 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
                 var mdiff = m[0] - m[1];
                 var ddiff = d[0] - d[1];
 
-                console.log("ydiff : "+ydiff);
-                console.log("mdiff : "+mdiff);
-                console.log("ddiff : "+ddiff);
                 if ((mdiff <= 0) && (ddiff < 0)) {
                     ydiff = ydiff -1;
                     mdiff = mdiff + 12;

@@ -229,18 +229,18 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         };
 
         // Handle the examination object to be saved.
-        $scope.saveExamination = function () {
+        $scope.saveExamination = function (examinationToSave) {
             //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
             var localExamination;
-            if( !$scope.newExamination.id ) {
-                localExamination = ExaminationServ.add($scope.newExamination, function()
+            if( !examinationToSave.id ) {
+                localExamination = ExaminationServ.add(examinationToSave, function()
                 {
-                   $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+                   $scope.newExamination = localExamination;
                 });
             } else {
-                localExamination = ExaminationServ.save({examinationId: $scope.newExamination.id}, $scope.newExamination);
+                localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);
             }
-            $scope.newExamination = localExamination;
+            $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
             return localExamination;
         };
 

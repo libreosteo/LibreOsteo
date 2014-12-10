@@ -158,13 +158,15 @@
 </tab>
 
 <tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" >
-    <examination model="previousExamination.data" read-only="true" ng-if="previousExamination.data != null" ng-animate="displayExamination"/>
+    <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
+    save-model="saveExamination(previousExamination.data)"
+    new-examination="false"/>
     <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
     current-examination="newExamination"
     current-examination-manager="currentExaminationManager()"/>
 </tab>
 
 <tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
-    <examination model="newExamination" save-model="saveExamination()" invoice="invoice(newExamination)"/>
+    <examination model="newExamination" save-model="saveExamination(newExamination)" invoice="invoice(newExamination)" new-examination="true"/>
 </tab>
 </tabset>

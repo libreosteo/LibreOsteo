@@ -28,10 +28,10 @@ examination.directive('examination', function(){
             model: '=',
             saveModel : '&',
             invoice : '&',
-            readOnly : '=',
+            newExamination: '=',
         },
       compile: function(element, attrs){
-          if (!attrs.readOnly) { attrs.readOnly = false; }
+          if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
         controller : function($scope, $filter)
@@ -50,6 +50,14 @@ examination.directive('examination', function(){
                     return 'Non renseigné';
                 }
             };
+
+            $scope.$watch('model.status', function(newValue, oldValue){
+                if (newValue){
+                    console.log("status = "+$scope.model.status);
+                    console.log("model = "+angular.toJson($scope.model));
+                    $scope.readOnly = newValue != 0; 
+                }
+            });
         },
         templateUrl: 'web-view/partials/examination'
     }

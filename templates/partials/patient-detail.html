@@ -159,7 +159,9 @@
 
 <tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" >
     <examination model="previousExamination.data" read-only="true" ng-if="previousExamination.data != null" ng-animate="displayExamination"/>
-    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"/>
+    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
+    current-examination="newExamination"
+    current-examination-manager="currentExaminationManager()"/>
 </tab>
 
 <tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">

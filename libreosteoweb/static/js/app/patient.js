@@ -244,6 +244,12 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
             return localExamination;
         };
 
+        // Function which manage the current examination
+        $scope.currentExaminationManager = function() {
+            $scope.newExaminationDisplay = true;
+            $scope.newExaminationActive = true;
+        };
+
         // Handle the invoice function
         $scope.invoice = function(examination)
         {

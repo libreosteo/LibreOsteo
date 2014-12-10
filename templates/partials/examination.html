@@ -1,8 +1,13 @@
 {% load i18n %}
-<button type="button" class="close pull-right"
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="close pull-right"
                 ng-click="model = null"
                 ng-show="readOnly"
-                ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+            </button>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -33,11 +38,11 @@
                     <div style="padding-top: 45px">
                         <inlinetextarea class="col-md-5" model="model" property="reason_description" on-save="saveModel()"
                                     placeholder="{{ examination.reason_description }}" read-only="readOnly"
-                                row="5" col="40"/>
+                                row="5" col="28"/>
                         <span class="col-md-1">{{ examination.medical_examination }}</span>
                         <inlinetextarea class="col-md-6" model="model" property="medical_examination" on-save="saveModel()"
                                     placeholder="{{ examination.medical_examination }}" read-only="readOnly"
-                                row="5" col="50"/>
+                                row="5" col="30"/>
                     </div>
                 </div>
             </div>

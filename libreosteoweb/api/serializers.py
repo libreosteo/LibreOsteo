@@ -32,3 +32,9 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
         model = Examination
         fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type')
         depth = 1
+
+class ExaminationInvoicingSerializer(serializers.Serializer):
+    reason = serializers.CharField(required=False)
+    paiment_mode = serializers.IntegerField(required=False)
+
+

@@ -108,6 +108,10 @@ class Examination(models.Model):
     treatments = models.TextField(_('Treatments'), blank=True)
     conclusion = models.TextField(_('Conclusion'), blank=True)
     date = models.DateTimeField(_('Date'))
+    # Status : 0 -> in progress
+    # Status : 1 -> invoiced not paid
+    # Status : 2 -> invoiced and paid
+    # Status : 3 -> not invoiced
     status = models.SmallIntegerField(_('Status'))
     # Type : 1 -> normal examination
     # Type : 2 -> Scheduled return
@@ -116,3 +120,8 @@ class Examination(models.Model):
     #invoice =
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'), blank=True,null=True)
+
+EXAMINATION_IN_PROGRESS = 0
+EXAMINATION_WAITING_FOR_PAIEMENT = 1
+EXAMINATION_INVOICED_PAID = 2
+EXAMINATION_NOT_INVOICED = 3

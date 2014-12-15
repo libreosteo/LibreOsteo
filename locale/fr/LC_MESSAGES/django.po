@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-11 20:58+0000\n"
-"PO-Revision-Date: 2014-10-12 07:39+0100\n"
+"POT-Creation-Date: 2014-12-15 13:33+0000\n"
+"PO-Revision-Date: 2014-12-15 14:34+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -165,19 +165,19 @@ msgstr "Conclusion"
 msgid "Date"
 msgstr "Date"
 
-#: libreosteoweb/models.py:111
+#: libreosteoweb/models.py:115
 msgid "Status"
 msgstr "État"
 
-#: libreosteoweb/models.py:115
+#: libreosteoweb/models.py:119
 msgid "Type"
 msgstr "Type"
 
-#: libreosteoweb/models.py:117
+#: libreosteoweb/models.py:121
 msgid "Patient"
 msgstr "Patient"
 
-#: libreosteoweb/models.py:118
+#: libreosteoweb/models.py:122
 msgid "Therapeut"
 msgstr "Thérapeute"
 
@@ -287,14 +287,14 @@ msgstr "Ajouter"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/partials/examination.html:10
-#: templates/partials/timeline.html:14
+#: templates/partials/examination.html:15
+#: templates/partials/timeline.html:18
 msgid "Session of "
 msgstr "Séance du"
 
-#: templates/partials/examination.html:177
-msgid "Invoice"
-msgstr "Facturer"
+#: templates/partials/examination.html:182
+msgid "Close"
+msgstr "Clôturer"
 
 #: templates/partials/patient-detail.html:11
 msgid "General infos"
@@ -317,7 +317,7 @@ msgstr "Non fumeur"
 msgid "History"
 msgstr "Antécédents"
 
-#: templates/partials/patient-detail.html:165
+#: templates/partials/patient-detail.html:170
 msgid "New Examination"
 msgstr "Nouvelle consultation"
 
@@ -341,11 +341,11 @@ msgstr "Suivant"
 msgid "Start an examination"
 msgstr "Démarrer une consultation"
 
-#: templates/partials/timeline.html:17
+#: templates/partials/timeline.html:21
 msgid "by"
 msgstr "par"
 
-#: templates/partials/timeline.html:27
+#: templates/partials/timeline.html:31
 msgid "No session for this patient"
 msgstr "Pas de séance pour ce patient"
 
@@ -360,6 +360,9 @@ msgstr "Mettre à jour"
 #: templates/partials/user-profile.html:37
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+#~ msgid "Invoice"
+#~ msgstr "Facturer"
 
 #~ msgid "Search"
 #~ msgstr "Recherche"

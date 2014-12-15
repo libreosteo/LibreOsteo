@@ -251,13 +251,22 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         };
 
         // Handle the invoice function
-        $scope.invoice = function(examination)
+        $scope.close = function(examination)
         {
-            // Hide the new examination function
-            $scope.newExamination = {};
-            $scope.newExaminationDisplay = false;
-            $scope.newExaminationActive = false;
-            $scope.examinationsListActive = true;
+            ExaminationServ.close({examinationId : examination.id} , function() {
+                if ($scope.newExaminationDisplay){
+                    // Hide the in progress examination
+                    $scope.newExamination = {};
+                    $scope.newExaminationDisplay = false;
+                    $scope.newExaminationActive = false;
+                    $scope.examinationsListActive = true;
+                } else {
+                    // Close the view of the examination
+                    $scope.previousExamination = null;
+                }
+                // Reload the examinations list
+                $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+            });
         };
 
 

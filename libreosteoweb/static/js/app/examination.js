@@ -8,7 +8,12 @@ examination.factory('ExaminationServ', ['$resource',
             query: {method: 'GET', isArray : true},
             get : {method: 'GET', params : {examinationId : 'examination'} },
             save : {method : 'PUT'},
-            add : {method : 'POST'}
+            add : {method : 'POST'},
+            close : {
+                method : 'POST',
+                params : {examinationId : '@examinationId'},
+                url : 'api/examinations/:examinationId/close'
+            },
         });
     }
 ]);
@@ -27,7 +32,7 @@ examination.directive('examination', function(){
         scope: {
             model: '=',
             saveModel : '&',
-            invoice : '&',
+            close : '&',
             newExamination: '=',
         },
       compile: function(element, attrs){
@@ -53,8 +58,6 @@ examination.directive('examination', function(){
 
             $scope.$watch('model.status', function(newValue, oldValue){
                 if (newValue){
-                    console.log("status = "+$scope.model.status);
-                    console.log("model = "+angular.toJson($scope.model));
                     $scope.readOnly = newValue != 0; 
                 }
             });

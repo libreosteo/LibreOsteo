@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os,sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+if getattr(sys, 'frozen', False):
+    SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
+else :
+    SITE_ROOT = BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +30,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+LOCALE_PATHS = (os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'),)
 
 APPEND_SLASH = False
 
@@ -61,17 +65,41 @@ ROOT_URLCONF = 'Libreosteo.urls'
 
 WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
+STATIC_ROOT = "./static"
+
 TEMPLATE_DIRS = (
-    "templates", # Change this to your own directory.
-    "static",
+    'templates',
+    'static',
 )
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'Libreosteo.zip_loader.load_template_source'
 #     'django.template.loaders.eggs.Loader',
 )
+
+TEMPLATE_ZIP_FILES = (
+    'library.zip',
+    )
+
+# Additional locations of static files
+#STATICFILES_DIRS = (
+# Put strings here, like "/home/html/static" or "C:/www/django/static".
+# Always use forward slashes, even on Windows.
+# Don't forget to use absolute paths, not relative paths.
+#    os.path.join(SITE_ROOT, 'static'),
+#    )
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+'django.contrib.staticfiles.finders.FileSystemFinder',
+'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 "django.contrib.auth.context_processors.auth",
@@ -89,7 +117,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(SITE_ROOT, 'db.sqlite3'),
     }
 }
 
@@ -187,7 +215,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+        'PATH': os.path.join(SITE_ROOT, 'whoosh_index'),
     },
 }
 

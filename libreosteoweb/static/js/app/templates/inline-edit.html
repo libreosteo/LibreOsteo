@@ -1,29 +1,35 @@
 <div class="{$ editclass $}" ng-switch="model[property].length" ng-if="!readOnly">
-    <div ng-switch-when="0" ng-mouseenter="displayButton = true"
-                      ng-mouseleave="displayButton = false">
-                <span editable-text="model[property]"
-                      e-placeholder="{$ placeholder $}" onaftersave="saveModel()" e-form="editform"
-                      e-style="width:{$ width $}" class="inlineedit"
-                      blur="submit"
-                        >{$ model[property] || '&nbsp;&nbsp;' $}</span>
-        <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
-                ng-click="editform.$show()"
-                ng-show="displayButton && !editform.$visible"
-                ></button>
-    </div>
-    <div ng-switch-default>
-                <span editable-text="model[property]"
-                      e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
-                      e-style="width:{$ width $}" class="inlineedit"
-                      blur="submit"
-                        >{$ model[property] || '&nbsp;&nbsp;' $}</span>
-    </div>
+  <div ng-switch-when="0" ng-mouseenter="displayButton = true"
+    ng-mouseleave="displayButton = false">
+  <span editable-text="model[property]"
+    e-placeholder="{$ placeholder $}" onaftersave="saveModel()" e-form="editform"
+    e-style="width:{$ width $}" class="inlineedit"
+    tooltip="{$ placeholder $}"
+    tooltip-trigger="mouseenter"
+    blur="submit"
+  >{$ model[property] || '&nbsp;&nbsp;' $}</span>
+  <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
+    ng-click="editform.$show()"
+    tooltip="{$ placeholder $}"
+    tooltip-trigger="mouseenter"
+    ng-show="displayButton && !editform.$visible"
+  ></button>
+</div>
+<div ng-switch-default>
+<span editable-text="model[property]"
+  e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
+  e-style="width:{$ width $}" class="inlineedit"
+  tooltip="{$ placeholder $}"
+  tooltip-trigger="mouseenter"
+  blur="submit"
+>{$ model[property] || '&nbsp;&nbsp;' $}</span>
+</div>
 </div>
 
 <div class="{$ editclass $}" ng-if="readOnly">
-    <div>
-                <span
-                      e-style="width:{$ width $}" class="inlineedit"
-                        >{$ model[property] || '&nbsp;&nbsp;' $}</span>
-    </div>
+  <div>
+    <span
+      e-style="width:{$ width $}" class="inlineedit"
+    >{$ model[property] || '&nbsp;&nbsp;' $}</span>
+  </div>
 </div>

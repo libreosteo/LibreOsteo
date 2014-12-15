@@ -84,33 +84,41 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         // Display the formated age
         $scope.get_age = function () {
             var birthDate = $scope.patient.birth_date;
-            if(birthDate)
-            {
-               var todate= new Date();
-               var fromdate= new Date(birthDate),
-                y= [todate.getFullYear(), fromdate.getFullYear()],
-                ydiff= y[0]-y[1],
-                m= [todate.getMonth(), fromdate.getMonth()],
-                mdiff= m[0]-m[1],
-                d= [todate.getDate(), fromdate.getDate()],
-                ddiff= d[0]-d[1];
+            if(birthDate) {
+                var todate = new Date();
+                var fromDate = new Date(birthDate);
+                var y = [todate.getFullYear(), fromDate.getFullYear()];
+                var m = [todate.getMonth(), fromDate.getMonth()];
+                var d = [todate.getDate(), fromDate.getDate()];
 
-                if(mdiff < 0 || (mdiff=== 0 && ddiff<0))--ydiff;
-                if(mdiff<0) mdiff+= 12;
-                if(ddiff<0){
-                fromdate.setMonth(m[1]+1, 0);
-                ddiff= fromdate.getDate()-d[1]+d[0];
-                --mdiff;
+                var ydiff = y[0] - y[1];
+                var mdiff = m[0] - m[1];
+                var ddiff = d[0] - d[1];
+
+                if ((mdiff <= 0) && (ddiff < 0)) {
+                    ydiff = ydiff -1;
+                    mdiff = mdiff + 12;
                 }
-                return { year : ydiff, month : mdiff, day: ddiff};
+                if (ddiff <= 0) {
+                    var n_day_by_month = [31,28,31,30,31, 30, 31, 31, 30, 31,30, 31];
+                    mdiff = mdiff -1;
+                    var d_month ;
+                    if ((m[0] == 1) && (y[0]%4 == 0)) {
+                         d_month = n_day_by_month[m[0]] + 1;
+                    } else {
+                        d_month = n_day_by_month[m[0]];
+                    }
+                    ddiff = ddiff + d_month;
+                }
+                return {year : ydiff, month : mdiff, day : ddiff};
             }
-            return { };
+            return {};
         };
         $scope.age = $scope.get_age();
 
         $scope.$watch('patient.birth_date', function (newValue, oldValue) {
-           $scope.age = $scope.get_age();
-        });
+         $scope.age = $scope.get_age();
+     });
 
         $scope.updateComponentPolyfill = function() {
             // To be compliant with all browser.
@@ -221,29 +229,44 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         };
 
         // Handle the examination object to be saved.
-        $scope.saveExamination = function () {
+        $scope.saveExamination = function (examinationToSave) {
             //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
             var localExamination;
-            if( !$scope.newExamination.id ) {
-                localExamination = ExaminationServ.add($scope.newExamination, function()
+            if( !examinationToSave.id ) {
+                localExamination = ExaminationServ.add(examinationToSave, function()
                 {
-                   $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+                   $scope.newExamination = localExamination;
                 });
             } else {
-                localExamination = ExaminationServ.save({examinationId: $scope.newExamination.id}, $scope.newExamination);
+                localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);
             }
-            $scope.newExamination = localExamination;
+            $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
             return localExamination;
         };
 
+        // Function which manage the current examination
+        $scope.currentExaminationManager = function() {
+            $scope.newExaminationDisplay = true;
+            $scope.newExaminationActive = true;
+        };
+
         // Handle the invoice function
-        $scope.invoice = function(examination)
+        $scope.close = function(examination)
         {
-            // Hide the new examination function
-            $scope.newExamination = {};
-            $scope.newExaminationDisplay = false;
-            $scope.newExaminationActive = false;
-            $scope.examinationsListActive = true;
+            ExaminationServ.close({examinationId : examination.id} , function() {
+                if ($scope.newExaminationDisplay){
+                    // Hide the in progress examination
+                    $scope.newExamination = {};
+                    $scope.newExaminationDisplay = false;
+                    $scope.newExaminationActive = false;
+                    $scope.examinationsListActive = true;
+                } else {
+                    // Close the view of the examination
+                    $scope.previousExamination = null;
+                }
+                // Reload the examinations list
+                $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+            });
         };
 
 

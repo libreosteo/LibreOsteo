@@ -53,3 +53,12 @@ pre {
 {
     z-index : 1000;
 }
+
+.timeline-panel
+{
+    cursor:pointer;
+}
+.timeline-badge
+{
+    cursor:pointer;
+}

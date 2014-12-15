@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
-from libreosteoweb.models import RegularDoctor, Patient, Examination
+from libreosteoweb.models import RegularDoctor, Patient, Examination, EXAMINATION_IN_PROGRESS, EXAMINATION_WAITING_FOR_PAIEMENT, EXAMINATION_INVOICED_PAID, EXAMINATION_NOT_INVOICED
 from rest_framework.decorators import action, detail_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer
+from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
@@ -61,6 +61,19 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
 
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = Examination
+
+
+    @detail_route(methods=['POST'])
+    def close(self, request, pk=None):
+        current_examination = self.get_object()
+        serializer = ExaminationInvoicingSerializer(data=request.DATA)
+        if serializer.is_valid():
+            current_examination.status = EXAMINATION_NOT_INVOICED
+            current_examination.save()
+            return Response({'invoice':'waiting for paiment'})
+        else :
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def pre_save(self, obj):
         if not self.request.user.is_authenticated():

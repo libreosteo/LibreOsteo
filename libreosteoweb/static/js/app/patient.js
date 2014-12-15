@@ -229,29 +229,44 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
         };
 
         // Handle the examination object to be saved.
-        $scope.saveExamination = function () {
+        $scope.saveExamination = function (examinationToSave) {
             //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
             var localExamination;
-            if( !$scope.newExamination.id ) {
-                localExamination = ExaminationServ.add($scope.newExamination, function()
+            if( !examinationToSave.id ) {
+                localExamination = ExaminationServ.add(examinationToSave, function()
                 {
-                   $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+                   $scope.newExamination = localExamination;
                 });
             } else {
-                localExamination = ExaminationServ.save({examinationId: $scope.newExamination.id}, $scope.newExamination);
+                localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);
             }
-            $scope.newExamination = localExamination;
+            $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
             return localExamination;
         };
 
+        // Function which manage the current examination
+        $scope.currentExaminationManager = function() {
+            $scope.newExaminationDisplay = true;
+            $scope.newExaminationActive = true;
+        };
+
         // Handle the invoice function
-        $scope.invoice = function(examination)
+        $scope.close = function(examination)
         {
-            // Hide the new examination function
-            $scope.newExamination = {};
-            $scope.newExaminationDisplay = false;
-            $scope.newExaminationActive = false;
-            $scope.examinationsListActive = true;
+            ExaminationServ.close({examinationId : examination.id} , function() {
+                if ($scope.newExaminationDisplay){
+                    // Hide the in progress examination
+                    $scope.newExamination = {};
+                    $scope.newExaminationDisplay = false;
+                    $scope.newExaminationActive = false;
+                    $scope.examinationsListActive = true;
+                } else {
+                    // Close the view of the examination
+                    $scope.previousExamination = null;
+                }
+                // Reload the examinations list
+                $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+            });
         };
 
 

@@ -262,7 +262,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
                     $scope.examinationsListActive = true;
                 } else {
                     // Close the view of the examination
-                    $scope.previousExamination = null;
+                    $scope.previousExamination.data = null;
                 }
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);

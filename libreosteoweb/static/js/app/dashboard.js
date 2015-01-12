@@ -1,4 +1,4 @@
-var dashboard = angular.module('loDashboard', ['ngResource']);
+var dashboard = angular.module('loDashboard', ['ngResource', 'loOfficeEvent']);
 
 dashboard.factory('DashboardServ', ['$resource',
     function ($resource) {
@@ -9,8 +9,8 @@ dashboard.factory('DashboardServ', ['$resource',
     }
 ]);
 
-dashboard.controller('DashboardCtrl', ['$scope', 'growl', 'DashboardServ',
-    function($scope, growl, DashboardServ) {
+dashboard.controller('DashboardCtrl', ['$scope', 'growl', 'DashboardServ', 'OfficeEventServ',
+    function($scope, growl, DashboardServ, OfficeEventServ) {
         "use strict";
         $scope.statistics = DashboardServ.get();
         $scope.selector = 'week';
@@ -35,5 +35,7 @@ dashboard.controller('DashboardCtrl', ['$scope', 'growl', 'DashboardServ',
            $scope.statistics = data;
             $scope.show($scope.selector);
         });
+
+        $scope.events = OfficeEventServ.query();
     }
 ]);

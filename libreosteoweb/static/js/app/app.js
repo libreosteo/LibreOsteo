@@ -7,6 +7,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loInlineEdit',
     'loTimeline',
     'loDashboard',
+    'loOfficeEvent',
     'yaru22.angular-timeago',
     'ngAnimate',
      'duScroll',

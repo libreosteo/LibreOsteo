@@ -62,3 +62,6 @@ def display_userprofile(request):
 
 def display_dashboard(request):
     return render_to_response('partials/dashboard.html', {})
+
+def display_officeevent(request):
+    return render_to_response('partials/officeevent.html', {})

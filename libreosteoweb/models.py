@@ -3,7 +3,14 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
-from datetime import date
+from datetime import date, datetime
+
+
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class RegularDoctor(models.Model):
@@ -48,8 +55,11 @@ class Patient(models.Model):
         medical_reports = models.TextField(_('Medical reports'), blank=True)
         creation_date = models.DateField(_('Creation date'), blank=True, null=True, editable=False)
 
+        #Not mapped field, only for traceability purpose
+        current_user_operation = None
+
         def __unicode__(self):
-                return "%s %s" % (self.family_name, self.first_name)
+                return "%s %s by %s" % (self.family_name, self.first_name, self.current_user_operation)
 
         def validate_unique(self, *args, **kwargs):
             super(Patient, self).validate_unique(*args, **kwargs)
@@ -75,6 +85,16 @@ class Patient(models.Model):
 
             if self.creation_date is None:
                 self.creation_date = date.today()
+
+        def set_user_operation(self, user):
+            """ Use this setting method to define the user
+            which performs the operation (create, update).
+            Not mapped in DB only for the runtime"""
+            self.current_user_operation = user
+
+
+        TYPE_NEW_PATIENT = 1
+        TYPE_UPDATE_PATIENT = 2
 
 
 class Children(models.Model):
@@ -121,7 +141,24 @@ class Examination(models.Model):
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'), blank=True,null=True)
 
-EXAMINATION_IN_PROGRESS = 0
-EXAMINATION_WAITING_FOR_PAIEMENT = 1
-EXAMINATION_INVOICED_PAID = 2
-EXAMINATION_NOT_INVOICED = 3
+    EXAMINATION_IN_PROGRESS = 0
+    EXAMINATION_WAITING_FOR_PAIEMENT = 1
+    EXAMINATION_INVOICED_PAID = 2
+    EXAMINATION_NOT_INVOICED = 3
+
+
+class OfficeEvent(models.Model):
+    """
+    This class implements bean object to represent
+    event on the office
+    """
+    date = models.DateTimeField(_('Date'), blank=True)
+    clazz = models.TextField(_('Class'), blank=True)
+    type = models.SmallIntegerField(_('Type'))
+    comment = models.TextField(_('Comment'), blank=True)
+    reference = models.IntegerField(_('Reference'), blank=True, null=False)
+    user = models.ForeignKey(User, verbose_name=_('user'), blank=True,null=False)
+
+    def clean(self):
+        if self.date is None:
+            self.date = datetime.today()

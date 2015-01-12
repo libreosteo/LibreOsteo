@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from libreosteoweb.models import Patient, Examination
+from libreosteoweb.models import Patient, Examination, OfficeEvent
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
 
 
 class WithPkMixin(object):
@@ -11,6 +12,7 @@ class WithPkMixin(object):
 class PatientSerializer (WithPkMixin, serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Patient
+    
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta :
@@ -33,8 +35,32 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
         fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type')
         depth = 1
 
+
 class ExaminationInvoicingSerializer(serializers.Serializer):
     reason = serializers.CharField(required=False)
     paiment_mode = serializers.IntegerField(required=False)
+
+
+class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
+
+    class Meta:
+        model = OfficeEvent
+
+    patient_name = serializers.SerializerMethodField('get_patient_name')
+    translated_comment = serializers.SerializerMethodField('get_translated_comment')
+    therapeut_name = UserInfoSerializer(source = 'user')
+
+    def get_patient_name(self, obj):
+        if (obj.clazz == "Patient"):
+            patient = Patient.objects.get(id = obj.reference)
+            return "%s %s" % (patient.family_name, patient.first_name)
+        if (obj.clazz == "Examination"):
+            examination = Examination.objects.get(id=obj.reference)
+            patient = examination.patient
+            return "%s %s" % (patient.family_name, patient.first_name)
+        return ""
+
+    def get_translated_comment(self, obj):
+        return _(obj.comment)
 
 

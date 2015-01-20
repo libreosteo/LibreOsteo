@@ -40,7 +40,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat">
-                                <li ng-repeat="officeevent in officeevents|orderBy:'-date'" class="left clearfix">
+                                <li ng-repeat="officeevent in officeevents|orderBy:'-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
                                     <div class="chat-img pull-left events-badge">
                                         <!--<i class="fa fa-user"/>-->
                                         <i class="fa fa-search" ng-class="{'fa-user': officeevent.clazz == 'Patient', 'fa-search':officeevent.clazz == 'Examination'}" />

@@ -129,3 +129,15 @@ class StatisticsView(APIView):
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = OfficeEvent
     serializer_class =  OfficeEventSerializer
+
+    def get_queryset(self):
+        """
+        By default, filter events on only new patient/new examinations
+        No update events are given.
+        'all' parameter is used to get all events
+        """
+        queryset = OfficeEvent.objects.all()
+        all_flag = self.request.QUERY_PARAMS.get('all', None)
+        if all_flag is None :
+            queryset = queryset.exclude(clazz__exact = 'Patient', type__exact=2 )
+        return queryset

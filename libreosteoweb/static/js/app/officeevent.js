@@ -18,34 +18,27 @@ officeEvent.controller('OfficeEventCtrl', ['$scope', 'growl', 'OfficeEventServ',
 ]);
 
 
-officeEvent.directive('officeevent', ['PatientServ', 'ExaminationServ', function(PatientServ, ExaminationServ){
+officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationServ', function($location, PatientServ, ExaminationServ){
     return {
     restrict: 'E',
     //transclude : true,
     scope: {
         officeevents : '=',
     },
-    controller: function($scope)
+    controller: function($scope, $location)
     {
         "use strict";
-        
-        $scope.getPatientName = function(officeevent){
-            var patient = {};
-            if(officeevent.clazz === 'Patient'){
-                //patient = PatientServ.get({patientId : officeevent.reference }, function(p){
-                //    console.log(angular.tojson(p));
-                //});
-                console.log(angular.toJson(patient));
-            } else if( officeevent.clazz === 'Examination'){
-                //var examination = ExaminationServ.get({examinationId : officeevent.reference});
-                //patient = PatientServ.get({patientId : examination.patient})
-                patient.familyname = "TEST";
-                patient.firstname = "Test";
+        $scope.loadOfficeevent = function(officeevent)
+        {
+            if (officeevent.clazz === 'Patient'){
+                $location.path('/patient/'+officeevent.reference);
+            } else if(officeevent.clazz === 'Examination')
+            {
+                ExaminationServ.get({examinationId : officeevent.reference}, function(data){
+                  $location.path('/patient/'+data.patient+'/examination/'+officeevent.reference);
+                });
             }
-            return patient.familyname + " "+patient.firstname;
-        };
-        
-        
+        }
     },
 
     templateUrl: 'web-view/partials/officeevent'

@@ -157,7 +157,7 @@
             </div>
 </tab>
 
-<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" >
+<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" ui-sref="patient.examinations">
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"

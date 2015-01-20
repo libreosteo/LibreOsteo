@@ -15,6 +15,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loUser',
     'angular-growl',
     'angular-loading-bar',
+    'ui.router',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -37,29 +38,43 @@ libreosteoApp.config(['growlProvider', function(growlProvider) {
     growlProvider.onlyUniqueMessages(false);
 }]);
 
-libreosteoApp.config(['$routeProvider',
-    function ($routeProvider) {
-        $routeProvider.
-            when('/patient/:patientId',
+libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
+    function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise('/');
+
+        $stateProvider.
+            state('patient', 
             {
+                url : '/patient/{patientId}',
                 templateUrl : 'web-view/partials/patient-detail',
                 controller : 'PatientCtrl'
             }).
-            when('/addPatient',
+            state('patient.examinations',
             {
+                url : '/examinations',
+
+            }).
+            state('patient.examination',
+            {
+                url : '/examination/{examinationId}',
+            }).
+            state('addPatient',
+            {
+                url : '/addPatient',
                 templateUrl : 'web-view/partials/add-patient',
                 controller : 'AddPatientCtrl'
-            }
-            ).
-            when('/search/:query',
+            }).
+            state('search', 
             {
+                url : '/search/:query',
                 templateUrl : function(params) {
                     return 'web-view/partials/search-result?q='+params.query ;
                 },
                 controller : 'SearchResultCtrl'
             }).
-            when('/search/:query/:page',
+            state('searchPaginated', 
             {
+                url : '/search/:query/:page',
                 templateUrl : function(params) {
                     page = '';
                     if(params.page)
@@ -68,18 +83,18 @@ libreosteoApp.config(['$routeProvider',
                 },
                 controller : 'SearchResultCtrl'
             }).
-            when('/accounts/user-profile',
+            state('user-profile', 
             {
+                url : '/accounts/user-profile',
                templateUrl : 'web-view/partials/user-profile',
                 controller : 'UserProfileCtrl'
             }).
-            when('/',
+
+            state('dashboard',
             {
+                url : '/',
                 templateUrl : 'web-view/partials/dashboard',
                 controller : 'DashboardCtrl'
-            }).
-            otherwise({
-               redirectTo : '/'
             });
     }
 ]);

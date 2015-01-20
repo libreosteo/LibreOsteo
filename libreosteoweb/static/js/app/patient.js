@@ -73,11 +73,11 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
     'PatientExaminationsServ', 'ExaminationServ',
-    function($scope, $routeParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
+    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
         "use strict";
-        $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
+        $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
         });
 
@@ -148,7 +148,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
                 } else {
                     growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
                 }
-                $scope.patient = PatientServ.get({patientId : $routeParams.patientId}, function (p) {
+                $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
                      p.doctor_detail(function (detail) {$scope.doctor = detail; });
                 });
             });
@@ -188,7 +188,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
 
         };
 
-       $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+       $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
         // The futur examination of the patient, if a new examination is started.
         $scope.newExamination = {};
         // To display examination in the patient file.
@@ -240,7 +240,7 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
             } else {
                 localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);
             }
-            $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+            $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
             return localExamination;
         };
 
@@ -265,10 +265,22 @@ patient.controller('PatientCtrl', ['$scope', '$routeParams', '$filter', '$modal'
                     $scope.previousExamination.data = null;
                 }
                 // Reload the examinations list
-                $scope.examinations = $scope.getOrderedExaminations($routeParams.patientId);
+                $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
             });
         };
 
+
+        // Restore the state
+        if ($state.includes('patient.examinations')){
+            $scope.examinationsListActive = true;
+        } else if ($state.includes('patient.examination')){
+            $scope.examinationsListActive = true;
+
+            $scope.previousExamination.data = ExaminationServ.get({examinationId : $state.params.examinationId},
+                function(data){
+                  $scope.previousExamination.data = data;
+              });
+        }
 
 }]);
 

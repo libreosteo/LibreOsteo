@@ -78,3 +78,8 @@ pre {
     color: #fff;
     background-color: #3f903f;
 }
+
+.officeevent
+{
+    cursor: pointer;
+}

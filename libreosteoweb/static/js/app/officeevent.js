@@ -13,7 +13,6 @@ officeEvent.controller('OfficeEventCtrl', ['$scope', 'growl', 'OfficeEventServ',
     function($scope, growl, OfficeEventServ) {
         "use strict";
         $scope.events = OfficeEventServ.query();
-        
     }
 ]);
 
@@ -24,10 +23,12 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
     //transclude : true,
     scope: {
         officeevents : '=',
+        officeeventsByDay : '=',
     },
     controller: function($scope, $location)
     {
         "use strict";
+        $scope.selector = 'all';
         $scope.loadOfficeevent = function(officeevent)
         {
             if (officeevent.clazz === 'Patient'){
@@ -38,6 +39,9 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
                   $location.path('/patient/'+data.patient+'/examination/'+officeevent.reference);
                 });
             }
+        };
+        $scope.show = function(selector) {
+            $scope.selector = selector;
         }
     },
 

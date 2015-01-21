@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-12 14:55+0000\n"
-"PO-Revision-Date: 2015-01-12 15:55+0100\n"
+"POT-Creation-Date: 2015-01-20 13:29+0000\n"
+"PO-Revision-Date: 2015-01-20 14:30+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -26,7 +26,6 @@ msgid "Patient updated"
 msgstr "Fiche patient mise à jour"
 
 #: libreosteoweb/api/receivers.py:34
-#| msgid "New Examination"
 msgid "New examination"
 msgstr "Nouvelle consultation"
 
@@ -318,18 +317,26 @@ msgstr "Ajouter"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/partials/examination.html:15
+#: templates/partials/examination.html:16
 #: templates/partials/timeline.html:18
 msgid "Session of "
 msgstr "Séance du"
 
-#: templates/partials/examination.html:182
+#: templates/partials/examination.html:183
 msgid "Close"
 msgstr "Clôturer"
 
 #: templates/partials/officeevent.html:5
 msgid "Events"
 msgstr "Évènements"
+
+#: templates/partials/officeevent.html:13
+msgid "By day"
+msgstr "Par jour"
+
+#: templates/partials/officeevent.html:18
+msgid "All"
+msgstr "Tout"
 
 #: templates/partials/patient-detail.html:11
 msgid "General infos"

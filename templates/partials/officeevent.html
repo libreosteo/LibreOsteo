@@ -45,10 +45,10 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat" ng-if="selector=='day'">
-                                <li ng-if="selector == 'day'" ng-repeat-start="(day,officeEventList) in officeeventsByDay" class="left clearfix">
+                                <li ng-if="selector == 'day'" ng-repeat-start="(day,officeEventList) in officeeventsByDay | toArray | orderBy : '-'" class="left clearfix">
                                     <div class="chat-body clearfix">
                                         <p class="pull-right">
-                                            <b>{$ day | date : 'fullDate' $}</b>
+                                            <b>{$ officeEventList.$key | date : 'fullDate' $}</b>
                                         </p>
                                     </div>
                                 </li>

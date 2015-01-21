@@ -38,16 +38,18 @@ dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardS
 
         $scope.eventsByDay = {};
         $scope.events = OfficeEventServ.query(function(data){
-            for (var i = 0; i < $scope.events.length; i++) {
-                var date = new Date($scope.events[i].date);
-                var keyDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-                var key = $filter('date')(keyDate, 'yyyy-MM-dd');
-                if (!$scope.eventsByDay[key]) {
-                    $scope.eventsByDay[key] = [ $scope.events[i], ];
+            angular.forEach($scope.events, function(officeevent, index){
+                var date = new Date(officeevent.date);
+                var key = $filter('date')(
+                    new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+                    'yyyy-MM-dd');
+                if (!this[key]) {
+                    this[key] = [ officeevent, ];
                 } else {
-                    $scope.eventsByDay[key].push($scope.events[i]);
+                    this[key].push(officeevent);
                 }
-            };
+
+            }, $scope.eventsByDay);
         });
     }
 ]);

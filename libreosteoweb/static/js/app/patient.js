@@ -251,8 +251,25 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         };
 
         // Handle the invoice function
-        $scope.close = function(examination)
+
+        $scope.invoice = function(examination)
         {
+            var modalInstance = $modal.open({
+                templateUrl: 'web-view/partials/invoice-modal',
+                controller : InvoiceFormCtrl
+            });
+
+           modalInstance.result.then(function (invoicing){
+
+              $scope.close(examination, invoicing);
+           });
+        }
+
+        $scope.close = function(examination, invoicing)
+        {
+            console.log("invoicing = "+angular.toJson(invoicing));
+            console.log("examination = "+angular.toJson(examination));
+            /*
             ExaminationServ.close({examinationId : examination.id} , function() {
                 if ($scope.newExaminationDisplay){
                     // Hide the in progress examination
@@ -267,6 +284,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
             });
+*/
         };
 
 
@@ -300,6 +318,74 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
+    };
+};
+
+var InvoiceFormCtrl = function($scope, $modalInstance) {
+    "use strict";
+    $scope.invoicing = {
+        status : null,
+        reason : null,
+        amount : null,
+        paimentmode : null,
+        check : {
+            bank : null,
+            payer : null,
+            number : null,
+        },
+    };
+    $scope.ok = function() {
+        $modalInstance.close($scope.invoicing);
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.validateStatus = function(value) {
+        return value != null ;
+    }
+
+    $scope.validateReason = function(value) {
+        if($scope.invoicing.status == 'notinvoiced'){
+            return value != null && value.length != 0;
+        }
+        return true;
+    };
+
+    $scope.validateAmount = function(value) {
+        if($scope.invoicing.status == 'invoiced'){
+            return value != null && value > 0 ;
+        }
+        return true;
+    };
+
+    $scope.validatePaimentMode = function(value) {
+        return value != null;
+    }
+
+    $scope.validateBank = function(value) {
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        {
+            return value != null && value.length != 0;
+        }
+        return true;
+    };
+
+    $scope.validatePayer = function(value) {
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        {
+            return value != null && value.length != 0;
+        }
+        return true;
+    };
+
+    $scope.validateNumber = function(value) {
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        {
+            return value != null && value.length != 0;
+        }
+        return true;
     };
 };
 

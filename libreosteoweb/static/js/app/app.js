@@ -17,6 +17,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'angular-loading-bar',
     'ui.router',
     'angular-toArrayFilter',
+    'ui.validate',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

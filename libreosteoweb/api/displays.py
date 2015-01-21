@@ -65,3 +65,6 @@ def display_dashboard(request):
 
 def display_officeevent(request):
     return render_to_response('partials/officeevent.html', {})
+
+def display_invoicing(request):
+    return render_to_response('partials/invoice-modal.html', {})

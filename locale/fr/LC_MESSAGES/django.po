@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-20 13:29+0000\n"
-"PO-Revision-Date: 2015-01-20 14:30+0100\n"
+"POT-Creation-Date: 2015-01-22 13:11+0000\n"
+"PO-Revision-Date: 2015-01-22 14:13+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -126,6 +126,8 @@ msgid "Parent"
 msgstr "Parent"
 
 #: libreosteoweb/models.py:118
+#: templates/partials/invoice-modal.html:21
+#: templates/partials/invoice-modal.html:23
 msgid "Reason"
 msgstr "Motif"
 
@@ -314,6 +316,7 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: templates/partials/doctor-modal-add.html:26
+#: templates/partials/invoice-modal.html:69
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -325,6 +328,57 @@ msgstr "Séance du"
 #: templates/partials/examination.html:183
 msgid "Close"
 msgstr "Clôturer"
+
+#: templates/partials/invoice-modal.html:3
+#| msgid "Invoice"
+msgid "Invoicing"
+msgstr "Facturation"
+
+#: templates/partials/invoice-modal.html:10
+#| msgid "Invoice"
+msgid "Not invoiced"
+msgstr "Non facturé"
+
+#: templates/partials/invoice-modal.html:16
+#| msgid "Invoice"
+msgid "Invoiced"
+msgstr "Facturé"
+
+#: templates/partials/invoice-modal.html:27
+#: templates/partials/invoice-modal.html:29
+msgid "Amount"
+msgstr "Montant"
+
+#: templates/partials/invoice-modal.html:36
+msgid "Cash"
+msgstr "Espèces"
+
+#: templates/partials/invoice-modal.html:42
+msgid "Check"
+msgstr "Chèque"
+
+#: templates/partials/invoice-modal.html:48
+msgid "Not paid"
+msgstr "Non réglé"
+
+#: templates/partials/invoice-modal.html:53
+#: templates/partials/invoice-modal.html:54
+msgid "Bank"
+msgstr "Banque"
+
+#: templates/partials/invoice-modal.html:57
+#: templates/partials/invoice-modal.html:58
+msgid "Payer"
+msgstr "Émetteur"
+
+#: templates/partials/invoice-modal.html:61
+#: templates/partials/invoice-modal.html:62
+msgid "Number"
+msgstr "Numéro"
+
+#: templates/partials/invoice-modal.html:68
+msgid "Validate"
+msgstr "Valider"
 
 #: templates/partials/officeevent.html:5
 msgid "Events"
@@ -402,9 +456,6 @@ msgstr "Mettre à jour"
 #: templates/partials/user-profile.html:37
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
-
-#~ msgid "Invoice"
-#~ msgstr "Facturer"
 
 #~ msgid "Search"
 #~ msgstr "Recherche"

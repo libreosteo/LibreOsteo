@@ -133,6 +133,7 @@ class Examination(models.Model):
     # Status : 2 -> invoiced and paid
     # Status : 3 -> not invoiced
     status = models.SmallIntegerField(_('Status'))
+    status_reason = models.TextField(_('Status reason'), blank=True, null=True)
     # Type : 1 -> normal examination
     # Type : 2 -> Scheduled return
     # Type : 3 -> Urgent return

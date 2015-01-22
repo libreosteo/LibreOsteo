@@ -36,9 +36,42 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
         depth = 1
 
 
+class CheckSerializer(serializers.Serializer):
+    bank = serializers.CharField(required=False)
+    payer = serializers.CharField(required=False)
+    number = serializers.CharField(required=False)
+
 class ExaminationInvoicingSerializer(serializers.Serializer):
+    status = serializers.CharField(required=True)
     reason = serializers.CharField(required=False)
-    paiment_mode = serializers.IntegerField(required=False)
+    paiment_mode = serializers.CharField(required=False)
+    amount = serializers.FloatField(required=False)
+    check = CheckSerializer()
+
+    def validate(self, attrs):
+        """
+        Check that the invoicing is consistent
+        """
+        if attrs['status'] == 'notinvoiced':
+            if attrs['reason'] is None or len(attrs['reason'].strip()) == 0:
+                raise serializers.ValidationError(_("Reason is mandatory when the examination is not invoiced"))
+        if attrs['status'] == 'invoiced':
+            if attrs['amount'] is None or attrs['amount'] <= 0:
+                raise serializers.ValidationError(_("Amount is invalid"))
+            if attrs['paiment_mode'] is None or len(attrs['paiment_mode'].strip()) == 0 or attrs['paiment_mode'] not in ['check', 'cash', 'notpaid']:
+                raise serializers.ValidationError(_("Paiment mode is mandatory when the examination is invoiced"))
+            if attrs['paiment_mode'] == 'check':
+                if attrs['check'] is None :
+                    raise serializers.ValidationError(_("Check information is missing"))
+                if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
+                    raise serializers.ValidationError(_("Bank information is missing about the check paiment"))
+                if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
+                    raise serializers.ValidationError(_("Payer information is missing about the check paiment"))
+                if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
+                    raise serializers.ValidationError(_("Number information is missing about the check paiment"))
+        return attrs
+
+
 
 
 class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):

@@ -267,10 +267,8 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         $scope.close = function(examination, invoicing)
         {
-            console.log("invoicing = "+angular.toJson(invoicing));
-            console.log("examination = "+angular.toJson(examination));
-            /*
-            ExaminationServ.close({examinationId : examination.id} , function() {
+            
+            ExaminationServ.close({examinationId : examination.id}, invoicing , function() {
                 if ($scope.newExaminationDisplay){
                     // Hide the in progress examination
                     $scope.newExamination = {};
@@ -284,7 +282,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
             });
-*/
         };
 
 
@@ -327,7 +324,7 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
         status : null,
         reason : null,
         amount : null,
-        paimentmode : null,
+        paiment_mode : null,
         check : {
             bank : null,
             payer : null,
@@ -365,7 +362,7 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
     }
 
     $scope.validateBank = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
         }
@@ -373,7 +370,7 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
     };
 
     $scope.validatePayer = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
         }
@@ -381,7 +378,7 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
     };
 
     $scope.validateNumber = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paimentmode == 'check')
+        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
         }

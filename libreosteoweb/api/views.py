@@ -85,9 +85,11 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = ExaminationInvoicingSerializer(data=request.DATA)
         if serializer.is_valid():
-            current_examination.status = Examination.EXAMINATION_NOT_INVOICED
-            current_examination.save()
-            return Response({'invoice':'waiting for paiment'})
+            if serializer.data['status'] == 'notinvoiced':
+                current_examination.status = Examination.EXAMINATION_NOT_INVOICED
+                current_examination.status_reason = serializer.data['reason']
+                current_examination.save()
+            return Response({'invoicing':'try to execute the close'})
         else :
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)

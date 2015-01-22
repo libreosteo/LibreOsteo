@@ -32,23 +32,23 @@
         </div>
         <div class="radio">
             <label>
-                <input type="radio" ng-model="invoicing.paimentmode" name="paimentmode" value="cash" ui-validate=" 'validatePaimentMode($value)' ">
+                <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="cash" ui-validate=" 'validatePaimentMode($value)' ">
                 {% trans 'Cash' %}
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio" ng-model="invoicing.paimentmode" name="paimentmode"  value="check">
+                <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode"  value="check">
                 {% trans 'Check' %}
             </label>
         </div>
         <div class="radio">
             <label>
-                <input type="radio" ng-model="invoicing.paimentmode" name="paimentmode"  value="notpaid">
+                <input type="radio" ng-model="invoicing.paiment_mode" name="paimentmode"  value="notpaid">
                 {% trans 'Not paid' %}
             </label>
         </div>
-        <div ng-if="invoicing.paimentmode == 'check'">
+        <div ng-if="invoicing.paiment_mode == 'check'">
             <div class="form-group">
                 <label>{% trans 'Bank' %}</label>
                 <input type="text" class="form-control" ng-model="invoicing.check.bank" placeholder="{%trans 'Bank' %}" ui-validate=" 'validateBank($value)' ">

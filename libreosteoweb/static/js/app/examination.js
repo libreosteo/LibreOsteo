@@ -11,7 +11,7 @@ examination.factory('ExaminationServ', ['$resource',
             add : {method : 'POST'},
             close : {
                 method : 'POST',
-                params : {examinationId : '@examinationId'},
+                params : {examinationId : 'examinationId'},
                 url : 'api/examinations/:examinationId/close'
             },
         });

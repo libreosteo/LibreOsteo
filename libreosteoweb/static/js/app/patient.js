@@ -252,7 +252,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         // Handle the invoice function
 
-        $scope.invoice = function(examination)
+        $scope.invoiceExamination = function(examination)
         {
             var modalInstance = $modal.open({
                 templateUrl: 'web-view/partials/invoice-modal',
@@ -263,7 +263,8 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
               $scope.close(examination, invoicing);
            });
-        }
+        };
+
 
         $scope.close = function(examination, invoicing)
         {
@@ -362,26 +363,26 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
     }
 
     $scope.validateBank = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
-        }
+        }*/
         return true;
     };
 
     $scope.validatePayer = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
-        }
+        }*/
         return true;
     };
 
     $scope.validateNumber = function(value) {
-        if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
         {
             return value != null && value.length != 0;
-        }
+        }*/
         return true;
     };
 };

@@ -161,13 +161,13 @@
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
-    close="invoice(previousExamination.data)"/>
+    close="invoiceExamination(previousExamination.data)"/>
     <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
     current-examination="newExamination"
     current-examination-manager="currentExaminationManager()"/>
 </tab>
 
 <tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
-    <examination model="newExamination" save-model="saveExamination(newExamination)" close="invoice(newExamination)" new-examination="true"/>
+    <examination model="newExamination" save-model="saveExamination(newExamination)" close="invoiceExamination(newExamination)" new-examination="true"/>
 </tab>
 </tabset>

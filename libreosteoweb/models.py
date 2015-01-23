@@ -138,7 +138,7 @@ class Examination(models.Model):
     # Type : 2 -> Scheduled return
     # Type : 3 -> Urgent return
     type = models.SmallIntegerField(_('Type'))
-    #invoice =
+    invoice = models.OneToOneField('Invoice', verbose_name=_('Invoice'), blank=True, null=True)
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'), blank=True,null=True)
 
@@ -147,6 +147,36 @@ class Examination(models.Model):
     EXAMINATION_INVOICED_PAID = 2
     EXAMINATION_NOT_INVOICED = 3
 
+class Invoice(models.Model):
+    """
+    This class implements bean object to represent
+    invoice on an examination
+    """
+    date = models.DateTimeField(_('Date'))
+    amount = models.FloatField(_('Amount'))
+    currency = models.CharField(_('Currency'), max_length=10)
+    paiment_mode = models.CharField(_('Paiment mode'), max_length=10)
+    header = models.TextField(_('Header'),blank=True)
+    therapeut_name = models.TextField(_('Therapeut name'))
+    therapeut_first_name = models.TextField(_('Therapeut firstname'))
+    quality = models.TextField(_('Quality'))
+    adeli = models.TextField(_('Adeli'))
+    location = models.TextField(_('Location'))
+    number = models.TextField(_('Number'))
+    patient_family_name = models.CharField(_('Family name'), max_length=200 )
+    patient_original_name = models.CharField(_('Original name'), max_length=200, blank=True)
+    patient_first_name = models.CharField(_('Firstname'), max_length=200, blank=True )
+    patient_address_street = models.CharField(_('Street'), max_length=500, blank=True)
+    patient_address_complement = models.CharField(_('Address complement'), max_length=500, blank=True)
+    patient_address_zipcode = models.CharField(_('Zipcode'), max_length=200, blank=True)
+    patient_address_city = models.CharField(_('City'), max_length=200, blank=True)
+    content_invoice = models.TextField(_('Content'), blank=True)
+    footer = models.TextField(_('Footer'), blank=True)
+    office_siret = models.TextField(_('Siret'), blank=True)
+
+    def clean(self):
+        if self.date is None:
+            self.date = datetime.today()
 
 class OfficeEvent(models.Model):
     """

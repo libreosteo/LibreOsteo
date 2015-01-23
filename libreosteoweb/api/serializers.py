@@ -63,12 +63,12 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
             if attrs['paiment_mode'] == 'check':
                 if attrs['check'] is None :
                     raise serializers.ValidationError(_("Check information is missing"))
-                if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
-                    raise serializers.ValidationError(_("Bank information is missing about the check paiment"))
-                if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
-                    raise serializers.ValidationError(_("Payer information is missing about the check paiment"))
-                if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
-                    raise serializers.ValidationError(_("Number information is missing about the check paiment"))
+                #if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
+                #    raise serializers.ValidationError(_("Bank information is missing about the check paiment"))
+                #if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
+                #    raise serializers.ValidationError(_("Payer information is missing about the check paiment"))
+                #if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
+                #    raise serializers.ValidationError(_("Number information is missing about the check paiment"))
         return attrs
 
 

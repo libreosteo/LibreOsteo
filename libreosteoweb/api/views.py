@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
-from libreosteoweb.models import RegularDoctor, Patient, Examination, OfficeEvent
+from libreosteoweb.models import RegularDoctor, Patient, Examination, OfficeEvent, Invoice
 from rest_framework.decorators import action, detail_route
 from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer
 from rest_framework.response import Response
@@ -19,32 +19,27 @@ from django.contrib.auth.models import User
 from .permissions import IsStaffOrTargetUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from datetime import date, datetime
 from rest_framework import status
+from django.views.generic.base import TemplateView
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-
-class SearchViewJson(View):
-
-    def get(self, request, *args, **kwargs):
-        # Get the query
-        search_query = self.request.GET['q']
-        # Build the query set for result
-        sqs = SearchQuerySet().auto_query(search_query)
-        # Get the results only
-        data_results = [ result.object for result in sqs ]
-
-        json_data = serializers.serialize('json', data_results, fields=('family_name', 'first_name', 'original_name'))
-
-        return HttpResponse(json_data, content_type='application/json')
-
 
 
 
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
     results_per_page = 10
+
+class InvoiceViewHtml(TemplateView):
+    template_name = 'invoice/invoice-result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
+        context['invoice'] = Invoice.objects.get(pk=kwargs['invoiceid'])
+        return context
 
 
 
@@ -89,10 +84,38 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.status = Examination.EXAMINATION_NOT_INVOICED
                 current_examination.status_reason = serializer.data['reason']
                 current_examination.save()
+            if serializer.data['status'] == 'invoiced':
+                self.generate_invoice(serializer.data, )
+                if serializer.data['paiment_mode'] == 'notpaid':
+                    current_examination.status = Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.save()
+                if serializer.data['paiment_mode'] in ['check', 'cash']:
+                    current_examination.status = Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.save()
             return Response({'invoicing':'try to execute the close'})
         else :
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def generate_invoice(self, invoicingSerializerData):
+        invoice = Invoice()
+        invoice.amount = invoicingSerializerData['amount']
+        invoice.currency = 'EUR'
+        invoice.paiment_mode = invoicingSerializerData['paiment_mode']
+        invoice.therapeut_name = self.request.user.last_name
+        invoice.therapeut_first_name = self.request.user.first_name
+        invoice.number = "2015-"
+        invoice.patient_family_name = self.get_object().patient.family_name
+        invoice.patient_original_name = self.get_object().patient.original_name
+        invoice.patient_first_name = self.get_object().patient.first_name
+        invoice.patient_address_street = self.get_object().patient.address_street
+        invoice.patient_address_complement = self.get_object().patient.address_complement
+        invoice.patient_address_zipcode = self.get_object().patient.address_zipcode
+        invoice.patient_address_city = self.get_object().patient.address_city
+        invoice.date = datetime.today()
+        invoice.save()
+        invoice.number += unicode(10000+invoice.id)
+        invoice.save()
 
     def pre_save(self, obj):
         if not self.request.user.is_authenticated():
@@ -125,6 +148,8 @@ class StatisticsView(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         return response
 
+class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Invoice
 
 
 

@@ -28,7 +28,8 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
     controller: function($scope, $location)
     {
         "use strict";
-        $scope.selector = 'all';
+        $scope.selector = 'day';
+
         $scope.loadOfficeevent = function(officeevent)
         {
             if (officeevent.clazz === 'Patient'){

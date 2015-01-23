@@ -45,14 +45,14 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <ul class="chat" ng-if="selector=='day'">
-                                <li ng-if="selector == 'day'" ng-repeat-start="(day,officeEventList) in officeeventsByDay | toArray | orderBy : '-'" class="left clearfix">
+                                <li ng-if="selector == 'day'" ng-repeat-start="officeEventListDay in officeeventsByDay | orderBy : '-day'" class="left clearfix">
                                     <div class="chat-body clearfix">
                                         <p class="pull-right">
-                                            <b>{$ officeEventList.$key | date : 'fullDate' $}</b>
+                                            <b>{$ officeEventListDay.day | date : 'fullDate' $}</b>
                                         </p>
                                     </div>
                                 </li>
-                                <li ng-repeat="officeevent in officeEventList|orderBy : '-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
+                                <li ng-repeat="officeevent in officeEventListDay.list |orderBy : '-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
                                     <div class="chat-img pull-left events-badge">
                                         <i class="fa fa-search" ng-class="{'fa-user': officeevent.clazz == 'Patient', 'fa-search':officeevent.clazz == 'Examination'}" />
                                     </div>

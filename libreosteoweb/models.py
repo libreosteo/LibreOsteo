@@ -159,7 +159,7 @@ class Invoice(models.Model):
     header = models.TextField(_('Header'),blank=True)
     therapeut_name = models.TextField(_('Therapeut name'))
     therapeut_first_name = models.TextField(_('Therapeut firstname'))
-    quality = models.TextField(_('Quality'))
+    quality = models.TextField(_('Quality'), blank=True)
     adeli = models.TextField(_('Adeli'))
     location = models.TextField(_('Location'))
     number = models.TextField(_('Number'))

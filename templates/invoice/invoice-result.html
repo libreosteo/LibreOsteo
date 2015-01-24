@@ -1,45 +1,47 @@
 {% load i18n %}
+{% load invoice_extras %}
 <html>
 <head>
 	<title>Invoice</title>
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/invoice-style.css" type="text/css">
 </head>
 <body>
-	<div id="header">
-		<div id="title">
-			<p>{{ invoice.header }}</p>
-			<p>{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</p>
-			<p>Adeli : {{ invoice.adeli }}</p>
-			<p>SIRET : {{ invoice.office_siret }}</p>
+	<div id="page_wrap">
+		<div id="header">
+			<div id="title">
+				<p>
+					<span class="header">{{ invoice.header }}</span><br/>
+					<span>{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</span><br/>
+					<span>Adeli : {{ invoice.adeli }}</span><br/>
+					<span>SIRET : {{ invoice.office_siret }}</span><br/>
+				</p>
+			</div>
+		</div>
+		
+		<div id="patient">
+			<p>
+				<span>{{ invoice.patient_first_name }} {{invoice.patient_family_name}}</span><br/>
+				<span>{{ invoice.patient_address_street}}</span><br/>
+				{% if invoice.patient_address_complement != "" %}
+					<span>{{ invoice.patient_address_complement}}</span><br/>
+				{% endif %}
+				<span>{{ invoice.patient_address_zipcode}} {{ invoice.patient_address_city}}</span><br/>
+			</p>
+		</div>
+
+		<div id="location-date">
+			<p>
+				<span>À {{ invoice.location}}, le {{ invoice.date | date:"d F Y" }}</span>
+			</p>
+		</div>
+		
+		<div id="main">
+			<p>{{ invoice.content_invoice | templatize:invoice | linebreaksbr }}</p>
+		</div>
+
+		<div id="footer">
+			<p>{{ invoice.footer | linebreaksbr  }}</p>
 		</div>
 	</div>
-	
-	<div id="patient">
-		<p>{{invoice.patient_first_name}} {{invoice.patient_family_name}}</p>
-		<p>{{ invoice.patient_address_street}}</p>
-		<p>{{ invoice.patient_address_complement}}</p>
-		<p>{{ invoice.patient_address_zipcode}} {{ invoice.patient_address_city}}</p>
-	</div>
-	
-	<div id="main">
-		<table id="tabulation">
-			<tr> <th class="first">Service</th> <th>Hours</th> <th>Rate</th> <th>Total</th> </tr>
-			<tr class="billable_item"> <td class="first">Consulting</td> <td>8.0</td> <td>$150</td> <td>1200.00</td> </tr>
-			<tr class="billable_item"> <td class="first">Programming</td> <td>6.0</td> <td>$100</td> <td>600.00</td> </tr>
-			<tr id="total"><td colspan="2">&nbsp;</td><td class="totalLabel">Total</td><td class="totals">$1800.00</td></tr>
-			<tr id="paid"><td colspan="2">&nbsp;</td><td class="totalLabel">Paid</td><td class="totals">0.00</td></tr>
-			<tr id="due"><td colspan="2">&nbsp;</td><td class="totalLabel">Due</td><td class="totals">$1800.00</td></tr>
-		</table>
-	</div>
-	
-	<div id="footer">
-		<div id="company">
-			Smart Company
-		</div>
-		<div id="thanks">
-			THANK YOU FOR YOUR BUSINESS!
-		</div>
-	</div>
-	
 </body>
 </html>

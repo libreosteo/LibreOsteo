@@ -193,3 +193,36 @@ class OfficeEvent(models.Model):
     def clean(self):
         if self.date is None:
             self.date = datetime.today()
+
+class OfficeSettings(models.Model):
+    """
+    This class implements model for the settings into the application
+    """
+    invoice_office_header = models.CharField(_('Invoice office header'), max_length=500, blank=True)
+    office_address_street = models.CharField(_('street'),max_length=500, blank=True)
+    office_address_complement = models.CharField(_('Address complement'),max_length=500, blank=True)
+    office_address_zipcode = models.CharField(_('Zipcode'), max_length=200, blank=True)
+    office_address_city = models.CharField(_('City'), max_length=200, blank=True)
+    office_phone = models.CharField(_('Phone'), max_length=200, blank=True)
+    office_siret = models.CharField(_('Siret'), max_length=20)
+    currency = models.CharField(_('Currency'), max_length=10)
+    invoice_content = models.TextField(_('Invoice content'), blank=True)
+    invoice_footer = models.TextField(_('Invoice footer'), blank=True)
+    invoice_start_sequence = models.TextField(_('Invoice start sequence'), blank=True)    
+
+    def save(self, *args, **kwargs):
+        """
+        Ensure that only one instance exists in the db
+        """
+        self.id = 1
+        super(OfficeSettings, self).save()
+
+
+
+class TherapeutSettings(models.Model):
+    """
+    This class implements model for extending the User model
+    """
+    adeli = models.TextField(_('Adeli'),blank=True)
+    quality = models.TextField(_('Quality'), blank=True)
+    user = models.OneToOneField(User, verbose_name=_('User'), blank=True,null=True)

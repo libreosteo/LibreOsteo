@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load l10n %}
 {% load invoice_extras %}
 <html>
 <head>
@@ -36,7 +37,9 @@
 		</div>
 		
 		<div id="main">
+			{% localize on %}
 			<p>{{ invoice.content_invoice | templatize:invoice | linebreaksbr }}</p>
+			{% endlocalize %}
 		</div>
 
 		<div id="footer">

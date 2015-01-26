@@ -21,6 +21,8 @@ router.register(r'examinations', views.ExaminationViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'events', views.OfficeEventViewSet)
 router.register(r'invoices', views.InvoiceViewSet)
+router.register(r'settings', views.OfficeSettingsView)
+router.register(r'profiles', views.TherapeutSettingsViewSet)
 
 urlpatterns = patterns('',
     # Examples:

@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
-from libreosteoweb.models import RegularDoctor, Patient, Examination, OfficeEvent, Invoice
-from rest_framework.decorators import action, detail_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer
+from libreosteoweb import models 
+from rest_framework.decorators import action, detail_route, list_route
+from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
@@ -38,7 +38,7 @@ class InvoiceViewHtml(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
-        context['invoice'] = Invoice.objects.get(pk=kwargs['invoiceid'])
+        context['invoice'] = models.Invoice.objects.get(pk=kwargs['invoiceid'])
         return context
 
 
@@ -47,12 +47,12 @@ class InvoiceViewHtml(TemplateView):
 
 
 class PatientViewSet(viewsets.ModelViewSet):
-    model = Patient
+    model = models.Patient
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
-        examinations = Examination.objects.filter(patient=current_patient).order_by('-date')
+        examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
         return Response(ExaminationSerializer(examinations, many=True).data)
 
     def pre_save(self, obj):
@@ -65,14 +65,14 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
-    model = RegularDoctor
+    model = models.RegularDoctor
 
 
 
 
 
 class ExaminationViewSet(viewsets.ModelViewSet):
-    model = Examination
+    model = models.Examination
 
 
     @detail_route(methods=['POST'])
@@ -81,16 +81,16 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         serializer = ExaminationInvoicingSerializer(data=request.DATA)
         if serializer.is_valid():
             if serializer.data['status'] == 'notinvoiced':
-                current_examination.status = Examination.EXAMINATION_NOT_INVOICED
+                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
                 current_examination.status_reason = serializer.data['reason']
                 current_examination.save()
             if serializer.data['status'] == 'invoiced':
                 self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
                     current_examination.save()
                 if serializer.data['paiment_mode'] in ['check', 'cash']:
-                    current_examination.status = Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
                     current_examination.save()
             return Response({'invoicing':'try to execute the close'})
         else :
@@ -98,7 +98,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def generate_invoice(self, invoicingSerializerData):
-        invoice = Invoice()
+        invoice = models.Invoice()
         invoice.amount = invoicingSerializerData['amount']
         invoice.currency = 'EUR'
         invoice.paiment_mode = invoicingSerializerData['paiment_mode']
@@ -149,12 +149,12 @@ class StatisticsView(APIView):
         return response
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
-    model = Invoice
+    model = models.Invoice
 
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
-    model = OfficeEvent
+    model = models.OfficeEvent
     serializer_class =  OfficeEventSerializer
 
     def get_queryset(self):
@@ -163,8 +163,33 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
         No update events are given.
         'all' parameter is used to get all events
         """
-        queryset = OfficeEvent.objects.all()
+        queryset = models.OfficeEvent.objects.all()
         all_flag = self.request.QUERY_PARAMS.get('all', None)
         if all_flag is None :
             queryset = queryset.exclude(clazz__exact = 'Patient', type__exact=2 )
         return queryset
+
+class OfficeSettingsView(viewsets.ModelViewSet):
+    model = models.OfficeSettings
+
+class TherapeutSettingsViewSet(viewsets.ModelViewSet):
+    model = models.TherapeutSettings
+    permission_classes = [IsStaffOrTargetUser]
+    serializer_class = TherapeutSettingsSerializer
+
+    @list_route()
+    def get_by_user(self, request):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        settings = models.TherapeutSettings.objects.filter(user=self.request.user)
+        if (len(settings)>0):
+            return Response(TherapeutSettingsSerializer(settings[0]).data)
+        else:
+            return Response()
+
+    def pre_save(self, obj):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+
+        if not obj.user:
+            setattr(obj, 'user', self.request.user)

@@ -254,10 +254,10 @@
         <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
-        <li><a href="#/accounts/user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
+        <li><a ui-sref="user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
         </li>
-        <!--li><a href="accounts/settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
-        </li-->
+        <li><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
+        </li>
         <li class="divider"></li>
         <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
         </li>
@@ -444,6 +444,7 @@
 <script src="{{ STATIC_URL }}js/app/user.js"></script>
 <script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
 <script src="{{ STATIC_URL }}js/app/officeevent.js"></script>
+<script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

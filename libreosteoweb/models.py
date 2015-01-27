@@ -173,6 +173,11 @@ class Invoice(models.Model):
     content_invoice = models.TextField(_('Content'), blank=True)
     footer = models.TextField(_('Footer'), blank=True)
     office_siret = models.TextField(_('Siret'), blank=True)
+    office_address_street = models.CharField(_('Street'),max_length=500, blank=True, default='')
+    office_address_complement = models.CharField(_('Address complement'),max_length=500, blank=True, default='')
+    office_address_zipcode = models.CharField(_('Zipcode'), max_length=200, blank=True, default='')
+    office_address_city = models.CharField(_('City'), max_length=200, blank=True, default='')
+    office_phone = models.CharField(_('Phone'), max_length=200, blank=True, default='')
 
     def clean(self):
         if self.date is None:
@@ -199,12 +204,13 @@ class OfficeSettings(models.Model):
     This class implements model for the settings into the application
     """
     invoice_office_header = models.CharField(_('Invoice office header'), max_length=500, blank=True)
-    office_address_street = models.CharField(_('street'),max_length=500, blank=True)
+    office_address_street = models.CharField(_('Street'),max_length=500, blank=True)
     office_address_complement = models.CharField(_('Address complement'),max_length=500, blank=True)
     office_address_zipcode = models.CharField(_('Zipcode'), max_length=200, blank=True)
     office_address_city = models.CharField(_('City'), max_length=200, blank=True)
     office_phone = models.CharField(_('Phone'), max_length=200, blank=True)
     office_siret = models.CharField(_('Siret'), max_length=20)
+    amount = models.FloatField(_('Amount'), blank=True, null=True, default=None)
     currency = models.CharField(_('Currency'), max_length=10)
     invoice_content = models.TextField(_('Invoice content'), blank=True)
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)

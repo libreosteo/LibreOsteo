@@ -85,7 +85,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.status_reason = serializer.data['reason']
                 current_examination.save()
             if serializer.data['status'] == 'invoiced':
-                self.generate_invoice(serializer.data, )
+                current_examination.invoice = self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
                     current_examination.save()
@@ -98,13 +98,28 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def generate_invoice(self, invoicingSerializerData):
+        officesettings = models.OfficeSettings.objects.all()[0]
+        therapeutsettings = models.TherapeutSettings.objects.filter(user=self.request.user)[0]
+
         invoice = models.Invoice()
         invoice.amount = invoicingSerializerData['amount']
-        invoice.currency = 'EUR'
+        invoice.currency = officesettings.currency
+        invoice.header = officesettings.invoice_office_header
+        invoice.office_address_street = officesettings.office_address_street
+        invoice.office_address_complement = officesettings.office_address_complement
+        invoice.office_address_zipcode = officesettings.office_address_zipcode
+        invoice.office_address_city = officesettings.office_address_city
+        invoice.office_phone = officesettings.office_phone
+        invoice.office_siret = officesettings.office_siret
+
         invoice.paiment_mode = invoicingSerializerData['paiment_mode']
         invoice.therapeut_name = self.request.user.last_name
         invoice.therapeut_first_name = self.request.user.first_name
-        invoice.number = "2015-"
+        invoice.quality = therapeutsettings.quality
+        invoice.adeli = therapeutsettings.adeli
+        invoice.location = officesettings.office_address_city
+        invoice.number = ""
+
         invoice.patient_family_name = self.get_object().patient.family_name
         invoice.patient_original_name = self.get_object().patient.original_name
         invoice.patient_first_name = self.get_object().patient.first_name
@@ -112,10 +127,13 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.patient_address_complement = self.get_object().patient.address_complement
         invoice.patient_address_zipcode = self.get_object().patient.address_zipcode
         invoice.patient_address_city = self.get_object().patient.address_city
+        invoice.content_invoice = officesettings.invoice_content
+        invoice.footer = officesettings.invoice_footer
         invoice.date = datetime.today()
         invoice.save()
         invoice.number += unicode(10000+invoice.id)
         invoice.save()
+        return invoice
 
     def pre_save(self, obj):
         if not self.request.user.is_authenticated():

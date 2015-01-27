@@ -37,6 +37,12 @@ class TherapeutSettingsDisplay(ModelForm):
 
     display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.TherapeutSettings._meta.fields)])
 
+class OfficeSettingsDisplay(ModelForm):
+    class Meta:
+        model = models.OfficeSettings
+
+    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.OfficeSettings._meta.fields)])
+
 def display_patient(request):
     display = PatientDisplay()
     displayExamination = ExaminationDisplay()
@@ -76,3 +82,7 @@ def display_officeevent(request):
 
 def display_invoicing(request):
     return render_to_response('partials/invoice-modal.html', {})
+
+def display_officesettings(request):
+    displayOfficeSettings = OfficeSettingsDisplay()
+    return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields})

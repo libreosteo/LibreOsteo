@@ -1,0 +1,117 @@
+{% load i18n %}
+<h1 class="page-header">
+    {% trans 'Office settings' %}
+</h1>
+
+<div class="container-fluid">
+    <div class="row">
+            <form novalidate name="form">
+                <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
+                    <h2>{% trans 'Office' %}</h2>
+                </div>
+                <div class="col-xs-8 col-sm-7 col-md-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_street" required name="office_address_street" placeholder="{{ officesettings.office_address_street }}"
+                                tooltip="{{ officesettings.office_address_street }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_complement" name="office_address_complement" placeholder="{{ officesettings.office_address_complement }}"
+                                tooltip="{{ officesettings.office_address_complement }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_zipcode" name="office_address_zipcode" placeholder="{{ officesettings.office_address_zipcode }}" tooltip="{{ officesettings.office_address_zipcode }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-8 col-sm-8 col-md-8">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_city" name="office_address_city" placeholder="{{ officesettings.office_address_city }}" tooltip="{{ officesettings.office_address_city }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="glyphicon glyphicon-phone-alt input-group-addon"></span>
+                                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_phone" name="office_phone" placeholder="{{ officesettings.office_phone }}"
+                                    tooltip="{{ officesettings.office_phone }}"
+                                    tooltip-trigger="mouseenter"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_siret" name="office_siret" placeholder="{{ officesettings.office_siret }}"
+                                tooltip="{{ officesettings.office_siret }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
+                    <h2>{% trans 'Invoicing' %}</h2>
+                </div>
+                <div class="col-xs-8 col-sm-7 col-md-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="amount">{{officesettings.amount}}</label>
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.amount" required name="amount" id="amount" placeholder="{{ officesettings.amount }}"
+                                tooltip="{{ officesettings.amount }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="currency">{{officesettings.currency}}</label>
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.currency" required name="currency" id="currency" placeholder="{{ officesettings.currency }}"
+                                tooltip="{{ officesettings.currency }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="invoice_office_header">{{officesettings.invoice_office_header}}</label>
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_office_header" required name="invoice_office_header" id="invoice_office_header" placeholder="{{ officesettings.invoice_office_header }}"
+                                tooltip="{{ officesettings.invoice_office_header }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="invoice_content">{{officesettings.invoice_content}}</label>
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_content" required name="invoice_content" id="invoice_content" placeholder="{{ officesettings.invoice_content }}"
+                                tooltip="{{ officesettings.invoice_content }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <label for="invoice_footer">{{officesettings.invoice_footer}}</label>
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_footer" required name="invoice_footer" id="invoice_footer" placeholder="{{ officesettings.invoice_footer }}"
+                                tooltip="{{ officesettings.invoice_footer }}"
+                                tooltip-trigger="mouseenter"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-3 col-md-offset-3">
+                    <button class="btn btn-primary"
+                        ng-click="updateSettings(officesettings)">{% trans 'Update' %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="update-info" ng-hide="true">{% trans 'Settings was updated' %}</div>

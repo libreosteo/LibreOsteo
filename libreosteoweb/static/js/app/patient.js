@@ -1,4 +1,4 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ',
@@ -74,8 +74,8 @@ patient.filter('format_age', function () {
 });
 
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
-    'PatientExaminationsServ', 'ExaminationServ',
-    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ',
+    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
@@ -319,7 +319,7 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
     };
 };
 
-var InvoiceFormCtrl = function($scope, $modalInstance) {
+var InvoiceFormCtrl = function($scope, $modalInstance, OfficeSettingsServ) {
     "use strict";
     $scope.invoicing = {
         status : null,
@@ -332,6 +332,12 @@ var InvoiceFormCtrl = function($scope, $modalInstance) {
             number : null,
         },
     };
+
+    OfficeSettingsServ.get(function(settings){
+          $scope.officesettings = settings[0];
+          $scope.invoicing.amount = $scope.officesettings.amount;
+    });
+
     $scope.ok = function() {
         $modalInstance.close($scope.invoicing);
     };

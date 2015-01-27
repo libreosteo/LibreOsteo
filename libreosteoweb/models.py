@@ -225,4 +225,4 @@ class TherapeutSettings(models.Model):
     """
     adeli = models.TextField(_('Adeli'),blank=True)
     quality = models.TextField(_('Quality'), blank=True)
-    user = models.OneToOneField(User, verbose_name=_('User'), blank=True,null=True)
+    user = models.OneToOneField(User, verbose_name=_('User'),   blank=True,null=True)

@@ -1,0 +1,41 @@
+
+* { margin: 0; padding: 0; } 
+
+body {
+	font:14px/1.4 Georgia, serif;
+}
+
+#page_wrap {
+	width: 800px;
+	margin : 0 auto;
+}
+
+#header {
+	margin : 25px 0;
+}
+.header {
+	font : 18px bold;
+}
+
+#patient {
+	margin-top: 50px;
+	margin-bottom: 100px;
+	float: right;
+
+}
+
+#location-date {
+	float:left;
+	margin-top: 50px;
+}
+
+#main {
+	clear: both;
+	margin-left: 100px;
+	margin-bottom: 100px;
+}
+
+#footer {
+	margin-top: 300px;
+	margin-left: 100px;
+}

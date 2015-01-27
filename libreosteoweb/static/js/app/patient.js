@@ -1,4 +1,4 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ',
@@ -74,8 +74,8 @@ patient.filter('format_age', function () {
 });
 
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
-    'PatientExaminationsServ', 'ExaminationServ',
-    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ) {
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ',
+    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
@@ -251,9 +251,25 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         };
 
         // Handle the invoice function
-        $scope.close = function(examination)
+
+        $scope.invoiceExamination = function(examination)
         {
-            ExaminationServ.close({examinationId : examination.id} , function() {
+            var modalInstance = $modal.open({
+                templateUrl: 'web-view/partials/invoice-modal',
+                controller : InvoiceFormCtrl
+            });
+
+           modalInstance.result.then(function (invoicing){
+
+              $scope.close(examination, invoicing);
+           });
+        };
+
+
+        $scope.close = function(examination, invoicing)
+        {
+            
+            ExaminationServ.close({examinationId : examination.id}, invoicing , function() {
                 if ($scope.newExaminationDisplay){
                     // Hide the in progress examination
                     $scope.newExamination = {};
@@ -300,6 +316,80 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
+    };
+};
+
+var InvoiceFormCtrl = function($scope, $modalInstance, OfficeSettingsServ) {
+    "use strict";
+    $scope.invoicing = {
+        status : null,
+        reason : null,
+        amount : null,
+        paiment_mode : null,
+        check : {
+            bank : null,
+            payer : null,
+            number : null,
+        },
+    };
+
+    OfficeSettingsServ.get(function(settings){
+          $scope.officesettings = settings[0];
+          $scope.invoicing.amount = $scope.officesettings.amount;
+    });
+
+    $scope.ok = function() {
+        $modalInstance.close($scope.invoicing);
+    };
+
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.validateStatus = function(value) {
+        return value != null ;
+    }
+
+    $scope.validateReason = function(value) {
+        if($scope.invoicing.status == 'notinvoiced'){
+            return value != null && value.length != 0;
+        }
+        return true;
+    };
+
+    $scope.validateAmount = function(value) {
+        if($scope.invoicing.status == 'invoiced'){
+            return value != null && value > 0 ;
+        }
+        return true;
+    };
+
+    $scope.validatePaimentMode = function(value) {
+        return value != null;
+    }
+
+    $scope.validateBank = function(value) {
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        {
+            return value != null && value.length != 0;
+        }*/
+        return true;
+    };
+
+    $scope.validatePayer = function(value) {
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        {
+            return value != null && value.length != 0;
+        }*/
+        return true;
+    };
+
+    $scope.validateNumber = function(value) {
+        /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
+        {
+            return value != null && value.length != 0;
+        }*/
+        return true;
     };
 };
 

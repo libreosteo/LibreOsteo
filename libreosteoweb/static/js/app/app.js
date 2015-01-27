@@ -10,13 +10,15 @@ var libreosteoApp = angular.module('libreosteo', [
     'loOfficeEvent',
     'yaru22.angular-timeago',
     'ngAnimate',
-     'duScroll',
+    'duScroll',
     'loSearch',
     'loUser',
     'angular-growl',
     'angular-loading-bar',
     'ui.router',
     'angular-toArrayFilter',
+    'ui.validate',
+    'loOfficeSettings',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -89,6 +91,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 url : '/accounts/user-profile',
                templateUrl : 'web-view/partials/user-profile',
                 controller : 'UserProfileCtrl'
+            }).
+            state('office-settings',
+            {
+                url : '/office/settings',
+                templateUrl : 'web-view/partials/office-settings',
+                controller : 'OfficeSettingsCtrl'
             }).
 
             state('dashboard',

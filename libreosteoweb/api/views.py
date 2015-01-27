@@ -2,9 +2,9 @@ from __future__ import unicode_literals
 from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
-from libreosteoweb.models import RegularDoctor, Patient, Examination, OfficeEvent
-from rest_framework.decorators import action, detail_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer
+from libreosteoweb import models 
+from rest_framework.decorators import action, detail_route, list_route
+from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
@@ -19,26 +19,13 @@ from django.contrib.auth.models import User
 from .permissions import IsStaffOrTargetUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from datetime import date, datetime
 from rest_framework import status
+from django.views.generic.base import TemplateView
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
-
-
-class SearchViewJson(View):
-
-    def get(self, request, *args, **kwargs):
-        # Get the query
-        search_query = self.request.GET['q']
-        # Build the query set for result
-        sqs = SearchQuerySet().auto_query(search_query)
-        # Get the results only
-        data_results = [ result.object for result in sqs ]
-
-        json_data = serializers.serialize('json', data_results, fields=('family_name', 'first_name', 'original_name'))
-
-        return HttpResponse(json_data, content_type='application/json')
-
 
 
 
@@ -46,18 +33,26 @@ class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
     results_per_page = 10
 
+class InvoiceViewHtml(TemplateView):
+    template_name = 'invoice/invoice-result.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
+        context['invoice'] = models.Invoice.objects.get(pk=kwargs['invoiceid'])
+        return context
+
 
 
 
 
 
 class PatientViewSet(viewsets.ModelViewSet):
-    model = Patient
+    model = models.Patient
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
-        examinations = Examination.objects.filter(patient=current_patient).order_by('-date')
+        examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
         return Response(ExaminationSerializer(examinations, many=True).data)
 
     def pre_save(self, obj):
@@ -70,14 +65,14 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
-    model = RegularDoctor
+    model = models.RegularDoctor
 
 
 
 
 
 class ExaminationViewSet(viewsets.ModelViewSet):
-    model = Examination
+    model = models.Examination
 
 
     @detail_route(methods=['POST'])
@@ -85,12 +80,60 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = ExaminationInvoicingSerializer(data=request.DATA)
         if serializer.is_valid():
-            current_examination.status = Examination.EXAMINATION_NOT_INVOICED
-            current_examination.save()
-            return Response({'invoice':'waiting for paiment'})
+            if serializer.data['status'] == 'notinvoiced':
+                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
+                current_examination.status_reason = serializer.data['reason']
+                current_examination.save()
+            if serializer.data['status'] == 'invoiced':
+                current_examination.invoice = self.generate_invoice(serializer.data, )
+                if serializer.data['paiment_mode'] == 'notpaid':
+                    current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.save()
+                if serializer.data['paiment_mode'] in ['check', 'cash']:
+                    current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.save()
+            return Response({'invoicing':'try to execute the close'})
         else :
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def generate_invoice(self, invoicingSerializerData):
+        officesettings = models.OfficeSettings.objects.all()[0]
+        therapeutsettings = models.TherapeutSettings.objects.filter(user=self.request.user)[0]
+
+        invoice = models.Invoice()
+        invoice.amount = invoicingSerializerData['amount']
+        invoice.currency = officesettings.currency
+        invoice.header = officesettings.invoice_office_header
+        invoice.office_address_street = officesettings.office_address_street
+        invoice.office_address_complement = officesettings.office_address_complement
+        invoice.office_address_zipcode = officesettings.office_address_zipcode
+        invoice.office_address_city = officesettings.office_address_city
+        invoice.office_phone = officesettings.office_phone
+        invoice.office_siret = officesettings.office_siret
+
+        invoice.paiment_mode = invoicingSerializerData['paiment_mode']
+        invoice.therapeut_name = self.request.user.last_name
+        invoice.therapeut_first_name = self.request.user.first_name
+        invoice.quality = therapeutsettings.quality
+        invoice.adeli = therapeutsettings.adeli
+        invoice.location = officesettings.office_address_city
+        invoice.number = ""
+
+        invoice.patient_family_name = self.get_object().patient.family_name
+        invoice.patient_original_name = self.get_object().patient.original_name
+        invoice.patient_first_name = self.get_object().patient.first_name
+        invoice.patient_address_street = self.get_object().patient.address_street
+        invoice.patient_address_complement = self.get_object().patient.address_complement
+        invoice.patient_address_zipcode = self.get_object().patient.address_zipcode
+        invoice.patient_address_city = self.get_object().patient.address_city
+        invoice.content_invoice = officesettings.invoice_content
+        invoice.footer = officesettings.invoice_footer
+        invoice.date = datetime.today()
+        invoice.save()
+        invoice.number += unicode(10000+invoice.id)
+        invoice.save()
+        return invoice
 
     def pre_save(self, obj):
         if not self.request.user.is_authenticated():
@@ -123,11 +166,13 @@ class StatisticsView(APIView):
         response = Response(result, status=status.HTTP_200_OK)
         return response
 
+class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
+    model = models.Invoice
 
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
-    model = OfficeEvent
+    model = models.OfficeEvent
     serializer_class =  OfficeEventSerializer
 
     def get_queryset(self):
@@ -136,8 +181,33 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
         No update events are given.
         'all' parameter is used to get all events
         """
-        queryset = OfficeEvent.objects.all()
+        queryset = models.OfficeEvent.objects.all()
         all_flag = self.request.QUERY_PARAMS.get('all', None)
         if all_flag is None :
             queryset = queryset.exclude(clazz__exact = 'Patient', type__exact=2 )
         return queryset
+
+class OfficeSettingsView(viewsets.ModelViewSet):
+    model = models.OfficeSettings
+
+class TherapeutSettingsViewSet(viewsets.ModelViewSet):
+    model = models.TherapeutSettings
+    permission_classes = [IsStaffOrTargetUser]
+    serializer_class = TherapeutSettingsSerializer
+
+    @list_route()
+    def get_by_user(self, request):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        settings = models.TherapeutSettings.objects.filter(user=self.request.user)
+        if (len(settings)>0):
+            return Response(TherapeutSettingsSerializer(settings[0]).data)
+        else:
+            return Response()
+
+    def pre_save(self, obj):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+
+        if not obj.user:
+            setattr(obj, 'user', self.request.user)

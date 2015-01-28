@@ -16,6 +16,10 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl', 'Of
 
         OfficeSettingsServ.get(function(settings){
           $scope.officesettings = settings[0];
+          if (!$scope.officesettings)
+          {
+            $scope.officesettings = {'id' : 1,};
+          }
         });
 
         $scope.updateSettings = function(settings) {

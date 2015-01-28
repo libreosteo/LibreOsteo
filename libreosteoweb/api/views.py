@@ -19,6 +19,7 @@ from django.contrib.auth.models import User
 from .permissions import IsStaffOrTargetUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from datetime import date, datetime
 from rest_framework import status
 from django.views.generic.base import TemplateView
@@ -189,13 +190,14 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OfficeSettingsView(viewsets.ModelViewSet):
     model = models.OfficeSettings
+    permission_classes = [IsStaffOrTargetUser]
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
-    permission_classes = [IsStaffOrTargetUser]
     serializer_class = TherapeutSettingsSerializer
+    permission_classes = [IsStaffOrTargetUser]
 
-    @list_route()
+    @list_route(permission_classes=[AllowAny])
     def get_by_user(self, request):
         if not self.request.user.is_authenticated():
             raise Http404()

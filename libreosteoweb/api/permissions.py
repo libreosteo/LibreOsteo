@@ -11,4 +11,9 @@ class IsStaffOrTargetUser(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         # allow logged in user to view own details, allows staff to view all records
-        return request.user.is_staff or obj == request.user
+        if request.user.is_staff:
+        	return True
+        try :
+        	return getattr(obj, 'user') == request.user
+        except AttributeError:
+        	return obj == request.user

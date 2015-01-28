@@ -5,23 +5,32 @@
 <head>
 	<title>Invoice</title>
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/invoice-style.css" type="text/css">
+	<link rel="stylesheet" href="{{ STATIC_URL}}/font-awesome/css/font-awesome.min.css">
+
 </head>
 <body>
 	<div id="page_wrap">
 		<div id="header">
 			<div id="title">
-				<p>
-					<span class="header">{{ invoice.header }}</span><br/>
-					<span class="adress">{{ invoice.office_address_street}}</span><br/>
-					{% if invoice.office_address_complement|length > 0 %}
-					<span>{{ invoice.office_address_complement}}</span><br/>
+					<div class="frame">
+						<span class="header">{{ invoice.header }}</span><br/>
+						<span class="address">{{ invoice.office_address_street}}</span><br/>
+						{% if invoice.office_address_complement|length > 0 %}
+						<span class="address">{{ invoice.office_address_complement}}</span><br/>
+						{% endif %}
+						<span class="address">{{ invoice.office_address_zipcode}} {{ invoice.office_address_city}}</span><br/>
+						<span class="phone"><i class="fa fa-phone-square"> </i> {{ invoice.office_phone }}</span><br/>
+						<span class="siret">SIRET : {{ invoice.office_siret }}</span><br/>
+					</div>
+					<div class="therapeut-frame">
+						<span class="therapeut">{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</span><br/>
+					{% if invoice.quality %}
+						<span class="therapeut">{{ invoice.quality }}</span><br/>
 					{% endif %}
-					<span>{{ invoice.office_address_zipcode}} {{ invoice.office_address_city}}</span><br/>
-					<span>{{ invoice.office_phone }}</span><br/>
-					<span>{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</span><br/>
-					<span>Adeli : {{ invoice.adeli }}</span><br/>
-					<span>SIRET : {{ invoice.office_siret }}</span><br/>
-				</p>
+						<span class="adeli">Adeli : {{ invoice.adeli }}</span><br/>
+					</div>
+					<div class="spacer"></div>
+					<hr/>
 			</div>
 		</div>
 		
@@ -37,12 +46,18 @@
 		</div>
 
 		<div id="location-date">
-			<p> Facture {{invoice.number}}</p>
 			<p>
 				<span>À {{ invoice.location}}, le {{ invoice.date | date:"d F Y" }}</span>
 			</p>
-
 		</div>
+
+		<div class="spacer"></div>
+		
+		<div id="invoice-number">
+			<p> Facture {{invoice.number}}</p>
+		</div>
+
+
 		
 		<div id="main">
 			{% localize on %}
@@ -55,6 +70,10 @@
 			{% else %}
 			<p>Non réglé en date de facture</p>
 			{% endif %}
+
+			<table class="fees">
+				<tr><td>HONORAIRES</td><td>{{invoice.amount}} {{invoice.currency}}</td></tr>
+			</table>
 		</div>
 
 		<div id="footer">

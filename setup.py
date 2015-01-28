@@ -81,8 +81,8 @@ if sys.platform in ['win32']:
         migration_files = [] 
         for root, directories, files in os.walk(directory):
             for filename in files :
-                if (filename.endswith('.py')):
-                    migration_files.append(directory.replace('/', '.') + filename[0:len(filename)-3])
+                if (filename.endswith('.py'))  and not (filename.startswith('__')):
+                    migration_files.append(directory.replace('/', '.') + '.' + filename[0:len(filename)-3])
         return migration_files
 
     from cx_Freeze import setup, Executable

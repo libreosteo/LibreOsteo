@@ -72,6 +72,18 @@ if sys.platform in ['win32']:
                 file_paths.append(filepath)  # Add it to the list.
 
         return file_paths  # Self-explanatory.
+        
+    def include_migration_files(directory):
+        """
+        This function will generate the include from the list of python
+        migration files in the directory
+        """
+        migration_files = [] 
+        for root, directories, files in os.walk(directory):
+            for filename in files :
+                if (filename.endswith('.py')):
+                    migration_files.append(directory.replace('/', '.') + filename[0:len(filename)-3])
+        return migration_files
 
     from cx_Freeze import setup, Executable
     copyDependentFiles = True
@@ -93,10 +105,8 @@ if sys.platform in ['win32']:
         "django.contrib.auth.migrations.0001_initial",
         "django.contrib.contenttypes.migrations.0001_initial",
         "django.contrib.sessions.migrations.0001_initial",
-        "libreosteoweb.migrations.0001_initial",
-        "libreosteoweb.migrations.0002_remove_examination_tests",
-        "libreosteoweb.migrations.0003_patient_creation_date",
-    ]
+    ] + include_migration_files('libreosteoweb/migrations')
+    
     include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale()
     zip_includes = get_filepaths('templates')
     packages = [

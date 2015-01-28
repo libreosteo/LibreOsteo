@@ -30,6 +30,14 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl', 'Of
               var e = document.getElementById('update-info');
               var text = angular.element(e).text();
               growl.addSuccessMessage(text);
-              });
+              },
+                function(reason) {
+                  // Should display the error
+                  if(reason.data.detail) {
+                    growl.addErrorMessage(reason.data.detail);
+                  } else {
+                    growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
+                  }
+                });
         };
 }]);

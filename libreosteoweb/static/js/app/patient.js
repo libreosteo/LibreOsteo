@@ -95,7 +95,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 var mdiff = m[0] - m[1];
                 var ddiff = d[0] - d[1];
 
-                if ((mdiff <= 0) && (ddiff < 0)) {
+                if (mdiff <= 0) {
                     ydiff = ydiff -1;
                     mdiff = mdiff + 12;
                 }

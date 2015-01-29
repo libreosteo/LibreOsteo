@@ -157,12 +157,17 @@
             </div>
 </tab>
 
-<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" >
-    <examination model="previousExamination.data" read-only="true" ng-if="previousExamination.data != null" ng-animate="displayExamination"/>
-    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"/>
+<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" ui-sref="patient.examinations">
+    <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
+    save-model="saveExamination(previousExamination.data)"
+    new-examination="false"
+    close="invoiceExamination(previousExamination.data)"/>
+    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
+    current-examination="newExamination"
+    current-examination-manager="currentExaminationManager()"/>
 </tab>
 
 <tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
-    <examination model="newExamination" save-model="saveExamination()" invoice="invoice(newExamination)"/>
+    <examination model="newExamination" save-model="saveExamination(newExamination)" close="invoiceExamination(newExamination)" new-examination="true"/>
 </tab>
 </tabset>

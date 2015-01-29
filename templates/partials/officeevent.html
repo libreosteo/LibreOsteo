@@ -1,0 +1,112 @@
+{% load i18n %}
+                    <div class="chat-panel panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i>
+                            {% trans 'Events' %}
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li>
+                                        <a ng-click="show('day')">
+                                            <i class="fa fa-sun-o fa-fw"></i> {% trans 'By day' %}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="show('all')">
+                                            <i class="fa fa-navicon fa-fw"></i> {% trans 'All' %}
+                                        </a>
+                                    </li>
+                                    <!--li>
+                                        <a href="#">
+                                            <i class="fa fa-check-circle fa-fw"></i> Available
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-times fa-fw"></i> Busy
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-clock-o fa-fw"></i> Away
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-sign-out fa-fw"></i> Sign Out
+                                        </a>
+                                    </li-->
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="chat" ng-if="selector=='day'">
+                                <li ng-if="selector == 'day'" ng-repeat-start="officeEventListDay in officeeventsByDay | orderBy : '-day'" class="left clearfix">
+                                    <div class="chat-body clearfix">
+                                        <p class="pull-right">
+                                            <b>{$ officeEventListDay.day | date : 'fullDate' $}</b>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li ng-repeat="officeevent in officeEventListDay.list |orderBy : '-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
+                                    <div class="chat-img pull-left events-badge">
+                                        <i class="fa fa-search" ng-class="{'fa-user': officeevent.clazz == 'Patient', 'fa-search':officeevent.clazz == 'Examination'}" />
+                                    </div>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{$ officeevent.patient_name $}</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i> {$ officeevent.date | timeAgo $}
+                                            </small>
+                                        </div>
+                                        <p>
+                                           {$ officeevent.translated_comment $}
+                                        </p>
+                                        <small class="pull-right text-muted">
+                                                <i class="fa fa-hand-o-right"></i> {$ officeevent.therapeut_name.first_name + " " + officeevent.therapeut_name.last_name$}
+                                            </small>
+                                    </div>
+                                </li>
+                                <div ng-show="false" ng-repeat-end/>
+                            </ul>
+                            <ul class="chat" ng-if="selector=='all'">
+                                <li ng-repeat="officeevent in officeevents|orderBy:'-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
+                                    <div class="chat-img pull-left events-badge">
+                                        <!--<i class="fa fa-user"/>-->
+                                        <i class="fa fa-search" ng-class="{'fa-user': officeevent.clazz == 'Patient', 'fa-search':officeevent.clazz == 'Examination'}" />
+                                    </div>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{$ officeevent.patient_name $}</strong>
+                                            <small class="pull-right text-muted">
+                                                <i class="fa fa-clock-o fa-fw"></i> {$ officeevent.date | timeAgo $}
+                                            </small>
+                                        </div>
+                                        <p>
+                                           {$ officeevent.translated_comment $}
+                                        </p>
+                                        <small class="pull-right text-muted">
+                                                <i class="fa fa-hand-o-right"></i> {$ officeevent.therapeut_name.first_name + " " + officeevent.therapeut_name.last_name$}
+                                            </small>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.panel-body -->
+                        <!--div class="panel-footer">
+                            <div class="input-group">
+                                <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+                                <span class="input-group-btn">
+                                    <button class="btn btn-warning btn-sm" id="btn-chat">
+                                        Send
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- /.panel-footer -->
+                    </div>
+                    <!-- /.panel .chat-panel -->

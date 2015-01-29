@@ -1,0 +1,85 @@
+
+* { margin: 0; padding: 0; } 
+
+body {
+	font:14px/1.4 Georgia, serif;
+}
+
+#page_wrap {
+	width: 800px;
+	margin : 0 auto;
+}
+
+#header {
+	margin : 25px 0;
+	float:none;
+}
+.frame {
+	float: left;
+}
+.header {
+	font : 18px bold;
+}
+
+.address {
+	font-size : 12px;
+}
+.phone {
+	font-size : 12px;
+}
+.therapeut-frame {
+	float:right;
+}
+.therapeut{
+	padding-top: 10px;
+}
+.spacer{
+	clear:both;
+}
+
+#patient {
+	margin-top: 50px;
+	margin-bottom: 100px;
+	float: right;
+
+}
+
+#location-date {
+	float:left;
+	margin-top: 50px;
+}
+#invoice-number {
+	margin-bottom: 50px;
+	font-weight: bold;
+}
+
+#main {
+	clear: both;
+	margin-top: 150px;
+	margin-left: 100px;
+	margin-bottom: 100px;
+}
+
+.fees {
+	margin-top : 50px;
+	margin-bottom : 50px;
+	border:1px solid black;
+	border-collapse: collapse;
+	vertical-align:middle;
+	text-align: center;
+	width:50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.fees td {
+	text-align: center;
+	padding-bottom: 2em;
+	padding-top: 2em;
+	border: 1px solid black;
+}
+
+#footer {
+	margin-top: 300px;
+	margin-left: 100px;
+}

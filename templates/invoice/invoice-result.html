@@ -1,0 +1,84 @@
+{% load i18n %}
+{% load l10n %}
+{% load invoice_extras %}
+<html>
+<head>
+	<title>Invoice</title>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/invoice-style.css" type="text/css">
+	<link rel="stylesheet" href="{{ STATIC_URL}}/font-awesome/css/font-awesome.min.css">
+
+</head>
+<body>
+	<div id="page_wrap">
+		<div id="header">
+			<div id="title">
+					<div class="frame">
+						<span class="header">{{ invoice.header }}</span><br/>
+						<span class="address">{{ invoice.office_address_street}}</span><br/>
+						{% if invoice.office_address_complement|length > 0 %}
+						<span class="address">{{ invoice.office_address_complement}}</span><br/>
+						{% endif %}
+						<span class="address">{{ invoice.office_address_zipcode}} {{ invoice.office_address_city}}</span><br/>
+						<span class="phone"><i class="fa fa-phone-square"> </i> {{ invoice.office_phone }}</span><br/>
+						<span class="siret">SIRET : {{ invoice.office_siret }}</span><br/>
+					</div>
+					<div class="therapeut-frame">
+						<span class="therapeut">{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</span><br/>
+					{% if invoice.quality %}
+						<span class="therapeut">{{ invoice.quality }}</span><br/>
+					{% endif %}
+						<span class="adeli">Adeli : {{ invoice.adeli }}</span><br/>
+					</div>
+					<div class="spacer"></div>
+					<hr/>
+			</div>
+		</div>
+		
+		<div id="patient">
+			<p>
+				<span>{{ invoice.patient_first_name }} {{invoice.patient_family_name}}</span><br/>
+				<span>{{ invoice.patient_address_street}}</span><br/>
+				{% if invoice.patient_address_complement != "" %}
+					<span>{{ invoice.patient_address_complement}}</span><br/>
+				{% endif %}
+				<span>{{ invoice.patient_address_zipcode}} {{ invoice.patient_address_city}}</span><br/>
+			</p>
+		</div>
+
+		<div id="location-date">
+			<p>
+				<span>À {{ invoice.location}}, le {{ invoice.date | date:"d F Y" }}</span>
+			</p>
+		</div>
+
+		<div class="spacer"></div>
+		
+		<div id="invoice-number">
+			<p> Facture {{invoice.number}}</p>
+		</div>
+
+
+		
+		<div id="main">
+			{% localize on %}
+			<p>{{ invoice.content_invoice | templatize:invoice | linebreaksbr }}</p>
+			{% endlocalize %}
+			{% if invoice.paiment_mode == 'check' %}
+				<p>Règlement par chèque </p>
+			{% elif invoice.paiment_mode == 'cash' %}
+				<p>Règlement par espèce </p>
+			{% else %}
+			<p>Non réglé en date de facture</p>
+			{% endif %}
+
+			<table class="fees">
+				<tr><td>HONORAIRES</td><td>{{invoice.amount}} {{invoice.currency}}</td></tr>
+			</table>
+		</div>
+
+		<div id="footer">
+			<p>{{ invoice.footer | linebreaksbr  }}</p>
+		</div>
+	</div>
+</body>
+</html>

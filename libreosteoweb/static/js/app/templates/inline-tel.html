@@ -2,24 +2,35 @@
 <div class="{$ editclass $}" ng-switch="model[property].length" ng-if="!readOnly">
     <div ng-switch-when="0" ng-mouseenter="displayButton = true"
                       ng-mouseleave="displayButton = false">
-                <span class="{$ icon $}"></span>
+                <span class="{$ icon $}"
+                      tooltip="{$ placeholder $}"
+                      tooltip-trigger="mouseenter"
+                ></span>
                 <span editable-tel="model[property]"  e-form="editform"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-style="width:{$ width $}"
                       blur="submit"
+                      tooltip="{$ placeholder $}"
+                      tooltip-trigger="mouseenter"
                       class="inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</span>
         <button class="btn btn-default btn-xs glyphicon glyphicon-pencil"
                 ng-click="editform.$show()"
                 ng-show="displayButton && !editform.$visible"
+                tooltip="{$ placeholder $}"
+                tooltip-trigger="mouseenter"
                 ></button>
     </div>
     <div ng-switch-default>
-                <span class="{$ icon $}"></span>
+                <span class="{$ icon $}"
+                      tooltip="{$ placeholder $}"
+                      tooltip-trigger="mouseenter"></span>
                 <span editable-tel="model[property]"
                       e-placeholder="{$ placeholder $}" onaftersave="saveModel()"
                       e-style="width:{$ width $}"
                       blur="submit"
-                        class=" inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</span>
+                      tooltip="{$ placeholder $}"
+                      tooltip-trigger="mouseenter"
+                      class=" inlineedit">{$ model[property] || '&nbsp;&nbsp;' $}</span>
     </div>
 </div>
 

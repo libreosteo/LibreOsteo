@@ -8,7 +8,12 @@ examination.factory('ExaminationServ', ['$resource',
             query: {method: 'GET', isArray : true},
             get : {method: 'GET', params : {examinationId : 'examination'} },
             save : {method : 'PUT'},
-            add : {method : 'POST'}
+            add : {method : 'POST'},
+            close : {
+                method : 'POST',
+                params : {examinationId : 'examinationId'},
+                url : 'api/examinations/:examinationId/close'
+            },
         });
     }
 ]);
@@ -27,11 +32,11 @@ examination.directive('examination', function(){
         scope: {
             model: '=',
             saveModel : '&',
-            invoice : '&',
-            readOnly : '=',
+            close : '&',
+            newExamination: '=',
         },
       compile: function(element, attrs){
-          if (!attrs.readOnly) { attrs.readOnly = false; }
+          if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
         controller : function($scope, $filter)
@@ -50,6 +55,12 @@ examination.directive('examination', function(){
                     return 'Non renseigné';
                 }
             };
+
+            $scope.$watch('model.status', function(newValue, oldValue){
+                if (newValue){
+                    $scope.readOnly = newValue != 0; 
+                }
+            });
         },
         templateUrl: 'web-view/partials/examination'
     }

@@ -7,9 +7,13 @@
     </div>
     <ul class="timeline" ng-switch-when="true">
         <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': examination.order %2 == 0 }">
-            <div class="timeline-badge" ng-class="{'success' : examination.type == 1, 'warning' : examination.type == 2, 'danger' : examination.type >= 3 }"><i class="fa fa-check" ></i>
+            <div class="timeline-badge" 
+                ng-class="{'success' : examination.type == 1, 'warning' : examination.type == 2, 'danger' : examination.type >= 3 }"
+                ng-click="loadExamination(examination.id)" ui-sref="patient.examination({examinationId :  examination.id })">
+                <i class="fa"
+                    ng-class="{'fa-check': examination.status >= 2, 'fa-money': examination.status == 1, 'fa-play': examination.status == 0}" ></i>
             </div>
-            <div class="timeline-panel" ng-click="loadExamination(examination.id)">
+            <div class="timeline-panel" ng-click="loadExamination(examination.id)" ui-sref="patient.examination({examinationId :  examination.id })">
                 <div class="timeline-heading">
                     <h4 class="timeline-title">{% trans 'Session of ' %} {$ examination.date | date : 'longDate' $}</h4>
 

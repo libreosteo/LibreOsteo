@@ -16,7 +16,7 @@ from haystack.views import SearchView
 import json
 import logging
 from django.contrib.auth.models import User
-from .permissions import IsStaffOrTargetUser
+from .permissions import IsStaffOrTargetUser, TargetUserSettingsPermissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -195,7 +195,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
     serializer_class = TherapeutSettingsSerializer
-    permission_classes = [IsStaffOrTargetUser]
+    permission_classes = [TargetUserSettingsPermissions]
 
     @list_route(permission_classes=[AllowAny])
     def get_by_user(self, request):

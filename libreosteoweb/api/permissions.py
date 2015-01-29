@@ -17,3 +17,16 @@ class IsStaffOrTargetUser(permissions.BasePermission):
         	return getattr(obj, 'user') == request.user
         except AttributeError:
         	return obj == request.user
+
+class TargetUserSettingsPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return view.action in ['create','retrieve', 'partial_update', 'update'] or request.user.is_staff
+
+    def has_object_permission(self, request, view, obj):
+         # allow logged in user to view own details, allows staff to view all records
+        if request.user.is_staff:
+            return True
+        try :
+            return getattr(obj, 'user') == request.user or getattr(obj, 'User') is None
+        except AttributeError:
+            return obj == request.user

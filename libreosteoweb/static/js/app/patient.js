@@ -95,11 +95,15 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 var mdiff = m[0] - m[1];
                 var ddiff = d[0] - d[1];
 
-                if (mdiff <= 0) {
+                if (mdiff < 0) {
                     ydiff = ydiff -1;
                     mdiff = mdiff + 12;
                 }
-                if (ddiff <= 0) {
+
+                if (mdiff == 0 && ddiff < 0) {
+                    ydiff = ydiff -1;
+                    mdiff = mdiff + 12;
+                } else if (ddiff < 0) {
                     var n_day_by_month = [31,28,31,30,31, 30, 31, 31, 30, 31,30, 31];
                     mdiff = mdiff -1;
                     var d_month ;

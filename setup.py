@@ -100,6 +100,7 @@ if sys.platform in ['win32']:
         'libreosteoweb.models',
         'libreosteoweb.search_indexes',
         'libreosteoweb.api',
+        'libreosteoweb.apps',
         'libreosteoweb.templatetags.invoice_extras',
         'email.mime.image',
         "django.contrib.admin.migrations.0001_initial",

@@ -6,7 +6,7 @@ from cx_Freeze import setup, Executable
 base=None
 
 import os
-from setuptools import setup
+#from setuptools import setup
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
@@ -16,32 +16,32 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-setup(
-    name = "Libreosteo",
-    version = "0.1",
-    author = "Jean-Baptiste Gury",
-    author_email = "libreosteo@gmail.com",
-    description = ("Software suite for osteopaths"),
-    license = "GNU/GPL v3",
-    keywords = "osteopathy software patient manager",
-    url = "http://libreosteo.olympe.in/",
-    packages=['Libreosteo', 'libreosteoweb'],
-    long_description=read('README.rst'),
-    include_package_data=True,
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Topic :: Utilities",
-        "License :: OSI Approved :: GNU License",
-    ],
-    install_requires=[
-    'django',
-    'whoosh',
-    'django-angular',
-    'django-haystack',
-    'django-statici18n',
-    'djangorestframework',
-    'cherrypy',]
-)
+##setup(
+##    name = "Libreosteo",
+##    version = "0.1",
+##    author = "Jean-Baptiste Gury",
+##    author_email = "libreosteo@gmail.com",
+##    description = ("Software suite for osteopaths"),
+##    license = "GNU/GPL v3",
+##    keywords = "osteopathy software patient manager",
+##    url = "http://libreosteo.olympe.in/",
+##    packages=['Libreosteo', 'libreosteoweb'],
+##    long_description=read('README.rst'),
+##    include_package_data=True,
+##    classifiers=[
+##        "Development Status :: 3 - Alpha",
+##        "Topic :: Utilities",
+##        "License :: OSI Approved :: GNU License",
+##    ],
+##    install_requires=[
+##    'django',
+##    'whoosh',
+##    'django-angular',
+##    'django-haystack',
+##    'django-statici18n',
+##    'djangorestframework',
+##    'cherrypy',]
+##)
 
 
 # Build on Windows.
@@ -100,7 +100,7 @@ if sys.platform in ['win32']:
         'libreosteoweb.models',
         'libreosteoweb.search_indexes',
         'libreosteoweb.api',
-	'libreosteoweb.templatetags.invoice_extras',
+        'libreosteoweb.templatetags.invoice_extras',
         'email.mime.image',
         "django.contrib.admin.migrations.0001_initial",
         "django.contrib.auth.migrations.0001_initial",
@@ -139,10 +139,10 @@ if sys.platform in ['win32']:
     }
 
     setup(  name = "libreosteo",
-        version = "0.1",
+        version = "0.2.1",
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
+        executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
 
     # Remove init.py into locale directory

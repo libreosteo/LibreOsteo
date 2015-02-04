@@ -6,6 +6,7 @@ from cx_Freeze import setup, Executable
 base=None
 
 import os
+import shutil
 #from setuptools import setup
 
 # Utility function to read the README file.
@@ -46,7 +47,7 @@ def read(fname):
 
 # Build on Windows.
 if sys.platform in ['win32']:
-
+    base='Console'
     def get_djangolocale():
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings")
         import django
@@ -85,11 +86,27 @@ if sys.platform in ['win32']:
                     migration_files.append(directory.replace('/', '.') + '.' + filename[0:len(filename)-3])
         return migration_files
 
+    def remove_useless_files(directory, keepfiles_list, keepdir_list):
+        keep_path_list = []
+        for root,directories,files in os.walk(directory):
+            for f in files:
+                if f not in keepfiles_list:
+                    os.remove(os.path.join(root, f))
+            for d in directories :
+                if d not in keepdir_list and root not in keep_path_list:
+                    shutil.rmtree(os.path.join(root, d))
+                else :
+                    keep_path_list.append(os.path.join(root,d))
+                
+
     from cx_Freeze import setup, Executable
     copyDependentFiles = True
     includes = [
+        'cherrypy',
+        #'win32serviceutil', 'win32service', 'win32event', 'servicemanager',
         'django.template.loader_tags',
         'django.core.management',
+        'Libreosteo',
         'Libreosteo.urls',
         'Libreosteo.settings',
         'Libreosteo.wsgi',
@@ -122,6 +139,7 @@ if sys.platform in ['win32']:
         "sqlite3",
         "statici18n",
         "email",
+        "Libreosteo",
         
         
     ]
@@ -143,13 +161,28 @@ if sys.platform in ['win32']:
         version = "0.2.1",
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
+        executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
 
-    # Remove init.py into locale directory
+
     # Create a web shorcut link
     shortlink = open("build/exe.win32-2.7/Libreosteo.url","w")
     shortlink.write("[InternetShortcut]\n")
     shortlink.write("URL=http://localhost/\n")
     shortlink.write("\n")
     shortlink.write("\n")
+
+    ##Copy the launchservice program
+    shutil.copy2('Z:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
+
+    ##Remove useless locales
+    remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])
+    remove_useless_files("build/exe.win32-2.7/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
+
+    ##Create the service launcher configuration
+    #launcherService = open("build/exe.win32-2.7/LaunchServ.ini", "w")
+    #launcherService.write("Name = LibreosteoService")
+    #launcherService.write("Description = Libreosteo Service")
+    #launcherService.write("Executable = \"C:\project\Libreosteo\build\exe.win32-2.7\Libreosteo.exe\"")
+    #launcherService.write("WorkDir = \"C:\project\Libreosteo\build\exe.win32-2.7\"")
+    #launcherService.write("SingleInstance = 1")

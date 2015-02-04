@@ -6,6 +6,14 @@ Requires Mark Hammond's pywin32 package.
 import sys
 import logging
 import os, os.path
+
+if getattr(sys, 'frozen', False):
+        # frozen
+        dir = os.path.dirname(sys.executable)
+        sys.path.append(dir)
+        os.environ['PATH'] = (os.environ['PATH']+";").join(p+";" for p in sys.path)
+        print sys.path
+        print os.environ['PATH']
  
 # Third-party imports
 import cherrypy
@@ -19,8 +27,6 @@ from django.http import HttpResponseServerError
  
 class Server(object):
     def __init__(self):
-        os.chdir(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])
-        cherrypy.log(os.getcwd())
         self.base_dir = os.path.abspath(os.getcwd())
  
         #conf_path = os.path.join(self.base_dir, ".", "server.cfg")
@@ -33,7 +39,6 @@ class Server(object):
  
     def run(self):
         engine = cherrypy.engine
-        cherrypy.config.update({'server.socket_port': 80})
         engine.signal_handler.subscribe()
  
         if hasattr(engine, "console_control_handler"):
@@ -145,9 +150,9 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
                 'engine.SIGHUP': None,
                 'engine.SIGTERM': None,
                 'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
-                'log.screen' : False,
                 'tools.log_tracebacks.on' : True,
-                'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log')
+                'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
+                'server.socket_port': 80,
                 }
             })
         server.run()
@@ -162,4 +167,13 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
         # otherwise the Service Controller never knows that it is stopped !
         
 if __name__ == '__main__':
+    if getattr(sys, 'frozen', False):
+        # frozen
+        dir = os.path.dirname(sys.executable)
+    else:
+        # unfrozen
+        dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(dir)
+    cherrypy.log(os.getcwd())
+    print os.getcwd()
     win32serviceutil.HandleCommandLine(LibreosteoService)

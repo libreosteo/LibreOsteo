@@ -9,12 +9,18 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os,sys
+import os,sys,logging
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 if getattr(sys, 'frozen', False):
     SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
-else :
+    DATA_FOLDER = SITE_ROOT
+    if (getattr(sys, 'frozen', False) == 'macosx_app'):
+    	DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
+    	if not os.path.exists(DATA_FOLDER):
+    	    os.makedirs(DATA_FOLDER)
+else:
     SITE_ROOT = BASE_DIR
+    DATA_FOLDER = SITE_ROOT
 
 
 # Quick-start development settings - unsuitable for production
@@ -117,7 +123,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(SITE_ROOT, 'db.sqlite3'),
+        'NAME': os.path.join(DATA_FOLDER, 'db.sqlite3'),
     }
 }
 
@@ -215,7 +221,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(SITE_ROOT, 'whoosh_index'),
+        'PATH': os.path.join(DATA_FOLDER, 'whoosh_index'),
     },
 }
 

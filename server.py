@@ -25,7 +25,7 @@ class Server(object):
  
     def run(self):
         engine = cherrypy.engine
-        cherrypy.config.update({'server.socket_port': 80})
+        cherrypy.config.update({'server.socket_port': 8080})
         engine.signal_handler.subscribe()
  
         if hasattr(engine, "console_control_handler"):

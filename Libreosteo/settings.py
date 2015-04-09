@@ -167,6 +167,7 @@ LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'accounts-login'
 LOGOUT_URL_NAME = 'accounts-logout'
 LOGIN_REDIRECT_URL= '/'
+INITIALIZE_ADMIN_URL_NAME = 'accounts-create-admin'
 
 
 

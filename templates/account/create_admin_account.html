@@ -1,0 +1,63 @@
+{% load i18n %}<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.png">
+
+    <title>{% trans  "Create admin account on Libreosteo" %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+
+     <!-- Custom styles for this template -->
+    <link href="{{ STATIC_URL }}css/signin.css" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  <style type="text/css"></style></head>
+
+  <body>
+
+    <div class="container">
+
+      <form class="form-registration" role="form" method="post" action="{% url 'libreosteoweb.api.views.create_admin_account' %}">
+          {% csrf_token %}
+        <h2 class="form-registration-heading">{% trans "Registration" %}</h2>
+        {% if form.errors %}
+          {% for error in form.password2.errors %}
+            <div class="alert alert-danger" role="alert">
+              <p>{{error}}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <div class="well well-lg">
+          <p>{% trans 'In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application.' %}</p>
+
+          <p>{% trans 'Then you will be redirected to be identified with this login and password.' %}</p>
+        </div>
+        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus="">
+        <input type="password" name="password1" class="form-control form-registration-password1" placeholder="{%  trans "Password" %}" required="">
+        <input type="password" name="password2" class="form-control form-registration-password2" placeholder="{%  trans "Confirm password" %}" required="">
+        <!--<label class="checkbox">
+          <input type="checkbox" value="remember-me"> {% trans "Remember me" %}
+        </label>-->
+        <input type="hidden" name="next" value="{{ next|escape }}" />
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">{% trans "Register" %}</button>
+      </form>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  
+
+</body></html>

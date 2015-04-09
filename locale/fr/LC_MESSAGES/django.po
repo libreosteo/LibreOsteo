@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 18:44+0000\n"
-"PO-Revision-Date: 2015-01-27 19:45+0100\n"
+"POT-Creation-Date: 2015-04-09 12:19+0000\n"
+"PO-Revision-Date: 2015-04-09 14:22+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -322,12 +322,10 @@ msgid "Invoice office header"
 msgstr "Entête de facture"
 
 #: libreosteoweb/models.py:215
-#| msgid "Invoice"
 msgid "Invoice content"
 msgstr "Contenu de la facture"
 
 #: libreosteoweb/models.py:216
-#| msgid "Invoice"
 msgid "Invoice footer"
 msgstr "Pied de page de facture"
 
@@ -365,6 +363,46 @@ msgstr "Recherche..."
 msgid "New patient"
 msgstr "Nouveau patient"
 
+#: templates/account/create_admin_account.html:10
+#| msgid "Signin on Libreosto"
+msgid "Create admin account on Libreosteo"
+msgstr "Créé un compte administrateur sur Libreosteo"
+
+#: templates/account/create_admin_account.html:32
+msgid "Registration"
+msgstr "Enregistrement"
+
+#: templates/account/create_admin_account.html:41
+msgid "In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application."
+msgstr "Afin d'utiliser Libreosteo, vous devez enregistrer un utilisateur et un mot de passe sur l'application. Veuillez les saisir avant d'utiliser l'application."
+
+#: templates/account/create_admin_account.html:43
+msgid "Then you will be redirected to be identified with this login and password."
+msgstr "Ensuite vous serez dirigé afin d'être identifié avec ce nom d'utilisateur et mot de passe."
+
+#: templates/account/create_admin_account.html:45
+#: templates/account/login.html:35
+msgid "Your login"
+msgstr "Votre nom d'utilisateur"
+
+#: templates/account/create_admin_account.html:46
+#: templates/account/login.html:36
+msgid "Password"
+msgstr "Mot de passe"
+
+#: templates/account/create_admin_account.html:47
+msgid "Confirm password"
+msgstr "Confirmation du mot de passe"
+
+#: templates/account/create_admin_account.html:49
+#: templates/account/login.html:38
+msgid "Remember me"
+msgstr "Se rappeler de moi"
+
+#: templates/account/create_admin_account.html:52
+msgid "Register"
+msgstr "Enregistrer"
+
 #: templates/account/login.html:10
 msgid "Signin on Libreosto"
 msgstr "Identifiez-vous sur Libreosteo"
@@ -376,18 +414,6 @@ msgstr "Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez r
 #: templates/account/login.html:34
 msgid "Please sign in"
 msgstr "Veuillez vous identifier"
-
-#: templates/account/login.html:35
-msgid "Your login"
-msgstr "Votre nom d'utilisateur"
-
-#: templates/account/login.html:36
-msgid "Password"
-msgstr "Mot de passe"
-
-#: templates/account/login.html:38
-msgid "Remember me"
-msgstr "Se rappeler de moi"
 
 #: templates/account/login.html:41
 msgid "Sign in"
@@ -495,7 +521,6 @@ msgid "Validate"
 msgstr "Valider"
 
 #: templates/partials/office-settings.html:3
-#| msgid "Settings"
 msgid "Office settings"
 msgstr "Paramètres du cabinet"
 
@@ -509,7 +534,6 @@ msgid "Update"
 msgstr "Mettre à jour"
 
 #: templates/partials/office-settings.html:117
-#| msgid "Profile was updated"
 msgid "Settings was updated"
 msgstr "Les paramètres ont été mis à jour"
 

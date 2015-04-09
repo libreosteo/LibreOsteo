@@ -23,12 +23,54 @@ from rest_framework.permissions import AllowAny
 from datetime import date, datetime
 from rest_framework import status
 from django.views.generic.base import TemplateView
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import (REDIRECT_FIELD_NAME, get_user_model )
+from django.template.response import TemplateResponse
+from django.utils.http import is_safe_url
+from django.shortcuts import resolve_url
+from django.conf import settings
+from django.http import HttpResponseRedirect
 
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def create_superuser(request, user):
+    UserModel = get_user_model()
+    UserModel.objects.create_superuser(user['username'], '', user['password1'])
 
+@csrf_protect
+@never_cache
+def create_admin_account(request, template_name='account/create_admin_account.html',
+    redirect_field_name=REDIRECT_FIELD_NAME,
+    registration_form=UserCreationForm):
+    """
+    Displays the login form and handles the login action.
+    """
+    redirect_to = request.POST.get(redirect_field_name,
+    request.GET.get(redirect_field_name, ''))
+    if request.method == "POST":
+        form = registration_form(request.POST)
+        if form.is_valid():
+            # Ensure the user-originating redirection url is safe.
+            if not is_safe_url(url=redirect_to, host=request.get_host()):
+                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+            # Okay, security check complete. Log the user in.
+            create_superuser(request, form.data)
+            return HttpResponseRedirect(redirect_to)
+        else :
+            context = {
+                'form':form
+            }
+    else:
+        form = registration_form(request)
+        context = {
+            'form': form,
+            redirect_field_name: redirect_to
+        }
+    return TemplateResponse(request, template_name, context)
 
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'

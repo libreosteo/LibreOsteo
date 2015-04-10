@@ -44,6 +44,8 @@ class Patient(models.Model):
         address_city = models.CharField(_('City'), max_length=200, blank=True)
         phone = models.CharField(_('Phone'), max_length=200, blank=True)
         mobile_phone = models.CharField(_('Mobile phone'), max_length=200, blank=True)
+        job = models.CharField(_('Job'), max_length=200, blank=True, default="")
+        hobbies = models.TextField(_('Hobbies'), blank=True, default="")
         #family_situation = Column(Integer)
         doctor = models.ForeignKey(RegularDoctor, verbose_name=_('Regular doctor'), blank=True, null=True)
         smoker = models.BooleanField(_('Smoker'), default=False)

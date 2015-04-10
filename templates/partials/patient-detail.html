@@ -34,20 +34,23 @@
                             placeholder="{{ patient.address_complement }}"></inlineedit>
 
 
-                    <div class="row col-md-12">
-                        <inlineedit class="row col-md-5" model="patient" property="address_zipcode" on-save="savePatient()"
+                    <div class="row">
+                        <div class="col-md-12">
+                            <inlineedit class="row col-md-5" model="patient" property="address_zipcode" on-save="savePatient()"
                             placeholder="{{ patient.address_zipcode }}" width="66px"></inlineedit>
 
-                        <inlineedit class="row col-md-7" model="patient" property="address_city" on-save="savePatient()"
+                            <inlineedit class="row col-md-7" model="patient" property="address_city" on-save="savePatient()"
                             placeholder="{{ patient.address_city }}" width="200px"></inlineedit>
+                        </div>
                     </div>
-                    <div class="row col-md-12">
-                        <inlinetel class="row col-md-6" model="patient" property="phone" on-save="savePatient()"
+                    <div class="row">
+                        <div class="col-md-12">
+                            <inlinetel class="row col-md-6" model="patient" property="phone" on-save="savePatient()"
                             placeholder="{{ patient.phone }}" icon="glyphicon glyphicon-phone-alt"></inlinetel>
 
-                        <inlinetel class="row col-md-6"  model="patient" property="mobile_phone" on-save="savePatient()"
+                            <inlinetel class="row col-md-6"  model="patient" property="mobile_phone" on-save="savePatient()"
                             placeholder="{{ patient.mobile_phone }}" icon="glyphicon glyphicon-earphone"></inlinetel>
-
+                        </div>
                     </div>
                     <hr/>
 
@@ -68,6 +71,18 @@
                                 >{$ doctor.family_name || "{% trans 'not documented' %}" $} - {$ doctor.city || "{% trans 'not documented' %}" $}</span>
                             <button class="btn btn-default btn-xs fa fa-plus"
                                     title="{% trans 'Add a doctor' %}" ng-click="formAddDoctor()"></button>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ patient.job }} :<inlineedit class="row col-md-12" model="patient" property="job" on-save="savePatient()"
+                            placeholder="{{ patient.job }}" width="200px"></inlineedit>
+                        </div>
+                        <div class="col-md-6">
+                            {{ patient.hobbies }} :<inlinetextarea model="patient" property="hobbies" on-save="savePatient()"
+                            placeholder="{{ patient.hobbies }}"
+                            row="5" col="15"></inlinetextarea>
                         </div>
                     </div>
                 </div>

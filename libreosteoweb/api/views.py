@@ -4,7 +4,7 @@ from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb import models 
 from rest_framework.decorators import action, detail_route, list_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer
+from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer, OfficeSettingsSerializer
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
@@ -232,6 +232,7 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OfficeSettingsView(viewsets.ModelViewSet):
     model = models.OfficeSettings
+    serializer_class = OfficeSettingsSerializer
     permission_classes = [IsStaffOrTargetUser]
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):

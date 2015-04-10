@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
@@ -100,3 +100,7 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
 class TherapeutSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = TherapeutSettings
+
+class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = OfficeSettings

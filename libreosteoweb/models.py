@@ -116,7 +116,7 @@ class Examination(models.Model):
     examination on a patient
     """
     reason = models.TextField(_('Reason'), blank=True)
-    reason_description = models.TextField(_('Reason description'), blank=True)
+    reason_description = models.TextField(_('Reason description/Context'), blank=True)
     orl = models.TextField(_('ORL Sphere'), blank=True)
     visceral = models.TextField(_('Visceral Sphere'), blank=True)
     pulmo = models.TextField(_('Cardio-Pulmo Sphere'), blank=True)

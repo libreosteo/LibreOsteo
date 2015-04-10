@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-09 12:19+0000\n"
-"PO-Revision-Date: 2015-04-09 14:22+0100\n"
+"POT-Creation-Date: 2015-04-10 20:19+0000\n"
+"PO-Revision-Date: 2015-04-10 22:21+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -44,6 +44,12 @@ msgstr "Le mode de paiement est obligatoire lorsque la consultation est facturé
 #: libreosteoweb/api/serializers.py:65
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
+
+#: libreosteoweb/api/serializers.py:103
+#: libreosteoweb/models.py:157
+#: libreosteoweb/models.py:214
+msgid "Currency"
+msgstr "Monnaie"
 
 #: libreosteoweb/models.py:23
 #: libreosteoweb/models.py:37
@@ -165,8 +171,9 @@ msgid "Reason"
 msgstr "Motif"
 
 #: libreosteoweb/models.py:119
-msgid "Reason description"
-msgstr "Description du motif"
+#| msgid "Reason description"
+msgid "Reason description/Context"
+msgstr "Détail du motif de consultation / Contexte"
 
 #: libreosteoweb/models.py:120
 msgid "ORL Sphere"
@@ -246,11 +253,6 @@ msgstr "Thérapeute"
 #: templates/partials/invoice-modal.html:29
 msgid "Amount"
 msgstr "Montant"
-
-#: libreosteoweb/models.py:157
-#: libreosteoweb/models.py:214
-msgid "Currency"
-msgstr "Monnaie"
 
 #: libreosteoweb/models.py:158
 msgid "Paiment mode"
@@ -338,33 +340,32 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: templates/404.html:257
-#: templates/index.html:257
+#: templates/index.html:259
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
 #: templates/404.html:259
-#: templates/index.html:259
+#: templates/index.html:261
 msgid "Settings"
 msgstr "Paramètres"
 
 #: templates/404.html:262
-#: templates/index.html:262
+#: templates/index.html:264
 msgid "Logout"
 msgstr "Déconnexion"
 
 #: templates/404.html:278
-#: templates/index.html:278
+#: templates/index.html:280
 msgid "Search..."
 msgstr "Recherche..."
 
 #: templates/404.html:290
-#: templates/index.html:290
+#: templates/index.html:292
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
 
 #: templates/account/create_admin_account.html:10
-#| msgid "Signin on Libreosto"
 msgid "Create admin account on Libreosteo"
 msgstr "Créé un compte administrateur sur Libreosteo"
 

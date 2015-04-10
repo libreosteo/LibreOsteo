@@ -247,7 +247,7 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
         if (len(settings)>0):
             return Response(TherapeutSettingsSerializer(settings[0]).data)
         else:
-            return Response()
+            return Response({})
 
     def pre_save(self, obj):
         if not self.request.user.is_authenticated():

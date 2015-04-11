@@ -9,5 +9,5 @@ django-statici18n==1.1
 djangorestframework==2.4.3
 six==1.8.0
 wsgiref==0.1.2
-cx_freeze
+cx_freeze==4.3.3
 cherrypy

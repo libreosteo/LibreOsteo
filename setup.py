@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import sys, glob, os
 
 VERSION = "0.2.1"

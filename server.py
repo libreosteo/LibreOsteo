@@ -164,4 +164,7 @@ def callback_server_started():
     webbrowser.open("http://localhost:%s/"%(SERVER_PORT), new=2,autoraise=True)
 
 if __name__ == '__main__':
-    Server().run(callback_server_started)
+    if sys.platform not in ['win32']:
+        Server().run(callback_server_started)
+    else :
+        Server().run()

@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 import sys, glob, os
 
-VERSION = "0.2.1"
+VERSION = "0.2.2beta"
 
 
 

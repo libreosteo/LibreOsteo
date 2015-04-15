@@ -41,7 +41,9 @@ function stepUserProfile() {
 
 function stepOfficeSettings() {
   return $.getJSON('/api/settings').done(function(data){
-  if (typeof data.currency === 'undefined' || data.currency == "" ){
+  if (data.length == 0 || typeof data[0].currency === 'undefined' || data[0].currency == "" ){
+    console.log("passe ici car : "+data.currency);
+    console.log(typeof data.currency === 'undefined' || data.currency == "" );
     tour.addStep(
     {
       element: "#office-settings",

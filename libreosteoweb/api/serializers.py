@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,10 +30,14 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer(source = 'therapeut')
+    comments = serializers.SerializerMethodField('get_nb_comments')
     class Meta:
         model = Examination
-        fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type')
+        fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type', 'comments')
         depth = 1
+
+    def get_nb_comments(self, obj):
+        return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
 
 
 class CheckSerializer(serializers.Serializer):
@@ -72,7 +76,9 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
         return attrs
 
 
-
+class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = ExaminationComment
 
 class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
 

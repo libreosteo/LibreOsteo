@@ -15,7 +15,7 @@ timeline.directive('timeline', function()
             currentExamination : '=',
             currentExaminationManager : '&',
         },
-        controller : function($scope, ExaminationServ) {
+        controller : function($scope, ExaminationServ, ExaminationCommentServ, CommentServ) {
           $scope.loadExamination = function(examinationId) {
             if ($scope.currentExamination.id == null)
             {
@@ -31,6 +31,40 @@ timeline.directive('timeline', function()
                 });
             }
           }  ;
+
+          $scope.loadComments = function(examinationId, event) {
+            if ($scope.currentExamination.id == null || $scope.currentExamination.id != examinationId) {
+              var panelComment = $(event.target).parents(".timeline-footer").next(".timeline-panel-footer");
+
+              ExaminationCommentServ.query({examinationId : examinationId}, function(data){  
+                panelComment.toggleClass('hidden');
+                var examination = $scope.examinations.find(function(element, index, array)
+                  {
+                    return element.id == examinationId;
+                  });
+                examination.comments_list = data;
+              });
+              event.stopPropagation();
+            }
+          };
+          $scope.no_propagate = function(event)
+          {
+            event.stopPropagation();
+          }
+
+          $scope.sendComment = function(examinationId, comment)
+          {
+           var data = {
+            comment : comment,
+            examination : examinationId,
+           };
+           var result = CommentServ.save(data);
+           var examination = $scope.examinations.find(function(element, index, array)
+            {
+              return element.id == examinationId;
+            });
+            examination.comments_list.unshift(result);
+          }
         },
         templateUrl: 'web-view/partials/examinations-timeline'
     }

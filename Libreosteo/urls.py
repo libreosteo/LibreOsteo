@@ -23,6 +23,7 @@ router.register(r'events', views.OfficeEventViewSet)
 router.register(r'invoices', views.InvoiceViewSet)
 router.register(r'settings', views.OfficeSettingsView)
 router.register(r'profiles', views.TherapeutSettingsViewSet)
+router.register(r'comments', views.ExaminationCommentViewSet)
 
 urlpatterns = patterns('',
     # Examples:

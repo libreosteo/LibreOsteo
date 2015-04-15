@@ -83,3 +83,18 @@ pre {
 {
     cursor: pointer;
 }
+
+.timeline-comments
+{
+
+}
+
+.comments-list
+{
+
+}
+
+.comment
+{
+    list-style-type: none;
+}

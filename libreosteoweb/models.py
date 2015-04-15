@@ -149,6 +149,22 @@ class Examination(models.Model):
     EXAMINATION_INVOICED_PAID = 2
     EXAMINATION_NOT_INVOICED = 3
 
+    def __unicode__(self):
+        return "%s %s" % (self.patient, self.date)
+
+class ExaminationComment(models.Model):
+    """This class represents a comment on examination
+    """
+    user = models.ForeignKey(User, verbose_name=_('User'), blank=True, null=True)
+    comment = models.TextField(_('Comment'))
+    date = models.DateTimeField(_('Date'), null=True, blank=True)
+    examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
+
+    def clean(self):
+        if self.date is None:
+            self.date = datetime.today()
+
+
 class Invoice(models.Model):
     """
     This class implements bean object to represent

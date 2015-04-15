@@ -4,13 +4,12 @@ from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb import models 
 from rest_framework.decorators import action, detail_route, list_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer, OfficeSettingsSerializer
+from libreosteoweb.api import serializers as apiserializers
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
 from django.http import HttpResponse
 from django.views.generic import View
-from django.core import serializers
 from haystack.utils import Highlighter
 from haystack.views import SearchView
 import json
@@ -96,7 +95,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
         examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
-        return Response(ExaminationSerializer(examinations, many=True).data)
+        return Response(apiserializers.ExaminationSerializer(examinations, many=True).data)
 
     def pre_save(self, obj):
         """ Set the user which perform the operation as the currently logged user"""
@@ -121,7 +120,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
-        serializer = ExaminationInvoicingSerializer(data=request.DATA)
+        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.DATA)
         if serializer.is_valid():
             if serializer.data['status'] == 'notinvoiced':
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
@@ -185,12 +184,18 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         if not obj.therapeut:
             setattr(obj, 'therapeut', self.request.user)
 
+    @detail_route(methods=['GET'])
+    def comments(self, request, pk=None):
+        current_examination = self.get_object()
+        comments = models.ExaminationComment.objects.filter(examination=current_examination).order_by('-date')
+        return Response(apiserializers.ExaminationCommentSerializer(comments, many=True).data)
+
 
 
 
 class UserViewSet(viewsets.ModelViewSet):
     model = User
-    serializer_class =  UserInfoSerializer
+    serializer_class =  apiserializers.UserInfoSerializer
     permission_classes = [IsStaffOrTargetUser]
 
 
@@ -216,7 +221,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent
-    serializer_class =  OfficeEventSerializer
+    serializer_class =  apiserializers.OfficeEventSerializer
 
     def get_queryset(self):
         """
@@ -232,12 +237,12 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OfficeSettingsView(viewsets.ModelViewSet):
     model = models.OfficeSettings
-    serializer_class = OfficeSettingsSerializer
+    serializer_class = apiserializers.OfficeSettingsSerializer
     permission_classes = [IsStaffOrTargetUser]
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
-    serializer_class = TherapeutSettingsSerializer
+    serializer_class = apiserializers.TherapeutSettingsSerializer
     permission_classes = [TargetUserSettingsPermissions]
 
     @list_route(permission_classes=[AllowAny])
@@ -246,7 +251,7 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
             raise Http404()
         settings = models.TherapeutSettings.objects.filter(user=self.request.user)
         if (len(settings)>0):
-            return Response(TherapeutSettingsSerializer(settings[0]).data)
+            return Response(apiserializers.TherapeutSettingsSerializer(settings[0]).data)
         else:
             return Response({})
 
@@ -256,3 +261,10 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
 
         if not obj.user:
             setattr(obj, 'user', self.request.user)
+
+class ExaminationCommentViewSet(viewsets.ModelViewSet):
+    model = models.ExaminationComment
+    serializer_class = apiserializers.ExaminationCommentSerializer
+
+    def pre_save(self, obj):
+        setattr(obj, 'user', self.request.user)

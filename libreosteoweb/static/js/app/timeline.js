@@ -58,12 +58,19 @@ timeline.directive('timeline', function()
             comment : comment,
             examination : examinationId,
            };
-           var result = CommentServ.save(data);
-           var examination = $scope.examinations.find(function(element, index, array)
-            {
-              return element.id == examinationId;
-            });
-            examination.comments_list.unshift(result);
+           CommentServ.save(data, function(result) {
+              console.log(angular.toJson(result));
+              var examination = $scope.examinations.find(function(element, index, array)
+              {
+                return element.id == examinationId;
+              });
+              if (!result.date.endsWith('Z'))
+              {
+                result.date += 'Z';
+              }
+              examination.comments_list.unshift(result);
+              examination.comments = examination.comments_list.length;
+           });
           }
         },
         templateUrl: 'web-view/partials/examinations-timeline'

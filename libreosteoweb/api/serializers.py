@@ -77,6 +77,7 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
 
 
 class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
+    user_info = UserInfoSerializer(source="user", required=False)
     class Meta:
         model = ExaminationComment
 

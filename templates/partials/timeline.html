@@ -33,7 +33,7 @@
                     <div class="input-group">
                         <input id="btn-input" type="text" class="form-control input-sm" placeholder="{% trans 'Comment' %}" ng-model="new_comment"/>
                         <span class="input-group-btn">
-                            <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="sendComment(examination.id , new_comment)">
+                            <button class="btn btn-warning btn-sm" id="btn-chat" ng-click="sendComment(examination.id , new_comment);new_comment='';">
                                 {% trans 'Send' %}
                             </button>
                         </span>
@@ -41,7 +41,9 @@
                     <div class="timeline-comments">
                         <ul class="comments-list">
                             <li class="comment" ng-repeat="comment in examination.comments_list">
-                                <p>{$ comment.comment $}</p>
+                                <p class="comment-ident">{$ comment.user_info.last_name $} {$ comment.user_info.first_name $}<p>
+                                <p class="comment-content">{$ comment.comment $}</p>
+                                <p class="text-muted comment-time"><i class="fa fa-clock-o"></i> {$ comment.date | timeAgo $}</p>
                             </li>
                         </ul>
                     </div>

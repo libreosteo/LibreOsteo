@@ -3,7 +3,7 @@ from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb import models 
-from rest_framework.decorators import action, detail_route, list_route
+from rest_framework.decorators import  detail_route, list_route
 from libreosteoweb.api import serializers as apiserializers
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
@@ -15,10 +15,10 @@ from haystack.views import SearchView
 import json
 import logging
 from django.contrib.auth.models import User
-from .permissions import IsStaffOrTargetUser, TargetUserSettingsPermissions
+from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import date, datetime
 from rest_framework import status
 from django.views.generic.base import TemplateView
@@ -90,6 +90,8 @@ class InvoiceViewHtml(TemplateView):
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = models.Patient
+    serializer_class = apiserializers.PatientSerializer
+    queryset = models.Patient.objects.all()
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
@@ -108,6 +110,7 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
     model = models.RegularDoctor
+    queryset = models.RegularDoctor.objects.all()
 
 
 
@@ -115,6 +118,7 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
 
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = models.Examination
+    queryset = models.Examination.objects.all()
 
 
     @detail_route(methods=['POST'])
@@ -197,6 +201,26 @@ class UserViewSet(viewsets.ModelViewSet):
     model = User
     serializer_class =  apiserializers.UserInfoSerializer
     permission_classes = [IsStaffOrTargetUser]
+    queryset = User.objects.all()
+
+
+class UserOfficeViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = apiserializers.UserOfficeSerializer
+    permission_classes = [IsStaffOrReadOnlyTargetUser]
+
+    @detail_route(methods=['post'])
+    def set_password(self, request, pk=None):
+        user = self.get_object()
+        serializer = apiserializers.PasswordSerializer(data=request.DATA)
+        if serializer.is_valid():
+            user.set_password(serializer.data['password'])
+            user.save()
+            return Response({'status': 'password set'})
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -216,12 +240,14 @@ class StatisticsView(APIView):
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
+    queryset = models.Invoice.objects.all()
 
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent
     serializer_class =  apiserializers.OfficeEventSerializer
+    queryset = models.OfficeEvent.objects.all()
 
     def get_queryset(self):
         """
@@ -238,12 +264,14 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
 class OfficeSettingsView(viewsets.ModelViewSet):
     model = models.OfficeSettings
     serializer_class = apiserializers.OfficeSettingsSerializer
-    permission_classes = [IsStaffOrTargetUser]
+    permission_classes = [IsStaffOrReadOnlyTargetUser]
+    queryset = models.OfficeSettings.objects.all()
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
     serializer_class = apiserializers.TherapeutSettingsSerializer
-    permission_classes = [TargetUserSettingsPermissions]
+    permission_classes = [IsStaffOrTargetUser]
+    queryset = models.TherapeutSettings.objects.all()
 
     @list_route(permission_classes=[AllowAny])
     def get_by_user(self, request):
@@ -265,6 +293,7 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
 class ExaminationCommentViewSet(viewsets.ModelViewSet):
     model = models.ExaminationComment
     serializer_class = apiserializers.ExaminationCommentSerializer
+    queryset = models.ExaminationComment.objects.all()
 
     def pre_save(self, obj):
         setattr(obj, 'user', self.request.user)

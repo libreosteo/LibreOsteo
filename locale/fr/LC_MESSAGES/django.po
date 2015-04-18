@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 08:09+0000\n"
+"POT-Creation-Date: 2015-04-16 09:13+0000\n"
 "PO-Revision-Date: 2015-04-16 10:11+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -39,69 +39,54 @@ msgstr "Le montant est invalide"
 
 #: libreosteoweb/api/serializers.py:66
 msgid "Paiment mode is mandatory when the examination is invoiced"
-msgstr "Le mode de paiement est obligatoire lorsque la consultation est facturée"
+msgstr ""
+"Le mode de paiement est obligatoire lorsque la consultation est facturée"
 
 #: libreosteoweb/api/serializers.py:69
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
 
-#: libreosteoweb/models.py:23
-#: libreosteoweb/models.py:37
-#: libreosteoweb/models.py:107
-#: libreosteoweb/models.py:184
+#: libreosteoweb/models.py:23 libreosteoweb/models.py:37
+#: libreosteoweb/models.py:107 libreosteoweb/models.py:184
 msgid "Family name"
 msgstr "Nom de famille"
 
-#: libreosteoweb/models.py:24
-#: libreosteoweb/models.py:39
-#: libreosteoweb/models.py:108
-#: libreosteoweb/models.py:186
+#: libreosteoweb/models.py:24 libreosteoweb/models.py:39
+#: libreosteoweb/models.py:108 libreosteoweb/models.py:186
 msgid "Firstname"
 msgstr "Prénom"
 
-#: libreosteoweb/models.py:25
-#: libreosteoweb/models.py:45
-#: libreosteoweb/models.py:198
-#: libreosteoweb/models.py:229
+#: libreosteoweb/models.py:25 libreosteoweb/models.py:45
+#: libreosteoweb/models.py:198 libreosteoweb/models.py:229
 msgid "Phone"
 msgstr "Téléphone"
 
-#: libreosteoweb/models.py:26
-#: libreosteoweb/models.py:44
-#: libreosteoweb/models.py:190
-#: libreosteoweb/models.py:197
+#: libreosteoweb/models.py:26 libreosteoweb/models.py:44
+#: libreosteoweb/models.py:190 libreosteoweb/models.py:197
 #: libreosteoweb/models.py:228
 msgid "City"
 msgstr "Ville"
 
-#: libreosteoweb/models.py:38
-#: libreosteoweb/models.py:185
+#: libreosteoweb/models.py:38 libreosteoweb/models.py:185
 msgid "Original name"
 msgstr "Nom de jeune fille"
 
-#: libreosteoweb/models.py:40
-#: libreosteoweb/models.py:109
+#: libreosteoweb/models.py:40 libreosteoweb/models.py:109
 msgid "Birth date"
 msgstr "Date de naissance"
 
-#: libreosteoweb/models.py:41
-#: libreosteoweb/models.py:187
-#: libreosteoweb/models.py:194
-#: libreosteoweb/models.py:225
+#: libreosteoweb/models.py:41 libreosteoweb/models.py:187
+#: libreosteoweb/models.py:194 libreosteoweb/models.py:225
 msgid "Street"
 msgstr "Rue"
 
-#: libreosteoweb/models.py:42
-#: libreosteoweb/models.py:188
-#: libreosteoweb/models.py:195
-#: libreosteoweb/models.py:226
+#: libreosteoweb/models.py:42 libreosteoweb/models.py:188
+#: libreosteoweb/models.py:195 libreosteoweb/models.py:226
 msgid "Address complement"
 msgstr "Complément d'adresse"
 
-#: libreosteoweb/models.py:43
-#: libreosteoweb/models.py:189
-#: libreosteoweb/models.py:196
-#: libreosteoweb/models.py:227
+#: libreosteoweb/models.py:43 libreosteoweb/models.py:189
+#: libreosteoweb/models.py:196 libreosteoweb/models.py:227
 msgid "Zipcode"
 msgstr "Code postal"
 
@@ -145,8 +130,7 @@ msgstr "Antécédents familiaux"
 msgid "Trauma history"
 msgstr "Antécédents traumatiques"
 
-#: libreosteoweb/models.py:57
-#: templates/partials/patient-detail.html:162
+#: libreosteoweb/models.py:57 templates/partials/patient-detail.html:162
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
@@ -166,8 +150,7 @@ msgstr "La date de naissance est invalide"
 msgid "Parent"
 msgstr "Parent"
 
-#: libreosteoweb/models.py:120
-#: templates/partials/invoice-modal.html:21
+#: libreosteoweb/models.py:120 templates/partials/invoice-modal.html:21
 #: templates/partials/invoice-modal.html:23
 msgid "Reason"
 msgstr "Motif"
@@ -216,10 +199,8 @@ msgstr "Traitements"
 msgid "Conclusion"
 msgstr "Conclusion"
 
-#: libreosteoweb/models.py:132
-#: libreosteoweb/models.py:160
-#: libreosteoweb/models.py:173
-#: libreosteoweb/models.py:209
+#: libreosteoweb/models.py:132 libreosteoweb/models.py:160
+#: libreosteoweb/models.py:173 libreosteoweb/models.py:209
 msgid "Date"
 msgstr "Date"
 
@@ -231,13 +212,11 @@ msgstr "État"
 msgid "Status reason"
 msgstr "Raison de l'état"
 
-#: libreosteoweb/models.py:142
-#: libreosteoweb/models.py:211
+#: libreosteoweb/models.py:142 libreosteoweb/models.py:211
 msgid "Type"
 msgstr "Type"
 
-#: libreosteoweb/models.py:143
-#: templates/partials/examination.html:185
+#: libreosteoweb/models.py:143 templates/partials/examination.html:185
 msgid "Invoice"
 msgstr "Facture"
 
@@ -249,31 +228,26 @@ msgstr "Patient"
 msgid "Therapeut"
 msgstr "Thérapeute"
 
-#: libreosteoweb/models.py:158
-#: libreosteoweb/models.py:252
+#: libreosteoweb/models.py:158 libreosteoweb/models.py:252
 msgid "User"
 msgstr "Utilisateur"
 
-#: libreosteoweb/models.py:159
-#: libreosteoweb/models.py:212
+#: libreosteoweb/models.py:159 libreosteoweb/models.py:212
 #: templates/partials/timeline.html:34
 msgid "Comment"
 msgstr "Commentaire"
 
 #: libreosteoweb/models.py:161
-#| msgid "Examinations"
 msgid "Examination"
 msgstr "Consultation"
 
-#: libreosteoweb/models.py:174
-#: libreosteoweb/models.py:231
+#: libreosteoweb/models.py:174 libreosteoweb/models.py:231
 #: templates/partials/invoice-modal.html:27
 #: templates/partials/invoice-modal.html:29
 msgid "Amount"
 msgstr "Montant"
 
-#: libreosteoweb/models.py:175
-#: libreosteoweb/models.py:232
+#: libreosteoweb/models.py:175 libreosteoweb/models.py:232
 msgid "Currency"
 msgstr "Monnaie"
 
@@ -293,13 +267,11 @@ msgstr "Nom du thérapeute"
 msgid "Therapeut firstname"
 msgstr "Prénom du thérapeute"
 
-#: libreosteoweb/models.py:180
-#: libreosteoweb/models.py:251
+#: libreosteoweb/models.py:180 libreosteoweb/models.py:251
 msgid "Quality"
 msgstr "Qualité"
 
-#: libreosteoweb/models.py:181
-#: libreosteoweb/models.py:250
+#: libreosteoweb/models.py:181 libreosteoweb/models.py:250
 msgid "Adeli"
 msgstr "Adeli"
 
@@ -307,8 +279,7 @@ msgstr "Adeli"
 msgid "Location"
 msgstr "Lieu"
 
-#: libreosteoweb/models.py:183
-#: templates/partials/invoice-modal.html:61
+#: libreosteoweb/models.py:183 templates/partials/invoice-modal.html:61
 #: templates/partials/invoice-modal.html:62
 msgid "Number"
 msgstr "Numéro"
@@ -321,8 +292,7 @@ msgstr "Contenu"
 msgid "Footer"
 msgstr "Pied de page"
 
-#: libreosteoweb/models.py:193
-#: libreosteoweb/models.py:230
+#: libreosteoweb/models.py:193 libreosteoweb/models.py:230
 msgid "Siret"
 msgstr "Siret"
 
@@ -354,28 +324,23 @@ msgstr "Pied de page de facture"
 msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
-#: templates/404.html:257
-#: templates/index.html:259
+#: templates/404.html:257 templates/index.html:259
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/404.html:259
-#: templates/index.html:261
+#: templates/404.html:259 templates/index.html:261
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/404.html:262
-#: templates/index.html:264
+#: templates/404.html:262 templates/index.html:264
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/404.html:278
-#: templates/index.html:280
+#: templates/404.html:278 templates/index.html:280
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/404.html:290
-#: templates/index.html:292
+#: templates/404.html:290 templates/index.html:292
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -389,12 +354,20 @@ msgid "Registration"
 msgstr "Enregistrement"
 
 #: templates/account/create_admin_account.html:41
-msgid "In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application."
-msgstr "Afin d'utiliser Libreosteo, vous devez enregistrer un utilisateur et un mot de passe sur l'application. Veuillez les saisir avant d'utiliser l'application."
+msgid ""
+"In order to use Libreosteo, you have to register a login and password on the "
+"application. Please select it before to use the application."
+msgstr ""
+"Afin d'utiliser Libreosteo, vous devez enregistrer un utilisateur et un mot "
+"de passe sur l'application. Veuillez les saisir avant d'utiliser "
+"l'application."
 
 #: templates/account/create_admin_account.html:43
-msgid "Then you will be redirected to be identified with this login and password."
-msgstr "Ensuite vous serez dirigé afin d'être identifié avec ce nom d'utilisateur et mot de passe."
+msgid ""
+"Then you will be redirected to be identified with this login and password."
+msgstr ""
+"Ensuite vous serez dirigé afin d'être identifié avec ce nom d'utilisateur et "
+"mot de passe."
 
 #: templates/account/create_admin_account.html:45
 #: templates/account/login.html:35
@@ -425,7 +398,9 @@ msgstr "Identifiez-vous sur Libreosteo"
 
 #: templates/account/login.html:29
 msgid "Your username and password didn't match. Please try again."
-msgstr "Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez réessayer s'il vous plaît."
+msgstr ""
+"Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez "
+"réessayer s'il vous plaît."
 
 #: templates/account/login.html:34
 msgid "Please sign in"
@@ -459,8 +434,7 @@ msgstr "Année"
 msgid "New patients"
 msgstr "Nouveaux patients"
 
-#: templates/partials/dashboard.html:32
-#: templates/partials/dashboard.html:54
+#: templates/partials/dashboard.html:32 templates/partials/dashboard.html:54
 #: templates/partials/dashboard.html:98
 msgid "View Details"
 msgstr "Afficher les détails"
@@ -488,8 +462,7 @@ msgstr "Ajouter"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/partials/examination.html:16
-#: templates/partials/timeline.html:18
+#: templates/partials/examination.html:16 templates/partials/timeline.html:18
 msgid "Session of "
 msgstr "Séance du"
 
@@ -498,7 +471,7 @@ msgid "Close"
 msgstr "Clôturer"
 
 #: templates/partials/invoice-modal.html:3
-#: templates/partials/office-settings.html:61
+#: templates/partials/office-settings.html:64
 msgid "Invoicing"
 msgstr "Facturation"
 
@@ -540,18 +513,30 @@ msgstr "Valider"
 msgid "Office settings"
 msgstr "Paramètres du cabinet"
 
-#: templates/partials/office-settings.html:10
+#: templates/partials/office-settings.html:8
+#, fuzzy
+#| msgid "General state"
+msgid "General"
+msgstr "État général"
+
+#: templates/partials/office-settings.html:13
 msgid "Office"
 msgstr "Cabinet"
 
-#: templates/partials/office-settings.html:110
+#: templates/partials/office-settings.html:113
 #: templates/partials/user-profile.html:47
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/partials/office-settings.html:117
+#: templates/partials/office-settings.html:120
 msgid "Settings was updated"
 msgstr "Les paramètres ont été mis à jour"
+
+#: templates/partials/office-settings.html:122
+#, fuzzy
+#| msgid "User"
+msgid "Users"
+msgstr "Utilisateur"
 
 #: templates/partials/officeevent.html:5
 msgid "Events"
@@ -615,7 +600,6 @@ msgid "by"
 msgstr "par"
 
 #: templates/partials/timeline.html:29
-#| msgid "Comment"
 msgid "No comment"
 msgstr "Aucun commentaire"
 

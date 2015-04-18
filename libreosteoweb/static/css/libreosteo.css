@@ -113,3 +113,8 @@ pre {
     margin-top: -11px;
     float:right;
 }
+
+.usersGrid {
+    width: 800px;
+    height: 300px;
+}

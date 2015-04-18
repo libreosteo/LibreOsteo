@@ -45,7 +45,7 @@ Install Javascript dependencies with bower ::
 
 Initialize the database ::
 
-    python manage.py syncdb
+    python manage.py migrate
     
 It should ask for the administrator user.
 

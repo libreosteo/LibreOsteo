@@ -49,6 +49,8 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/dashboard', displays.display_dashboard),
     url(r'^web-view/partials/officeevent', displays.display_officeevent),
     url(r'^web-view/partials/invoice-modal', displays.display_invoicing),
+    url(r'^web-view/partials/add-user-modal', displays.display_adduser),
+    url(r'^web-view/partials/set-password-modal', displays.display_setpassword),
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

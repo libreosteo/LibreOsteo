@@ -5,7 +5,7 @@ officesettings.factory('OfficeSettingsServ', ['$resource',
         "use strict";
         return $resource('api/settings/:settingsId', null, {
             get : {method: 'GET', isArray : true},
-            save : {method : 'PUT'}
+            save : {method : 'PUT'},
         });
     }
 ]);
@@ -17,6 +17,8 @@ officesettings.factory('OfficeUsersServ', ['$resource',
       save : {method : 'PUT', params: {userId : 'userId'}},
       add : { method : 'POST'},
       query : { method : 'GET', isArray : true},
+      setpassword : {method : 'POST', params: {userId : 'userId'}, 
+        url : 'api/office-users/:userId/set_password'},
     });
   }
   ]);
@@ -30,9 +32,10 @@ officesettings.filter('true_false', function() {
               }
           });
 
+
 officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl', 
-  'OfficeSettingsServ', 'OfficeUsersServ', 'i18nService',
-    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, i18nService){
+  'OfficeSettingsServ', 'OfficeUsersServ', 'i18nService', '$modal',
+    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, i18nService, $modal){
         "use strict";
 
         i18nService.setCurrentLang('fr');
@@ -100,10 +103,100 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
         $scope.setPassword = function(entity)
         {
           console.log("Ask for change password for "+entity.username);
-        }
+          var modalInstance = $modal.open({
+                templateUrl: 'web-view/partials/set-password-modal',
+                controller : 'SetPasswordFormCtrl'
+          });
+          modalInstance.result.then(function (newPassword){
+            OfficeUsersServ.setpassword({userId : entity.id}, newPassword).
+              $promise.then( function(result)
+                {
+                  growl.addSuccessMessage("Le mot de passe a été modifié.")
+                },
+                  function(reason) {
+                    // Should display the error
+                    if(reason.data.detail) {
+                      growl.addErrorMessage(reason.data.detail);
+                    } else {
+                      growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
+                    }
+                  });
+                });
+        };
 
         $scope.addUser = function()
         {
-          console.log("Ask for adding user");
+          var modalInstance = $modal.open({
+                templateUrl: 'web-view/partials/add-user-modal',
+                controller : 'AddUserFormCtrl'
+          });
+          modalInstance.result.then(function (newUser){
+              OfficeUsersServ.add(newUser).$promise.then(function (data)
+                {
+                  OfficeUsersServ.setpassword({userId : data.id}, newUser).$promise.then(function (result)
+                  { 
+                    $scope.users.push(data);
+                  });
+                });
+          });
         }
 }]);
+
+officesettings.controller('AddUserFormCtrl', ['$scope', '$modalInstance', 'OfficeUsersServ', '$q',
+ function($scope, $modalInstance, OfficeUsersServ, $q) {
+    "use strict";
+    $scope.user = {
+        username : null,
+        password : null
+
+    };
+    $scope.ok = function () {
+      $modalInstance.close($scope.user);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.validateUsername = function(value)
+    {
+
+      var deferred = $q.defer();
+
+      OfficeUsersServ
+        .query(function(data) { 
+
+            var user = data.find(function(element, index, array)
+            {
+                return element.username == value;
+            });
+            if (user !== undefined)
+            {
+              deferred.reject(false);
+            } else {
+              deferred.resolve(true)
+            }
+      });
+
+      return deferred.promise;
+    };
+}
+]);
+
+officesettings.controller('SetPasswordFormCtrl', ['$scope', '$modalInstance',
+ function($scope, $modalInstance) {
+    "use strict";
+    $scope.field = {
+      password : null
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.field);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+}
+]);
+

@@ -91,3 +91,9 @@ def display_invoicing(request):
 def display_officesettings(request):
     displayOfficeSettings = OfficeSettingsDisplay()
     return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
+
+def display_adduser(request):
+    return render_to_response('partials/add-user-modal.html', {})
+
+def display_setpassword(request):
+    return render_to_response('partials/set-password-user-modal.html', {})

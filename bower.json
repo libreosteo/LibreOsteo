@@ -24,10 +24,10 @@
     "angular-loading-bar": "0.6.x",
     "webshim": "1.15.x",
     "angular-ui-router": "0.2.x",
-    "angular-toArrayFilter" : "1.x.x",
-    "angular-ui-utils" : "0.2.x"
+    "angular-toArrayFilter": "1.x.x",
+    "angular-ui-utils": "0.2.x"
   },
   "resolutions": {
-    "angular": "1.2.29-build.589+sha.14c50a1"
+    "angular": "1.2.28"
   }
 }

@@ -297,16 +297,14 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
             return Response({})
 
     def perform_create(self, serializer):
-        self.update_instance(serializer)
-
-    def perform_update(self, serializer):
-        self.update_instance(serializer)
-
-    def update_instance(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
+        serializer.save(user=self.request.user)
 
-        if not serializer.validated_data.user:
+    def perform_update(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        if not serializer.instance.user :
             serializer.save(user=self.request.user)
 
 class ExaminationCommentViewSet(viewsets.ModelViewSet):

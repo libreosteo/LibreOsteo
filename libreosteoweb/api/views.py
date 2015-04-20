@@ -30,7 +30,7 @@ from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 
 
 # Get an instance of a logger
@@ -48,6 +48,8 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
     """
     Displays the login form and handles the login action.
     """
+    if len(User.objects.filter(is_staff__exact=True)) > 0 :
+        return HttpResponseNotFound()
     redirect_to = request.POST.get(redirect_field_name,
     request.GET.get(redirect_field_name, ''))
     if request.method == "POST":

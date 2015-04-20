@@ -102,7 +102,6 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
         $scope.setPassword = function(entity)
         {
-          console.log("Ask for change password for "+entity.username);
           var modalInstance = $modal.open({
                 templateUrl: 'web-view/partials/set-password-modal',
                 controller : 'SetPasswordFormCtrl'

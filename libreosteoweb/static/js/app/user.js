@@ -6,6 +6,8 @@ user.factory('UserServ', ['$resource',
         return $resource('api/users/:userId', null, {
             get : {method: 'GET', params: {userId: 'user'}},
             'update' : {method : 'PUT' , params : {userId : 'userId'}},
+            setpassword : {method : 'POST', params: {userId : 'userId'}, 
+                    url : 'api/office-users/:userId/set_password'},
         });
     }
 ]);
@@ -22,8 +24,8 @@ user.factory('TherapeutSettingsServ', ['$resource',
   }
 ]);
 
-user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSettingsServ', 'growl',
-    function($scope, $http, UserServ, TherapeutSettingsServ, growl){
+user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSettingsServ', 'growl','$modal',
+    function($scope, $http, UserServ, TherapeutSettingsServ, growl, $modal){
         "use strict";
         $scope.userid = null;
 
@@ -59,4 +61,42 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
                             })
             });
           }
-}]);
+        $scope.setPassword = function()
+        {
+          var modalInstance = $modal.open({
+                templateUrl: 'web-view/partials/set-password-modal',
+                controller : 'SetPasswordFormCtrl'
+          });
+          modalInstance.result.then(function (newPassword){
+            UserServ.setpassword({userId : $scope.userid}, newPassword).
+              $promise.then( function(result)
+                {
+                  growl.addSuccessMessage("Le mot de passe a été modifié.")
+                },
+                  function(reason) {
+                    // Should display the error
+                    if(reason.data.detail) {
+                      growl.addErrorMessage(reason.data.detail);
+                    } else {
+                      growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
+                    }
+                  });
+                });
+        }
+}])
+.controller('SetPasswordFormCtrl', ['$scope', '$modalInstance',
+ function($scope, $modalInstance) {
+    "use strict";
+    $scope.field = {
+      password : null
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.field);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+    };
+}
+]);

@@ -31,6 +31,7 @@ from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseNotFound
+from datetime import datetime
 
 
 # Get an instance of a logger
@@ -99,20 +100,25 @@ class PatientViewSet(viewsets.ModelViewSet):
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
         examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
-        return Response(apiserializers.ExaminationSerializer(examinations, many=True).data)
+        return Response(apiserializers.ExaminationExtractSerializer(examinations, many=True).data)
 
-    def pre_save(self, obj):
-        """ Set the user which perform the operation as the currently logged user"""
-        if not self.request.user.is_authenticated():
-            raise Http404()
-        obj.set_user_operation(self.request.user)
+    def perform_create(self, serializer):
+        instance = models.Patient(**serializer.validated_data)
+        instance.set_user_operation(self.request.user)
+        instance.full_clean()
+        instance.save()
+        serializer.instance = instance
 
+    def perform_update(self, serializer):
+        serializer.instance.set_user_operation(self.request.user)
+        return super(PatientViewSet, self).perform_update(serializer)
 
 
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
     model = models.RegularDoctor
     queryset = models.RegularDoctor.objects.all()
+    serializer_class = apiserializers.RegularDoctorSerializer
 
 
 
@@ -121,6 +127,7 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = models.Examination
     queryset = models.Examination.objects.all()
+    serializer_class = apiserializers.ExaminationSerializer
 
 
     @detail_route(methods=['POST'])
@@ -183,12 +190,16 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.save()
         return invoice
 
-    def pre_save(self, obj):
+    def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
+        serializer.save(therapeut=self.request.user)
 
-        if not obj.therapeut:
-            setattr(obj, 'therapeut', self.request.user)
+    def perform_update(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        if not serializer.instance.therapeut :
+            serializer.save(therapeut=self.request.user)
 
     @detail_route(methods=['GET'])
     def comments(self, request, pk=None):
@@ -285,17 +296,25 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
         else:
             return Response({})
 
-    def pre_save(self, obj):
+    def perform_create(self, serializer):
+        self.update_instance(serializer)
+
+    def perform_update(self, serializer):
+        self.update_instance(serializer)
+
+    def update_instance(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
 
-        if not obj.user:
-            setattr(obj, 'user', self.request.user)
+        if not serializer.validated_data.user:
+            serializer.save(user=self.request.user)
 
 class ExaminationCommentViewSet(viewsets.ModelViewSet):
     model = models.ExaminationComment
     serializer_class = apiserializers.ExaminationCommentSerializer
     queryset = models.ExaminationComment.objects.all()
 
-    def pre_save(self, obj):
-        setattr(obj, 'user', self.request.user)
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        serializer.save(user=self.request.user,date=datetime.today())

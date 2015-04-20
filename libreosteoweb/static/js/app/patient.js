@@ -7,7 +7,7 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ',
         var serv = $resource('api/patients/:patientId', null, {
             query: {method: 'GET' },
             get : {method: 'GET', params: {patientId: 'patient'}},
-            save : {method : 'PUT'},
+            save : {method : 'PUT', params : {patientId : 'patientId'}},
             add : {method : 'POST'}
         });
 
@@ -410,8 +410,10 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'P
             function(data)
             {
                 // Should display the error
-                if(data.data.detail) {
-                    growl.addErrorMessage(data.data.detail);
+                if(data.data.birth_date && data.data.birth_date.birth_date) {
+                    growl.addErrorMessage(data.data.birth_date.birth_date);
+                } else if (data.data.non_field_errors){
+                    growl.addErrorMessage(data.data.non_field_errors);
                 } else {
                     growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
                 }

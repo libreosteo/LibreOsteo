@@ -59,15 +59,10 @@ timeline.directive('timeline', function()
             examination : examinationId,
            };
            CommentServ.save(data, function(result) {
-              console.log(angular.toJson(result));
               var examination = $scope.examinations.find(function(element, index, array)
               {
                 return element.id == examinationId;
               });
-              if (!result.date.endsWith('Z'))
-              {
-                result.date += 'Z';
-              }
               examination.comments_list.unshift(result);
               examination.comments = examination.comments_list.length;
            });

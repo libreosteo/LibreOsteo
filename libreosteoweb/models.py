@@ -22,7 +22,7 @@ class RegularDoctor(models.Model):
         """
         family_name = models.CharField(_('Family name'), max_length=200)
         first_name = models.CharField(_('Firstname'), max_length=200)
-        phone = models.CharField(_('Phone'), max_length=100, blank=True)
+        phone = models.CharField(_('Phone'), max_length=100, blank=True,null=True)
         city = models.CharField(_('City'), max_length=200, blank=True)
 
         def __unicode__(self):
@@ -63,28 +63,7 @@ class Patient(models.Model):
         def __unicode__(self):
                 return "%s %s by %s" % (self.family_name, self.first_name, self.current_user_operation)
 
-        def validate_unique(self, *args, **kwargs):
-            super(Patient, self).validate_unique(*args, **kwargs)
-            found = Patient.objects.filter(family_name__iexact=self.family_name)\
-                    .filter( first_name__iexact=self.first_name )\
-                    .filter( birth_date__iexact=self.birth_date )\
-                    .exclude( id = self.id)\
-                    .exists()
-            if found:
-                raise ValidationError(
-                    {
-                        NON_FIELD_ERRORS:
-                        _('This patient already exists')
-                    }
-                )
-
         def clean(self):
-            if self.birth_date > date.today():
-                raise ValidationError({
-                    'birth_date' :
-                        _('Birth date is invalid')
-                })
-
             if self.creation_date is None:
                 self.creation_date = date.today()
 
@@ -160,9 +139,6 @@ class ExaminationComment(models.Model):
     date = models.DateTimeField(_('Date'), null=True, blank=True)
     examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
 
-    def clean(self):
-        if self.date is None:
-            self.date = datetime.today()
 
 
 class Invoice(models.Model):

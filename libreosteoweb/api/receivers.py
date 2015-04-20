@@ -2,7 +2,10 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from ..models import OfficeEvent, Patient, Examination
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Patient)

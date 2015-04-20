@@ -1,18 +1,33 @@
-from rest_framework import serializers
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment
+from rest_framework import serializers, validators
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from datetime import date
 
 
 class WithPkMixin(object):
     def get_pk_field(self, model_field):
         return self.get_field(model_field)
 
+def check_birth_date(value):
+    if value > date.today():
+        raise serializers.ValidationError({
+            'birth_date' :
+                _('Birth date is invalid')
+        })
 
-class PatientSerializer (WithPkMixin, serializers.HyperlinkedModelSerializer):
+class PatientSerializer (serializers.ModelSerializer):
+    current_user_operation = None
+    birth_date = serializers.DateField(label=_('Birth date'), validators=[check_birth_date] )
     class Meta:
         model = Patient
-    
+        validators = [
+            validators.UniqueTogetherValidator(
+                queryset=Patient.objects.all(),
+                fields=('family_name', 'first_name', 'birth_date'),
+                message = _('This patient already exists'),
+            )
+        ]
 
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta :
@@ -28,8 +43,12 @@ class UserInfoSerializer(serializers.ModelSerializer):
         #    user.set_password(attrs['password'])
         #return user
 
-class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
-    therapeut = UserInfoSerializer(source = 'therapeut')
+class RegularDoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RegularDoctor
+
+class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
+    therapeut = UserInfoSerializer()
     comments = serializers.SerializerMethodField('get_nb_comments')
     class Meta:
         model = Examination
@@ -39,17 +58,21 @@ class ExaminationSerializer(WithPkMixin, serializers.ModelSerializer):
     def get_nb_comments(self, obj):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
 
+class ExaminationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Examination
+
 
 class CheckSerializer(serializers.Serializer):
-    bank = serializers.CharField(required=False)
-    payer = serializers.CharField(required=False)
-    number = serializers.CharField(required=False)
+    bank = serializers.CharField(required=False, allow_null=True)
+    payer = serializers.CharField(required=False, allow_null=True)
+    number = serializers.CharField(required=False, allow_null=True)
 
 class ExaminationInvoicingSerializer(serializers.Serializer):
     status = serializers.CharField(required=True)
-    reason = serializers.CharField(required=False)
-    paiment_mode = serializers.CharField(required=False)
-    amount = serializers.FloatField(required=False)
+    reason = serializers.CharField(required=False, allow_null=True)
+    paiment_mode = serializers.CharField(required=False, allow_null=True)
+    amount = serializers.FloatField(required=False, allow_null=True)
     check = CheckSerializer()
 
     def validate(self, attrs):
@@ -77,7 +100,7 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
 
 
 class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
-    user_info = UserInfoSerializer(source="user", required=False)
+    user_info = UserInfoSerializer(source="user", required=False, read_only=True)
     class Meta:
         model = ExaminationComment
 

@@ -8,7 +8,7 @@ import cherrypy
 from cherrypy.process import wspbus, plugins
 from cherrypy import _cplogging, _cperror
 from django.conf import settings
-from Libreosteo.wsgi import application
+from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 import webbrowser
 

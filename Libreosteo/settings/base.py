@@ -2,15 +2,15 @@
 Django settings for Libreosteo project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
+https://docs.djangoproject.com/en/1.7/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
+https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os,sys,logging
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 if getattr(sys, 'frozen', False):
     SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
     DATA_FOLDER = SITE_ROOT
@@ -26,7 +26,7 @@ else:
 from django.utils.translation import ugettext_lazy as _
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8xmh#fjyiamw^-_ro9m29^6^81^kc!aiczp)gvb#7with$dzb6'
@@ -41,6 +41,8 @@ ALLOWED_HOSTS = ['*']
 LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'))
 
 APPEND_SLASH = False
+
+DEMONSTRATION = False
 
 
 # Application definition

@@ -1,6 +1,6 @@
 import sys, glob, os
 
-VERSION = "0.2.2beta"
+VERSION = "0.3"
 
 
 
@@ -36,7 +36,7 @@ if sys.platform in ['win32']:
     # console application).
     base='Console'
     def get_djangolocale():
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings.standalone")
         import django
         directory = os.path.join(django.__path__[0], 'conf', 'locale')
         return [(directory, 'django/conf/locale')]

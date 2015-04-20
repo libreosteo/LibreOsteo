@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-16 08:09+0000\n"
-"PO-Revision-Date: 2015-04-16 10:11+0100\n"
+"POT-Creation-Date: 2015-04-19 19:30+0200\n"
+"PO-Revision-Date: 2015-04-19 20:09+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: \n"
@@ -16,6 +16,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: Libreosteo/settings.py:140
+msgid "French"
+msgstr "Français"
+
+#: Libreosteo/settings.py:141
+msgid "English"
+msgstr "Anglais"
 
 #: libreosteoweb/api/receivers.py:14
 msgid "New patient created"
@@ -261,7 +269,6 @@ msgid "Comment"
 msgstr "Commentaire"
 
 #: libreosteoweb/models.py:161
-#| msgid "Examinations"
 msgid "Examination"
 msgstr "Consultation"
 
@@ -355,27 +362,27 @@ msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
 #: templates/404.html:257
-#: templates/index.html:259
+#: templates/index.html:260
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
 #: templates/404.html:259
-#: templates/index.html:261
+#: templates/index.html:262
 msgid "Settings"
 msgstr "Paramètres"
 
 #: templates/404.html:262
-#: templates/index.html:264
+#: templates/index.html:265
 msgid "Logout"
 msgstr "Déconnexion"
 
 #: templates/404.html:278
-#: templates/index.html:280
+#: templates/index.html:281
 msgid "Search..."
 msgstr "Recherche..."
 
 #: templates/404.html:290
-#: templates/index.html:292
+#: templates/index.html:293
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -403,6 +410,12 @@ msgstr "Votre nom d'utilisateur"
 
 #: templates/account/create_admin_account.html:46
 #: templates/account/login.html:36
+#: templates/partials/add-user-modal.html:17
+#: templates/partials/add-user-modal.html:19
+#: templates/partials/add-user-modal.html:25
+#: templates/partials/set-password-user-modal.html:9
+#: templates/partials/set-password-user-modal.html:11
+#: templates/partials/set-password-user-modal.html:17
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -438,6 +451,35 @@ msgstr "Identification"
 #: templates/partials/add-patient.html:35
 msgid "Init the patient file"
 msgstr "Initialiser la fiche patient"
+
+#: templates/partials/add-user-modal.html:3
+msgid "Add user in the office"
+msgstr "Ajouter un utilisateur au cabinet"
+
+#: templates/partials/add-user-modal.html:9
+#: templates/partials/add-user-modal.html:11
+#| msgid "User"
+msgid "Username"
+msgstr "Nom utilisateur"
+
+#: templates/partials/add-user-modal.html:23
+#: templates/partials/set-password-user-modal.html:15
+#| msgid "Confirm password"
+msgid "Confirm the password"
+msgstr "Confirmation du mot de passe"
+
+#: templates/partials/add-user-modal.html:31
+#: templates/partials/invoice-modal.html:68
+#: templates/partials/set-password-user-modal.html:23
+msgid "Validate"
+msgstr "Valider"
+
+#: templates/partials/add-user-modal.html:32
+#: templates/partials/doctor-modal-add.html:26
+#: templates/partials/invoice-modal.html:69
+#: templates/partials/set-password-user-modal.html:24
+msgid "Cancel"
+msgstr "Annuler"
 
 #: templates/partials/dashboard.html:3
 msgid "Dashboard"
@@ -483,11 +525,6 @@ msgstr "Ajouter un médecin"
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/partials/doctor-modal-add.html:26
-#: templates/partials/invoice-modal.html:69
-msgid "Cancel"
-msgstr "Annuler"
-
 #: templates/partials/examination.html:16
 #: templates/partials/timeline.html:18
 msgid "Session of "
@@ -498,7 +535,7 @@ msgid "Close"
 msgstr "Clôturer"
 
 #: templates/partials/invoice-modal.html:3
-#: templates/partials/office-settings.html:61
+#: templates/partials/office-settings.html:64
 msgid "Invoicing"
 msgstr "Facturation"
 
@@ -532,26 +569,37 @@ msgstr "Banque"
 msgid "Payer"
 msgstr "Émetteur"
 
-#: templates/partials/invoice-modal.html:68
-msgid "Validate"
-msgstr "Valider"
-
 #: templates/partials/office-settings.html:3
 msgid "Office settings"
 msgstr "Paramètres du cabinet"
 
-#: templates/partials/office-settings.html:10
+#: templates/partials/office-settings.html:8
+#| msgid "General state"
+msgid "General"
+msgstr "Général"
+
+#: templates/partials/office-settings.html:13
 msgid "Office"
 msgstr "Cabinet"
 
-#: templates/partials/office-settings.html:110
+#: templates/partials/office-settings.html:113
 #: templates/partials/user-profile.html:47
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: templates/partials/office-settings.html:117
+#: templates/partials/office-settings.html:120
 msgid "Settings was updated"
 msgstr "Les paramètres ont été mis à jour"
+
+#: templates/partials/office-settings.html:122
+#| msgid "User"
+msgid "Users"
+msgstr "Utilisateurs"
+
+#: templates/partials/office-settings.html:127
+#| msgid "user"
+msgid "Add user"
+msgstr "Ajouter un utilisateur"
 
 #: templates/partials/officeevent.html:5
 msgid "Events"
@@ -606,6 +654,11 @@ msgstr "Précédent"
 msgid "Next"
 msgstr "Suivant"
 
+#: templates/partials/set-password-user-modal.html:3
+#| msgid "Confirm password"
+msgid "Change password"
+msgstr "Modifier le mot de passe"
+
 #: templates/partials/timeline.html:6
 msgid "Start an examination"
 msgstr "Démarrer une consultation"
@@ -615,7 +668,6 @@ msgid "by"
 msgstr "par"
 
 #: templates/partials/timeline.html:29
-#| msgid "Comment"
 msgid "No comment"
 msgstr "Aucun commentaire"
 

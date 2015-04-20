@@ -3,6 +3,11 @@ from django.forms.models import ModelForm
 from libreosteoweb import models 
 from django.contrib.auth.models import User
 
+# import the logging library
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 def filter_fields(f):
     return f is not None and f.formfield() is not None
@@ -85,4 +90,10 @@ def display_invoicing(request):
 
 def display_officesettings(request):
     displayOfficeSettings = OfficeSettingsDisplay()
-    return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields})
+    return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
+
+def display_adduser(request):
+    return render_to_response('partials/add-user-modal.html', {})
+
+def display_setpassword(request):
+    return render_to_response('partials/set-password-user-modal.html', {})

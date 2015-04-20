@@ -23,6 +23,7 @@ else:
     SITE_ROOT = BASE_DIR
     DATA_FOLDER = SITE_ROOT
 
+from django.utils.translation import ugettext_lazy as _
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -37,7 +38,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOCALE_PATHS = (os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'),)
+LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'))
 
 APPEND_SLASH = False
 
@@ -53,13 +54,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'haystack',
     'libreosteoweb',
-    'rest_framework',
     'django_filters',
     'statici18n',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -132,9 +134,14 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'fr-FR'
+LANGUAGE_CODE = 'fr'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = (
+    ('fr', _('French')),
+    ('en', _('English')),
+    )
+
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
@@ -214,6 +221,10 @@ LOGGING = {
             'propagate': False,
         },
         'libreosteoweb': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'libreosteoweb.api':{
             'handlers': ['console'],
             'level': 'INFO',
         }

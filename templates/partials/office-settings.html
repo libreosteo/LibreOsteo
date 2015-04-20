@@ -3,6 +3,9 @@
     {% trans 'Office settings' %}
 </h1>
 
+<tabset>
+
+<tab heading="{% trans 'General' %}">
 <div class="container-fluid">
     <div class="row">
             <form novalidate name="form">
@@ -115,3 +118,19 @@
 </div>
 
 <div id="update-info" ng-hide="true">{% trans 'Settings was updated' %}</div>
+</tab>
+<tab heading="{% trans 'Users'%}" ng-if="'{{user.is_staff}}' == 'True'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-primary"
+                        ng-click="addUser()">{% trans 'Add user' %}</button>
+
+            </div>
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-edit ui-grid-cellnav class="usersGrid"></div>
+            </div>
+        </div>
+    </div>
+</tab>
+</tabset>

@@ -86,8 +86,8 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeEvent
 
-    patient_name = serializers.SerializerMethodField('get_patient_name')
-    translated_comment = serializers.SerializerMethodField('get_translated_comment')
+    patient_name = serializers.SerializerMethodField()
+    translated_comment = serializers.SerializerMethodField()
     therapeut_name = UserInfoSerializer(source = 'user')
 
     def get_patient_name(self, obj):
@@ -111,3 +111,15 @@ class TherapeutSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeSettings
+
+
+
+class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'is_staff', 'is_active')
+
+class PasswordSerializer(serializers.Serializer):
+     password = serializers.CharField(
+        required=False
+     )

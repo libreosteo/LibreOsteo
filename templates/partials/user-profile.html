@@ -28,6 +28,8 @@
                 <input type="text" class="form-control  input-lg" ng-model="user.email" required
                        name="email" placeholder="{{ user.email }}">
             </div>
+
+            <button class="btn btn-default" ng-click="setPassword()">{% trans 'Change password'%}</button>
             <hr/>
             <div class="form-horizontal">
                 <div class="form-group">

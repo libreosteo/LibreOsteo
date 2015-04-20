@@ -76,11 +76,12 @@
                     <hr/>
                     <div class="row">
                         <div class="col-md-6">
-                            {{ patient.job }} :<inlineedit class="row col-md-12" model="patient" property="job" on-save="savePatient()"
+                            <p>{{ patient.job }} :</p>
+                            <inlineedit class="row col-md-12" model="patient" property="job" on-save="savePatient()"
                             placeholder="{{ patient.job }}" width="200px"></inlineedit>
                         </div>
                         <div class="col-md-6">
-                            {{ patient.hobbies }} :<inlinetextarea model="patient" property="hobbies" on-save="savePatient()"
+                            <p>{{ patient.hobbies }} :</p><inlinetextarea model="patient" property="hobbies" on-save="savePatient()"
                             placeholder="{{ patient.hobbies }}"
                             row="5" col="15"></inlinetextarea>
                         </div>

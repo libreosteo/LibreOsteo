@@ -200,6 +200,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             raise Http404()
         if not serializer.instance.therapeut :
             serializer.save(therapeut=self.request.user)
+        serializer.save(therapeut=serializer.instance.therapeut)
 
     @detail_route(methods=['GET'])
     def comments(self, request, pk=None):
@@ -306,6 +307,7 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
             raise Http404()
         if not serializer.instance.user :
             serializer.save(user=self.request.user)
+        serializer.save(user=serializer.instance.user)
 
 class ExaminationCommentViewSet(viewsets.ModelViewSet):
     model = models.ExaminationComment

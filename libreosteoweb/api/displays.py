@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.forms.models import ModelForm
 from libreosteoweb import models 
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # import the logging library
 import logging
@@ -77,7 +78,8 @@ def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
     return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields, 
-        'therapeutsettings': displayTherapeutSettings.display_fields})
+        'therapeutsettings': displayTherapeutSettings.display_fields,
+        'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):
     return render_to_response('partials/dashboard.html', {})

@@ -27,6 +27,9 @@
     <!-- InlineEdit component -->
     <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
     <!-- compatibility for date input with all browsers -->
+
+    <link href="{{ STATIC_URL }}bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.css" />
     
 
 </head>
@@ -250,13 +253,13 @@
 </li> -->
 <!-- /.dropdown -->
 <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
         <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
     </a>
     <ul class="dropdown-menu dropdown-user">
-        <li><a ui-sref="user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
+        <li id="user-profile"><a ui-sref="user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
         </li>
-        <li><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
+        <li id="office-settings"><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
         </li>
         <li class="divider"></li>
         <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
@@ -399,7 +402,7 @@
 <!-- /#wrapper -->
 
 <!-- Core Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/jquery-1.11.0.js"></script>
+<script src="{{ STATIC_URL }}bower_components/jquery/dist/jquery.min.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 
 <!-- Page-Level Plugin Scripts - Blank -->
@@ -431,6 +434,8 @@
 <script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-ui-utils/ui-utils.js"></script>
+<script src="{{ STATIC_URL }}bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
+<script src="{{ STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.js"></script>
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>
@@ -445,6 +450,8 @@
 <script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
 <script src="{{ STATIC_URL }}js/app/officeevent.js"></script>
 <script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
+
+<script src="{{ STATIC_URL }}js/app/tour.js"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

@@ -31,3 +31,19 @@ function formatGrowlError(obj) {
     }
     return result;
 }
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+Array.prototype.find = function(predicate, thisArg) {
+    "use strict";
+    //TODO: Check predicate is a function.
+    var lastValue;
+    if(!Array.prototype.some.call(this, function(val, index, arr) {
+        return predicate.call(thisArg, lastValue = val, index, arr);
+    })) {
+        return;
+    }
+    return lastValue;
+}

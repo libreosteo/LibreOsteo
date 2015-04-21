@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from re import compile
- 
+from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
  
  
@@ -10,6 +10,9 @@ def get_login_url():
 
 def get_logout_url():
     return reverse(settings.LOGOUT_URL_NAME)
+
+def initialize_admin_url():
+    return reverse(settings.INITIALIZE_ADMIN_URL_NAME)
  
  
 def get_exempts():
@@ -36,6 +39,16 @@ class LoginRequiredMiddleware(object):
  'django.contrib.auth.middlware.AuthenticationMiddleware'. If that\
  doesn't work, ensure your TEMPLATE_CONTEXT_PROCESSORS setting includes\
  'django.core.context_processors.auth'."
+
+        match_install = compile(initialize_admin_url().lstrip('/'))
+
+        UserModel = get_user_model()
+        if UserModel.objects.all().count() == 0 :
+            if not match_install.match(request.path.lstrip('/')):
+                return HttpResponseRedirect(initialize_admin_url())
+            else :
+                return
+
         if not request.user.is_authenticated():
             path = request.path.lstrip('/')
             if get_logout_url().lstrip('/') == path :

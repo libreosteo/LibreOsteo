@@ -24,8 +24,11 @@
     "angular-loading-bar": "0.6.x",
     "webshim": "1.15.x",
     "angular-ui-router": "0.2.x",
-    "angular-toArrayFilter": "1.x.x",
-    "angular-ui-utils": "0.2.x"
+    "angular-toArrayFilter" : "1.x.x",
+    "angular-ui-utils" : "0.2.x",
+    "bootstrap" : "latest",
+    "bootstrap-tour" : "latest",
+    "angular-ui-grid" : "latest"
   },
   "resolutions": {
     "angular": "1.2.28"

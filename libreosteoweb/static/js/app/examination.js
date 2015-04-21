@@ -18,6 +18,20 @@ examination.factory('ExaminationServ', ['$resource',
     }
 ]);
 
+examination.factory('ExaminationCommentServ', ['$resource',
+    function ($resource) {
+        return $resource('api/examinations/:examinationId/comments', null, {
+            query : { method : 'GET', isArray : true},
+        });
+    }
+    ]);
+
+examination.factory('CommentServ', ['$resource', 
+    function($resource) {
+        return $resource('api/comments', null)
+    }
+    ]);
+
 examination.controller('ExaminationCtrl', ['$scope', '$routeParams', 'ExaminationServ', function ($scope, $routeParams, DoctorServ) {
         "use strict";
         $scope.examination = ExaminationServ.get({examinationId : $routeParams.examinationId});

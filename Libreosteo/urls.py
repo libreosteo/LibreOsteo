@@ -23,6 +23,8 @@ router.register(r'events', views.OfficeEventViewSet)
 router.register(r'invoices', views.InvoiceViewSet)
 router.register(r'settings', views.OfficeSettingsView)
 router.register(r'profiles', views.TherapeutSettingsViewSet)
+router.register(r'comments', views.ExaminationCommentViewSet)
+router.register(r'office-users', views.UserOfficeViewSet)
 
 urlpatterns = patterns('',
     # Examples:
@@ -31,6 +33,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'account/login.html'}, name='accounts-login'),
     url(r'^accounts/logout', 'django.contrib.auth.views.logout', {'template_name' : 'account/login.html'}, name="accounts-logout"),
+    url(r'^accounts/create-admin/$', views.create_admin_account, name='accounts-create-admin'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/statistics[/]?$', views.StatisticsView.as_view(), name='statistics_view'),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
@@ -46,6 +49,8 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/dashboard', displays.display_dashboard),
     url(r'^web-view/partials/officeevent', displays.display_officeevent),
     url(r'^web-view/partials/invoice-modal', displays.display_invoicing),
+    url(r'^web-view/partials/add-user-modal', displays.display_adduser),
+    url(r'^web-view/partials/set-password-modal', displays.display_setpassword),
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,47 +1,29 @@
+"""
+Requires Mark Hammond's pywin32 package.
+"""
+
 # Python stdlib imports
 import sys
 import logging
 import os, os.path
+
+if getattr(sys, 'frozen', False):
+        # frozen
+        dir = os.path.dirname(sys.executable)
+        sys.path.append(dir)
+        os.environ['PATH'] = (os.environ['PATH']+";").join(p+";" for p in sys.path)
+        print sys.path
+        print os.environ['PATH']
  
 # Third-party imports
 import cherrypy
+import win32serviceutil
+import win32service
 from cherrypy.process import wspbus, plugins
 from cherrypy import _cplogging, _cperror
 from django.conf import settings
-from Libreosteo.standalone import application
+from Libreosteo.wsgi import application
 from django.http import HttpResponseServerError
-import webbrowser
-
-SERVER_PORT = 8080
-
-def _exit(self):
-    """Stop all services and prepare to exit the process."""
-    exitstate = self.state
-    try:
-        self.stop()
-
-        self.state = states.EXITING
-        self.log('Bus EXITING')
-        self.publish('exit')
-        # This isn't strictly necessary, but it's better than seeing
-        # "Waiting for child threads to terminate..." and then nothing.
-        self.log('Bus EXITED')
-    except:
-        # This method is often called asynchronously (whether thread,
-        # signal handler, console handler, or atexit handler), so we
-        # can't just let exceptions propagate out unhandled.
-        # Assume it's been logged and just die.
-        return  # EX_SOFTWARE
-
-    if exitstate == states.STARTING:
-        # exit() was called before start() finished, possibly due to
-        # Ctrl-C because a start listener got stuck. In this case,
-        # we could get stuck in a loop where Ctrl-C never exits the
-        # process, so we just call os.exit here.
-        return
-
-original_exit = cherrypy.process.wspbus.Bus.exit
-cherrypy.process.wspbus.Bus.exit = _exit
  
 class Server(object):
     def __init__(self):
@@ -55,25 +37,15 @@ class Server(object):
         # play nicely with the process bus that is the engine.
         DjangoAppPlugin(cherrypy.engine, self.base_dir).subscribe()
  
-    def run(self, callback=None):
+    def run(self):
         engine = cherrypy.engine
-        cherrypy.config.update({'server.socket_port': SERVER_PORT})
         engine.signal_handler.subscribe()
  
         if hasattr(engine, "console_control_handler"):
             engine.console_control_handler.subscribe()
-    
-        try :
-            engine.start()
-        except :
-            pass
-
-
-        if callback :
-            callback()
-
-        if engine.state == cherrypy.engine.states.STARTED:
-            engine.block()
+ 
+        engine.start()
+        engine.block()
  
 class DjangoAppPlugin(plugins.SimplePlugin):
     def __init__(self, bus, base_dir):
@@ -154,17 +126,54 @@ class HTTPLogger(_cplogging.LogManager):
             self.access_log.log(logging.INFO, self.access_log_format % atoms)
         except:
             self.error(traceback=True)
+     
 
-def callback_server_started():
-    """
-    This function is called when the server is started.
-    If an instance is already running, the callback
-    is called too
-    """
-    webbrowser.open("http://localhost:%s/"%(SERVER_PORT), new=2,autoraise=True)
+class LibreosteoService(win32serviceutil.ServiceFramework):
+    """Libreosteo NT Service."""
+    
+    _svc_name_ = "LibreosteoService"
+    _svc_display_name_ = "Libreosteo Service"
 
+    def SvcDoRun(self):
+        server = Server()
+        
+
+        # in practice, you will want to specify a value for
+        # log.error_file below or in your config file.  If you
+        # use a config file, be sure to use an absolute path to
+        # it, as you can't be assured what path your service
+        # will run in.
+        cherrypy.config.update({
+            'global':{
+                'log.screen': False,
+                'engine.autoreload.on': False,
+                'engine.SIGHUP': None,
+                'engine.SIGTERM': None,
+                'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
+                'tools.log_tracebacks.on' : True,
+                'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
+                'server.socket_port': 80,
+                }
+            })
+        server.run()
+        
+        
+    def SvcStop(self):
+        self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
+        cherrypy.engine.exit()
+        
+        self.ReportServiceStatus(win32service.SERVICE_STOPPED) 
+        # very important for use with py2exe
+        # otherwise the Service Controller never knows that it is stopped !
+        
 if __name__ == '__main__':
-    if sys.platform not in ['win32']:
-        Server().run(callback_server_started)
-    else :
-        Server().run()
+    if getattr(sys, 'frozen', False):
+        # frozen
+        dir = os.path.dirname(sys.executable)
+    else:
+        # unfrozen
+        dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(dir)
+    cherrypy.log(os.getcwd())
+    print os.getcwd()
+    win32serviceutil.HandleCommandLine(LibreosteoService)

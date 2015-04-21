@@ -74,6 +74,9 @@
     border-bottom: 14px solid transparent;
     border-left: 14px solid #fff;
 }
+.timeline > li > .timeline-panel-footer {
+    
+}
 
 .timeline > li > .timeline-badge {
     z-index: 100;
@@ -141,4 +144,13 @@
 
 .timeline-body > p + p {
     margin-top: 5px;
+}
+.timeline-footer >p {
+    float : right;
+}
+.timeline-footer > p:hover {
+    text-decoration: underline;
+}
+.timeline-panel-footer {
+    clear: both;
 }

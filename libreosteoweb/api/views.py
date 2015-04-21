@@ -3,32 +3,76 @@ from rest_framework import viewsets, filters
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb import models 
-from rest_framework.decorators import action, detail_route, list_route
-from libreosteoweb.api.serializers import PatientSerializer, ExaminationSerializer, UserInfoSerializer, ExaminationInvoicingSerializer, OfficeEventSerializer, TherapeutSettingsSerializer
+from rest_framework.decorators import  detail_route, list_route
+from libreosteoweb.api import serializers as apiserializers
 from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
 from django.http import HttpResponse
 from django.views.generic import View
-from django.core import serializers
 from haystack.utils import Highlighter
 from haystack.views import SearchView
 import json
 import logging
 from django.contrib.auth.models import User
-from .permissions import IsStaffOrTargetUser, TargetUserSettingsPermissions
+from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import date, datetime
 from rest_framework import status
 from django.views.generic.base import TemplateView
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import (REDIRECT_FIELD_NAME, get_user_model )
+from django.template.response import TemplateResponse
+from django.utils.http import is_safe_url
+from django.shortcuts import resolve_url
+from django.conf import settings
+from django.http import HttpResponseRedirect, HttpResponseNotFound
+from datetime import datetime
 
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def create_superuser(request, user):
+    UserModel = get_user_model()
+    UserModel.objects.create_superuser(user['username'], '', user['password1'])
 
+@csrf_protect
+@never_cache
+def create_admin_account(request, template_name='account/create_admin_account.html',
+    redirect_field_name=REDIRECT_FIELD_NAME,
+    registration_form=UserCreationForm):
+    """
+    Displays the login form and handles the login action.
+    """
+    if len(User.objects.filter(is_staff__exact=True)) > 0 :
+        return HttpResponseNotFound()
+    redirect_to = request.POST.get(redirect_field_name,
+    request.GET.get(redirect_field_name, ''))
+    if request.method == "POST":
+        form = registration_form(request.POST)
+        if form.is_valid():
+            # Ensure the user-originating redirection url is safe.
+            if not is_safe_url(url=redirect_to, host=request.get_host()):
+                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+            # Okay, security check complete. Log the user in.
+            create_superuser(request, form.data)
+            return HttpResponseRedirect(redirect_to)
+        else :
+            context = {
+                'form':form
+            }
+    else:
+        form = registration_form(request)
+        context = {
+            'form': form,
+            redirect_field_name: redirect_to
+        }
+    return TemplateResponse(request, template_name, context)
 
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
@@ -49,24 +93,32 @@ class InvoiceViewHtml(TemplateView):
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = models.Patient
+    serializer_class = apiserializers.PatientSerializer
+    queryset = models.Patient.objects.all()
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
         examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
-        return Response(ExaminationSerializer(examinations, many=True).data)
+        return Response(apiserializers.ExaminationExtractSerializer(examinations, many=True).data)
 
-    def pre_save(self, obj):
-        """ Set the user which perform the operation as the currently logged user"""
-        if not self.request.user.is_authenticated():
-            raise Http404()
-        obj.set_user_operation(self.request.user)
+    def perform_create(self, serializer):
+        instance = models.Patient(**serializer.validated_data)
+        instance.set_user_operation(self.request.user)
+        instance.full_clean()
+        instance.save()
+        serializer.instance = instance
 
+    def perform_update(self, serializer):
+        serializer.instance.set_user_operation(self.request.user)
+        return super(PatientViewSet, self).perform_update(serializer)
 
 
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
     model = models.RegularDoctor
+    queryset = models.RegularDoctor.objects.all()
+    serializer_class = apiserializers.RegularDoctorSerializer
 
 
 
@@ -74,12 +126,14 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
 
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = models.Examination
+    queryset = models.Examination.objects.all()
+    serializer_class = apiserializers.ExaminationSerializer
 
 
     @detail_route(methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
-        serializer = ExaminationInvoicingSerializer(data=request.DATA)
+        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.DATA)
         if serializer.is_valid():
             if serializer.data['status'] == 'notinvoiced':
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
@@ -136,20 +190,51 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.save()
         return invoice
 
-    def pre_save(self, obj):
+    def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
+        serializer.save(therapeut=self.request.user)
 
-        if not obj.therapeut:
-            setattr(obj, 'therapeut', self.request.user)
+    def perform_update(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        if not serializer.instance.therapeut :
+            serializer.save(therapeut=self.request.user)
+        serializer.save(therapeut=serializer.instance.therapeut)
+
+    @detail_route(methods=['GET'])
+    def comments(self, request, pk=None):
+        current_examination = self.get_object()
+        comments = models.ExaminationComment.objects.filter(examination=current_examination).order_by('-date')
+        return Response(apiserializers.ExaminationCommentSerializer(comments, many=True).data)
 
 
 
 
 class UserViewSet(viewsets.ModelViewSet):
     model = User
-    serializer_class =  UserInfoSerializer
+    serializer_class =  apiserializers.UserInfoSerializer
     permission_classes = [IsStaffOrTargetUser]
+    queryset = User.objects.all()
+
+
+class UserOfficeViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = apiserializers.UserOfficeSerializer
+    permission_classes = [IsStaffOrReadOnlyTargetUser]
+
+    @detail_route(methods=['post'])
+    def set_password(self, request, pk=None):
+        user = self.get_object()
+        serializer = apiserializers.PasswordSerializer(data=request.DATA)
+        if serializer.is_valid():
+            user.set_password(serializer.data['password'])
+            user.save()
+            return Response({'status': 'password set'})
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -169,12 +254,14 @@ class StatisticsView(APIView):
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
+    queryset = models.Invoice.objects.all()
 
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent
-    serializer_class =  OfficeEventSerializer
+    serializer_class =  apiserializers.OfficeEventSerializer
+    queryset = models.OfficeEvent.objects.all()
 
     def get_queryset(self):
         """
@@ -190,12 +277,15 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
 
 class OfficeSettingsView(viewsets.ModelViewSet):
     model = models.OfficeSettings
-    permission_classes = [IsStaffOrTargetUser]
+    serializer_class = apiserializers.OfficeSettingsSerializer
+    permission_classes = [IsStaffOrReadOnlyTargetUser]
+    queryset = models.OfficeSettings.objects.all()
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
-    serializer_class = TherapeutSettingsSerializer
-    permission_classes = [TargetUserSettingsPermissions]
+    serializer_class = apiserializers.TherapeutSettingsSerializer
+    permission_classes = [IsStaffOrTargetUser]
+    queryset = models.TherapeutSettings.objects.all()
 
     @list_route(permission_classes=[AllowAny])
     def get_by_user(self, request):
@@ -203,13 +293,28 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
             raise Http404()
         settings = models.TherapeutSettings.objects.filter(user=self.request.user)
         if (len(settings)>0):
-            return Response(TherapeutSettingsSerializer(settings[0]).data)
+            return Response(apiserializers.TherapeutSettingsSerializer(settings[0]).data)
         else:
-            return Response()
+            return Response({})
 
-    def pre_save(self, obj):
+    def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
+        serializer.save(user=self.request.user)
 
-        if not obj.user:
-            setattr(obj, 'user', self.request.user)
+    def perform_update(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        if not serializer.instance.user :
+            serializer.save(user=self.request.user)
+        serializer.save(user=serializer.instance.user)
+
+class ExaminationCommentViewSet(viewsets.ModelViewSet):
+    model = models.ExaminationComment
+    serializer_class = apiserializers.ExaminationCommentSerializer
+    queryset = models.ExaminationComment.objects.all()
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        serializer.save(user=self.request.user,date=datetime.today())

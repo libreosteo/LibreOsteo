@@ -2,23 +2,31 @@
 Django settings for Libreosteo project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
+https://docs.djangoproject.com/en/1.7/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
+https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os,sys
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import os,sys,logging
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 if getattr(sys, 'frozen', False):
-    SITE_ROOT = os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0]
-else :
+    SITE_ROOT = os.path.split(os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0])[0]
+    DATA_FOLDER = SITE_ROOT
+    if (getattr(sys, 'frozen', False) == 'macosx_app'):
+    	DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
+    	SITE_ROOT = os.path.split(SITE_ROOT)[0]
+    	if not os.path.exists(DATA_FOLDER):
+    	    os.makedirs(DATA_FOLDER)
+else:
     SITE_ROOT = BASE_DIR
+    DATA_FOLDER = SITE_ROOT
 
+from django.utils.translation import ugettext_lazy as _
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '8xmh#fjyiamw^-_ro9m29^6^81^kc!aiczp)gvb#7with$dzb6'
@@ -30,9 +38,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOCALE_PATHS = (os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'),)
+LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'))
 
 APPEND_SLASH = False
+
+DEMONSTRATION = False
 
 
 # Application definition
@@ -46,13 +56,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'haystack',
     'libreosteoweb',
-    'rest_framework',
     'django_filters',
     'statici18n',
+    'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -117,7 +128,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(SITE_ROOT, 'db.sqlite3'),
+        'NAME': os.path.join(DATA_FOLDER, 'db.sqlite3'),
     }
 }
 
@@ -125,9 +136,14 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'fr-FR'
+LANGUAGE_CODE = 'fr'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = (
+    ('fr', _('French')),
+    ('en', _('English')),
+    )
+
+TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
@@ -167,6 +183,7 @@ LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'accounts-login'
 LOGOUT_URL_NAME = 'accounts-logout'
 LOGIN_REDIRECT_URL= '/'
+INITIALIZE_ADMIN_URL_NAME = 'accounts-create-admin'
 
 
 
@@ -208,6 +225,10 @@ LOGGING = {
         'libreosteoweb': {
             'handlers': ['console'],
             'level': 'INFO',
+        },
+        'libreosteoweb.api':{
+            'handlers': ['console'],
+            'level': 'INFO',
         }
     }
 }
@@ -215,7 +236,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(SITE_ROOT, 'whoosh_index'),
+        'PATH': os.path.join(DATA_FOLDER, 'whoosh_index'),
     },
 }
 

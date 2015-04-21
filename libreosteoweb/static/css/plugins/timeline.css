@@ -75,6 +75,18 @@
     border-left: 14px solid #fff;
 }
 
+.timeline > li > .timeline-panel-footer {
+    content: " ";
+    display: inline-block;
+    position: absolute;
+    top: 27px;
+    right: -14px;
+    border-top: 14px solid transparent;
+    border-right: 0 solid #fff;
+    border-bottom: 14px solid transparent;
+    border-left: 14px solid #fff;
+}
+
 .timeline > li > .timeline-badge {
     z-index: 100;
     position: absolute;

@@ -83,3 +83,38 @@ pre {
 {
     cursor: pointer;
 }
+
+.timeline-comments
+{
+
+}
+
+.comments-list
+{
+
+}
+
+.comment
+{
+    list-style-type: none;
+    margin-bottom : 20px;
+}
+
+.comment-ident
+{
+    margin-left: -40px;
+    margin-bottom:-11px;
+    font-size: 0.8em;
+    color:#000099;
+}
+.comment-time
+{
+    font-size : 0.8em;
+    margin-top: -11px;
+    float:right;
+}
+
+.usersGrid {
+    width: 800px;
+    height: 300px;
+}

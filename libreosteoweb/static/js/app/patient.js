@@ -237,9 +237,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
             var localExamination;
             if( !examinationToSave.id ) {
-                localExamination = ExaminationServ.add(examinationToSave, function()
+                localExamination = ExaminationServ.add(examinationToSave, function(value)
                 {
-                   $scope.newExamination = localExamination;
+                   $scope.newExamination = value;
                 });
             } else {
                 localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);

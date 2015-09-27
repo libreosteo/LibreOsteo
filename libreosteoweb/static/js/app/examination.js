@@ -57,8 +57,8 @@ examination.directive('examination', function(){
         {
             $scope.types = [
                 { value : 1, text : 'Consultation normale' },
-                { value : 2, text : 'Retour prévu (Contrôle)' },
-                { value : 3, text : 'Retour non prévu' },
+                { value : 2, text : 'Poursuite de traitement' },
+                { value : 3, text : 'Retour' },
                 { value : 4, text : 'Urgence' },
             ];
             $scope.showTypes = function() {

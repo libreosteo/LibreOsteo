@@ -36,29 +36,6 @@ dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardS
             $scope.show($scope.selector);
         });
 
-        $scope.eventsByDay = [];
-        $scope.events = OfficeEventServ.query(function(data){
-            angular.forEach($scope.events, function(officeevent, index){
-                var date = new Date(officeevent.date);
-                var key = $filter('date')(
-                    new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-                    'yyyy-MM-dd');
-                var obj = {
-                    day : null,
-                    list : []
-                };
-                angular.forEach(this, function(myobj, idx){
-                    if(myobj.day == key){
-                        obj = myobj;
-                    }
-                });
-                if (obj.day == null) {
-                    obj.day = key;
-                    this.push(obj);
-                }
-                obj.list.push(officeevent);
-
-            }, $scope.eventsByDay);
-        });
+        $scope.officeEventLoader = new OfficeEventServ();
     }
 ]);

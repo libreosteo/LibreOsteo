@@ -118,3 +118,8 @@ pre {
     width: 800px;
     height: 300px;
 }
+
+.chat-panel .panel-body{
+    height: auto;
+    overflow-y : initial; 
+}

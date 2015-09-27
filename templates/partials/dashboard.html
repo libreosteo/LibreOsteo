@@ -105,4 +105,4 @@
             </div>
             <!-- /.row -->
 
-            <officeevent officeevents="events" officeevents-by-day="eventsByDay"/>
+            <officeevent infinite-scroll="officeEventLoader.loadEvents()" infinite-scroll-disabled='officeEventLoader.busy' officeevents="officeEventLoader.items" officeevents-by-day="officeEventLoader.itemsByDay" infinite-scroll-immediate-check='true' busy="officeEventLoader.busy"/>

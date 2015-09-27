@@ -28,7 +28,8 @@
     "angular-ui-utils" : "0.2.x",
     "bootstrap" : "latest",
     "bootstrap-tour" : "latest",
-    "angular-ui-grid" : "latest"
+    "angular-ui-grid" : "latest",
+    "ngInfiniteScroll" : "1.0.0"
   },
   "resolutions": {
     "angular": "1.2.28"

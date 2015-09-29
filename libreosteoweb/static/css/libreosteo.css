@@ -123,3 +123,15 @@ pre {
     height: auto;
     overflow-y : initial; 
 }
+
+.dashboard-sparkline
+{
+    float:left;
+    margin-top: 10%;
+    margin-left: 40%;
+}
+.jqstooltip {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}

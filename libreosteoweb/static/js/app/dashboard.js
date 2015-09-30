@@ -48,22 +48,23 @@ dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardS
             });
         };
 
+        var showStatistics = function(obj)
+        {
+            $scope.nb_new_patient = obj.nb_new_patient;
+            $scope.nb_examination = obj.nb_examination;
+            $scope.nb_urgent_return = obj.nb_urgent_return;
+        }
+
         $scope.show = function(selector) {
             $scope.selector = selector;
           if(selector == 'week'){
-                $scope.nb_new_patient = $scope.statistics.week.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.week.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.week.nb_urgent_return;
+                showStatistics($scope.statistics.week);
                 showObjSparklines($scope.statistics.history.week);
           } else if (selector == 'month') {
-                $scope.nb_new_patient = $scope.statistics.month.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.month.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.month.nb_urgent_return;
+                showStatistics($scope.statistics.month);
                 showObjSparklines($scope.statistics.history.month);
           } else if (selector == 'year') {
-                $scope.nb_new_patient = $scope.statistics.year.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.year.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.year.nb_urgent_return;
+                showStatistics($scope.statistics.year)
                 showObjSparklines($scope.statistics.history.year);
           }
         };

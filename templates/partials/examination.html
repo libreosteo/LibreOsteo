@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $}</span>
@@ -22,10 +22,10 @@
                     <span ng-if="readOnly">{$ showTypes() $}</span>
                 </div>
             </div>
+            <a class="btn btn-success pull-left" ng-show="model.status > 0 && model.status < 3" href="invoice/{$ model.invoice $}"target="_blank"
+                    >{% trans 'Invoice' %}</a>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     {{ examination.reason }}
@@ -37,101 +37,90 @@
                             ></inlineedit>
                     </div>
                     <div style="padding-top: 45px">
+
                         <inlinetextarea class="col-md-5" model="model" property="reason_description" on-save="saveModel()"
                                     placeholder="{{ examination.reason_description }}" read-only="readOnly"
                                 row="5" col="28"/>
-                        <span class="col-md-1">{{ examination.medical_examination }}</span>
-                        <inlinetextarea class="col-md-6" model="model" property="medical_examination" on-save="saveModel()"
+                        <div class="row col-md-7">
+                            <span class="col-md-12">{{ examination.medical_examination }}</span>
+                            <inlinetextarea class="col-md-12" model="model" property="medical_examination" on-save="saveModel()"
                                     placeholder="{{ examination.medical_examination }}" read-only="readOnly"
                                 row="5" col="30"/>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9">
+            <!-- The accordion -->
+            <accordion close-others="false">
+                <accordion-group heading="{{ examination.orl }}" class="panel-primary" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
+                    <inlinetextarea model="model" property="orl" on-save="saveModel()"
+                            placeholder="{{ examination.orl }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+                <accordion-group heading="{{ examination.visceral }}" class="panel-primary" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
+                    <inlinetextarea model="model" property="visceral" on-save="saveModel()"
+                            placeholder="{{ examination.visceral }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+                <accordion-group heading="{{ examination.pulmo }}" class="panel-primary" ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
+                    <inlinetextarea model="model" property="pulmo" on-save="saveModel()"
+                            placeholder="{{ examination.pulmo }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+                <accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
+                    <inlinetextarea model="model" property="uro_gyneco" on-save="saveModel()"
+                            placeholder="{{ examination.uro_gyneco }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+                <accordion-group heading="{{ examination.periphery }}" class="panel-primary" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
+                    <inlinetextarea model="model" property="periphery" on-save="saveModel()"
+                            placeholder="{{ examination.periphery }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+                <accordion-group heading="{{ examination.general_state }}" class="panel-primary" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
+                    <inlinetextarea model="model" property="general_state" on-save="saveModel()"
+                            placeholder="{{ examination.general_state }}" read-only="readOnly"
+                            row="5" col="35"></inlinetextarea>
+                </accordion-group>
+
+            </accordion>
+        </div>
+        <div class="col-md-3">
+            <!-- the button command -->
+            <div class="btn-group btn-group-vertical">
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.orl" btn-checkbox>{{ examination.orl }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.visceral" btn-checkbox>{{ examination.visceral }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.pulmo" btn-checkbox>{{ examination.pulmo }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" btn-checkbox>{{ examination.uro_gyneco }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.periphery" btn-checkbox>{{ examination.periphery }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.general_state" btn-checkbox>{{ examination.general_state }}</label>
                 </div>
             </div>
         </div>
      </div>
 
-     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.orl }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="orl" on-save="saveModel()"
-                            placeholder="{{ examination.orl }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.visceral }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <inlinetextarea model="model" property="visceral" on-save="saveModel()"
-                            placeholder="{{ examination.visceral }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.pulmo }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="pulmo" on-save="saveModel()"
-                            placeholder="{{ examination.pulmo }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.uro_gyneco }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <inlinetextarea model="model" property="uro_gyneco" on-save="saveModel()"
-                            placeholder="{{ examination.uro_gyneco }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.periphery }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="periphery" on-save="saveModel()"
-                            placeholder="{{ examination.periphery }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    {{ examination.general_state }}
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <inlinetextarea model="model" property="general_state" on-save="saveModel()"
-                            placeholder="{{ examination.general_state }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
+    <div class="row" style="padding-top:15px">
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -177,12 +166,11 @@
       </div>
 
     <div class="row">
-        <div class="col-md-8"></div>
+        <div class="col-md-8">
+            <a class="btn btn-success pull-left" ng-show="model.status > 0 && model.status < 3" href="invoice/{$ model.invoice $}"target="_blank">{% trans 'Invoice' %}</a></div>
         <div class="col-md-4">
             <button class="btn btn-success pull-right" ng-show="model.status < 1"
                     ng-click="close(model)">{% trans 'Close' %}</button>
-            <a class="btn btn-success pull-right" ng-show="model.status > 0 && model.status < 3" href="invoice/{$ model.invoice $}"target="_blank"
-                    >{% trans 'Invoice' %}</a>
         </div>
 
     </div>

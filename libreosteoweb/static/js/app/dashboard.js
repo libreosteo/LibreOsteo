@@ -12,22 +12,60 @@ dashboard.factory('DashboardServ', ['$resource',
 dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardServ', 'OfficeEventServ',
     function($scope, $filter, growl, DashboardServ, OfficeEventServ) {
         "use strict";
-        $scope.statistics = DashboardServ.get();
         $scope.selector = 'week';
+
+        var describe_map = function(range_array){
+            var map = {};
+            for(var i = 0; i < range_array.length; i++)
+            {
+                map[i] = range_array[i];
+            }
+            return map;
+        };
+
+        var showObjSparklines = function(obj) {
+            $('.inlinesparkline-newpatient').sparkline(obj.nb_new_patient[1],{
+                type: 'line',
+                tooltipFormat: '{{x:labels}} - {{y}}',
+                tooltipValueLookups: {
+                    labels: $.range_map(describe_map(obj.nb_new_patient[0]))
+                }
+            });
+
+            $('.inlinesparkline-nbexamination').sparkline(obj.nb_examination[1],{
+                type: 'line',
+                tooltipFormat: '{{x:labels}} - {{y}}',
+                tooltipValueLookups: {
+                    labels: $.range_map(describe_map(obj.nb_examination[0]))
+                }
+            });
+            $('.inlinesparkline-urgentreturn').sparkline(obj.nb_urgent_return[1], {
+                type: 'line',
+                tooltipFormat: '{{x:labels}} - {{y}}',
+                tooltipValueLookups: {
+                    labels: $.range_map(describe_map(obj.nb_urgent_return[0]))
+                }
+            });
+        };
+
+        var showStatistics = function(obj)
+        {
+            $scope.nb_new_patient = obj.nb_new_patient;
+            $scope.nb_examination = obj.nb_examination;
+            $scope.nb_urgent_return = obj.nb_urgent_return;
+        }
+
         $scope.show = function(selector) {
             $scope.selector = selector;
           if(selector == 'week'){
-                $scope.nb_new_patient = $scope.statistics.week.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.week.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.week.nb_urgent_return;
+                showStatistics($scope.statistics.week);
+                showObjSparklines($scope.statistics.history.week);
           } else if (selector == 'month') {
-                $scope.nb_new_patient = $scope.statistics.month.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.month.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.month.nb_urgent_return;
+                showStatistics($scope.statistics.month);
+                showObjSparklines($scope.statistics.history.month);
           } else if (selector == 'year') {
-                $scope.nb_new_patient = $scope.statistics.year.nb_new_patient;
-                $scope.nb_examination = $scope.statistics.year.nb_examination;
-                $scope.nb_urgent_return = $scope.statistics.year.nb_urgent_return;
+                showStatistics($scope.statistics.year)
+                showObjSparklines($scope.statistics.history.year);
           }
         };
 
@@ -36,29 +74,7 @@ dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardS
             $scope.show($scope.selector);
         });
 
-        $scope.eventsByDay = [];
-        $scope.events = OfficeEventServ.query(function(data){
-            angular.forEach($scope.events, function(officeevent, index){
-                var date = new Date(officeevent.date);
-                var key = $filter('date')(
-                    new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-                    'yyyy-MM-dd');
-                var obj = {
-                    day : null,
-                    list : []
-                };
-                angular.forEach(this, function(myobj, idx){
-                    if(myobj.day == key){
-                        obj = myobj;
-                    }
-                });
-                if (obj.day == null) {
-                    obj.day = key;
-                    this.push(obj);
-                }
-                obj.list.push(officeevent);
+        $scope.officeEventLoader = new OfficeEventServ();
 
-            }, $scope.eventsByDay);
-        });
     }
 ]);

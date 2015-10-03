@@ -20,6 +20,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'ui.validate',
     'loOfficeSettings',
     'ui.grid',
+    'infinite-scroll',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

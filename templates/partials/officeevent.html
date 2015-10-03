@@ -72,6 +72,7 @@
                                     </div>
                                 </li>
                                 <div ng-show="false" ng-repeat-end/>
+                                <div ng-show='busy'>Chargement...</div>
                             </ul>
                             <ul class="chat" ng-if="selector=='all'">
                                 <li ng-repeat="officeevent in officeevents|orderBy:'-date'" class="left clearfix officeevent" ng-click="loadOfficeevent(officeevent)">
@@ -94,6 +95,7 @@
                                             </small>
                                     </div>
                                 </li>
+                                <div ng-show='busy'>Chargement...</div>
                             </ul>
                         </div>
                         <!-- /.panel-body -->

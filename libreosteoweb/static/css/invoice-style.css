@@ -2,7 +2,7 @@
 * { margin: 0; padding: 0; } 
 
 body {
-	font:14px/1.4 Georgia, serif;
+	font:16px/1.4 Georgia, serif;
 }
 
 #page_wrap {
@@ -18,20 +18,20 @@ body {
 	float: left;
 }
 .header {
-	font : 18px bold;
+	font : 24px bold;
 }
 
 .address {
-	font-size : 12px;
+	font-size : 14px;
 }
 .phone {
-	font-size : 12px;
+	font-size : 14px;
 }
 .therapeut-frame {
 	float:right;
 }
 .therapeut{
-	padding-top: 10px;
+	padding-top: 12px;
 }
 .spacer{
 	clear:both;

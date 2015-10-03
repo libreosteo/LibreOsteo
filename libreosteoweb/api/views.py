@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, pagination
 from rest_framework.filters import DjangoFilterBackend
 import django_filters
 from libreosteoweb import models 
@@ -262,6 +262,7 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent
     serializer_class =  apiserializers.OfficeEventSerializer
     queryset = models.OfficeEvent.objects.all()
+    pagination_class= pagination.LimitOffsetPagination
 
     def get_queryset(self):
         """
@@ -269,7 +270,7 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
         No update events are given.
         'all' parameter is used to get all events
         """
-        queryset = models.OfficeEvent.objects.all()
+        queryset = models.OfficeEvent.objects.all().order_by('-date')
         all_flag = self.request.QUERY_PARAMS.get('all', None)
         if all_flag is None :
             queryset = queryset.exclude(clazz__exact = 'Patient', type__exact=2 )

@@ -22,6 +22,7 @@
                                     <i class="fa fa-plus-square fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
+                                    <span class="inlinesparkline-newpatient dashboard-sparkline"></span>
                                     <div class="huge">{$ nb_new_patient $}</div>
                                     <div>{% trans 'New patients' %}</div>
                                 </div>
@@ -44,6 +45,7 @@
                                     <i class="fa fa-folder-open fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
+                                    <span class="inlinesparkline-nbexamination dashboard-sparkline"></span>
                                     <div class="huge">{$ nb_examination $}</div>
                                     <div>{% trans 'Examinations' %}</div>
                                 </div>
@@ -88,6 +90,7 @@
                                     <i class="fa fa-exclamation-triangle fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
+                                    <span class="inlinesparkline-urgentreturn dashboard-sparkline"></span>
                                     <div class="huge">{$ nb_urgent_return $}</div>
                                     <div>{% trans 'Urgent return' %}</div>
                                 </div>
@@ -105,4 +108,4 @@
             </div>
             <!-- /.row -->
 
-            <officeevent officeevents="events" officeevents-by-day="eventsByDay"/>
+            <officeevent infinite-scroll="officeEventLoader.loadEvents()" infinite-scroll-disabled='officeEventLoader.busy' officeevents="officeEventLoader.items" officeevents-by-day="officeEventLoader.itemsByDay" infinite-scroll-immediate-check='true' busy="officeEventLoader.busy"/>

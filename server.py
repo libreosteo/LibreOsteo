@@ -57,6 +57,7 @@ class Server(object):
  
     def run(self, callback=None):
         engine = cherrypy.engine
+        cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
         engine.signal_handler.subscribe()
  

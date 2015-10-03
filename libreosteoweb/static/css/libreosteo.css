@@ -8,6 +8,7 @@ pre {
     background-color : transparent;
     border : none;
     font-family: Arial, Helvetica, sans-serif;
+    white-space: pre-wrap;
 }
 
 .no-session {
@@ -117,4 +118,21 @@ pre {
 .usersGrid {
     width: 800px;
     height: 300px;
+}
+
+.chat-panel .panel-body{
+    height: auto;
+    overflow-y : initial; 
+}
+
+.dashboard-sparkline
+{
+    float:left;
+    margin-top: 10%;
+    margin-left: 40%;
+}
+.jqstooltip {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }

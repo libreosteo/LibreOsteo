@@ -38,6 +38,10 @@ examination.controller('ExaminationCtrl', ['$scope', '$routeParams', 'Examinatio
     }
 ]);
 
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
 
 examination.directive('examination', function(){
     "use strict";
@@ -75,6 +79,44 @@ examination.directive('examination', function(){
                     $scope.readOnly = newValue != 0; 
                 }
             });
+
+            $scope.examinationSettings = {
+                orl : false,
+                visceral : false,
+                pulmo : false,
+                uro_gyneco : false,
+                periphery : false,
+                general_state : false,
+            }
+
+            $scope.accordionOpenState = {
+                orl : true,
+                visceral : true,
+                pulmo : true,
+                uro_gyneco : true,
+                periphery : true,
+                general_state : true
+            }
+
+            $scope.$watch('model.orl', function(newValue, oldValue){
+                $scope.examinationSettings.orl = !isEmpty(newValue);
+            });
+            $scope.$watch('model.visceral', function(newValue, oldValue){
+                $scope.examinationSettings.visceral = !isEmpty(newValue);
+            });
+            $scope.$watch('model.pulmo', function(newValue, oldValue){
+                $scope.examinationSettings.pulmo = !isEmpty(newValue);
+            });
+            $scope.$watch('model.uro_gyneco', function(newValue, oldValue){
+                $scope.examinationSettings.uro_gyneco = !isEmpty(newValue);
+            });
+            $scope.$watch('model.periphery', function(newValue, oldValue){
+                $scope.examinationSettings.periphery = !isEmpty(newValue);
+            });
+            $scope.$watch('model.general_state', function(newValue, oldValue){
+                $scope.examinationSettings.general_state = !isEmpty(newValue);
+            });
+            
         },
         templateUrl: 'web-view/partials/examination'
     }

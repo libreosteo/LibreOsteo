@@ -1,5 +1,6 @@
 from libreosteoweb.models import Patient, Examination
 from datetime import date, timedelta
+import datetime
 import copy
 
 class Statistics(object):
@@ -28,7 +29,7 @@ class Statistics(object):
             'nb_non_paid':0,
             'nb_examination':0}
         period = self.subclass()
-        return self.compute_statistics(period.get_start_of_period(start_date), start_date, statistics_obj)
+        return self.compute_statistics(period.get_start_of_period(start_date), datetime.datetime.combine(start_date, datetime.time.max), statistics_obj)
 
     def compute_statistics(self, start_date, end_date, stats_obj):
         stats_obj['nb_new_patient'] = Patient.objects.filter(creation_date__gte= start_date, creation_date__lte=end_date).count()

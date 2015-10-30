@@ -12,7 +12,7 @@ from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 import webbrowser
 
-SERVER_PORT = 8080
+SERVER_PORT = 80
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""

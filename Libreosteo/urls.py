@@ -55,3 +55,14 @@ urlpatterns = patterns('',
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+
+from django.views.i18n import javascript_catalog
+
+js_info_dict = {
+    'domain' : 'django',
+    'packages' : ('libreosteoweb',)
+}
+
+urlpatterns += patterns('',
+    (r'^jsi18n/$', javascript_catalog, js_info_dict),
+)

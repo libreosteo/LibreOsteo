@@ -302,6 +302,22 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
               });
         }
 
+        // Load the values for the sex
+        $scope.sexes = [
+                { value : 'M', text : gettext('Male') },
+                { value :'F', text : gettext('Female') },
+        ];
+
+        // display the translated value for the sex
+        $scope.showSex = function() {
+            if($scope.patient) {
+                var selected = $filter('filter')($scope.sexes, {value: $scope.patient.sex});
+                return ($scope.patient && $scope.patient.sex && selected.length) ? selected[0].text : gettext('not documented');
+            } else {
+                return gettext('not documented');
+            }
+        };
+
 }]);
 
 

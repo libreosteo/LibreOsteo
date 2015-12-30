@@ -5,12 +5,14 @@
                 ng-click="model = null"
                 ng-show="!newExamination"
                 ui-sref="patient.examinations"
+                tooltip="Fermer ce volet"
+                tooltip-placement="left"
                 ><span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
             </button>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $}</span>
@@ -22,30 +24,38 @@
                     <span ng-if="readOnly">{$ showTypes() $}</span>
                 </div>
             </div>
-            <a class="btn btn-success pull-left" ng-show="model.status > 0 && model.status < 3" href="invoice/{$ model.invoice $}"target="_blank"
+        </div>
+        <div class="col-md-3" ng-show="model.status > 0 && model.status < 3">
+            <a class="btn btn-success pull-left" href="invoice/{$ model.invoice $}"target="_blank"
                     >{% trans 'Invoice' %}</a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     {{ examination.reason }}
                 </div>
-                <div class="panel-body row" style="margin-left: 1px; margin-right: 1px">
-                    <div>
-                        <inlineedit class="col-md-12" model="model" property="reason" on-save="saveModel()"
-                            placeholder="{{ examination.reason }}" read-only="readOnly"
+                <div class="panel-body row" style="margin-left: 1px; margin-right: 1px;">
+                    <div class="row">
+                        <div class="col-md-12" style="padding-bottom:25px">
+                            <inlineedit model="model" property="reason" on-save="saveModel()"
+                                placeholder="{{ examination.reason }}" read-only="readOnly"
                             ></inlineedit>
-                    </div>
-                    <div style="padding-top: 45px">
-
-                        <inlinetextarea class="col-md-5" model="model" property="reason_description" on-save="saveModel()"
-                                    placeholder="{{ examination.reason_description }}" read-only="readOnly"
-                                row="5" col="28"/>
-                        <div class="row col-md-7">
-                            <span class="col-md-12">{{ examination.medical_examination }}</span>
-                            <inlinetextarea class="col-md-12" model="model" property="medical_examination" on-save="saveModel()"
+                        </div>
+                        <div class="col-md-5">
+                            <inlinetextarea model="model" property="reason_description" on-save="saveModel()"
+                            placeholder="{{ examination.reason_description }}" read-only="readOnly"
+                            row="5" col="28"/>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
+                                <div class="col-md-12"></div>
+                                <div class="col-md-12">
+                                    <inlinetextarea model="model" property="medical_examination" on-save="saveModel()"
                                     placeholder="{{ examination.medical_examination }}" read-only="readOnly"
                                 row="5" col="30"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -53,6 +63,29 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-3">
+            <!-- the button command -->
+            <div class="btn-group btn-group-vertical">
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.orl" btn-checkbox>{{ examination.orl }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.visceral" btn-checkbox>{{ examination.visceral }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.pulmo" btn-checkbox>{{ examination.pulmo }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" btn-checkbox>{{ examination.uro_gyneco }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.periphery" btn-checkbox>{{ examination.periphery }}</label>
+                </div>
+                <div class="col-md-12 btn-group">
+                    <label class="btn btn-default" ng-model="examinationSettings.general_state" btn-checkbox>{{ examination.general_state }}</label>
+                </div>
+            </div>
+        </div>
         <div class="col-md-9">
             <!-- The accordion -->
             <accordion close-others="false">
@@ -93,29 +126,6 @@
                 </accordion-group>
 
             </accordion>
-        </div>
-        <div class="col-md-3">
-            <!-- the button command -->
-            <div class="btn-group btn-group-vertical">
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.orl" btn-checkbox>{{ examination.orl }}</label>
-                </div>
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.visceral" btn-checkbox>{{ examination.visceral }}</label>
-                </div>
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.pulmo" btn-checkbox>{{ examination.pulmo }}</label>
-                </div>
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" btn-checkbox>{{ examination.uro_gyneco }}</label>
-                </div>
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.periphery" btn-checkbox>{{ examination.periphery }}</label>
-                </div>
-                <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.general_state" btn-checkbox>{{ examination.general_state }}</label>
-                </div>
-            </div>
         </div>
      </div>
 

@@ -1,3 +1,16 @@
 .inlineedit {
     background-color : #eeeeee;
 }
+span.inlineedit {
+	vertical-align: middle;
+	line-height: 1.5;
+}
+.inlineditbtn {
+	top: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	vertical-align: top;
+}
+pre.inlineedit {
+
+}

@@ -136,3 +136,6 @@ pre {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
+.subtitle {
+    padding-bottom:10px;
+}

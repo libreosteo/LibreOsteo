@@ -60,17 +60,17 @@ examination.directive('examination', function(){
         controller : function($scope, $filter)
         {
             $scope.types = [
-                { value : 1, text : 'Consultation normale' },
-                { value : 2, text : 'Poursuite de traitement' },
-                { value : 3, text : 'Retour' },
-                { value : 4, text : 'Urgence' },
+                { value : 1, text : gettext('Normal examination') },
+                { value : 2, text : gettext('Continuing examination') },
+                { value : 3, text : gettext('Return') },
+                { value : 4, text : gettext('Emergency') },
             ];
             $scope.showTypes = function() {
                 if($scope.model) {
                     var selected = $filter('filter')($scope.types, {value: $scope.model.type});
-                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : 'Non renseigné';
+                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : gettext('not documented');
                 } else {
-                    return 'Non renseigné';
+                    return gettext('not documented');
                 }
             };
 

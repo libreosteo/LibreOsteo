@@ -13,63 +13,59 @@ logger = logging.getLogger(__name__)
 def filter_fields(f):
     return f is not None and f.formfield() is not None
 
-class PatientDisplay(ModelForm):
+class GenericDisplay(ModelForm):
+    class Meta:
+        model = User 
+
+    def display_fields(self): 
+        return dict([ (f.name, f.formfield().label) for f in filter( filter_fields, self.Meta.model._meta.fields)])
+
+
+class PatientDisplay(GenericDisplay):
     class Meta:
         model = models.Patient
 
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.Patient._meta.fields)])
-
-class RegularDoctorDisplay(ModelForm):
+class RegularDoctorDisplay(GenericDisplay):
     class Meta:
         model = models.RegularDoctor
 
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.RegularDoctor._meta.fields)])
-
-class ExaminationDisplay(ModelForm):
+class ExaminationDisplay(GenericDisplay):
     class Meta:
         model = models.Examination
 
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.Examination._meta.fields)])
-
-class UserDisplay(ModelForm):
+class UserDisplay(GenericDisplay):
     class Meta:
         model = User
 
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, User._meta.fields)])
-
-class TherapeutSettingsDisplay(ModelForm):
+class TherapeutSettingsDisplay(GenericDisplay):
     class Meta:
         model = models.TherapeutSettings
 
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.TherapeutSettings._meta.fields)])
-
-class OfficeSettingsDisplay(ModelForm):
+class OfficeSettingsDisplay(GenericDisplay):
     class Meta:
         model = models.OfficeSettings
-
-    display_fields = dict([ (f.name, f.formfield().label) for f in filter( filter_fields, models.OfficeSettings._meta.fields)])
 
 def display_patient(request):
     display = PatientDisplay()
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields,
-                                                               'examination' : displayExamination.display_fields})
+    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields(),
+                                                               'examination' : displayExamination.display_fields()})
 
 def display_newpatient(request):
     display = PatientDisplay()
-    return render_to_response('partials/add-patient.html', {'patient' : display.display_fields})
+    return render_to_response('partials/add-patient.html', {'patient' : display.display_fields()})
 
 def display_doctor(request):
     display = RegularDoctorDisplay()
-    return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields})
+    return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields()})
 
 def display_examination_timeline(request):
     display = ExaminationDisplay()
-    return render_to_response('partials/timeline.html', {'examination' : display.display_fields})
+    return render_to_response('partials/timeline.html', {'examination' : display.display_fields()})
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields})
+    return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields()})
 
 def display_search_result(request):
     return render_to_response('partials/search-result.html', {})
@@ -77,8 +73,8 @@ def display_search_result(request):
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
-    return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields, 
-        'therapeutsettings': displayTherapeutSettings.display_fields,
+    return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields(), 
+        'therapeutsettings': displayTherapeutSettings.display_fields(),
         'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):

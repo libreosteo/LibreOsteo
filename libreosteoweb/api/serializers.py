@@ -3,6 +3,7 @@ from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSet
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
+from .validators import UniqueTogetherIgnoreCaseValidator
 
 
 class WithPkMixin(object):
@@ -22,7 +23,7 @@ class PatientSerializer (serializers.ModelSerializer):
     class Meta:
         model = Patient
         validators = [
-            validators.UniqueTogetherValidator(
+            UniqueTogetherIgnoreCaseValidator(
                 queryset=Patient.objects.all(),
                 fields=('family_name', 'first_name', 'birth_date'),
                 message = _('This patient already exists'),

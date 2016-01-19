@@ -1,4 +1,6 @@
-var officesettings = angular.module('loOfficeSettings', ['ngResource', 'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav']);
+var officesettings = angular.module('loOfficeSettings', ['ngResource', 
+  'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav'
+  ]);
 
 officesettings.factory('OfficeSettingsServ', ['$resource',
     function ($resource) {

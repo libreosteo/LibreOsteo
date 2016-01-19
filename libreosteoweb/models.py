@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
+from .api.filter import get_name_filters
 
 
 # import the logging library
@@ -67,6 +68,9 @@ class Patient(models.Model):
         def clean(self):
             if self.creation_date is None:
                 self.creation_date = date.today()
+            self.family_name = get_name_filters().filter(self.family_name)
+            self.original_name = get_name_filters().filter(self.original_name)
+            self.first_name = get_name_filters().filter(self.first_name)
 
         def set_user_operation(self, user):
             """ Use this setting method to define the user

@@ -133,7 +133,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
-        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.DATA)
+        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
         if serializer.is_valid():
             if serializer.data['status'] == 'notinvoiced':
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
@@ -147,7 +147,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 if serializer.data['paiment_mode'] in ['check', 'cash']:
                     current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
                     current_examination.save()
-            return Response({'invoicing':'try to execute the close'})
+            return Response({'invoiced': current_examination.invoice.id})
         else :
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
@@ -271,7 +271,7 @@ class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
         'all' parameter is used to get all events
         """
         queryset = models.OfficeEvent.objects.all().order_by('-date')
-        all_flag = self.request.QUERY_PARAMS.get('all', None)
+        all_flag = self.request.query_params.get('all', None)
         if all_flag is None :
             queryset = queryset.exclude(clazz__exact = 'Patient', type__exact=2 )
         return queryset

@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
+from .api.filter import get_name_filters
 
 
 # import the logging library
@@ -56,6 +57,7 @@ class Patient(models.Model):
         trauma_history = models.TextField(_('Trauma history'), blank=True)
         medical_reports = models.TextField(_('Medical reports'), blank=True)
         creation_date = models.DateField(_('Creation date'), blank=True, null=True, editable=False)
+        sex = models.CharField(_('Sex'), max_length=1, choices=(('M', _('Male')), ('F', _('Female'))), blank=True, null=True)
 
         #Not mapped field, only for traceability purpose
         current_user_operation = None
@@ -66,6 +68,9 @@ class Patient(models.Model):
         def clean(self):
             if self.creation_date is None:
                 self.creation_date = date.today()
+            self.family_name = get_name_filters().filter(self.family_name)
+            self.original_name = get_name_filters().filter(self.original_name)
+            self.first_name = get_name_filters().filter(self.first_name)
 
         def set_user_operation(self, user):
             """ Use this setting method to define the user
@@ -116,8 +121,9 @@ class Examination(models.Model):
     status = models.SmallIntegerField(_('Status'))
     status_reason = models.TextField(_('Status reason'), blank=True, null=True)
     # Type : 1 -> normal examination
-    # Type : 2 -> Scheduled return
-    # Type : 3 -> Urgent return
+    # Type : 2 -> continuation of the examination
+    # Type : 3 -> return of a previous examination
+    # Type : 4 -> emergency examination
     type = models.SmallIntegerField(_('Type'))
     invoice = models.OneToOneField('Invoice', verbose_name=_('Invoice'), blank=True, null=True)
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
@@ -127,6 +133,12 @@ class Examination(models.Model):
     EXAMINATION_WAITING_FOR_PAIEMENT = 1
     EXAMINATION_INVOICED_PAID = 2
     EXAMINATION_NOT_INVOICED = 3
+
+    # i18n
+    TYPE_NORMAL_EXAMINATION_I18N = _('Normal examination')
+    TYPE_CONTINUING_EXAMINATION_I18N = _('Continuing examination')
+    TYPE_RETURN_I18N = _('Return')
+    TYPE_EMERGENCY_I18N = _('Emergency')
 
     def __unicode__(self):
         return "%s %s" % (self.patient, self.date)

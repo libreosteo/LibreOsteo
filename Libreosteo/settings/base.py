@@ -87,7 +87,7 @@ TEMPLATE_DIRS = (
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    'Libreosteo.zip_loader.load_template_source'
+    'Libreosteo.zip_loader.Loader'
 #     'django.template.loaders.eggs.Loader',
 )
 

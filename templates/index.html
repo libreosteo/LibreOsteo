@@ -440,20 +440,21 @@
 <script type="text/javascript" src='{{ STATIC_URL }}js/plugins/jquery.sparkline.min.js'></script>
 
 <!-- web Application -->
-<script src="{{ STATIC_URL }}js/app/app.js"></script>
-<script src="{{ STATIC_URL }}js/app/utils.js"></script>
-<script src="{{ STATIC_URL }}js/app/patient.js"></script>
-<script src="{{ STATIC_URL }}js/app/doctor.js"></script>
-<script src="{{ STATIC_URL }}js/app/examination.js"></script>
-<script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
-<script src="{{ STATIC_URL }}js/app/timeline.js"></script>
-<script src="{{ STATIC_URL }}js/app/search.js"></script>
-<script src="{{ STATIC_URL }}js/app/user.js"></script>
-<script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
-<script src="{{ STATIC_URL }}js/app/officeevent.js"></script>
-<script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
+<script src="{{ STATIC_URL }}js/app/app.js"></script>
+<script src="{{ STATIC_URL }}js/app/utils.js"></script>
+<script src="{{ STATIC_URL }}js/app/patient.js"></script>
+<script src="{{ STATIC_URL }}js/app/doctor.js"></script>
+<script src="{{ STATIC_URL }}js/app/examination.js"></script>
+<script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
+<script src="{{ STATIC_URL }}js/app/timeline.js"></script>
+<script src="{{ STATIC_URL }}js/app/search.js"></script>
+<script src="{{ STATIC_URL }}js/app/user.js"></script>
+<script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
+<script src="{{ STATIC_URL }}js/app/officeevent.js"></script>
+<script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
 
-<script src="{{ STATIC_URL }}js/app/tour.js"></script>
+<script src="{{ STATIC_URL }}js/app/tour.js"></script>
+<script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
 
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>

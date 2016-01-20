@@ -20,11 +20,21 @@
                         <div class="col-md-2">
                             {{ patient.birth_date }} :
                         </div>
-                        <div class="col-md-6"><span e-class="polyfill-updatable" editable-date="patient.birth_date"
+                        <div class="col-md-6"><span e-class="polyfill-updatable birthdate" editable-date="patient.birth_date"
                                                     onaftersave="savePatient()" onshow="updateComponentPolyfill()"
                                 >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
                         </div>
                         <div class="col-md-4"><span> ( {$ age | format_age $} )</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ patient.sex }} :
+                        </div>
+                        <div class="col-md-10"><span editable-select="patient.sex"
+                                                         e-ng-options="s.value as s.text for s in sexes"
+                                                         onaftersave="savePatient()"
+                                                         class="inlineedit"
+                                >{$ showSex() $}</span></div>
                     </div>
                     <hr/>
                     <inlineedit class="row col-md-12" model="patient" property="address_street" on-save="savePatient()"

@@ -110,11 +110,20 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
     }
 ]);
 
+webshim.setOptions('forms-ext', {
+    replaceUI: 'auto',
+    types: 'date',
+    date: {nopicker: false}
+});
+
 // WEBShim configuration
-webshim.polyfill('forms forms-ext');
+webshim.polyfill('forms-ext');
 
 libreosteoApp.controller('MainController', ['$scope', function($scope) {
 	$scope.$on('$viewContentLoaded', function() {
+                $('[type="date"].birthdate').prop('max', function(){
+                    return new Date().toJSON().split('T')[0];
+                });
                 $('body').updatePolyfill();
             });
 }]);

@@ -29,7 +29,8 @@
     "bootstrap" : "latest",
     "bootstrap-tour" : "latest",
     "angular-ui-grid" : "latest",
-    "ngInfiniteScroll" : "1.0.0"
+    "ngInfiniteScroll" : "1.0.0",
+    "jquery": "1.11.3"
   },
   "resolutions": {
     "angular": "1.2.29"

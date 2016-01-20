@@ -16,6 +16,7 @@ def filter_fields(f):
 class GenericDisplay(ModelForm):
     class Meta:
         model = User 
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
     def display_fields(self): 
         return dict([ (f.name, f.formfield().label) for f in filter( filter_fields, self.Meta.model._meta.fields)])
@@ -24,26 +25,32 @@ class GenericDisplay(ModelForm):
 class PatientDisplay(GenericDisplay):
     class Meta:
         model = models.Patient
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 class RegularDoctorDisplay(GenericDisplay):
     class Meta:
         model = models.RegularDoctor
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 class ExaminationDisplay(GenericDisplay):
     class Meta:
         model = models.Examination
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 class UserDisplay(GenericDisplay):
     class Meta:
         model = User
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 class TherapeutSettingsDisplay(GenericDisplay):
     class Meta:
         model = models.TherapeutSettings
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 class OfficeSettingsDisplay(GenericDisplay):
     class Meta:
         model = models.OfficeSettings
+        fields = [ f.name for f in model._meta.fields if f.editable ]
 
 def display_patient(request):
     display = PatientDisplay()

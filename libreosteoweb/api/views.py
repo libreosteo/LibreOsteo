@@ -167,6 +167,10 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.office_phone = officesettings.office_phone
         invoice.office_siret = officesettings.office_siret
 
+        # Override the siret on the invoice with the therapeut siret if defined
+        if therapeutsettings.siret is not None :
+            invoice.office_siret = therapeutsettings.siret
+
         invoice.paiment_mode = invoicingSerializerData['paiment_mode']
         invoice.therapeut_name = self.request.user.last_name
         invoice.therapeut_first_name = self.request.user.first_name
@@ -184,6 +188,10 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.patient_address_city = self.get_object().patient.address_city
         invoice.content_invoice = officesettings.invoice_content
         invoice.footer = officesettings.invoice_footer
+
+        # Override the footer on the invoice with the therapeut settings if defined
+        if therapeutsettings.invoice_footer is not None :
+            invoice.footer = therapeutsettings.invoice_footer
         invoice.date = datetime.today()
         invoice.save()
         invoice.number += unicode(10000+invoice.id)

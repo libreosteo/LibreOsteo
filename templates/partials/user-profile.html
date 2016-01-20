@@ -41,9 +41,21 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputAdeli" class="col-sm-2 control-label">{{ therapeutsettings.quality }}</label>
+                    <label for="inputSiret" class="col-sm-2 control-label">{{ therapeutsettings.siret }}</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputAdeli" placeholder="{{ therapeutsettings.quality }}">
+                      <input type="text" ng-model="therapeutsettings.siret" class="form-control" id="inputSiret" placeholder="{{ therapeutsettings.siret }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputQuality" class="col-sm-2 control-label">{{ therapeutsettings.quality }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputQuality" placeholder="{{ therapeutsettings.quality }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputFooter" class="col-sm-2 control-label">{{ therapeutsettings.invoice_footer }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" ng-model="therapeutsettings.invoice_footer" class="form-control" id="inputFooter" placeholder="{{ therapeutsettings.invoice_footer }}">
                     </div>
                 </div>
             </div>

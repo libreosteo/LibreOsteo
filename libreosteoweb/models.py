@@ -234,3 +234,15 @@ class TherapeutSettings(models.Model):
     adeli = models.TextField(_('Adeli'),blank=True)
     quality = models.TextField(_('Quality'), blank=True)
     user = models.OneToOneField(User, verbose_name=_('User'),   blank=True,null=True)
+    siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
+    invoice_footer = models.TextField(_('Invoice footer'), blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Ensure that empty string are none in DB
+        """
+        if self.siret == '':
+            self.siret = None
+        if self.invoice_footer == '':
+            self.invoice_footer = None
+        super(TherapeutSettings, self).save(*args, **kwargs)

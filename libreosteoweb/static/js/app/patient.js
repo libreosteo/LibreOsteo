@@ -280,12 +280,17 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     $scope.newExaminationDisplay = false;
                     $scope.newExaminationActive = false;
                     $scope.examinationsListActive = true;
+
                 } else {
                     // Close the view of the examination
                     $scope.previousExamination.data = null;
                 }
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
+                $scope.previousExamination.data = ExaminationServ.get({examinationId : examination.id},
+                    function(data){
+                        $scope.previousExamination.data = data;
+                });
             });
         };
 

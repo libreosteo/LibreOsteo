@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from .validators import UniqueTogetherIgnoreCaseValidator
+from .filter import get_name_filters
 
 
 class WithPkMixin(object):
@@ -20,6 +21,16 @@ def check_birth_date(value):
 class PatientSerializer (serializers.ModelSerializer):
     current_user_operation = None
     birth_date = serializers.DateField(label=_('Birth date'), validators=[check_birth_date] )
+    
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_original_name(self, value):
+        return get_name_filters().filter(value)
+    	
     class Meta:
         model = Patient
         validators = [

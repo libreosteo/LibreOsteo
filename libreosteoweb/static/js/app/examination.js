@@ -57,7 +57,7 @@ examination.directive('examination', function(){
           if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
-        controller : function($scope, $filter)
+        controller : function($scope, $filter, $window)
         {
             $scope.types = [
                 { value : 1, text : gettext('Normal examination') },
@@ -116,6 +116,15 @@ examination.directive('examination', function(){
             $scope.$watch('model.general_state', function(newValue, oldValue){
                 $scope.examinationSettings.general_state = !isEmpty(newValue);
             });
+
+            $scope.printInvoice = function(examination)
+            {
+                var invoiceTab = $window.open('invoice/' + examination.invoice , '_blank');
+
+                setTimeout(function() {
+                    invoiceTab.print();
+                }, 750);
+            };
             
         },
         templateUrl: 'web-view/partials/examination'

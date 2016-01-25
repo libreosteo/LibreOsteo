@@ -67,7 +67,7 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
                 'form':form
             }
     else:
-        form = registration_form(request)
+        form = registration_form()
         context = {
             'form': form,
             redirect_field_name: redirect_to
@@ -234,7 +234,7 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
     @detail_route(methods=['post'])
     def set_password(self, request, pk=None):
         user = self.get_object()
-        serializer = apiserializers.PasswordSerializer(data=request.DATA)
+        serializer = apiserializers.PasswordSerializer(data=request.data)
         if serializer.is_valid():
             user.set_password(serializer.data['password'])
             user.save()
@@ -263,6 +263,7 @@ class StatisticsView(APIView):
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
     queryset = models.Invoice.objects.all()
+    serializer_class = apiserializers.InvoiceSerializer
 
 
 

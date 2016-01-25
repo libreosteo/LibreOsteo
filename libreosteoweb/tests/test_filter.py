@@ -36,3 +36,8 @@ class TestFilter(TestCase):
 		filter_chain = get_name_filters()
 		text = 'jean-charles'
 		self.assertEquals('Jean-Charles', filter_chain.filter(text))
+
+	def test_capitalize_upper_name(self):
+		filter_chain = get_name_filters()
+		text = 'DUPOND'
+		self.assertEquals('Dupond', filter_chain.filter(text))

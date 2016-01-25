@@ -1,7 +1,11 @@
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 def get_name_filters():
 	filterChain = FilterManager()
+	filterChain.add(LowerNameFilter())
 	filterChain.add(CapitalizeNameFilter())
 	filterChain.add(CapitalizeComposedNameFilter())
 	return filterChain
@@ -35,13 +39,13 @@ class AbstractFilter(object):
 		self._next = next
 	def set_next(self, filter=None):
 		self._next = filter
+	def get_last(self):
+		next_filter = self
+		while next_filter.next() is not None:
+			next_filter = next_filter.next()
+		return next_filter
 	def next(self):
 		return self._next
-	def get_last(self):
-		last = self
-		while last.next() is not None:
-			last = last.next()
-		return last
 	def filter(self, text=None):
 		if self.next() is not None:
 			return self.next().filter(text)
@@ -54,11 +58,11 @@ class CapitalizeNameFilter(AbstractFilter):
 		super(CapitalizeNameFilter, self).__init__(next)
 
 	def filter(self, text=None):
-		filtered_text = super(CapitalizeNameFilter, self).filter(text)
+		filtered_text = text
 		if filtered_text:
 			text_list = filtered_text.split(' ')
-			return '-'.join([self._capitalize_word(t) for t in text_list])
-		return filtered_text
+			filtered_text = '-'.join([self._capitalize_word(t) for t in text_list])
+		return super(CapitalizeNameFilter, self).filter(filtered_text)
 			
 	def _capitalize_word(self, word=None):
 		if word and len(word) > 0:
@@ -70,8 +74,18 @@ class CapitalizeComposedNameFilter(CapitalizeNameFilter):
 		super(CapitalizeComposedNameFilter, self).__init__(next)
 
 	def filter(self, text=None):
-		filtered_text = super(CapitalizeComposedNameFilter, self).filter(text)
+		filtered_text = text
 		if filtered_text:
 			text_list = filtered_text.split('-')
-			return '-'.join([self._capitalize_word(t) for t in text_list])
-		return filtered_text
+			filtered_text = '-'.join([self._capitalize_word(t) for t in text_list])
+		return super(CapitalizeComposedNameFilter, self).filter(filtered_text)
+
+class LowerNameFilter(AbstractFilter):
+	def __init__(self, next=None):
+		super(LowerNameFilter, self).__init__(next)
+
+	def filter(self, text=None):
+		filtered_text = text
+		if filtered_text:
+			filtered_text = filtered_text.lower()
+		return super(LowerNameFilter, self).filter(filtered_text)

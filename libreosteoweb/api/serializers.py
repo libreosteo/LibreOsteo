@@ -1,5 +1,5 @@
 from rest_framework import serializers, validators
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
@@ -42,20 +42,21 @@ class PatientSerializer (serializers.ModelSerializer):
         ]
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    def validate_last_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta :
         model = User
         fields = ('username', 'email', 'first_name', 'last_name')
 
-
-    #def restore_object(self, attrs, instance=None):
-        # call set_password on user object. Without this
-        # the password will be stored in plain text.
-        #user = super(UserSerializer, self).restore_object(attrs, instance)
-        #if(attrs['password']):
-        #    user.set_password(attrs['password'])
-        #return user
-
 class RegularDoctorSerializer(serializers.ModelSerializer):
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta:
         model = RegularDoctor
 
@@ -71,6 +72,7 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
 
 class ExaminationSerializer(serializers.ModelSerializer):
+    invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True)
     class Meta:
         model = Examination
 
@@ -147,9 +149,16 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeSettings
 
-
+class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Invoice
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'is_staff', 'is_active')

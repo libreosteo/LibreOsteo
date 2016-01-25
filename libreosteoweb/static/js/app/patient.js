@@ -144,7 +144,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.savePatient = function () {
             // Be sure that the birth_date has a correct format to be registered.
             $scope.patient.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
-            return PatientServ.save({patientId:$scope.patient.id}, $scope.patient, null, function(data)
+            return PatientServ.save({patientId:$scope.patient.id}, $scope.patient, function(data)
+                {
+                    // Should reload the patient
+                    $scope.patient = data;
+                }, function(data)
             {
                 // Should display the error
                 if(data.data.detail) {
@@ -280,10 +284,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     $scope.newExaminationDisplay = false;
                     $scope.newExaminationActive = false;
                     $scope.examinationsListActive = true;
-
-                } else {
-                    // Close the view of the examination
-                    $scope.previousExamination.data = null;
                 }
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);

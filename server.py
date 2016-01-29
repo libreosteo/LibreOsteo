@@ -12,7 +12,7 @@ from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 import webbrowser
 
-SERVER_PORT = 80
+SERVER_PORT = 8085
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""
@@ -162,7 +162,11 @@ def callback_server_started():
     If an instance is already running, the callback
     is called too
     """
-    webbrowser.open("http://localhost:%s/"%(SERVER_PORT), new=2,autoraise=True)
+    import socket
+    addr = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
+    if addr is None:
+        addr = 'localhost'
+    webbrowser.open("http://%s:%s/"%(addr, SERVER_PORT), new=2,autoraise=True)
 
 if __name__ == '__main__':
     if sys.platform not in ['win32']:

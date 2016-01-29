@@ -142,12 +142,12 @@ if sys.platform in ['win32']:
     # Create a web shorcut link
     shortlink = open("build/exe.win32-2.7/Libreosteo.url","w")
     shortlink.write("[InternetShortcut]\n")
-    shortlink.write("URL=http://localhost/\n")
+    shortlink.write("URL=http://localhost:8085/\n")
     shortlink.write("\n")
     shortlink.write("\n")
 
     ##Copy the launchservice program
-    shutil.copy2('Z:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
+    shutil.copy2('Y:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
 
     ##Remove useless locales
     remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])

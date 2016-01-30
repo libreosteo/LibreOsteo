@@ -110,7 +110,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="invoice_footer">{{officesettings.invoice_footer}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_footer" name="invoice_footer" id="invoice_footer" placeholder="{{ officesettings.invoice_footer }}"
+                                <textarea class="form-control input-lg" ng-model="officesettings.invoice_footer" name="invoice_footer" id="invoice_footer" placeholder="{{ officesettings.invoice_footer }}"
                                 tooltip="{{ officesettings.invoice_footer }}"
                                 tooltip-trigger="mouseenter"
                                 ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>

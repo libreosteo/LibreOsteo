@@ -20,13 +20,13 @@
                 <div class="col-xs-6 col-sm-6 col-md-6">
                     <div class="form-group">
                         <input type="text" class="form-control  input-lg" ng-model="user.first_name"
-                               name="first_name" placeholder="{{ user.first_name }}">
+                               name="first_name" placeholder="{{ user.first_name }}"/>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <input type="text" class="form-control  input-lg" ng-model="user.email" required
-                       name="email" placeholder="{{ user.email }}">
+                       name="email" placeholder="{{ user.email }}"/>
             </div>
 
             {% if not DEMONSTRATION %}
@@ -37,25 +37,25 @@
                 <div class="form-group">
                     <label for="inputAdeli" class="col-sm-2 control-label">{{ therapeutsettings.adeli }}</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.adeli" class="form-control" id="inputAdeli" placeholder="{{ therapeutsettings.adeli }}">
+                      <input type="text" ng-model="therapeutsettings.adeli" class="form-control" id="inputAdeli" placeholder="{{ therapeutsettings.adeli }}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputSiret" class="col-sm-2 control-label">{{ therapeutsettings.siret }}</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.siret" class="form-control" id="inputSiret" placeholder="{{ therapeutsettings.siret }}">
+                      <input type="text" ng-model="therapeutsettings.siret" class="form-control" id="inputSiret" placeholder="{{ therapeutsettings.siret }}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputQuality" class="col-sm-2 control-label">{{ therapeutsettings.quality }}</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputQuality" placeholder="{{ therapeutsettings.quality }}">
+                      <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputQuality" placeholder="{{ therapeutsettings.quality }}"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputFooter" class="col-sm-2 control-label">{{ therapeutsettings.invoice_footer }}</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.invoice_footer" class="form-control" id="inputFooter" placeholder="{{ therapeutsettings.invoice_footer }}">
+                      <textarea ng-model="therapeutsettings.invoice_footer" class="form-control" id="inputFooter" placeholder="{{ therapeutsettings.invoice_footer }}"/>
                     </div>
                 </div>
             </div>

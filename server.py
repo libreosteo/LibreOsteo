@@ -14,12 +14,14 @@ import webbrowser
 
 SERVER_PORT = 8085
 
+
+
 def _exit(self):
     """Stop all services and prepare to exit the process."""
     exitstate = self.state
     try:
         self.stop()
-
+        
         self.state = states.EXITING
         self.log('Bus EXITING')
         self.publish('exit')
@@ -59,6 +61,7 @@ class Server(object):
         engine = cherrypy.engine
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
+
         engine.signal_handler.subscribe()
  
         if hasattr(engine, "console_control_handler"):
@@ -162,14 +165,87 @@ def callback_server_started():
     If an instance is already running, the callback
     is called too
     """
-    import socket
-    addr = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
-    if addr is None:
-        addr = 'localhost'
+    addr = 'localhost'
     webbrowser.open("http://%s:%s/"%(addr, SERVER_PORT), new=2,autoraise=True)
 
 if __name__ == '__main__':
+    if getattr(sys, 'frozen', False):
+        SITE_ROOT = os.path.split(os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0])[0]
+        DATA_FOLDER = SITE_ROOT
+        if (getattr(sys, 'frozen', False) == 'macosx_app'):
+    	    DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
+    	    SITE_ROOT = os.path.split(SITE_ROOT)[0]
+    	    if not os.path.exists(DATA_FOLDER):
+    	        os.makedirs(DATA_FOLDER)
+    LOG_CONF = {
+	    'version': 1,
+	
+	    'formatters': {
+	        'void': {
+	            'format': ''
+	        },
+	        'standard': {
+	            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+	        },
+	    },
+	    'handlers': {
+	        'default': {
+	            'level':'INFO',
+	            'class':'logging.StreamHandler',
+	            'formatter': 'standard',
+	            'stream': 'ext://sys.stdout'
+	        },
+	        'cherrypy_console': {
+	            'level':'INFO',
+	            'class':'logging.StreamHandler',
+	            'formatter': 'void',
+	            'stream': 'ext://sys.stdout'
+	        },
+	        'cherrypy_access': {
+	            'level':'INFO',
+	            'class': 'logging.handlers.RotatingFileHandler',
+	            'formatter': 'void',
+	            'filename': os.path.join(DATA_FOLDER, 'access.log'),
+	            'maxBytes': 10485760,
+	            'backupCount': 20,
+	            'encoding': 'utf8'
+	        },
+	        'cherrypy_error': {
+	            'level':'INFO',
+	            'class': 'logging.handlers.RotatingFileHandler',
+	            'formatter': 'void',
+	            'filename': os.path.join(DATA_FOLDER, 'errors.log'),
+	            'maxBytes': 10485760,
+	            'backupCount': 20,
+	            'encoding': 'utf8'
+	        },
+	    },
+	    'loggers': {
+	        '': {
+	            'handlers': ['default'],
+	            'level': 'INFO'
+	        },
+	        'db': {
+	            'handlers': ['default'],
+	            'level': 'INFO' ,
+	            'propagate': False
+	        },
+	        'cherrypy.access': {
+	            'handlers': ['cherrypy_access'],
+	            'level': 'INFO',
+	            'propagate': False
+	        },
+	        'cherrypy.error': {
+	            'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+	        },
+	    }
+	}
+	        
+    
+    logging.config.dictConfig(LOG_CONF)
     if sys.platform not in ['win32']:
-        Server().run(callback_server_started)
+	    Server().run(callback_server_started)
     else :
         Server().run()

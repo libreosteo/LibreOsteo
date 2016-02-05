@@ -27,7 +27,7 @@ def remove_useless_files(directory, keepfiles_list, keepdir_list):
 # Build on Windows.
 #
 # usage :
-#     python setup.py build 
+#     python setup.py build_exe 
 #
 if sys.platform in ['win32']:
     from cx_Freeze import setup, Executable
@@ -77,7 +77,7 @@ if sys.platform in ['win32']:
     copyDependentFiles = True
     includes = [
         'cherrypy',
-        #'win32serviceutil', 'win32service', 'win32event', 'servicemanager',
+        'win32serviceutil', 'win32service', 'win32event', 'servicemanager','win32timezone',
         'django.template.loader_tags',
         'django.core.management',
         'Libreosteo',
@@ -135,7 +135,7 @@ if sys.platform in ['win32']:
         version = VERSION,
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
+        executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
 
 
@@ -147,7 +147,7 @@ if sys.platform in ['win32']:
     shortlink.write("\n")
 
     ##Copy the launchservice program
-    shutil.copy2('Y:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
+    #shutil.copy2('Y:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
 
     ##Remove useless locales
     remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])

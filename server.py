@@ -14,7 +14,7 @@ import webbrowser
 
 SERVER_PORT = 8085
 
-
+logger = logging.getLogger(__name__)
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""
@@ -69,8 +69,8 @@ class Server(object):
     
         try :
             engine.start()
-        except :
-            pass
+        except Exception as e :
+            logger.exception("Exception when starting server")
 
 
         if callback :
@@ -169,6 +169,7 @@ def callback_server_started():
     webbrowser.open("http://%s:%s/"%(addr, SERVER_PORT), new=2,autoraise=True)
 
 if __name__ == '__main__':
+    DATA_FOLDER = os.path.dirname(__file__)
     if getattr(sys, 'frozen', False):
         SITE_ROOT = os.path.split(os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0])[0]
         DATA_FOLDER = SITE_ROOT
@@ -245,7 +246,14 @@ if __name__ == '__main__':
 	        
     
     logging.config.dictConfig(LOG_CONF)
-    if sys.platform not in ['win32']:
-	    Server().run(callback_server_started)
+    
+    import socket
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('127.0.0.1', SERVER_PORT))
+    if result == 0:
+        callback_server_started()
     else :
-        Server().run()
+        if sys.platform not in ['win32']:
+	        Server().run(callback_server_started)
+        else :
+            Server().run()

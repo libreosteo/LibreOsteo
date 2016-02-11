@@ -171,9 +171,9 @@ if sys.platform in ['win32']:
 if sys.platform in ['darwin']:
     from setuptools import setup
 
-    APP = ['server.py']
+    APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates']
+    DATA_FILES = ['static', 'locale','templates', 'macos']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
@@ -191,7 +191,7 @@ if sys.platform in ['darwin']:
             'CFBundleShortVersionString' : VERSION,
             'CFBundleVersion' : VERSION,
         },
-        'extra_scripts': ['manage.py'],
+        'extra_scripts': ['server.py','manage.py'],
         'optimize' : True,
         'iconfile' : 'libreosteoweb/static/images/favicon.icns',
     }

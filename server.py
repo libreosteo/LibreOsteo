@@ -250,10 +250,5 @@ if __name__ == '__main__':
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('127.0.0.1', SERVER_PORT))
-    if result == 0:
-        callback_server_started()
-    else :
-        if sys.platform not in ['win32']:
-	        Server().run(callback_server_started)
-        else :
-            Server().run()
+    if result != 0:
+        Server().run()

@@ -1,6 +1,6 @@
 import sys, glob, os
 
-VERSION = "0.3"
+VERSION = "0.4"
 
 
 
@@ -27,7 +27,7 @@ def remove_useless_files(directory, keepfiles_list, keepdir_list):
 # Build on Windows.
 #
 # usage :
-#     python setup.py build 
+#     python setup.py build_exe 
 #
 if sys.platform in ['win32']:
     from cx_Freeze import setup, Executable
@@ -77,7 +77,7 @@ if sys.platform in ['win32']:
     copyDependentFiles = True
     includes = [
         'cherrypy',
-        #'win32serviceutil', 'win32service', 'win32event', 'servicemanager',
+        'win32serviceutil', 'win32service', 'win32event', 'servicemanager','win32timezone',
         'django.template.loader_tags',
         'django.core.management',
         'Libreosteo',
@@ -135,7 +135,7 @@ if sys.platform in ['win32']:
         version = VERSION,
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("server.py", base=base,targetName="Libreosteo.exe"),
+        executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
                        Executable("manager.py", base=base)])
 
 
@@ -145,9 +145,6 @@ if sys.platform in ['win32']:
     shortlink.write("URL=http://localhost:8085/\n")
     shortlink.write("\n")
     shortlink.write("\n")
-
-    ##Copy the launchservice program
-    shutil.copy2('Y:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
 
     ##Remove useless locales
     remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])
@@ -171,9 +168,9 @@ if sys.platform in ['win32']:
 if sys.platform in ['darwin']:
     from setuptools import setup
 
-    APP = ['server.py']
+    APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates']
+    DATA_FILES = ['static', 'locale','templates', 'macos']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
@@ -191,7 +188,7 @@ if sys.platform in ['darwin']:
             'CFBundleShortVersionString' : VERSION,
             'CFBundleVersion' : VERSION,
         },
-        'extra_scripts': ['manage.py'],
+        'extra_scripts': ['server.py','manage.py'],
         'optimize' : True,
         'iconfile' : 'libreosteoweb/static/images/favicon.icns',
     }

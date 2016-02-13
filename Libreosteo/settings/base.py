@@ -76,7 +76,7 @@ ROOT_URLCONF = 'Libreosteo.urls'
 
 WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
-STATIC_ROOT = "./static"
+STATIC_ROOT = "static/"
 
 TEMPLATE_DIRS = (
     'templates',

@@ -7,3 +7,8 @@ cp /Applications/Libreosteo.app/Contents/Resources/macos/org.libreosteo.macos.Li
 chmod +x "/Library/LaunchDaemons/org.libreosteo.macos.Libreosteo.plist"
 sudo launchctl load -w "/Library/LaunchDaemons/org.libreosteo.macos.Libreosteo.plist"
 sudo launchctl start org.libreosteo.macos.Libreosteo
+
+# For previous installation
+if [ -e "/Users/${myuser}/Library/LaunchAgents/org.libreosteo.macos.Libreosteo.plist"]; then
+  rm "/Users/${myuser}/Library/LaunchAgents/org.libreosteo.macos.Libreosteo.plist"
+fi

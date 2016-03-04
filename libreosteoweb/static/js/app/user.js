@@ -24,8 +24,8 @@ user.factory('TherapeutSettingsServ', ['$resource',
   }
 ]);
 
-user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSettingsServ', 'growl','$modal',
-    function($scope, $http, UserServ, TherapeutSettingsServ, growl, $modal){
+user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSettingsServ', 'growl','$uibModal',
+    function($scope, $http, UserServ, TherapeutSettingsServ, growl, $uibModal){
         "use strict";
         $scope.userid = null;
 
@@ -63,11 +63,11 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
           }
         $scope.setPassword = function()
         {
-          var modalInstance = $modal.open({
+          var uibModalInstance = $uibModal.open({
                 templateUrl: 'web-view/partials/set-password-modal',
                 controller : 'SetPasswordFormCtrl'
           });
-          modalInstance.result.then(function (newPassword){
+          uibModalInstance.result.then(function (newPassword){
             UserServ.setpassword({userId : $scope.userid}, newPassword).
               $promise.then( function(result)
                 {
@@ -84,19 +84,19 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
                 });
         }
 }])
-.controller('SetPasswordFormCtrl', ['$scope', '$modalInstance',
- function($scope, $modalInstance) {
+.controller('SetPasswordFormCtrl', ['$scope', '$uibModalInstance',
+ function($scope, $uibModalInstance) {
     "use strict";
     $scope.field = {
       password : null
     };
 
     $scope.ok = function () {
-      $modalInstance.close($scope.field);
+      $uibModalInstance.close($scope.field);
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }
 ]);

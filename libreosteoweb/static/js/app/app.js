@@ -21,6 +21,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loOfficeSettings',
     'ui.grid',
     'infinite-scroll',
+    'loEditFormManager'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -33,9 +34,8 @@ libreosteoApp.run(function (editableOptions) {
 });
 
 libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
-    $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
-    $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
-    //$http.defaults.headers.delete['X-CSRFToken'] = $cookies.csrftoken;
+    $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $http.defaults.xsrfCookieName = 'csrftoken';
 }]);
 
 libreosteoApp.config(['growlProvider', function(growlProvider) {
@@ -119,11 +119,13 @@ webshim.setOptions('forms-ext', {
 // WEBShim configuration
 webshim.polyfill('forms-ext');
 
-libreosteoApp.controller('MainController', ['$scope', function($scope) {
+libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', function($scope, loEditFormManager) {
 	$scope.$on('$viewContentLoaded', function() {
                 $('[type="date"].birthdate').prop('max', function(){
                     return new Date().toJSON().split('T')[0];
                 });
                 $('body').updatePolyfill();
             });
+
+    $scope.editFormManager = loEditFormManager;
 }]);

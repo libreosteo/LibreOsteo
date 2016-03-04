@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class WithPkMixin(object):
@@ -72,7 +73,8 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
 
 class ExaminationSerializer(serializers.ModelSerializer):
-    invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True)
+    invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True, read_only=True)
+    therapeut_detail = UserInfoSerializer(source="therapeut", required=False, allow_null=True, read_only=True)
     class Meta:
         model = Examination
 
@@ -132,9 +134,12 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
             patient = Patient.objects.get(id = obj.reference)
             return "%s %s" % (patient.family_name, patient.first_name)
         if (obj.clazz == "Examination"):
-            examination = Examination.objects.get(id=obj.reference)
-            patient = examination.patient
-            return "%s %s" % (patient.family_name, patient.first_name)
+            try :
+                examination = Examination.objects.get(id=obj.reference)
+                patient = examination.patient
+                return "%s %s" % (patient.family_name, patient.first_name)
+            except ObjectDoesNotExist:
+                pass 
         return ""
 
     def get_translated_comment(self, obj):

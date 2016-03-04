@@ -73,9 +73,10 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$modal', '$http', 'growl', 'PatientServ', 'DoctorServ',
-    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ',
-    function($scope, $state, $stateParams, $filter, $modal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ) {
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ',
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager',
+    function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+        loEditFormManager) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
@@ -170,7 +171,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         // Prepare and define the modal function to add doctor.
        $scope.formAddDoctor = function() {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'web-view/partials/doctor-modal',
                 controller : DoctorAddFormCtrl
             });
@@ -202,13 +203,16 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // To display examination in the patient file.
        // $scope.archiveExamination = null;
 
-        $scope.newExaminationDisplay = false;
-        $scope.newExaminationActive = false;
-        $scope.examinationsListActive = false;
+       $scope.examinationsTab = {
+        //Is the tab for new examination is displayed ?
+        newExaminationDisplayTab : false,
+        // Should be it active ?
+        newExaminationDisplayActive : false,
+        examinationsListActive : false,
+       };
+
         $scope.startExamination = function() {
-            $scope.newExaminationDisplay = true;
-            $scope.newExaminationActive = true;
-            $scope.examinationsListActive = false;
+            $scope.currentExaminationManager();
 
             $scope.newExamination = {
                 reason : '',
@@ -239,30 +243,37 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // Handle the examination object to be saved.
         $scope.saveExamination = function (examinationToSave) {
             //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
+            if (!examinationToSave)
+            {
+                examinationToSave = $scope.newExamination;
+            } 
             var localExamination;
             if( !examinationToSave.id ) {
                 localExamination = ExaminationServ.add(examinationToSave, function(value)
                 {
-                   $scope.newExamination = value;
+                   Object.keys(value).forEach(function(key) { $scope.newExamination[key] = value[key]; });
+                   $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
                 });
             } else {
-                localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave);
+                localExamination = ExaminationServ.save({examinationId: examinationToSave.id}, examinationToSave, function(value){
+                    $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
+                });
             }
-            $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
             return localExamination;
         };
 
         // Function which manage the current examination
         $scope.currentExaminationManager = function() {
-            $scope.newExaminationDisplay = true;
-            $scope.newExaminationActive = true;
+            $scope.examinationsTab.newExaminationDisplay = true;
+            $scope.examinationsTab.newExaminationActive = true;
+            $scope.examinationsTab.examinationsListActive = false;
         };
 
         // Handle the invoice function
 
         $scope.invoiceExamination = function(examination)
         {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'web-view/partials/invoice-modal',
                 controller : InvoiceFormCtrl
             });
@@ -278,12 +289,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             
             ExaminationServ.close({examinationId : examination.id}, invoicing , function() {
-                if ($scope.newExaminationDisplay){
+                if ($scope.examinationsTab.newExaminationDisplay){
                     // Hide the in progress examination
                     $scope.newExamination = {};
-                    $scope.newExaminationDisplay = false;
-                    $scope.newExaminationActive = false;
-                    $scope.examinationsListActive = true;
+                    $scope.examinationsTab.newExaminationDisplay = false;
+                    $scope.examinationsTab.newExaminationActive = false;
+                    $scope.examinationsTab.examinationsListActive = true;
                 }
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
@@ -294,16 +305,43 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             });
         };
 
+        $scope.examinationDeleted = function(examination)
+        {
+            if (examination.id)
+            {
+                $scope.examinations = $scope.examinations.filter(function(el)
+                {
+                    return el.id !== examination.id;
+                });
+                
+            }                            
+            if ($scope.examinationsTab.newExaminationDisplay){
+                // Hide the in progress examination
+                Object.keys($scope.newExamination).forEach(function(key) { delete $scope.newExamination[key]; });
+                $scope.examinationsTab.newExaminationDisplay = false;
+                $scope.examinationsTab.newExaminationActive = false;
+                $scope.examinationsTab.examinationsListActive = true;
+            }
+            if($scope.examinationsTab.examinationsListActive){
+                $scope.previousExamination.data = null;
+                $state.go('patient.examinations');
+            }
+        }
 
         // Restore the state
         if ($state.includes('patient.examinations')){
-            $scope.examinationsListActive = true;
+            $scope.examinationsTab.examinationsListActive = true;
         } else if ($state.includes('patient.examination')){
-            $scope.examinationsListActive = true;
+            $scope.examinationsTab.examinationsListActive = true;
 
             $scope.previousExamination.data = ExaminationServ.get({examinationId : $state.params.examinationId},
                 function(data){
                   $scope.previousExamination.data = data;
+                  loEditFormManager.available = true;
+              }, function(error)
+              {
+                $scope.previousExamination.data = null;
+                $state.go('patient.examinations');
               });
         }
 
@@ -326,7 +364,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 }]);
 
 
-var DoctorAddFormCtrl = function($scope, $modalInstance) {
+var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
     "use strict";
     $scope.doctor = {
         family_name : null,
@@ -336,15 +374,15 @@ var DoctorAddFormCtrl = function($scope, $modalInstance) {
 
     };
     $scope.ok = function () {
-      $modalInstance.close($scope.doctor);
+      $uibModalInstance.close($scope.doctor);
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 };
 
-var InvoiceFormCtrl = function($scope, $modalInstance, OfficeSettingsServ) {
+var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ) {
     "use strict";
     $scope.invoicing = {
         status : null,
@@ -364,11 +402,11 @@ var InvoiceFormCtrl = function($scope, $modalInstance, OfficeSettingsServ) {
     });
 
     $scope.ok = function() {
-        $modalInstance.close($scope.invoicing);
+        $uibModalInstance.close($scope.invoicing);
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.validateStatus = function(value) {

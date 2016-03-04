@@ -3,9 +3,9 @@
     {% trans 'Office settings' %}
 </h1>
 
-<tabset>
+<uib-tabset>
 
-<tab heading="{% trans 'General' %}">
+<uib-tab heading="{% trans 'General' %}">
 <div class="container-fluid">
     <div class="row">
             <form novalidate name="form">
@@ -130,8 +130,8 @@
 </div>
 
 <div id="update-info" ng-hide="true">{% trans 'Settings was updated' %}</div>
-</tab>
-<tab heading="{% trans 'Users'%}" ng-if="{{ user.is_staff|yesno:"true,false" }}">
+</uib-tab>
+<uib-tab heading="{% trans 'Users'%}" ng-if="{{ user.is_staff|yesno:"true,false" }}">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -144,5 +144,5 @@
             </div>
         </div>
     </div>
-</tab>
-</tabset>
+</uib-tab>
+</uib-tabset>

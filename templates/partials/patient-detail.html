@@ -6,9 +6,9 @@
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
 </h1>
 
-<tabset>
+<uib-tabset>
 
-<tab heading="{% trans 'General infos' %}">
+<uib-tab heading="{% trans 'General infos' %}" >
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-info">
@@ -113,9 +113,9 @@
             </div>
         </div>
     </div>
-</tab>
+</uib-tab>
 
-<tab heading="{% trans 'History' %}">
+<uib-tab heading="{% trans 'History' %}" >
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-primary">
@@ -168,9 +168,9 @@
             </div>
         </div>
     </div>
-</tab>
+</uib-tab>
 
-<tab heading="{% trans 'Medical reports' %}">
+<uib-tab heading="{% trans 'Medical reports' %}" >
     <div class="panel panel-primary">
                 <div class="panel-heading">
                     {{ patient.medical_reports }}
@@ -181,19 +181,19 @@
                             row="7" col="75"></inlinetextarea>
                 </div>
             </div>
-</tab>
+</uib-tab>
 
-<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" ui-sref="patient.examinations">
+<uib-tab heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations">
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
-    close="invoiceExamination(previousExamination.data)"/>
-    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
+    close="invoiceExamination(previousExamination.data)" on-delete='examinationDeleted(previousExamination.data)'/>
+    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="examinationsTab.newExaminationDisplay" ng-if="previousExamination.data == null"
     current-examination="newExamination"
     current-examination-manager="currentExaminationManager()"/>
-</tab>
+</uib-tab>
 
-<tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
-    <examination model="newExamination" save-model="saveExamination(newExamination)" close="invoiceExamination(newExamination)" new-examination="true"/>
-</tab>
-</tabset>
+<uib-tab heading="{% trans 'New Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive">
+    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
+</uib-tab>
+</uib-tabset>

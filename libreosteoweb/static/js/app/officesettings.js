@@ -36,8 +36,8 @@ officesettings.filter('true_false', function() {
 
 
 officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl', 
-  'OfficeSettingsServ', 'OfficeUsersServ', 'i18nService', '$modal',
-    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, i18nService, $modal){
+  'OfficeSettingsServ', 'OfficeUsersServ', 'i18nService', '$uibModal',
+    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, i18nService, $uibModal){
         "use strict";
 
         i18nService.setCurrentLang('fr');
@@ -104,7 +104,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
         $scope.setPassword = function(entity)
         {
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
                 templateUrl: 'web-view/partials/set-password-modal',
                 controller : 'SetPasswordFormCtrl'
           });
@@ -127,7 +127,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
         $scope.addUser = function()
         {
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
                 templateUrl: 'web-view/partials/add-user-modal',
                 controller : 'AddUserFormCtrl'
           });
@@ -143,8 +143,8 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
         }
 }]);
 
-officesettings.controller('AddUserFormCtrl', ['$scope', '$modalInstance', 'OfficeUsersServ', '$q',
- function($scope, $modalInstance, OfficeUsersServ, $q) {
+officesettings.controller('AddUserFormCtrl', ['$scope', '$uibModalInstance', 'OfficeUsersServ', '$q',
+ function($scope, $uibModalInstance, OfficeUsersServ, $q) {
     "use strict";
     $scope.user = {
         username : null,
@@ -152,11 +152,11 @@ officesettings.controller('AddUserFormCtrl', ['$scope', '$modalInstance', 'Offic
 
     };
     $scope.ok = function () {
-      $modalInstance.close($scope.user);
+      $uibModalInstance.close($scope.user);
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     $scope.validateUsername = function(value)
@@ -184,19 +184,19 @@ officesettings.controller('AddUserFormCtrl', ['$scope', '$modalInstance', 'Offic
 }
 ]);
 
-officesettings.controller('SetPasswordFormCtrl', ['$scope', '$modalInstance',
- function($scope, $modalInstance) {
+officesettings.controller('SetPasswordFormCtrl', ['$scope', '$uibModalInstance',
+ function($scope, $uibModalInstance) {
     "use strict";
     $scope.field = {
       password : null
     };
 
     $scope.ok = function () {
-      $modalInstance.close($scope.field);
+      $uibModalInstance.close($scope.field);
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }
 ]);

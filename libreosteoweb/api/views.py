@@ -16,6 +16,7 @@ import json
 import logging
 from django.contrib.auth.models import User
 from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser
+from .exceptions import Forbidden
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -113,6 +114,12 @@ class PatientViewSet(viewsets.ModelViewSet):
         serializer.instance.set_user_operation(self.request.user)
         return super(PatientViewSet, self).perform_update(serializer)
 
+    def perform_destroy(self, instance):
+        examination_list = models.Examination.objects.filter(patient=instance.id)
+        if not len(examination_list) == 0:
+            raise Forbidden()
+        models.OfficeEvent.objects.filter(reference=instance.id, clazz=models.Patient.__name__).delete()
+        return super(PatientViewSet, self).perform_destroy(instance)
 
 
 class RegularDoctorViewSet(viewsets.ModelViewSet):
@@ -139,6 +146,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
                 current_examination.status_reason = serializer.data['reason']
                 current_examination.save()
+                return Response({'invoiced' : None})
             if serializer.data['status'] == 'invoiced':
                 current_examination.invoice = self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
@@ -209,6 +217,12 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         if not serializer.instance.therapeut :
             serializer.save(therapeut=self.request.user)
         serializer.save(therapeut=serializer.instance.therapeut)
+
+    def perform_destroy(self, instance):
+        if not instance.status == 0:
+            raise Forbidden()
+        models.OfficeEvent.objects.filter(reference=instance.id, clazz=models.Examination.__name__).delete()
+        return super(ExaminationViewSet, self).perform_destroy(instance)
 
     @detail_route(methods=['GET'])
     def comments(self, request, pk=None):

@@ -23,15 +23,19 @@
     "angular-loading-bar": "0.8.x",
     "webshim": "1.15.x",
     "angular-ui-router": "0.2.x",
-    "angular-toArrayFilter" : "1.x.x",
-    "angular-ui-validate" : "1.2.x",
-    "bootstrap" : "latest",
-    "bootstrap-tour" : "latest",
-    "angular-ui-grid" : "latest",
-    "ngInfiniteScroll" : "1.0.0",
-    "jquery" : "1.11.3"
+    "angular-toArrayFilter": "1.x.x",
+    "angular-ui-validate": "1.2.x",
+    "bootstrap": "latest",
+    "bootstrap-tour": "latest",
+    "angular-ui-grid": "latest",
+    "ngInfiniteScroll": "1.0.0",
+    "jquery": "1.11.3",
+    "rangy": "latest",
+    "jquery-ui": "1.x.x",
+    "hallo": "latest",
+    "jquery-ui-bootstrap" : "latest"
   },
   "resolutions": {
-    "angular": "1.2.29"
+    "angular": "1.5.x"
   }
 }

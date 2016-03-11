@@ -80,7 +80,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
+            p.birth_date = new Date(p.birth_date);
+            loEditFormManager.isavailable();
         });
+
+        $scope.form = {};
 
         // Display the formated age
         $scope.get_age = function () {
@@ -144,11 +148,14 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // Handle the patient object to be saved.
         $scope.savePatient = function () {
             // Be sure that the birth_date has a correct format to be registered.
-            $scope.patient.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
-            return PatientServ.save({patientId:$scope.patient.id}, $scope.patient, function(data)
+            var model = angular.copy($scope.patient);
+            model.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
+            return PatientServ.save({patientId:$scope.patient.id}, model, function(data)
                 {
                     // Should reload the patient
                     $scope.patient = data;
+                    $scope.patient.birth_date = new Date(data.birth_date);
+                    $scope.patient.doctor_detail(function (detail) {$scope.doctor = detail; });
                 }, function(data)
             {
                 // Should display the error
@@ -159,6 +166,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 }
                 $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
                      p.doctor_detail(function (detail) {$scope.doctor = detail; });
+                     $scope.patient.birth_date = new Date(p.birth_date);
                 });
             });
         };
@@ -166,7 +174,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // Prepare the doctors function to be selected.
         $scope.doctors = null;
         $scope.loadDoctors = function() {
-            $scope.doctors = DoctorServ.query();
+                return DoctorServ.query(function(result){
+                    $scope.doctors = result;
+                });
         };
 
         // Prepare and define the modal function to add doctor.
@@ -361,6 +371,98 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             }
         };
 
+        $scope.triggerEditFormPatient = {
+            save: false,
+            edit: true,
+            cancel: null,
+            delete: false,
+        };
+
+        $scope.$watch('form.patientForm.$visible', function(newValue, oldValue)
+        {
+            if(oldValue === false && newValue === true)
+            {
+                $scope.triggerEditFormPatient.edit = false;
+                $scope.triggerEditFormPatient.save = true;
+            } else if(oldValue === true && newValue === false )
+            {
+                $scope.triggerEditFormPatient.edit = true;
+                $scope.triggerEditFormPatient.save = false;
+            }
+            loEditFormManager.isavailable();
+        });
+
+        $scope.editPatient = function() {
+
+            $scope.form.patientForm.$show();
+        };
+
+        $scope.saveEditPatient = function()
+        {
+            $scope.form.patientForm.$save();
+        };
+
+        $scope.triggerEditFormHistory = {
+            save: false,
+            edit: true,
+            cancel: null,
+            delete: false,
+        };
+
+        $scope.$watch('form.historyForm.$visible', function(newValue, oldValue)
+        {
+            if(oldValue === false && newValue === true)
+            {
+                $scope.triggerEditFormHistory.edit = false;
+                $scope.triggerEditFormHistory.save = true;
+            } else if(oldValue === true && newValue === false )
+            {
+                $scope.triggerEditFormHistory.edit = true;
+                $scope.triggerEditFormHistory.save = false;
+            }
+            loEditFormManager.isavailable();
+        });
+
+        $scope.editHistory = function() {
+
+            $scope.form.historyForm.$show();
+        };
+
+        $scope.saveHistory = function()
+        {
+            $scope.form.historyForm.$save();
+        };
+
+        $scope.triggerEditFormMedical = {
+            save: false,
+            edit: true,
+            cancel: null,
+            delete: false,
+        };
+
+        $scope.$watch('form.medicalForm.$visible', function(newValue, oldValue)
+        {
+            if(oldValue === false && newValue === true)
+            {
+                $scope.triggerEditFormMedical.edit = false;
+                $scope.triggerEditFormMedical.save = true;
+            } else if(oldValue === true && newValue === false )
+            {
+                $scope.triggerEditFormMedical.edit = true;
+                $scope.triggerEditFormMedical.save = false;
+            }
+            loEditFormManager.isavailable();
+        });
+
+        $scope.editMedical = function() {
+
+            $scope.form.medicalForm.$show();
+        };
+
+        $scope.saveMedical = function()
+        {
+            $scope.form.medicalForm.$save();
+        };
 }]);
 
 

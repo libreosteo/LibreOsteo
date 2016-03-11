@@ -50,6 +50,7 @@ class Patient(models.Model):
         doctor = models.ForeignKey(RegularDoctor, verbose_name=_('Regular doctor'), blank=True, null=True)
         smoker = models.BooleanField(_('Smoker'), default=False)
         important_info = models.TextField(_('Important note'), blank=True)
+        current_treatment = models.TextField(_('Current treatment'), blank=True, default="")
         surgical_history = models.TextField(_('Surgical history'), blank=True)
         medical_history = models.TextField(_('Medical history'), blank=True)
         family_history = models.TextField(_('Family history'), blank=True)

@@ -4,7 +4,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'xeditable',
     'ui.bootstrap',
     'loPatient',
-    'loInlineEdit',
+    //'loInlineEdit',
     'loTimeline',
     'loDashboard',
     'loOfficeEvent',
@@ -21,7 +21,8 @@ var libreosteoApp = angular.module('libreosteo', [
     'loOfficeSettings',
     'ui.grid',
     'infinite-scroll',
-    'loEditFormManager'
+    'loEditFormManager',
+    'loHalloEditor'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

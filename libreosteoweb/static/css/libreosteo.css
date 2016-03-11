@@ -139,3 +139,13 @@ pre {
 .subtitle {
     padding-bottom:10px;
 }
+.inPlaceholderMode {
+  color: #ccc;
+  min-height: 1em;
+}
+.readyForEditMode {
+    background-color: white;
+    background-color: -moz-field;
+    border: 1px solid darkgray;
+    box-shadow: 1px 1px 1px 0 lightgray inset;    
+}

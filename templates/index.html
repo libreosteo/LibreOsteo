@@ -24,13 +24,12 @@
     <!-- TypeAHead component -->
     <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
 
-    <!-- InlineEdit component -->
-    <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
     <!-- compatibility for date input with all browsers -->
 
     <link href="{{ STATIC_URL }}bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.css" />
-    
+    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/jquery-ui-bootstrap/jquery.ui.theme.css">
+
 
 </head>
 
@@ -456,6 +455,10 @@
 <script src="{{ STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.js"></script>
 <script type='text/javascript' src='{{ STATIC_URL }}bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js'></script>
 <script type="text/javascript" src='{{ STATIC_URL }}js/plugins/jquery.sparkline.min.js'></script>
+<script type="text/javascript" src="{{ STATIC_URL }}bower_components/rangy/rangy-core.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}bower_components/hallo/dist/hallo.js"></script>
+
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>
@@ -463,7 +466,7 @@
 <script src="{{ STATIC_URL }}js/app/patient.js"></script>
 <script src="{{ STATIC_URL }}js/app/doctor.js"></script>
 <script src="{{ STATIC_URL }}js/app/examination.js"></script>
-<script src="{{ STATIC_URL }}js/app/inline-edit.js"></script>
+<!--script src="{{ STATIC_URL }}js/app/inline-edit.js"></script-->
 <script src="{{ STATIC_URL }}js/app/timeline.js"></script>
 <script src="{{ STATIC_URL }}js/app/search.js"></script>
 <script src="{{ STATIC_URL }}js/app/user.js"></script>
@@ -472,6 +475,7 @@
 <script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
 <script src="{{ STATIC_URL }}js/app/editformmanager.js"></script>
 <script src="{{ STATIC_URL }}js/app/tour.js"></script>
+<script src="{{ STATIC_URL }}js/app/halloeditor.js"></script>
 <script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
 
 <!--Specific libreosteo CSS -->

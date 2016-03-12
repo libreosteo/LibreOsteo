@@ -8,7 +8,8 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ',
             query: {method: 'GET' },
             get : {method: 'GET', params: {patientId: 'patient'}},
             save : {method : 'PUT', params : {patientId : 'patientId'}},
-            add : {method : 'POST'}
+            add : {method : 'POST'},
+            delete : { method : 'DELETE', params : {patientId : 'patientId'}},
         });
 
         serv.prototype.doctor_detail = function (callback) {
@@ -73,9 +74,9 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ',
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
     'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager',
-    function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+    function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
         loEditFormManager) {
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
@@ -221,6 +222,36 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         examinationsListActive : false,
        };
 
+       $scope.$watch('patient.id', function(newValue, oldValue)
+            {
+                $scope.updateDeleteTrigger();
+
+            });
+
+       $scope.updateDeleteTrigger = function() {
+                if($scope.patient == null)
+                {
+                    $scope.triggerEditFormPatient.delete = false;
+                    return;
+                }
+
+                if($scope.patient.id != null)
+                {
+                    var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data)
+                    {
+                        if( data.length != 0){
+                            $scope.triggerEditFormPatient.delete = false;
+                        } else {
+                            $scope.triggerEditFormPatient.delete = true;            
+                        }
+                    });
+                } else {
+                    $scope.triggerEditFormPatient.delete = false;
+                }
+            };
+
+
+
         $scope.startExamination = function() {
             $scope.currentExaminationManager();
 
@@ -269,6 +300,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
                 });
             }
+            $scope.updateDeleteTrigger();
             return localExamination;
         };
 
@@ -336,6 +368,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.previousExamination.data = null;
                 $state.go('patient.examinations');
             }
+            $scope.updateDeleteTrigger();
         }
 
         // Restore the state
@@ -375,7 +408,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             save: false,
             edit: true,
             cancel: null,
-            delete: false,
+            delete: true,
         };
 
         $scope.$watch('form.patientForm.$visible', function(newValue, oldValue)
@@ -401,6 +434,21 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             $scope.form.patientForm.$save();
         };
+
+        $scope.delete = function() 
+        {
+            if($scope.patient.id)
+                {
+                    PatientServ.delete({patientId : $scope.patient.id}, function(resultOk)
+                        {
+                            $state.go('dashboard'); 
+                        }, function(resultNok)
+                        {
+                            console.log(resultNok);
+                            growl.addErrorMessage("This operation is not available");
+                        });
+                }
+        }
 
         $scope.triggerEditFormHistory = {
             save: false,
@@ -463,6 +511,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             $scope.form.medicalForm.$save();
         };
+
+        $timeout(function() {
+            loEditFormManager.isavailable();
+        });
+        
 }]);
 
 
@@ -559,12 +612,15 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ) {
 };
 
 
-patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', 'DoctorServ',
-    function($scope, $location, growl, $sce, PatientServ, DoctorServ ) {
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', 'DoctorServ', '$filter',
+    function($scope, $location, growl, $sce, PatientServ, DoctorServ, $filter ) {
         "use strict";
 
         $scope.initPatient = function(patient) {
-            PatientServ.add(patient, function(data)
+            var model = angular.copy(patient);
+            model.birth_date = $filter('date')(patient.birth_date, 'yyyy-MM-dd');
+            
+            PatientServ.add(model, function(data)
             {
                 $location.path('/patient/'+data.id);
             },

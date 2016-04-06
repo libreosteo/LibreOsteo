@@ -247,3 +247,35 @@ class TherapeutSettings(models.Model):
         if self.invoice_footer == '':
             self.invoice_footer = None
         super(TherapeutSettings, self).save(*args, **kwargs)
+
+class FileImport(models.Model):
+    """
+    implements a couple of file for importing data.
+    It concerns only Patient and examination
+    """
+    file_patient = models.FileField(_('Patient file'))
+    file_examination = models.FileField(_('Examination file'),blank=True)
+    status = models.IntegerField(_('validity status'), blank=True, default=None, null=True)
+    analyze = None
+
+    def delete(self, *args, **kwargs):
+        """
+        Delete media file too.
+        """
+        if bool(self.file_patient) :
+            storage_patient, path_patient = self.file_patient.storage, self.file_patient.path
+        if bool(self.file_examination) : 
+            storage_examination, path_examination = self.file_examination.storage, self.file_examination.path
+        super(FileImport, self).delete(*args, **kwargs)
+        if bool(self.file_patient):
+            storage_patient.delete(path_patient)
+        if bool(self.file_examination) :
+            storage_examination.delete(path_examination)
+
+class InternalSetting(models.Model):
+    """
+    This model concerns all things which
+    are internal settings for the product
+    """
+    version_string = models.CharField(_('Version'), max_length=15, blank=None, null=True)
+    

@@ -82,7 +82,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
             p.birth_date = new Date(p.birth_date);
-            loEditFormManager.isavailable();
         });
 
         $scope.form = {};
@@ -386,6 +385,8 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.previousExamination.data = null;
                 $state.go('patient.examinations');
               });
+        } else {
+            loEditFormManager.available = true;
         }
 
         // Load the values for the sex
@@ -413,16 +414,16 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         $scope.$watch('form.patientForm.$visible', function(newValue, oldValue)
         {
-            if(oldValue === false && newValue === true)
+            if(newValue === true)
             {
                 $scope.triggerEditFormPatient.edit = false;
                 $scope.triggerEditFormPatient.save = true;
-            } else if(oldValue === true && newValue === false )
+                loEditFormManager.available = true;
+            } else if(newValue === false )
             {
                 $scope.triggerEditFormPatient.edit = true;
                 $scope.triggerEditFormPatient.save = false;
             }
-            loEditFormManager.isavailable();
         });
 
         $scope.editPatient = function() {
@@ -468,7 +469,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.triggerEditFormHistory.edit = true;
                 $scope.triggerEditFormHistory.save = false;
             }
-            loEditFormManager.isavailable();
         });
 
         $scope.editHistory = function() {
@@ -499,7 +499,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.triggerEditFormMedical.edit = true;
                 $scope.triggerEditFormMedical.save = false;
             }
-            loEditFormManager.isavailable();
         });
 
         $scope.editMedical = function() {
@@ -511,10 +510,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             $scope.form.medicalForm.$save();
         };
-
-        $timeout(function() {
-            loEditFormManager.isavailable();
-        });
         
 }]);
 

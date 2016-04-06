@@ -1,20 +1,23 @@
 var search = angular.module('loSearch', []);
 
 // Define the Controller in the index.html page
-search.controller('SearchCtrl', ['$scope', '$location', function ($scope, $location) {
-    $scope.query = '';
-    $scope.onEnterKeyDown = function($event)
-    {
-        "use strict";
-        if($event.keyCode == 13)
+search.controller('SearchCtrl', ['$scope', '$location', '$templateCache', '$state',  
+    function ($scope, $location, $templateCache, $state) {
+        $scope.query = '';
+        $scope.onEnterKeyDown = function($event)
         {
-            $scope.search();
+            "use strict";
+            if($event.keyCode == 13)
+            {
+                $scope.search();
+            }
         }
-    }
-    $scope.search = function()
-    {
-        $location.path('/search/'+$scope.query);
-    };
+        $scope.search = function()
+        {
+            var url = $state.get('search').templateUrl({query : $scope.query});
+            $templateCache.remove(url);
+            $location.path('/search/'+$scope.query);
+        };
 }]);
 
 

@@ -44,7 +44,7 @@ editFormManager.factory('loEditFormManager', function() {
         triggers_form[idx_form] = trigger;
     },
     isavailable: function() {
-      this.available = this._visibleCtrl() != null
+      this.available = this._visibleCtrl() != null;
       return this.available;
     },
     available: false,
@@ -163,3 +163,11 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
     }],
   }
 }]);
+
+
+
+var getStackTrace = function() {
+  var obj = {};
+  Error.captureStackTrace(obj, getStackTrace);
+  return obj.stack;
+};

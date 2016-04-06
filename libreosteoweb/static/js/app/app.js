@@ -74,7 +74,8 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
             {
                 url : '/search/:query',
                 templateUrl : function(params) {
-                    return 'web-view/partials/search-result?q='+params.query ;
+                    var url = 'web-view/partials/search-result?q='+params.query;
+                    return url ;
                 },
                 controller : 'SearchResultCtrl'
             }).
@@ -82,10 +83,11 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
             {
                 url : '/search/:query/:page',
                 templateUrl : function(params) {
-                    page = '';
+                    var page = '';
                     if(params.page)
                     {  page="&page="+params.page  }
-                    return 'web-view/partials/search-result?q='+params.query+page ;
+                    var url = 'web-view/partials/search-result?q='+params.query+page;
+                    return  url ;
                 },
                 controller : 'SearchResultCtrl'
             }).

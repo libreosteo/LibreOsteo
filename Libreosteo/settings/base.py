@@ -78,6 +78,8 @@ WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
 STATIC_ROOT = "static/"
 
+MEDIA_ROOT = "media/"
+
 TEMPLATE_DIRS = (
     'templates',
     'static',
@@ -157,6 +159,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/files/'
 
 
 REST_FRAMEWORK = {

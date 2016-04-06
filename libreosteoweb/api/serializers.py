@@ -1,11 +1,12 @@
 from rest_framework import serializers, validators
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice, FileImport
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters
 from django.core.exceptions import ObjectDoesNotExist
+from .file_integrator import Extractor
 
 
 class WithPkMixin(object):
@@ -172,3 +173,19 @@ class PasswordSerializer(serializers.Serializer):
      password = serializers.CharField(
         required=False
      )
+
+class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
+    _status = None
+    class Meta:
+        model = FileImport
+    analyze = serializers.SerializerMethodField()
+    extract = serializers.SerializerMethodField()
+
+    def get_analyze(self, obj):
+        if obj.analyze is not None:
+            return obj.analyze
+
+    def get_extract(self, obj):
+        if obj.status == 1:
+            return Extractor().extract(obj)
+        return None

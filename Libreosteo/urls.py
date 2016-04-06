@@ -25,6 +25,7 @@ router.register(r'settings', views.OfficeSettingsView)
 router.register(r'profiles', views.TherapeutSettingsViewSet)
 router.register(r'comments', views.ExaminationCommentViewSet)
 router.register(r'office-users', views.UserOfficeViewSet)
+router.register(r'file-import', views.FileImportViewSet)
 
 urlpatterns = patterns('',
     # Examples:

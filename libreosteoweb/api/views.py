@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from haystack.utils import Highlighter
 from haystack.views import SearchView
+from haystack.query import SearchQuerySet
 import json
 import logging
 from django.contrib.auth.models import User
@@ -33,6 +34,10 @@ from django.shortcuts import resolve_url
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from datetime import datetime
+from django.utils.translation import ugettext_lazy as _
+from rest_framework.exceptions import ValidationError
+from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination
+from django.db.models import signals
 
 
 # Get an instance of a logger
@@ -78,6 +83,7 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
     results_per_page = 10
+    results = SearchQuerySet()
 
 class InvoiceViewHtml(TemplateView):
     template_name = 'invoice/invoice-result.html'
@@ -342,3 +348,69 @@ class ExaminationCommentViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_authenticated():
             raise Http404()
         serializer.save(user=self.request.user,date=datetime.today())
+
+
+from .file_integrator import Extractor, IntegratorHandler
+
+class FileImportViewSet(viewsets.ModelViewSet):
+    model = models.FileImport
+    serializer_class = apiserializers.FileImportSerializer
+    queryset = models.FileImport.objects.all()
+    
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        instance = serializer.save()
+        logger.info("* Ready to start analyze")
+        extractor = Extractor()
+
+        status = extractor.analyze(instance)
+
+        if status['patient'][0] == 'examination':
+            tmp = status['examination']
+            tmp_file = instance.file_examination
+            status['examination'] = status['patient']
+            instance.file_examination = instance.file_patient
+            if tmp[0] == 'patient' and tmp_file:
+                status['patient'] = tmp
+                instance.file_patient = tmp_file
+            else :
+                raise ValidationError("Missing patient file after analyze")
+        logger.info("* Status after analyze is : %s "% (status))
+        is_all_valid = True
+        for f in status :
+            (type_file, is_valid, is_empty, errors) = status[f]
+            if type_file in ["examination", "patient"]:
+                is_all_valid = is_all_valid and is_valid and not(is_empty)
+        if is_all_valid:
+            instance.status = 1
+        else :
+            instance.status = 0
+        instance.analyze = status
+        instance.save()
+
+
+    @detail_route(methods=['POST','GET'])
+    def integrate(self, request, pk=None):
+        file_import_couple = self.get_object()
+        integrator = IntegratorHandler()
+        nb_line_patient = None
+        nb_line_examination = None
+        with temp_disconnect_signal(
+            signal=signals.post_save,
+            receiver=receiver_newpatient,
+            sender=models.Patient
+            ):
+            if file_import_couple.file_patient :
+                # Start integration of each patient in the file
+                ( nb_line_patient, errors) = integrator.integrate(file_import_couple.file_patient, apiserializers.PatientSerializer)
+        with temp_disconnect_signal(
+            signal=signals.post_save,
+            receiver=receiver_examination,
+            sender=models.Examination
+            ):
+            if file_import_couple.file_examination :
+                # Start integration of each examination in the file
+                (nb_line_examination, errors) = integrator.integrate(file_import_couple.file_examination)
+        return Response({'patient' : '%s lines imported' % nb_line_patient, "errors":errors}, status=status.HTTP_200_OK)

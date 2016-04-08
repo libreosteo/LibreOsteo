@@ -10,6 +10,7 @@ Changelog for Libreosteo
 - Allow to edit/delete patient
 - Allow to edit/delete examination
 - Add filter to automatically set uppercase on name for patient
+- Improve the print of invoice
 
 
 0.4.3 (2016-02-11)

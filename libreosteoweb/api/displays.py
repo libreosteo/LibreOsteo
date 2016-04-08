@@ -3,6 +3,7 @@ from django.forms.models import ModelForm
 from libreosteoweb import models 
 from django.contrib.auth.models import User
 from django.conf import settings
+import libreosteoweb
 
 # import the logging library
 import logging
@@ -51,6 +52,9 @@ class OfficeSettingsDisplay(GenericDisplay):
     class Meta:
         model = models.OfficeSettings
         fields = [ f.name for f in model._meta.fields if f.editable ]
+
+def display_index(request):
+    return render_to_response('index.html', {'version' : libreosteoweb.__version__ })
 
 def display_patient(request):
     display = PatientDisplay()
@@ -102,3 +106,6 @@ def display_adduser(request):
 
 def display_setpassword(request):
     return render_to_response('partials/set-password-user-modal.html', {})
+
+def display_import_files(request):
+    return render_to_response('partials/import-file.html', {})

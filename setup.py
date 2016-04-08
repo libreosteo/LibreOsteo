@@ -1,6 +1,7 @@
 import sys, glob, os
+import libreosteoweb
 
-VERSION = "0.4"
+version = libreosteoweb.__version__
 
 
 
@@ -132,7 +133,7 @@ if sys.platform in ['win32']:
     }
 
     setup(  name = "libreosteo",
-        version = VERSION,
+        version = version,
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
         executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
@@ -185,8 +186,8 @@ if sys.platform in ['darwin']:
             'CFBundleGetInfoString' : 'Libreosteo',
             'CFBundleDisplayName' : 'Libreosteo',
             'CFBundleName' : 'Libreosteo',
-            'CFBundleShortVersionString' : VERSION,
-            'CFBundleVersion' : VERSION,
+            'CFBundleShortVersionString' : version,
+            'CFBundleVersion' : version,
         },
         'extra_scripts': ['server.py','manage.py'],
         'optimize' : True,
@@ -199,3 +200,15 @@ if sys.platform in ['darwin']:
         setup_requires=['py2app'],
     )
     remove_useless_files("build/exe.win32-2.7/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
+else:
+    from setuptools import setup
+
+    setup(
+        name='Libreosteo',
+        version=version,
+        description='Open source software and free software for osteopaths',
+        author='Jean-Baptiste Gury'
+        url='https://libreosteo.github.io',
+        packages=['Libreosteo','libreosteoweb'],
+        )
+

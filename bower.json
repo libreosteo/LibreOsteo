@@ -33,7 +33,8 @@
     "rangy": "latest",
     "jquery-ui": "1.x.x",
     "hallo": "latest",
-    "jquery-ui-bootstrap" : "latest"
+    "jquery-ui-bootstrap" : "latest",
+    "ng-file-upload" : "latest"
   },
   "resolutions": {
     "angular": "1.5.x"

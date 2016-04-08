@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static from staticfiles %}
 <!DOCTYPE html>
 <html xmlns:ng="http://angularjs.org" ng-app="libreosteo">
 
@@ -10,25 +11,25 @@
     <title>Libreosteo</title>
 
     <!-- Core CSS - Include with every page -->
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Blank -->
-     <link href="{{ STATIC_URL }}css/plugins/timeline/timeline.css" rel="stylesheet">
+     <link href="{% static "css/plugins/timeline/timeline.css" %}" rel="stylesheet">
      <!-- MetisMenu CSS -->
-    <link href="{{ STATIC_URL }}css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="{% static "css/plugins/metisMenu/metisMenu.min.css" %}" rel="stylesheet">
 
     <!-- SB Admin CSS - Include with every page -->
-    <link href="{{ STATIC_URL }}css/sb-admin-2.css" rel="stylesheet">
+    <link href="{% static "css/sb-admin-2.css" %}" rel="stylesheet">
 
     <!-- TypeAHead component -->
-    <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
+    <link href="{% static "css/typeahead.css" %}" rel="stylesheet">
 
     <!-- compatibility for date input with all browsers -->
 
-    <link href="{{ STATIC_URL }}bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/jquery-ui-bootstrap/jquery.ui.theme.css">
+    <link href="{% static "bower_components/bootstrap-tour/build/css/bootstrap-tour.min.css"  %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "bower_components/angular-ui-grid/ui-grid.min.css" %}" />
+    <link rel="stylesheet" href="{% static "bower_components/jquery-ui-bootstrap/jquery.ui.theme.css" %}" >
 
 
 </head>
@@ -45,7 +46,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="/">Libreosteo</a>
+    <a class="navbar-brand" href="/">Libreosteo <div class="version">{{ version }}</div></a>
 </div>
 <!-- /.navbar-header -->
 
@@ -260,6 +261,8 @@
         </li>
         <li id="office-settings"><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
         </li>
+        <li id="import-file"><a ui-sref="import-file"><i class="fa fa-upload"></i> {% trans "Import files" %}</a>
+        </li>
         <li class="divider"></li>
         <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
         </li>
@@ -311,44 +314,44 @@
             </li>
             <!--
             <li>
-                <a href="{{ STATIC_URL }}index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                <a href="{% static "index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="{{ STATIC_URL }}flot.html">Flot Charts</a>
+                        <a href="{% static "flot.html">Flot Charts</a>
                     </li>
                     <li>
-                        <a href="{{ STATIC_URL }}morris.html">Morris.js Charts</a>
+                        <a href="{% static "morris.html">Morris.js Charts</a>
                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
             <!--
             </li>
             <li>
-                <a href="{{ STATIC_URL }}tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                <a href="{% static "tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
             </li>
             <li>
-                <a href="{{ STATIC_URL }}forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
+                <a href="{% static "forms.html"><i class="fa fa-edit fa-fw"></i> Forms</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="{{ STATIC_URL }}panels-wells.html">Panels and Wells</a>
+                        <a href="{% static "panels-wells.html">Panels and Wells</a>
                     </li>
                     <li>
-                        <a href="{{ STATIC_URL }}buttons.html">Buttons</a>
+                        <a href="{% static "buttons.html">Buttons</a>
                     </li>
                     <li>
-                        <a href="{{ STATIC_URL }}notifications.html">Notifications</a>
+                        <a href="{% static "notifications.html">Notifications</a>
                     </li>
                     <li>
-                        <a href="{{ STATIC_URL }}typography.html">Typography</a>
+                        <a href="{% static "typography.html">Typography</a>
                     </li>
                     <li>
-                        <a href="{{ STATIC_URL }}grid.html">Grid</a>
+                        <a href="{% static "grid.html">Grid</a>
                     </li>
                 </ul>
                 <!-- /.nav-second-level -->
@@ -419,67 +422,68 @@
 <!-- /#wrapper -->
 
 <!-- Core Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}bower_components/jquery/dist/jquery.min.js"></script>
-<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
 
 <!-- Page-Level Plugin Scripts - Blank -->
 
 <!-- SB Admin Scripts - Include with every page -->
-<script src="{{ STATIC_URL }}js/sb-admin-2.js"></script>
+<script src="{% static "js/sb-admin-2.js" %}"></script>
 <!-- Metis Menu Plugin JavaScript -->
-<script src="{{ STATIC_URL }}js/plugins/metisMenu/metisMenu.min.js"></script>
+<script src="{% static "js/plugins/metisMenu/metisMenu.min.js" %}"></script>
 
 <!-- Angular framework -->
-<script src="{{ STATIC_URL }}bower_components/angular/angular.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-resource/angular-resource.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-route/angular-route.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-cookies/angular-cookies.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-i18n/angular-locale_fr-fr.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-animate/angular-animate.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-<link href="{{ STATIC_URL }}bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
-<script src="{{ STATIC_URL }}bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-toArrayFilter/toArrayFilter.js"></script>
-<script src="{{ STATIC_URL }}js/plugins/timeAgo.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-scroll/angular-scroll.min.js"></script>
-<link href="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.css" rel="stylesheet">
-<script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
-<link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
-<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}bower_components/angular-ui-validate/dist/validate.js"></script>
-<script src="{{ STATIC_URL }}bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js"></script>
-<script src="{{ STATIC_URL }}bower_components/angular-ui-grid/ui-grid.min.js"></script>
-<script type='text/javascript' src='{{ STATIC_URL }}bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js'></script>
-<script type="text/javascript" src='{{ STATIC_URL }}js/plugins/jquery.sparkline.min.js'></script>
-<script type="text/javascript" src="{{ STATIC_URL }}bower_components/rangy/rangy-core.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}bower_components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}bower_components/hallo/dist/hallo.js"></script>
+<script src="{% static "bower_components/angular/angular.min.js" %}"></script>
+<script src="{% static "bower_components/angular-resource/angular-resource.min.js" %}"></script>
+<script src="{% static "bower_components/angular-route/angular-route.min.js" %}"></script>
+<script src="{% static "bower_components/angular-cookies/angular-cookies.min.js" %}"></script>
+<script src="{% static "bower_components/angular-i18n/angular-locale_fr-fr.js" %}"></script>
+<script src="{% static "bower_components/angular-animate/angular-animate.min.js" %}"></script>
+<script src="{% static "bower_components/angular-sanitize/angular-sanitize.min.js" %}"></script>
+<link href="{% static "bower_components/angular-xeditable/dist/css/xeditable.css" %}" rel="stylesheet">
+<script src="{% static "bower_components/angular-xeditable/dist/js/xeditable.min.js" %}"></script>
+<script src="{% static "bower_components/angular-bootstrap/ui-bootstrap.min.js" %}"></script>
+<script src="{% static "bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js" %}"></script>
+<script src="{% static "bower_components/angular-toArrayFilter/toArrayFilter.js" %}"></script>
+<script src="{% static "js/plugins/timeAgo.js" %}"></script>
+<script src="{% static "bower_components/angular-scroll/angular-scroll.min.js" %}"></script>
+<link href="{% static "bower_components/angular-growl/build/angular-growl.min.css" %}" rel="stylesheet">
+<script src="{% static "bower_components/angular-growl/build/angular-growl.min.js" %}"></script>
+<script src="{% static "bower_components/angular-loading-bar/build/loading-bar.min.js" %}"></script>
+<link href="{% static "bower_components/angular-loading-bar/build/loading-bar.min.css" %}" rel="stylesheet">
+<script src="{% static "bower_components/webshim/js-webshim/minified/polyfiller.js" %}"></script>
+<script src="{% static "bower_components/angular-ui-router/release/angular-ui-router.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/angular-ui-validate/dist/validate.js" %}"></script>
+<script src="{% static "bower_components/bootstrap-tour/build/js/bootstrap-tour.min.js" %}"></script>
+<script src="{% static "bower_components/angular-ui-grid/ui-grid.min.js" %}"></script>
+<script type='text/javascript' src="{% static "bower_components/ngInfiniteScroll/build/ng-infinite-scroll.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/plugins/jquery.sparkline.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/rangy/rangy-core.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/jquery-ui/ui/minified/jquery-ui.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/hallo/dist/hallo.js" %}"></script>
 
 
 <!-- web Application -->
-<script src="{{ STATIC_URL }}js/app/app.js"></script>
-<script src="{{ STATIC_URL }}js/app/utils.js"></script>
-<script src="{{ STATIC_URL }}js/app/patient.js"></script>
-<script src="{{ STATIC_URL }}js/app/doctor.js"></script>
-<script src="{{ STATIC_URL }}js/app/examination.js"></script>
-<!--script src="{{ STATIC_URL }}js/app/inline-edit.js"></script-->
-<script src="{{ STATIC_URL }}js/app/timeline.js"></script>
-<script src="{{ STATIC_URL }}js/app/search.js"></script>
-<script src="{{ STATIC_URL }}js/app/user.js"></script>
-<script src="{{ STATIC_URL }}js/app/dashboard.js"></script>
-<script src="{{ STATIC_URL }}js/app/officeevent.js"></script>
-<script src="{{ STATIC_URL }}js/app/officesettings.js"></script>
-<script src="{{ STATIC_URL }}js/app/editformmanager.js"></script>
-<script src="{{ STATIC_URL }}js/app/tour.js"></script>
-<script src="{{ STATIC_URL }}js/app/halloeditor.js"></script>
+<script src="{% static "js/app/app.js" %}"></script>
+<script src="{% static "js/app/utils.js" %}"></script>
+<script src="{% static "js/app/patient.js" %}"></script>
+<script src="{% static "js/app/doctor.js" %}"></script>
+<script src="{% static "js/app/examination.js" %}"></script>
+<!--script src="{% static "js/app/inline-edit.js" %}"></script-->
+<script src="{% static "js/app/timeline.js" %}"></script>
+<script src="{% static "js/app/search.js" %}"></script>
+<script src="{% static "js/app/user.js" %}"></script>
+<script src="{% static "js/app/dashboard.js" %}"></script>
+<script src="{% static "js/app/officeevent.js" %}"></script>
+<script src="{% static "js/app/officesettings.js" %}"></script>
+<script src="{% static "js/app/editformmanager.js" %}"></script>
+<script src="{% static "js/app/tour.js" %}"></script>
+<script src="{% static "js/app/halloeditor.js" %}"></script>
+<script src="{% static "js/app/fileimport.js" %}"></script>
 <script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
 
 <!--Specific libreosteo CSS -->
-<link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>
+<link href="{% static "css/libreosteo.css" %}" rel="stylesheet"/>
 
 
 </body>

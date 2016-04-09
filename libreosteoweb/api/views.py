@@ -413,4 +413,4 @@ class FileImportViewSet(viewsets.ModelViewSet):
             if file_import_couple.file_examination :
                 # Start integration of each examination in the file
                 (nb_line_examination, errors) = integrator.integrate(file_import_couple.file_examination)
-        return Response({'patient' : '%s lines imported' % nb_line_patient, "errors":errors}, status=status.HTTP_200_OK)
+        return Response({'patient' : nb_line_patient, "errors":errors}, status=status.HTTP_200_OK)

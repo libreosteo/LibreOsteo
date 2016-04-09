@@ -172,7 +172,7 @@ class IntegratorPatient(AbstractIntegrator):
         content = self.extractor.get_content(file, as_line=False)
         nb_line = 0
         errors = []
-        for r in content['content']:
+        for idx, r in enumerate(content['content']):
             logger.info("* Load line from content")
             data = {
                 'family_name' : r[1],
@@ -203,7 +203,9 @@ class IntegratorPatient(AbstractIntegrator):
                 serializer.save()
                 nb_line += 1
             else :
-                errors.append(serializer.errors)
+                # idx + 2 because : we have header and the index start from 0
+                # To have the line number we have to add 2 to the index....
+                errors.append((idx+2, serializer.errors))
                 logger.info("errors detected, data is = %s "% data)
         return ( nb_line, errors)
     

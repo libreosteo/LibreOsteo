@@ -186,6 +186,4 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
             return obj.analyze
 
     def get_extract(self, obj):
-        if obj.status == 1:
-            return Extractor().extract(obj)
-        return None
+        return Extractor().extract(obj)

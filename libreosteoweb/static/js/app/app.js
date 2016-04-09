@@ -4,7 +4,6 @@ var libreosteoApp = angular.module('libreosteo', [
     'xeditable',
     'ui.bootstrap',
     'loPatient',
-    //'loInlineEdit',
     'loTimeline',
     'loDashboard',
     'loOfficeEvent',
@@ -22,7 +21,9 @@ var libreosteoApp = angular.module('libreosteo', [
     'ui.grid',
     'infinite-scroll',
     'loEditFormManager',
-    'loHalloEditor'
+    'loHalloEditor',
+    'loFileImport',
+    'ngFileUpload'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -103,6 +104,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl : 'web-view/partials/office-settings',
                 controller : 'OfficeSettingsCtrl'
             }).
+            state('import-file',
+                {
+                    url : '/office/import-file',
+                    templateUrl : 'web-view/partials/import-file',
+                    controller : 'ImportFileCtrl'
+                }).
 
             state('dashboard',
             {

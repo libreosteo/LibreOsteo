@@ -54,7 +54,7 @@ class OfficeSettingsDisplay(GenericDisplay):
         fields = [ f.name for f in model._meta.fields if f.editable ]
 
 def display_index(request):
-    return render_to_response('index.html', {'version' : libreosteoweb.__version__ })
+    return render_to_response('index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
 
 def display_patient(request):
     display = PatientDisplay()
@@ -108,4 +108,4 @@ def display_setpassword(request):
     return render_to_response('partials/set-password-user-modal.html', {})
 
 def display_import_files(request):
-    return render_to_response('partials/import-file.html', {})
+    return render_to_response('partials/import-file.html', {'request' : request})

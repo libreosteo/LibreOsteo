@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-11 21:08+0100\n"
-"PO-Revision-Date: 2016-03-11 21:09+0100\n"
+"POT-Creation-Date: 2016-04-09 14:50+0200\n"
+"PO-Revision-Date: 2016-04-09 14:52+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -15,55 +15,59 @@ msgstr ""
 "X-Loco-Source-Locale: fr_FR\n"
 "X-Loco-Parser: loco_parse_po\n"
 "X-Loco-Target-Locale: zxx\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: Libreosteo/settings/base.py:143
+#: Libreosteo/settings/base.py:145
 msgid "French"
 msgstr "Français"
 
-#: Libreosteo/settings/base.py:144
+#: Libreosteo/settings/base.py:146
 msgid "English"
 msgstr "Anglais"
 
-#: libreosteoweb/api/receivers.py:17
+#: libreosteoweb/api/file_integrator.py:78
+msgid "Cannot recognize the patient file"
+msgstr "Impossible de reconnaître le fichier patient"
+
+#: libreosteoweb/api/receivers.py:39
 msgid "New patient created"
 msgstr "Nouveau patient créé"
 
-#: libreosteoweb/api/receivers.py:24
+#: libreosteoweb/api/receivers.py:46
 msgid "Patient updated"
 msgstr "Fiche patient mise à jour"
 
-#: libreosteoweb/api/receivers.py:37
+#: libreosteoweb/api/receivers.py:59
 msgid "New examination"
 msgstr "Nouvelle consultation"
 
-#: libreosteoweb/api/serializers.py:19
+#: libreosteoweb/api/serializers.py:20
 msgid "Birth date is invalid"
 msgstr "La date de naissance est invalide"
 
-#: libreosteoweb/api/serializers.py:24 libreosteoweb/models.py:40
+#: libreosteoweb/api/serializers.py:25 libreosteoweb/models.py:40
 #: libreosteoweb/models.py:90
 msgid "Birth date"
 msgstr "Date de naissance"
 
-#: libreosteoweb/api/serializers.py:41
+#: libreosteoweb/api/serializers.py:42
 msgid "This patient already exists"
 msgstr "Ce patient existe déjà"
 
-#: libreosteoweb/api/serializers.py:100
+#: libreosteoweb/api/serializers.py:101
 msgid "Reason is mandatory when the examination is not invoiced"
 msgstr "La raison est obligatoire lorsque la consultation n'est pas facturée"
 
-#: libreosteoweb/api/serializers.py:103
+#: libreosteoweb/api/serializers.py:104
 msgid "Amount is invalid"
 msgstr "Le montant est invalide"
 
-#: libreosteoweb/api/serializers.py:105
+#: libreosteoweb/api/serializers.py:106
 msgid "Paiment mode is mandatory when the examination is invoiced"
 msgstr ""
 "Le mode de paiement est obligatoire lorsque la consultation est facturée"
 
-#: libreosteoweb/api/serializers.py:108
+#: libreosteoweb/api/serializers.py:109
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
 
@@ -151,7 +155,7 @@ msgstr "Antécédents familiaux"
 msgid "Trauma history"
 msgstr "Antécédents traumatiques"
 
-#: libreosteoweb/models.py:58 templates/partials/patient-detail.html:219
+#: libreosteoweb/models.py:58 templates/partials/patient-detail.html:221
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
@@ -366,23 +370,41 @@ msgstr "Pied de page de facture"
 msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
-#: templates/404.html:257 templates/index.html:259
+#: libreosteoweb/models.py:256 templates/partials/import-file.html:49
+#: templates/partials/import-file.html:66
+msgid "Patient file"
+msgstr "Fichier patient"
+
+#: libreosteoweb/models.py:257 templates/partials/import-file.html:51
+#: templates/partials/import-file.html:86
+msgid "Examination file"
+msgstr "Fichier de consultation"
+
+#: libreosteoweb/models.py:258
+msgid "validity status"
+msgstr "validité"
+
+#: libreosteoweb/models.py:280
+msgid "Version"
+msgstr "Version"
+
+#: templates/404.html:257 templates/index.html:260
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/404.html:259 templates/index.html:261
+#: templates/404.html:259 templates/index.html:262
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/404.html:262 templates/index.html:264
+#: templates/404.html:262 templates/index.html:267
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/404.html:278 templates/index.html:280
+#: templates/404.html:278 templates/index.html:283
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/404.html:290 templates/index.html:292
+#: templates/404.html:290 templates/index.html:295
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -457,15 +479,19 @@ msgstr "Veuillez vous identifier"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:297 templates/index.html.py:300
+#: templates/index.html:264
+msgid "Import/export"
+msgstr "Import/export"
+
+#: templates/index.html:300 templates/index.html.py:303
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/index.html:304
+#: templates/index.html:307
 msgid "End of editing"
 msgstr "Fin d'édition"
 
-#: templates/index.html:307
+#: templates/index.html:310
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -526,7 +552,7 @@ msgid "View Details"
 msgstr "Afficher les détails"
 
 #: templates/partials/dashboard.html:50
-#: templates/partials/patient-detail.html:231
+#: templates/partials/patient-detail.html:235
 msgid "Examinations"
 msgstr "Consultations"
 
@@ -554,6 +580,120 @@ msgstr "par"
 #: templates/partials/examination.html:186
 msgid "Close"
 msgstr "Clôturer"
+
+#: templates/partials/import-file.html:4
+msgid "Managing import/export"
+msgstr "Gestion de l'import/export"
+
+#: templates/partials/import-file.html:9 templates/partials/import-file.html:45
+#: templates/partials/import-file.html:98
+msgid "Import"
+msgstr "Importer"
+
+#: templates/partials/import-file.html:13
+msgid ""
+"\n"
+"            <p>For importing patient or examination in the database, you "
+"have to download these both above templates. Fill them with your favorite "
+"Spreasheet editor and save them as csv files.</p>\n"
+"            <p>Do not change the format, because Libresoteo read only csv "
+"files.</p>\n"
+"            <br/>\n"
+"            <p>After you fill them, you upload your files with the import "
+"tool above.</p>\n"
+"            <br/>\n"
+"            <p>In order to add examinations for patients, you have to link "
+"each one with a number. If you read the Patient templates file you will see "
+"that the first column is \"Number\". This number should have been the same "
+"in the examination to add this examination to the patient.</p>\n"
+"            <div class=\"well\">Note : It have no relation with the number "
+"that you can see in the system after integration.</div>\n"
+"            "
+msgstr ""
+"\n"
+"            <p>Pour importer des patients ou des consultations dans la base, "
+"vous devez télécharger ces deux fichiers gabarits ci-dessous. Renseignez-les "
+"avec votre éditeur de feuilles de calcul favori et enregistrez-les en "
+"fichier csv.</p>\n"
+"            <p>Ne changez pas le format car Libreosteo lit uniquement des "
+"fichiers csv.</p>\n"
+"            <br/>\n"
+"            <p>Une fois que vous les avez renseignés, transmettez les "
+"fichiers avec l'outil ci-dessous.</p>\n"
+"            <br/>\n"
+"            <p>Afin d'ajouter des consultations pour les patients, vous "
+"devez lier l'un avec l'autre avec un numéro. Si vous lisez le gabarit de "
+"patient, vous verrez que la première colonne est \"Numéro\". Ce nombre "
+"devrait être le même dans la consultation à ajouter que le patient.</p>\n"
+"            <div class=\"well\">Note : Celui-ci n'a aucun lien avec le "
+"numéro que vous pourriez voir dans le système après intégration de patients."
+"</div>\n"
+"            "
+
+#: templates/partials/import-file.html:31
+msgid "Patient template file"
+msgstr "Gabarit du fichier patient"
+
+#: templates/partials/import-file.html:35
+msgid "Examination template file"
+msgstr "Gabarit du fichier consultation"
+
+#: templates/partials/import-file.html:54
+msgid "Analyze"
+msgstr "Analyser"
+
+#: templates/partials/import-file.html:60
+msgid "Analyze result"
+msgstr "Résultats d'analyse"
+
+#: templates/partials/import-file.html:69
+#: templates/partials/import-file.html:88
+msgid ""
+"Please check that the file is correctly read by the software before to "
+"integrate the content. Here is an extract of some lines of the file. First "
+"column is the line number in the file."
+msgstr ""
+"Veuillez vérifier que le fichier est correctement lu par le logiciel avant "
+"d'intégrer le contenu. Voici un extrait des lignes du fichier. La première "
+"colonne est le numéro de ligne dans le fichier si vous rencontrez des "
+"problèmes."
+
+#: templates/partials/import-file.html:82
+#: templates/partials/import-file.html:94
+msgid "Empty file"
+msgstr "Fichier vide"
+
+#: templates/partials/import-file.html:106
+msgid "Importing succeed"
+msgstr "Importation réussie"
+
+#: templates/partials/import-file.html:108
+#: templates/partials/import-file.html:115
+msgid "lines imported from file patient"
+msgstr "lignes importées du fichier patient"
+
+#: templates/partials/import-file.html:113
+msgid "Importing succeed but some errors"
+msgstr "Importation réussie avec des erreurs"
+
+#: templates/partials/import-file.html:116
+#: templates/partials/import-file.html:124
+msgid "Errors when integrating "
+msgstr "Erreurs lors de l'importation "
+
+#: templates/partials/import-file.html:117
+#: templates/partials/import-file.html:125
+msgid "line : "
+msgstr "ligne :"
+
+#: templates/partials/import-file.html:122
+#: templates/partials/import-file.html:136
+msgid "Importing failed"
+msgstr "L'importation a échoué"
+
+#: templates/partials/import-file.html:145
+msgid "Export"
+msgstr "Exporter"
 
 #: templates/partials/invoice-modal.html:3
 #: templates/partials/office-settings.html:70
@@ -652,7 +792,7 @@ msgstr "Non fumeur"
 msgid "History"
 msgstr "Antécédents"
 
-#: templates/partials/patient-detail.html:241
+#: templates/partials/patient-detail.html:245
 msgid "New Examination"
 msgstr "Nouvelle consultation"
 

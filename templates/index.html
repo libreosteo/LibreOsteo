@@ -261,7 +261,7 @@
         </li>
         <li id="office-settings"><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
         </li>
-        <li id="import-file"><a ui-sref="import-file"><i class="fa fa-upload"></i> {% trans "Import files" %}</a>
+        <li id="import-file" ng-if="{{ request.user.is_staff|yesno:"true,false" }}"><a ui-sref="import-file"><i class="fa fa-upload"></i> {% trans "Import/export" %}</a>
         </li>
         <li class="divider"></li>
         <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
@@ -423,6 +423,7 @@
 
 <!-- Core Scripts - Include with every page -->
 <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "js/plugins/animatescroll.min.js" %}"></script>
 <script src="{% static "js/bootstrap.min.js" %}"></script>
 
 <!-- Page-Level Plugin Scripts - Blank -->
@@ -461,7 +462,8 @@
 <script type="text/javascript" src="{% static "bower_components/rangy/rangy-core.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bower_components/jquery-ui/ui/minified/jquery-ui.min.js" %}"></script>
 <script type="text/javascript" src="{% static "bower_components/hallo/dist/hallo.js" %}"></script>
-
+<script type="text/javascript" src="{% static "bower_components/ng-file-upload/ng-file-upload-shim.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/ng-file-upload/ng-file-upload.min.js" %}"></script>
 
 <!-- web Application -->
 <script src="{% static "js/app/app.js" %}"></script>

@@ -207,7 +207,7 @@ else:
         name='Libreosteo',
         version=version,
         description='Open source software and free software for osteopaths',
-        author='Jean-Baptiste Gury'
+        author='Jean-Baptiste Gury',
         url='https://libreosteo.github.io',
         packages=['Libreosteo','libreosteoweb'],
         )

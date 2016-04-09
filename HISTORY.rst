@@ -2,8 +2,8 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.beta1 (2016-04-09)
-----------------------
+0.4.9.1 (2016-04-09)
+--------------------
 
 - Add support to import patient into the system through CSV file.
 - Change the editor for textarea to Hallo.js and allow to edit rich text in the application

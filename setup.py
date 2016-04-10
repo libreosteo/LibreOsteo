@@ -101,7 +101,7 @@ if sys.platform in ['win32']:
         "django.contrib.sessions.migrations.0001_initial",
     ] + include_migration_files('libreosteoweb/migrations')
     
-    include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale()
+    include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale() + get_filepaths('media')
     zip_includes = get_filepaths('templates')
     packages = [
         "os",
@@ -171,7 +171,7 @@ if sys.platform in ['darwin']:
 
     APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates', 'macos']
+    DATA_FILES = ['static', 'locale','templates', 'macos', 'media']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [

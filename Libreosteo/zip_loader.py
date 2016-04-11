@@ -6,14 +6,10 @@ import zipfile
 
 from django.template.loaders.base import Loader as BaseLoader
 
-try:
-    from pkg_resources import resource_string
-except ImportError:
-    resource_string = None
 
 
 class Loader(BaseLoader):
-    is_usable = resource_string is not None
+    is_usable = True
 
     def load_template_source(self, template_name, template_dirs=None):
         "Template loader that loads templates from a ZIP file."

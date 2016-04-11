@@ -97,11 +97,17 @@ if sys.platform in ['win32']:
         'email.mime.image',
         "django.contrib.admin.migrations.0001_initial",
         "django.contrib.auth.migrations.0001_initial",
+        "django.contrib.auth.migrations.0002_alter_permission_name_max_length",
+        "django.contrib.auth.migrations.0003_alter_user_email_max_length",
+        "django.contrib.auth.migrations.0004_alter_user_username_opts",
+        "django.contrib.auth.migrations.0005_alter_user_last_login_null",
+        "django.contrib.auth.migrations.0006_require_contenttypes_0002",
         "django.contrib.contenttypes.migrations.0001_initial",
+        "django.contrib.contenttypes.migrations.0002_remove_content_type_name",
         "django.contrib.sessions.migrations.0001_initial",
     ] + include_migration_files('libreosteoweb/migrations')
     
-    include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale() + get_filepaths('media')
+    include_files = get_filepaths('static') + get_filepaths('locale') + get_djangolocale() + get_filepaths('media')
     zip_includes = get_filepaths('templates')
     packages = [
         "os",

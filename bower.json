@@ -29,7 +29,7 @@
     "bootstrap-tour": "latest",
     "angular-ui-grid": "latest",
     "ngInfiniteScroll": "1.0.0",
-    "jquery": "1.11.3",
+    "jquery-1.11.1": "1.11.3",
     "rangy": "latest",
     "jquery-ui": "1.x.x",
     "hallo": "latest",

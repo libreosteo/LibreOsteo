@@ -26,6 +26,7 @@ from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 import webbrowser
+import patch
  
 
 SERVER_PORT = 8085
@@ -272,6 +273,10 @@ if __name__ == '__main__':
 	        },
 	    },
 	    'loggers': {
+            'django.utils.translation': {
+	            'handlers': ['default', 'cherrypy_error'],
+	            'level': 'INFO'
+	        },
 	        '': {
 	            'handlers': ['default', 'cherrypy_error'],
 	            'level': 'INFO'

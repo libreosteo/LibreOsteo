@@ -39,11 +39,14 @@ RUN cp -a $software/templates .
 
 RUN cd $software && bower install --allow-root
 
+RUN python $software/manage.py collectstatic --noinput
+RUN sed -i 's/SERVER_PORT = 8080/SERVER_PORT = 8085/g' $software/server.py
+
 # Port to expose (default: 11211)
-EXPOSE 11211 8000
+EXPOSE 11211 8000 8085
 
 # Default libreosteo run command arguments
-CMD ["python", "Libreosteo/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "Libreosteo/server.py"]
 
 # Set the user to run libreosteo daemon
 USER root

@@ -2,7 +2,7 @@ Changelog for Libreosteo
 ========================
 
 
-0.4.9.1 (2016-04-09)
+0.4.9.1 (2016-04-12)
 --------------------
 
 - Add support to import patient into the system through CSV file.

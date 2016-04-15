@@ -132,6 +132,10 @@ msgid "Smoker"
 msgstr "Fumeur"
 
 #: libreosteoweb/models.py:52
+msgid "Left-handedness"
+msgstr "Gaucher"
+
+#: libreosteoweb/models.py:52
 msgid "Important note"
 msgstr "Note importante"
 
@@ -787,6 +791,10 @@ msgstr "non renseigné"
 #: templates/partials/patient-detail.html:106
 msgid "Not smoker"
 msgstr "Non fumeur"
+
+#: templates/partials/patient-detail.html:108
+msgid "Right-handedness"
+msgstr "Droitier"
 
 #: templates/partials/patient-detail.html:165
 msgid "History"

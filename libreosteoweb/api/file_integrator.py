@@ -105,12 +105,12 @@ class Extractor(object):
             # Save header row.
             if rownum == 0:
                 if not as_line:
-                    header = [r.decode('utf-8') for r in row]
+                    header = [self.filter(r) for r in row]
                 else :
                     header = unicode(row)
             else :
                 if not as_line:
-                    content.append([r.decode('utf-8') for r in row])
+                    content.append([self.filter(r) for r in row])
                 else :
                     content.append(unicode(row))
             rownum += 1
@@ -130,6 +130,20 @@ class Extractor(object):
         file.seek(0)
         reader = csv.reader(file, dialect)
         return reader
+
+    def filter(self, line):
+        result_line = None
+        try:
+            result_line = line.decode('utf-8')
+        except:
+            pass
+        if result_line is None :
+            try:
+                result_line = line.decode('iso-8859-1')
+            except:
+                result_line = _('Cannot read the content file. Check the encoding.')
+        return result_line
+
 
 class InvalidIntegrationFile(Exception):
     def __init__(self, value):
@@ -189,13 +203,14 @@ class IntegratorPatient(AbstractIntegrator):
                 'job' : r[12],
                 'hobbies' : r[13],
                 'smoker'  : self.get_boolean_smoker(r[14]),
-                'important_info' : r[15],
-                'current_treatment' : r[16],
-                'surgical_history' : r[17],
-                'medical_history' : r[18],
-                'family_history' : r[19],
-                'trauma_history' : r[20],
-                'medical_report' : r[21],
+                'left_handedness'  : self.get_boolean_smoker(r[15]),
+                'important_info' : r[16],
+                'current_treatment' : r[17],
+                'surgical_history' : r[18],
+                'medical_history' : r[19],
+                'family_history' : r[20],
+                'trauma_history' : r[21],
+                'medical_report' : r[22],
                 'creation_date' : self.get_default_date(),
             }
             serializer = self.serializer_class(data=data)

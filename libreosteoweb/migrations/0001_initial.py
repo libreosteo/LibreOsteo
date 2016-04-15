@@ -64,6 +64,7 @@ class Migration(migrations.Migration):
                 ('phone', models.CharField(max_length=200, verbose_name='Phone', blank=True)),
                 ('mobile_phone', models.CharField(max_length=200, verbose_name='Mobile phone', blank=True)),
                 ('smoker', models.BooleanField(default=False, verbose_name='Smoker')),
+                ('left_handedness', models.BooleanField(default=False, verbose_name='Left-handedness')),
                 ('important_info', models.TextField(verbose_name='Important note', blank=True)),
                 ('surgical_history', models.TextField(verbose_name='Surgical history', blank=True)),
                 ('medical_history', models.TextField(verbose_name='Medical history', blank=True)),

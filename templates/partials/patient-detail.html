@@ -104,6 +104,8 @@
                         <div class="col-md-4">
                         <span editable-checkbox="patient.smoker"
                               e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
+                        <span editable-checkbox="patient.left_handedness"
+                              e-title="{{ patient.left_handedness }}?">{$ patient.left_handedness && "{{ patient.left_handedness }}" || "{% trans 'Right-handedness' %}" $}</span>
                         </div>
                         <div class="col-md-8">
                             {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"

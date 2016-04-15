@@ -271,11 +271,3 @@ class FileImport(models.Model):
             storage_patient.delete(path_patient)
         if bool(self.file_examination) :
             storage_examination.delete(path_examination)
-
-class InternalSetting(models.Model):
-    """
-    This model concerns all things which
-    are internal settings for the product
-    """
-    version_string = models.CharField(_('Version'), max_length=15, blank=None, null=True)
-    

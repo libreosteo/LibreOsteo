@@ -12,6 +12,11 @@ MAINTAINER Joseph Ligier
 ENV version 0.4.9.1
 ENV software Libreosteo
 ENV dir $software-$version
+
+# Login password to connect to Libreosteo
+ENV login demo
+ENV password demo
+
 # Update the default application repository sources list
 RUN apt-get update
 
@@ -31,9 +36,10 @@ RUN tar zxf $software.tar.gz
 RUN mv $dir $software
 RUN pip install -r $software/requirements/requ-py2.txt
 RUN python $software/manage.py migrate
-RUN echo "from django.contrib.auth.models import User;User.objects.create_superuser('demo', '', 'demo')" | python $software/manage.py shell
+RUN echo "from django.contrib.auth.models import User;User.objects.create_superuser('$login', '', '$password')" | python $software/manage.py shell
 RUN python $software/manage.py compilemessages
 RUN cp -a $software/templates .
+
 RUN cd $software && bower install --allow-root
 RUN python $software/manage.py collectstatic --noinput
 

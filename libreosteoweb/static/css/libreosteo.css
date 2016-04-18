@@ -141,13 +141,11 @@ pre {
 }
 .inPlaceholderMode {
   color: #ccc;
-  min-height: 1em;
 }
-.readyForEditMode {
-    background-color: white;
-    background-color: -moz-field;
-    border: 1px solid darkgray;
-    box-shadow: 1px 1px 1px 0 lightgray inset;    
+
+div.readyForEditMode {
+  height: auto;
+  min-height:34px;
 }
 
 .version {

@@ -13,6 +13,14 @@ directives.directive('halloEditor', [ '$sce', function($sce) {
         return;
       }
 
+      // Monkey patch hallo.js enable function
+      var enableOriginal = $.IKS.hallo.prototype.enable;
+      $.IKS.hallo.prototype.enable = function()
+      {
+        enableOriginal.apply(this);
+        this.element.css({'min-height':34});
+      };
+
       ngModel.$render = function() { 
         if(!scope.isEditable){
           if ( ngModel.$viewValue == '') {
@@ -75,9 +83,9 @@ directives.directive('halloEditor', [ '$sce', function($sce) {
 
         if(newValue)
         {
-          element.addClass('readyForEditMode');
+          element.addClass('form-control readyForEditMode');
         } else {
-          element.removeClass('readyForEditMode');
+          element.removeClass('form-control readyForEditMode');
         }
       });
 

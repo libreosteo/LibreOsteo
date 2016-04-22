@@ -108,7 +108,7 @@
                             {{ patient.laterality }} :
                         </div>
                         <div class="col-md-10"><span editable-select="patient.laterality"
-                                                         e-ng-options="s.value as s.text for s in sexes"
+                                                         e-ng-options="l.value as l.text for l in laterality"
                                 >{$ showLaterality() $}</span></div>
                         </div>
                         <div class="col-md-8">

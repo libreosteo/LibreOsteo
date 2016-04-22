@@ -203,7 +203,7 @@ class IntegratorPatient(AbstractIntegrator):
                 'job' : r[12],
                 'hobbies' : r[13],
                 'smoker'  : self.get_boolean_smoker(r[14]),
-                'left_handedness'  : self.get_boolean_smoker(r[15]),
+                'laterality'  : r[15],
                 'important_info' : r[16],
                 'current_treatment' : r[17],
                 'surgical_history' : r[18],

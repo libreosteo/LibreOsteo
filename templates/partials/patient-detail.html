@@ -104,8 +104,12 @@
                         <div class="col-md-4">
                         <span editable-checkbox="patient.smoker"
                               e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
-                        <span editable-checkbox="patient.left_handedness"
-                              e-title="{{ patient.left_handedness }}?">{$ patient.left_handedness && "{{ patient.left_handedness }}" || "{% trans 'Right-handedness' %}" $}</span>
+                        <div class="col-md-2">
+                            {{ patient.laterality }} :
+                        </div>
+                        <div class="col-md-10"><span editable-select="patient.laterality"
+                                                         e-ng-options="s.value as s.text for s in sexes"
+                                >{$ showLaterality() $}</span></div>
                         </div>
                         <div class="col-md-8">
                             {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"

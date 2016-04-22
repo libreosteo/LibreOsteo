@@ -132,8 +132,16 @@ msgid "Smoker"
 msgstr "Fumeur"
 
 #: libreosteoweb/models.py:52
-msgid "Left-handedness"
+msgid "Laterality"
+msgstr "Latéralité"
+
+#: libreosteoweb/models.py:52
+msgid "Left-handed"
 msgstr "Gaucher"
+
+#: libreosteoweb/models.py:52
+msgid "Right-handed"
+msgstr "Droitier"
 
 #: libreosteoweb/models.py:52
 msgid "Important note"
@@ -791,10 +799,6 @@ msgstr "non renseigné"
 #: templates/partials/patient-detail.html:106
 msgid "Not smoker"
 msgstr "Non fumeur"
-
-#: templates/partials/patient-detail.html:108
-msgid "Right-handedness"
-msgstr "Droitier"
 
 #: templates/partials/patient-detail.html:165
 msgid "History"

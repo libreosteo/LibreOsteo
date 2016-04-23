@@ -39,7 +39,6 @@ from rest_framework.exceptions import ValidationError
 from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination
 from django.db.models import signals
 
-
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -404,7 +403,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
             ):
             if file_import_couple.file_patient :
                 # Start integration of each patient in the file
-                ( nb_line_patient, errors) = integrator.integrate(file_import_couple.file_patient, apiserializers.PatientSerializer)
+                ( nb_line_patient, errors_patient) = integrator.integrate(file_import_couple.file_patient)
         with temp_disconnect_signal(
             signal=signals.post_save,
             receiver=receiver_examination,
@@ -412,5 +411,11 @@ class FileImportViewSet(viewsets.ModelViewSet):
             ):
             if file_import_couple.file_examination :
                 # Start integration of each examination in the file
-                (nb_line_examination, errors) = integrator.integrate(file_import_couple.file_examination)
-        return Response({'patient' : nb_line_patient, "errors":errors}, status=status.HTTP_200_OK)
+                (nb_line_examination, errors_examination) = integrator.integrate(
+                    file_import_couple.file_examination,  
+                    file_additional=file_import_couple.file_patient, user=request.user)
+        return Response({ 'patient':
+            {'imported' : nb_line_patient, "errors":errors_patient}, 
+            'examination' : {'imported': nb_line_examination, 'errors':errors_examination}
+            },
+             status=status.HTTP_200_OK)

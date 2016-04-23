@@ -75,8 +75,8 @@
       <div>
         <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
         <table class="table table-bordered" ng-show="!result_analyze.analyze.patient[2]">
-            <tr ng-repeat="row in result_analyze.extract.patient">
-                <td>{$ $eval(row[0]) + 1 $}</td>
+            <tr ng-repeat="(key,row) in result_analyze.extract.patient">
+                <td>{$ key $}</td>
                 <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
                 <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
                 <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
@@ -95,14 +95,20 @@
         <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
 
         <table class="table table-bordered" ng-show="!result_analyze.analyze.examination[2]">
-
+            <tr ng-repeat="(key,row) in result_analyze.extract.examination">
+                <td>{$ key $}</td>
+                <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
+                <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
+                <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
+                <td>{$ row[13] $}</td>
+            </tr>
         </table>
     </div>
     <p ng-show="result_analyze.analyze.examination[2]">{% trans 'Empty file' %}</p>
 </div>
 
 <p>
-    <button class="btn btn-success" ng-click="import()">{% trans 'Import' %}</button>
+    <button class="btn btn-success" ng-click="import()" ng-disabled="!result_analyze.analyze.patient[1] || !result_analyze.analyze.examination[1]">{% trans 'Import' %}</button>
 </p>
 <!--end panel body -->
 </div>
@@ -119,16 +125,25 @@
 <div class="panel panel-success" ng-show="import_result != null && import_error == null">
 <div class="panel-heading">{% trans 'Importing succeed' %}</div>
     <div class="panel-body">
-        <p>{$ import_result.patient $} {% trans 'lines imported from file patient' %}</p>
+        <p>{$ import_result.patient.imported $} {% trans 'lines imported from file patient' %}</p>
     </div>
 </div>
 
 <div class="panel panel-warning" ng-show="import_result != null && import_error != null">
 <div class="panel-heading">{% trans 'Importing succeed but some errors' %}</div>
     <div class="panel-body">
-        <p>{$ import_result.patient $} {% trans 'lines imported from file patient' %}</p>
-        <p>{% trans 'Errors when integrating ' %}</p>
-        <div ng-repeat="error in import_error"><p>{% trans 'line : '%} {$ error[0]$}</p>
+        <p>{$ import_result.patient.imported $} {% trans 'lines imported from file patient' %}</p>
+        <p ng-show="import_error.patient.errors.length != 0" >{% trans 'Errors when integrating patients' %}</p>
+        <div ng-repeat="error in import_error.patient.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
+        <ul>
+            <li ng-repeat="(key,value) in error[1]">
+                {$ value $}
+            </li>
+        </ul>
+        </div>
+        <p>{$ import_result.examination.imported $} {% trans 'lines imported from file examination' %}</p>
+        <p ng-repeat="import_error.patient.errors.length != 0">{% trans 'Errors when integrating examinations' %}</p>
+        <div ng-repeat="error in import_error.examination.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
         <ul>
             <li ng-repeat="(key,value) in error[1]">
                 {$ value $}

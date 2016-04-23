@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
+from api.utils import enum
 
 
 # import the logging library
@@ -139,6 +140,22 @@ class Examination(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (self.patient, self.date)
+
+ExaminationType = enum(
+    'ExaminationType',
+    'EMPTY',
+    'NORMAL',
+    'CONTINUING',
+    'RETURN',
+    'EMERGENCY',
+)
+
+ExaminationStatus = enum(
+    'ExaminationStatus',
+    'IN_PROGRESS',
+    'WAITING_FOR_PAIEMENT',
+    'INVOICED_PAID',
+    'NOT_INVOICED',)
 
 class ExaminationComment(models.Model):
     """This class represents a comment on examination

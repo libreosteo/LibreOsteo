@@ -2,10 +2,12 @@ Changelog for Libreosteo
 ========================
 
 
-0.4.9.2 (unreleased)
+0.4.9.2 (2016-04-23)
 --------------------
 
-- Nothing changed yet.
+- Add laterality on patient file
+- Add support to import examinations linked to patient
+- Add support to export patients and examinations as CSV files.
 
 
 0.4.9.1 (2016-04-12)

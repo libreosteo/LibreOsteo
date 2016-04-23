@@ -43,6 +43,13 @@ class PatientSerializer (serializers.ModelSerializer):
             )
         ]
 
+class PatientExportSerializer (serializers.ModelSerializer):
+    birth_date = serializers.DateField(label=_('Birth date'),)
+    
+    class Meta:
+        model = Patient
+        fields = ('family_name', 'first_name', 'original_name', 'birth_date')
+
 class UserInfoSerializer(serializers.ModelSerializer):
     def validate_last_name(self, value):
         return get_name_filters().filter(value)
@@ -76,6 +83,7 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
 class ExaminationSerializer(serializers.ModelSerializer):
     invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True, read_only=True)
     therapeut_detail = UserInfoSerializer(source="therapeut", required=False, allow_null=True, read_only=True)
+    patient_detail = PatientExportSerializer(source="patient", required=False, allow_null=True, read_only=True)
     class Meta:
         model = Examination
 

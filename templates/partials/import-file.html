@@ -181,7 +181,25 @@
 <uib-tab heading="{% trans 'Export'%}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
 <div class="container-fluid">
     <div class="row">
+        <p>{% blocktrans %}Here you can download the full list of patients and examinations as CSV files{% endblocktrans %}</p>
+        <div class="col-md-12">
 
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="/api/patients?format=csv">{%trans 'Patients file'%}</a>
+                        </div>
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="/api/examinations?format=csv">{%trans 'Examinations file'%}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 </uib-tab>

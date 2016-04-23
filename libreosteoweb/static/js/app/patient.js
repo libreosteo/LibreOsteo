@@ -405,6 +405,22 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             }
         };
 
+        // Load the values for the sex
+        $scope.laterality = [
+                { value : 'L', text : gettext('Left-handed') },
+                { value :'R', text : gettext('Right-handed') },
+        ];
+
+        // display the translated value for the sex
+        $scope.showLaterality = function() {
+            if($scope.patient) {
+                var selected = $filter('filter')($scope.laterality, {value: $scope.patient.laterality});
+                return ($scope.patient && $scope.patient.laterality && selected.length) ? selected[0].text : '';
+            } else {
+                return gettext('not documented');
+            }
+        };
+
         $scope.triggerEditFormPatient = {
             save: false,
             edit: true,

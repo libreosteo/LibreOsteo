@@ -50,6 +50,7 @@ class Patient(models.Model):
         #family_situation = Column(Integer)
         doctor = models.ForeignKey(RegularDoctor, verbose_name=_('Regular doctor'), blank=True, null=True)
         smoker = models.BooleanField(_('Smoker'), default=False)
+        laterality = models.CharField(_('Laterality'), max_length=1, choices=(('L', _('Left-handed')), ('R', _('Right-handed'))), blank=True, null=True)
         important_info = models.TextField(_('Important note'), blank=True)
         current_treatment = models.TextField(_('Current treatment'), blank=True, default="")
         surgical_history = models.TextField(_('Surgical history'), blank=True)

@@ -152,7 +152,7 @@ class Analyzer(object):
 class AnalyzerPatientFile(Analyzer):
     identifier = 'nom de famille'
     type = FileCsvType.PATIENT
-    field_number = 22
+    field_number = 23
     def __init__(self, content=None):
         super(self.__class__, self).__init__(content=content)
 
@@ -252,6 +252,20 @@ class AnalyzerHandler(object):
 
 
 
+    def filter(self, line):
+        result_line = None
+        try:
+            result_line = line.decode('utf-8')
+        except:
+            pass
+        if result_line is None :
+            try:
+                result_line = line.decode('iso-8859-1')
+            except:
+                result_line = _('Cannot read the content file. Check the encoding.')
+        return result_line
+
+
 class InvalidIntegrationFile(Exception):
     def __init__(self, value):
         self.value = value
@@ -306,13 +320,14 @@ class FilePatientFactory(object):
                 'job' : row[12],
                 'hobbies' : row[13],
                 'smoker'  : self.get_boolean_value(row[14]),
-                'important_info' : row[15],
-                'current_treatment' : row[16],
-                'surgical_history' : row[17],
-                'medical_history' : row[18],
-                'family_history' : row[19],
-                'trauma_history' : row[20],
-                'medical_report' : row[21],
+                'laterality'  : self.get_laterality_value(row[15]),
+                'important_info' : row[16],
+                'current_treatment' : row[17],
+                'surgical_history' : row[18],
+                'medical_history' : row[19],
+                'family_history' : row[20],
+                'trauma_history' : row[21],
+                'medical_report' : row[22],
                 'creation_date' : self.get_default_date(),
             }
         serializer = self.serializer_class(data=data)
@@ -322,6 +337,11 @@ class FilePatientFactory(object):
             return 'F'
         else :
             return 'M'
+    def get_laterality_value(self, value):
+        if value.upper() == 'G' or value.upper() == 'L':
+            return 'L'
+        else :
+            return 'R'
     def get_boolean_value(self, value):
         if value.lower() == 'o' or value.lower() == 'oui' or value.lower() == 'true' or value.lower() == 't':
             return True
@@ -351,7 +371,6 @@ class IntegratorPatient(AbstractIntegrator):
         for idx, r in enumerate(content['content']):
             logger.info("* Load line from content")
             serializer = factory.get_serializer(r)
-
             if serializer.is_valid():
                 serializer.save()
                 nb_line += 1

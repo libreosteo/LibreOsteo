@@ -108,7 +108,7 @@
 </div>
 
 <p>
-    <button class="btn btn-success" ng-click="import()" ng-disabled="!result_analyze.analyze.patient[1] || !result_analyze.analyze.examination[1]">{% trans 'Import' %}</button>
+    <button class="btn btn-success" ng-click="import()" ng-disabled="!result_analyze.analyze.patient[1] || !result_analyze.analyze.examination[1] && result_analyze.analyze.examination[0] == 'examination'">{% trans 'Import' %}</button>
 </p>
 <!--end panel body -->
 </div>

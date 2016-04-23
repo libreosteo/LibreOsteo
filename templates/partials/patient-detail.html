@@ -101,11 +101,20 @@
                     <hr/>
 
                     <div class="row">
+                        <div class="col-md-2">
+                            {{ patient.laterality }} :
+                        </div>
+                        <div class="col-md-6"><span editable-select="patient.laterality"
+                                                         e-ng-options="l.value as l.text for l in laterality"
+                                >{$ showLaterality() $}</span>
+                        </div>
                         <div class="col-md-4">
                         <span editable-checkbox="patient.smoker"
                               e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
                         </div>
-                        <div class="col-md-8">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"
                                                          e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
                                                          tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"

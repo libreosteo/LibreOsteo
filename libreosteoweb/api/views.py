@@ -396,6 +396,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
         integrator = IntegratorHandler()
         nb_line_patient = None
         nb_line_examination = None
+        response = {'patient' : { 'imported' : 0, 'errors' : []} , 'examination': { 'imported' : 0, 'errors' : []}}
         with temp_disconnect_signal(
             signal=signals.post_save,
             receiver=receiver_newpatient,
@@ -404,6 +405,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
             if file_import_couple.file_patient :
                 # Start integration of each patient in the file
                 ( nb_line_patient, errors_patient) = integrator.integrate(file_import_couple.file_patient)
+                response['patient'] = {'imported' : nb_line_patient, 'errors': errors_patient}
         with temp_disconnect_signal(
             signal=signals.post_save,
             receiver=receiver_examination,
@@ -414,8 +416,6 @@ class FileImportViewSet(viewsets.ModelViewSet):
                 (nb_line_examination, errors_examination) = integrator.integrate(
                     file_import_couple.file_examination,  
                     file_additional=file_import_couple.file_patient, user=request.user)
-        return Response({ 'patient':
-            {'imported' : nb_line_patient, "errors":errors_patient}, 
-            'examination' : {'imported': nb_line_examination, 'errors':errors_examination}
-            },
+                response['examination'] = {'imported' : nb_line_examination, 'errors': errors_examination}
+        return Response( response ,
              status=status.HTTP_200_OK)

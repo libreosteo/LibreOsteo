@@ -35,18 +35,20 @@ RUN npm install -g bower
 RUN wget https://codeload.github.com/garthylou/Libreosteo/tar.gz/$version -O $software.tar.gz
 RUN tar zxf $software.tar.gz
 RUN mv $dir $software
-RUN pip install -r $software/requirements/requ-py2.txt
-RUN python $software/manage.py migrate
-RUN cp -a $software/templates .
+WORKDIR /$software
+RUN pip install -r requirements/requ-py2.txt
+RUN python manage.py migrate
+RUN echo "from django.contrib.auth.models import User;User.objects.create_superuser('$login', '', '$password')" | python manage.py shell
+RUN python manage.py compilemessages
 
-RUN cd $software && bower install --allow-root
-RUN python $software/manage.py collectstatic --noinput
+RUN bower install --allow-root
+RUN python manage.py collectstatic --noinput
 
 # Port to expose
 EXPOSE 8085
 
 # Default libreosteo run command arguments
-CMD ["python", "Libreosteo/server.py"]
+CMD ["python", "server.py"]
 
 # Set the user to run libreosteo daemon
 USER root

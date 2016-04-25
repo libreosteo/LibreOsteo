@@ -420,5 +420,6 @@ class FileImportViewSet(viewsets.ModelViewSet):
                     file_import_couple.file_examination,  
                     file_additional=file_import_couple.file_patient, user=request.user)
                 response['examination'] = {'imported' : nb_line_examination, 'errors': errors_examination}
+        integrator.post_processing(files=[file_import_couple.file_patient, file_import_couple.file_examination])
         return Response( response ,
              status=status.HTTP_200_OK)

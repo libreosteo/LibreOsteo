@@ -81,6 +81,9 @@ class Extractor(object):
     def get_content(self, file):
         return FileContentProxy().get_content(file, line_filter=filter)
 
+    def unproxy(self,file):
+        FileContentProxy().unproxy(file, line_filter=filter)
+
 
 
 def filter( line):
@@ -231,6 +234,13 @@ class FileContentProxy(object):
             self.file_content[key] = FileContentAdapter(ourfile, line_filter).get_content()
             return self.file_content[key]
 
+    def unproxy(self, ourfile,line_filter=None):
+        key = FileContentKey(ourfile, line_filter)
+        try :
+            self.file_content[key] = None
+        except :
+            pass
+
 
 
 
@@ -280,6 +290,11 @@ class IntegratorHandler(object):
 
         result = integrator.integrate(file, file_additional=file_additional, user=user)
         return result
+
+    def post_processing(self, files):
+        extractor = Extractor()
+        for f in files :
+            extractor.unproxy(f)
         
 
 

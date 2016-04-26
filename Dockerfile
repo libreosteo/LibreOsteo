@@ -14,10 +14,6 @@ ENV version 0.4.9.2
 ENV software Libreosteo
 ENV dir $software-$version
 
-# Login password to connect to Libreosteo
-ENV login demo
-ENV password demo
-
 # Update the default application repository sources list
 RUN apt-get update
 
@@ -31,16 +27,15 @@ RUN apt-get install -y wget \
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN npm install -g bower
 
-# Install libreosteo
+# Download libreosteo
 RUN wget https://codeload.github.com/garthylou/Libreosteo/tar.gz/$version -O $software.tar.gz
 RUN tar zxf $software.tar.gz
 RUN mv $dir $software
+
+# Install libreosteo
 WORKDIR /$software
 RUN pip install -r requirements/requ-py2.txt
 RUN python manage.py migrate
-RUN echo "from django.contrib.auth.models import User;User.objects.create_superuser('$login', '', '$password')" | python manage.py shell
-RUN python manage.py compilemessages
-
 RUN bower install --allow-root
 RUN python manage.py collectstatic --noinput
 

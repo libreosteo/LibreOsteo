@@ -96,13 +96,14 @@ class InvoiceViewHtml(TemplateView):
 
 from rest_framework.settings import api_settings
 from rest_framework_csv import renderers as r
+from .renderers import PatientCSVRenderer, ExaminationCSVRenderer
 
 
 class PatientViewSet(viewsets.ModelViewSet):
     model = models.Patient
     serializer_class = apiserializers.PatientSerializer
     queryset = models.Patient.objects.all()
-    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [r.CSVRenderer, ]
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [PatientCSVRenderer, ]
 
     @detail_route(methods=['GET'])
     def examinations(self, request, pk=None):
@@ -142,7 +143,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     model = models.Examination
     queryset = models.Examination.objects.all()
     serializer_class = apiserializers.ExaminationSerializer
-    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [r.CSVRenderer, ]
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [ExaminationCSVRenderer, ]
 
 
     @detail_route(methods=['POST'])

@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreosteoweb', '0020_patient_sex'),
+        ('libreosteoweb', '0026_auto_20160403_1840'),
     ]
 
     operations = [

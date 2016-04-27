@@ -30,7 +30,7 @@ def update_family_name(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreosteoweb', '0022_therapeutsettings_invoice_footer'),
+        ('libreosteoweb', '0027_auto_20160422_1540'),
     ]
 
     operations = [

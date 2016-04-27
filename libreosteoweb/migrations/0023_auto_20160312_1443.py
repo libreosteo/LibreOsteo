@@ -41,7 +41,7 @@ def rebuild_index(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreosteoweb', '0022_patient_current_treatment'),
+        ('libreosteoweb', '0021_update_name_in_app'),
     ]
 
     operations = [

@@ -25,12 +25,20 @@ def remove_useless_files(directory, keepfiles_list, keepdir_list):
             if os.path.join(root,d) not in keep_path_list:
                 shutil.rmtree(os.path.join(root,d))
 
+def collectstatic():
+    from subprocess import call
+    call(["python", "manage.py", "collectstatic", "--noinput"])
+
 # Build on Windows.
 #
 # usage :
 #     python setup.py build_exe 
 #
 if sys.platform in ['win32']:
+
+    # before all of things : collectstatic
+    collectstatic()
+
     from cx_Freeze import setup, Executable
     import shutil
     # GUI applications require a different base on Windows (the default is for a
@@ -175,6 +183,9 @@ if sys.platform in ['win32']:
 if sys.platform in ['darwin']:
     from setuptools import setup
 
+    # before all of things : collectstatic
+    collectstatic()
+
     APP = ['application.py']
 
     DATA_FILES = ['static', 'locale','templates', 'macos', 'media']
@@ -208,6 +219,8 @@ if sys.platform in ['darwin']:
     remove_useless_files("build/exe.win32-2.7/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
 else:
     from setuptools import setup
+
+    collectstatic()
 
     setup(
         name='Libreosteo',

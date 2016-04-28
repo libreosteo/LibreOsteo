@@ -19,6 +19,7 @@ directives.directive('halloEditor', [ '$sce', function($sce) {
       {
         enableOriginal.apply(this);
         this.element.css({'min-height':34});
+        this.element.css({'min-width':'auto'});
       };
 
       ngModel.$render = function() { 

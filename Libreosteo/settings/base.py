@@ -84,8 +84,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'templates',
-            'static',
+            os.path.join(SITE_ROOT, 'templates'),
+            os.path.join(SITE_ROOT, 'static'),
         ],
         'OPTIONS': {
             'context_processors': [

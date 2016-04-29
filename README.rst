@@ -2,7 +2,7 @@
  LibreOsteo
 ============
 
-&copy; Jean-Baptiste Gury (garthylou) 2014
+&copy; Jean-Baptiste Gury (garthylou) 2014-2016
 
 *LibreOsteo*
 
@@ -35,9 +35,13 @@ Requirements :
 
 Retrieve the content of the project from Git repository.
 
-Then retrieve the python requierements with ::
+Then retrieve the python 2 requirements with ::
 
-    pip install -r requirements.txt
+    pip install -r requirements/requ-py2.txt
+
+or python 3 ::
+
+    pip install -r requirements/requirements.txt
 
 Install Javascript dependencies with bower ::
 
@@ -49,17 +53,13 @@ Initialize the database ::
     
 It should ask for the administrator user.
 
-Compile the translations ::
-
-    python manage.py compilemessages
-
 Now you can start the server with ::
 
 python manage.py runserver
 
 Point your browser on : http://localhost:8000/
 
-You can add other user from the admin console : http://localhost:8000/admin
+You can add other user from the admin console : http://localhost:8000
 
 Have fun !
 
@@ -68,8 +68,10 @@ Contributors
 
 The libreosteo team consist of:
 
-  * garthylou_
+  * jbgury_
+  * littlejo_
 
 
 .. _github : https://github.com/garthylou
-.. _garthylou: https://github.com/garthylou
+.. _jbgury: https://github.com/jbgury
+.. _littlejo: https://github.com/littlejo

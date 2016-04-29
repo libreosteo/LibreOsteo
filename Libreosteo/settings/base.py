@@ -78,18 +78,37 @@ WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
 STATIC_ROOT = "static/"
 
-TEMPLATE_DIRS = (
-    'templates',
-    'static',
-)
+MEDIA_ROOT = "media/"
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    'Libreosteo.zip_loader.load_template_source'
-#     'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            'templates',
+            'static',
+        ],
+        'OPTIONS': {
+            'context_processors': [
+                # Insert your TEMPLATE_CONTEXT_PROCESSORS here or use this
+                # list if you haven't customized them:
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+            ],
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'Libreosteo.zip_loader.Loader',
+            ]
+        },
+    },
+]
+
 
 TEMPLATE_ZIP_FILES = (
     'library.zip',
@@ -111,17 +130,6 @@ STATICFILES_FINDERS = (
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-"django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.static",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages",
-"django.core.context_processors.request",
-)
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
@@ -129,6 +137,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(DATA_FOLDER, 'db.sqlite3'),
+        #'ATOMIC_REQUESTS' : True,
     }
 }
 
@@ -156,6 +165,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/files/'
 
 
 REST_FRAMEWORK = {

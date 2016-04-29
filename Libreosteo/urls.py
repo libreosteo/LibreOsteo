@@ -25,10 +25,11 @@ router.register(r'settings', views.OfficeSettingsView)
 router.register(r'profiles', views.TherapeutSettingsViewSet)
 router.register(r'comments', views.ExaminationCommentViewSet)
 router.register(r'office-users', views.UserOfficeViewSet)
+router.register(r'file-import', views.FileImportViewSet)
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^$', displays.display_index ),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'account/login.html'}, name='accounts-login'),
@@ -52,6 +53,18 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/add-user-modal', displays.display_adduser),
     url(r'^web-view/partials/set-password-modal', displays.display_setpassword),
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
+    url(r'^web-view/partials/import-file$', displays.display_import_files),
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+
+from django.views.i18n import javascript_catalog
+
+js_info_dict = {
+    'domain' : 'django',
+    'packages' : ('libreosteoweb',)
+}
+
+urlpatterns += patterns('',
+    (r'^jsi18n/$', javascript_catalog, js_info_dict),
+)

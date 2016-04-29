@@ -6,10 +6,11 @@
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
 </h1>
 
-<tabset>
+<uib-tabset>
 
-<tab heading="{% trans 'General infos' %}">
+<uib-tab heading="{% trans 'General infos' %}" ui-sref="patient">
     <div class="row">
+        <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()">
         <div class="col-md-8">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -20,70 +21,124 @@
                         <div class="col-md-2">
                             {{ patient.birth_date }} :
                         </div>
-                        <div class="col-md-6"><span e-class="polyfill-updatable" editable-date="patient.birth_date"
-                                                    onaftersave="savePatient()" onshow="updateComponentPolyfill()"
+                        <div class="col-md-6"><span e-class="polyfill-updatable birthdate" editable-date="patient.birth_date"
+                                                 onshow="updateComponentPolyfill()"
                                 >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
                         </div>
                         <div class="col-md-4"><span> ( {$ age | format_age $} )</span></div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            {{ patient.sex }} :
+                        </div>
+                        <div class="col-md-10"><span editable-select="patient.sex"
+                                                         e-ng-options="s.value as s.text for s in sexes"
+                                >{$ showSex() $}</span></div>
+                    </div>
                     <hr/>
-                    <inlineedit class="row col-md-12" model="patient" property="address_street" on-save="savePatient()"
-                            placeholder="{{ patient.address_street }}"></inlineedit>
-
-                    <inlineedit class="row col-md-12" model="patient" property="address_complement" on-save="savePatient()"
-                            placeholder="{{ patient.address_complement }}"></inlineedit>
-
-
                     <div class="row">
                         <div class="col-md-12">
-                            <inlineedit class="row col-md-5" model="patient" property="address_zipcode" on-save="savePatient()"
-                            placeholder="{{ patient.address_zipcode }}" width="66px"></inlineedit>
-
-                            <inlineedit class="row col-md-7" model="patient" property="address_city" on-save="savePatient()"
-                            placeholder="{{ patient.address_city }}" width="200px"></inlineedit>
+                            <span editable-text="patient.address_street"
+                                e-placeholder="{{ patient.address_street }}"
+                                tooltip="{{ patient.address_street }}"
+                                tooltip-trigger="mouseenter"
+                              >{$ patient.address_street || '&nbsp;&nbsp;' $}</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <inlinetel class="row col-md-6" model="patient" property="phone" on-save="savePatient()"
-                            placeholder="{{ patient.phone }}" icon="glyphicon glyphicon-phone-alt"></inlinetel>
+                            <span editable-text="patient.address_complement"
+                                e-placeholder="{{ patient.address_complement }}"
+                                tooltip="{{ patient.address_complement }}"
+                                tooltip-trigger="mouseenter"
+                              >{$ patient.address_complement || '&nbsp;&nbsp;' $}</span>
+                        </div>
+                    </div>
 
-                            <inlinetel class="row col-md-6"  model="patient" property="mobile_phone" on-save="savePatient()"
-                            placeholder="{{ patient.mobile_phone }}" icon="glyphicon glyphicon-earphone"></inlinetel>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span editable-text="patient.address_zipcode"
+                        e-placeholder="{{ patient.address_zipcode }}"
+                        tooltip="{{ patient.address_zipcode }}"
+                        tooltip-trigger="mouseenter"
+                        class="row col-md-5" e-width="66px"
+                      >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
+
+                            <span editable-text="patient.address_city"
+                        e-placeholder="{{ patient.address_city }}"
+                        tooltip="{{ patient.address_city }}"
+                        tooltip-trigger="mouseenter"
+                        class="row col-md-7" e-width="200px"
+                      >{$ patient.address_city || '&nbsp;&nbsp;' $}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row col-md-6">
+                                <span class="glyphicon glyphicon-phone-alt"
+                                      tooltip="{{ patient.phone }}"
+                                      tooltip-trigger="mouseenter"
+                                ></span>
+                                <span editable-tel="patient.phone"
+                                      e-placeholder="{{ patient.phone }}"
+                                      tooltip="{{ patient.phone }}"
+                                      tooltip-trigger="mouseenter"
+                                      >{$ patient.phone || '&nbsp;&nbsp;' $}</span>
+                            </div>
+                            <div class="row col-md-6">
+                                <span class="glyphicon glyphicon-earphone"
+                                      tooltip="{{ patient.mobile_phone }}"
+                                      tooltip-trigger="mouseenter"
+                                ></span>
+                                <span editable-tel="patient.mobile_phone"
+                                      e-placeholder="{{ patient.mobile_phone }}"
+                                      tooltip="{{ patient.mobile_phone }}"
+                                      tooltip-trigger="mouseenter"
+                                      >{$ patient.mobile_phone || '&nbsp;&nbsp;' $}</span>
+                            </div>
                         </div>
                     </div>
                     <hr/>
 
                     <div class="row">
+                        <div class="col-md-2">
+                            {{ patient.laterality }} :
+                        </div>
+                        <div class="col-md-6"><span editable-select="patient.laterality"
+                                                         e-ng-options="l.value as l.text for l in laterality"
+                                >{$ showLaterality() $}</span>
+                        </div>
                         <div class="col-md-4">
                         <span editable-checkbox="patient.smoker"
-                              e-title="{{ patient.smoker }}?"
-                              class="inlineedit"
-                              onaftersave="savePatient()">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
+                              e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
                         </div>
-                        <div class="col-md-8">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"
                                                          e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
-                                                         onaftersave="savePatient()"
                                                          tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"
-                                                         class="inlineedit"
                                                          tooltip-trigger="mouseenter"
                                 >{$ doctor.family_name || "{% trans 'not documented' %}" $} - {$ doctor.city || "{% trans 'not documented' %}" $}</span>
                             <button class="btn btn-default btn-xs fa fa-plus"
-                                    title="{% trans 'Add a doctor' %}" ng-click="formAddDoctor()"></button>
+                                    title="{% trans 'Add a doctor' %}" ng-show="form.patientForm.$visible" ng-click="formAddDoctor()"></button>
                         </div>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col-md-6">
                             <p>{{ patient.job }} :</p>
-                            <inlineedit class="row col-md-12" model="patient" property="job" on-save="savePatient()"
-                            placeholder="{{ patient.job }}" width="200px"></inlineedit>
+                            <span editable-text="patient.job"
+                        e-placeholder="{{ patient.job }}"
+                        tooltip="{{ patient.job }}"
+                        tooltip-trigger="mouseenter"
+                        e-width="200px"
+                      >{$ patient.job || '&nbsp;&nbsp;' $}</span>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ patient.hobbies }} :</p><inlinetextarea model="patient" property="hobbies" on-save="savePatient()"
-                            placeholder="{{ patient.hobbies }}"
-                            row="5" col="15"></inlinetextarea>
+                            <p>{{ patient.hobbies }} :</p><div hallo-editor ng-model="patient.hobbies" 
+                            placeholder="'{{ patient.hobbies }}'"
+                            is-editable="form.patientForm.$visible"></div>
                         </div>
                     </div>
                 </div>
@@ -96,16 +151,28 @@
                     {{ patient.important_info }}
                 </div>
                 <div class="panel-body row">
-                    <inlinetextarea model="patient" property="important_info" on-save="savePatient()"
-                            placeholder="{{ patient.important_info }}"
-                            row="7" col="20"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.important_info" placeholder="'{{patient.important_info}}'" is-editable="form.patientForm.$visible"></div>
                 </div>
             </div>
-        </div>
-    </div>
-</tab>
 
-<tab heading="{% trans 'History' %}">
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    {{ patient.current_treatment }}
+                </div>
+                <div class="panel-body row">
+                    <div hallo-editor ng-model="patient.current_treatment" placeholder="'{{patient.current_treatment}}'" is-editable="form.patientForm.$visible"></div>
+                </div>
+            </div>
+
+        </div>
+        </form>
+    </div>
+</uib-tab>
+
+<uib-tab heading="{% trans 'History' %}" ui-sref="patient">
+    <form editable-form name="form.historyForm" edit-form-control edit="editHistory" save="saveHistory" trigger="triggerEditFormHistory" onaftersave="savePatient()">
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-primary">
@@ -113,9 +180,8 @@
                     {{ patient.surgical_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="patient" property="surgical_history" on-save="savePatient()"
-                            placeholder="{{ patient.surgical_history }}"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.surgical_history"
+                            placeholder="'{{ patient.surgical_history }}'" is-editable="form.historyForm.$visible"></div>
                 </div>
             </div>
         </div>
@@ -125,9 +191,9 @@
                     {{ patient.medical_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <inlinetextarea model="patient" property="medical_history" on-save="savePatient()"
-                            placeholder="{{ patient.medical_history }}"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.medical_history"  
+                            placeholder="'{{ patient.medical_history }}'" is-editable="form.historyForm.$visible"
+                            ></div>
                 </div>
             </div>
         </div>
@@ -139,9 +205,9 @@
                     {{ patient.family_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="patient" property="family_history" on-save="savePatient()"
-                            placeholder="{{ patient.family_history }}"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.family_history" 
+                            placeholder="'{{ patient.family_history }}'" is-editable="form.historyForm.$visible"
+                            ></div>
                 </div>
             </div>
         </div>
@@ -151,39 +217,41 @@
                     {{ patient.trauma_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <inlinetextarea model="patient" property="trauma_history" on-save="savePatient()"
-                            placeholder="{{ patient.trauma_history }}"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.trauma_history"
+                            placeholder="'{{ patient.trauma_history }}'" is-editable="form.historyForm.$visible"
+                            ></div>
                 </div>
             </div>
         </div>
     </div>
-</tab>
+    </form>
+</uib-tab>
 
-<tab heading="{% trans 'Medical reports' %}">
+<uib-tab heading="{% trans 'Medical reports' %}" ui-sref="patient">
+    <form editable-form name="form.medicalForm" edit-form-control edit="editMedical" save="saveMedical"  trigger="triggerEditFormMedical" onaftersave="savePatient()">
     <div class="panel panel-primary">
                 <div class="panel-heading">
                     {{ patient.medical_reports }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="patient" property="medical_reports" on-save="savePatient()"
-                            placeholder="{{ patient.medical_reports }}"
-                            row="7" col="75"></inlinetextarea>
+                    <div hallo-editor ng-model="patient.medical_reports"
+                            placeholder="'{{ patient.medical_reports }}'" is-editable="form.medicalForm.$visible"></div>
                 </div>
             </div>
-</tab>
+    </form>
+</uib-tab>
 
-<tab heading="{% trans 'Examinations' %}" active="$parent.examinationsListActive" ui-sref="patient.examinations">
+<uib-tab heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations">
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
-    close="invoiceExamination(previousExamination.data)"/>
-    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="newExaminationDisplay" ng-if="previousExamination.data == null"
+    close="invoiceExamination(previousExamination.data)" on-delete='examinationDeleted(previousExamination.data)'/>
+    <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="examinationsTab.newExaminationDisplay" ng-if="previousExamination.data == null"
     current-examination="newExamination"
     current-examination-manager="currentExaminationManager()"/>
-</tab>
+</uib-tab>
 
-<tab heading="{% trans 'New Examination' %}" ng-show="newExaminationDisplay" active="$parent.newExaminationActive">
-    <examination model="newExamination" save-model="saveExamination(newExamination)" close="invoiceExamination(newExamination)" new-examination="true"/>
-</tab>
-</tabset>
+<uib-tab heading="{% trans 'New Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive">
+    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
+</uib-tab>
+</uib-tabset>

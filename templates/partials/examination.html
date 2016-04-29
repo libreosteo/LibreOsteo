@@ -11,23 +11,34 @@
             </button>
         </div>
     </div>
+    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()">
     <div class="row">
         <div class="col-md-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $}</span>
+                    <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $} {% trans 'by'%} <span class="text-uppercase">{$ model.therapeut_detail.last_name $}</span> {$ model.therapeut_detail.first_name $}</span>
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <div class="badge" ng-class="{'alert-success' : model.type == 1, 'alert-warning' : model.type == 2, 'alert-danger' : model.type >= 3 }"><i class="fa fa-check" ></i></div>
-                    <span ng-if="!readOnly"><span editable-select="model.type" e-ng-options="t.value as t.text for t in types" onaftersave="saveModel()">{$ showTypes() $}
+                    <span ng-if="!readOnly"><span editable-select="model.type" e-ng-options="t.value as t.text for t in types">{$ showTypes() $}
                     </span></span>
                     <span ng-if="readOnly">{$ showTypes() $}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-3" ng-show="model.status > 0 && model.status < 3">
-            <a class="btn btn-success pull-left" href="invoice/{$ model.invoice $}"target="_blank"
-                    >{% trans 'Invoice' %}</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>{% trans 'Invoice' %}</span>
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                    <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model)"><i class="fa fa-print"></i> </button>
+                    <span><a href="invoice/{$ model.invoice $}"target="_blank">n° {$ model.invoice_number $}</a></span>
+                </div>
+            </div>            
+        </div>
+        <div class="col-md-3">
+            
         </div>
         <div class="col-md-12">
             <div class="panel panel-danger">
@@ -36,24 +47,29 @@
                 </div>
                 <div class="panel-body row" style="margin-left: 1px; margin-right: 1px;">
                     <div class="row">
-                        <div class="col-md-12" style="padding-bottom:25px">
-                            <inlineedit model="model" property="reason" on-save="saveModel()"
-                                placeholder="{{ examination.reason }}" read-only="readOnly"
-                            ></inlineedit>
+                        <div class="col-md-5" style="padding-bottom:25px">
+                            <div class="col-md-12">
+                                <span editable-text="model.reason"
+                                    e-placeholder="{{ examination.reason }}"
+                                    tooltip="{{ model.reason }}"
+                                    tooltip-trigger="mouseenter"
+                                >{$ model.reason || '&nbsp;&nbsp;' $}</span>
+                            </div>
+                            <div class="col-md-12">&nbsp;</div>
+                            <div class="col-md-12">
+                                <div hallo-editor ng-model="model.reason_description" 
+                                    placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
+                                ></div>
+                            </div>
                         </div>
-                        <div class="col-md-5">
-                            <inlinetextarea model="model" property="reason_description" on-save="saveModel()"
-                            placeholder="{{ examination.reason_description }}" read-only="readOnly"
-                            row="5" col="28"/>
-                        </div>
+                        
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
-                                <div class="col-md-12"></div>
+                                
                                 <div class="col-md-12">
-                                    <inlinetextarea model="model" property="medical_examination" on-save="saveModel()"
-                                    placeholder="{{ examination.medical_examination }}" read-only="readOnly"
-                                row="5" col="30"/>
+                                    <div hallo-editor ng-model="model.medical_examination"
+                                    placeholder="'{{ examination.medical_examination }}'" is-editable="editableForm.$visible"></div>
                                 </div>
                             </div>
                         </div>
@@ -67,65 +83,59 @@
             <!-- the button command -->
             <div class="btn-group btn-group-vertical">
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.orl" btn-checkbox>{{ examination.orl }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.orl" uib-btn-checkbox>{{ examination.orl }}</label>
                 </div>
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.visceral" btn-checkbox>{{ examination.visceral }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.visceral" uib-btn-checkbox>{{ examination.visceral }}</label>
                 </div>
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.pulmo" btn-checkbox>{{ examination.pulmo }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.pulmo" uib-btn-checkbox>{{ examination.pulmo }}</label>
                 </div>
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" btn-checkbox>{{ examination.uro_gyneco }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" uib-btn-checkbox>{{ examination.uro_gyneco }}</label>
                 </div>
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.periphery" btn-checkbox>{{ examination.periphery }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.periphery" uib-btn-checkbox>{{ examination.periphery }}</label>
                 </div>
                 <div class="col-md-12 btn-group">
-                    <label class="btn btn-default" ng-model="examinationSettings.general_state" btn-checkbox>{{ examination.general_state }}</label>
+                    <label class="btn btn-default" ng-model="examinationSettings.general_state" uib-btn-checkbox>{{ examination.general_state }}</label>
                 </div>
             </div>
         </div>
         <div class="col-md-9">
             <!-- The accordion -->
-            <accordion close-others="false">
-                <accordion-group heading="{{ examination.orl }}" class="panel-primary" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
-                    <inlinetextarea model="model" property="orl" on-save="saveModel()"
-                            placeholder="{{ examination.orl }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+            <uib-accordion close-others="false">
+                <uib-accordion-group heading="{{ examination.orl }}" class="panel-primary" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
+                    <div hallo-editor ng-model="model.orl" 
+                            placeholder="'{{ examination.orl }}'" is-editable="editableForm.$visible"></div>
+                </uib-accordion-group>
 
-                <accordion-group heading="{{ examination.visceral }}" class="panel-primary" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
-                    <inlinetextarea model="model" property="visceral" on-save="saveModel()"
-                            placeholder="{{ examination.visceral }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+                <uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
+                    <div hallo-editor ng-model="model.visceral" 
+                            placeholder="'{{ examination.visceral }}'" is-editable="editableForm.$visible"></div>
+                </uib-accordion-group>
 
-                <accordion-group heading="{{ examination.pulmo }}" class="panel-primary" ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
-                    <inlinetextarea model="model" property="pulmo" on-save="saveModel()"
-                            placeholder="{{ examination.pulmo }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+                <uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary" ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
+                    <div hallo-editor ng-model="model.pulmo" placeholder="'{{ examination.pulmo }}'" is-editable="editableForm.$visible"></div>
+                </uib-accordion-group>
 
-                <accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
-                    <inlinetextarea model="model" property="uro_gyneco" on-save="saveModel()"
-                            placeholder="{{ examination.uro_gyneco }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+                <uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
+                    <div hallo-editor ng-model="model.uro_gyneco"
+                            placeholder="'{{ examination.uro_gyneco }}'" is-editable="editableForm.$visible"></div>
+                </uib-accordion-group>
 
-                <accordion-group heading="{{ examination.periphery }}" class="panel-primary" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
-                    <inlinetextarea model="model" property="periphery" on-save="saveModel()"
-                            placeholder="{{ examination.periphery }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+                <uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
+                    <div  hallo-editor ng-model="model.periphery" 
+                            placeholder="'{{ examination.periphery }}'" is-editable="editableForm.$visible"
+                    ></div>
+                </uib-accordion-group>
 
-                <accordion-group heading="{{ examination.general_state }}" class="panel-primary" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
-                    <inlinetextarea model="model" property="general_state" on-save="saveModel()"
-                            placeholder="{{ examination.general_state }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
-                </accordion-group>
+                <uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
+                    <div hallo-editor ng-model="model.general_state" 
+                            placeholder="'{{ examination.general_state }}'" is-editable="editableForm.$visible"></div>
+                </uib-accordion-group>
 
-            </accordion>
+            </uib-accordion>
         </div>
      </div>
 
@@ -137,9 +147,8 @@
                     {{ examination.diagnosis }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="diagnosis" on-save="saveModel()"
-                            placeholder="{{ examination.diagnosis }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="model.diagnosis" 
+                            placeholder="'{{ examination.diagnosis }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>
         </div>
@@ -152,9 +161,7 @@
                     {{ examination.treatments }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="treatments" on-save="saveModel()"
-                            placeholder="{{ examination.treatments }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="model.treatments" placeholder="'{{ examination.treatments }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>
         </div>
@@ -167,20 +174,17 @@
                     {{ examination.conclusion }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <inlinetextarea model="model" property="conclusion" on-save="saveModel()"
-                            placeholder="{{ examination.conclusion }}" read-only="readOnly"
-                            row="5" col="35"></inlinetextarea>
+                    <div hallo-editor ng-model="model.conclusion" placeholder="'{{ examination.conclusion }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>
         </div>
       </div>
-
     <div class="row">
-        <div class="col-md-8">
-            <a class="btn btn-success pull-left" ng-show="model.status > 0 && model.status < 3" href="invoice/{$ model.invoice $}"target="_blank">{% trans 'Invoice' %}</a></div>
+        <div class="col-md-8"></div>
         <div class="col-md-4">
             <button class="btn btn-success pull-right" ng-show="model.status < 1"
-                    ng-click="close(model)">{% trans 'Close' %}</button>
+                    ng-click="saveAndClose()">{% trans 'Close' %}</button>
         </div>
 
     </div>
+    </form>

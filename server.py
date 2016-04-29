@@ -10,7 +10,6 @@ from cherrypy import _cplogging, _cperror
 from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
-import webbrowser
 
 SERVER_PORT = 8085
 
@@ -158,15 +157,6 @@ class HTTPLogger(_cplogging.LogManager):
             self.access_log.log(logging.INFO, self.access_log_format % atoms)
         except:
             self.error(traceback=True)
-
-def callback_server_started():
-    """
-    This function is called when the server is started.
-    If an instance is already running, the callback
-    is called too
-    """
-    addr = 'localhost'
-    webbrowser.open("http://%s:%s/"%(addr, SERVER_PORT), new=2,autoraise=True)
 
 if __name__ == '__main__':
     DATA_FOLDER = os.path.dirname(__file__)

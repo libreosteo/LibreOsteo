@@ -4,7 +4,6 @@ var libreosteoApp = angular.module('libreosteo', [
     'xeditable',
     'ui.bootstrap',
     'loPatient',
-    'loInlineEdit',
     'loTimeline',
     'loDashboard',
     'loOfficeEvent',
@@ -21,6 +20,10 @@ var libreosteoApp = angular.module('libreosteo', [
     'loOfficeSettings',
     'ui.grid',
     'infinite-scroll',
+    'loEditFormManager',
+    'loHalloEditor',
+    'loFileImport',
+    'ngFileUpload'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -33,9 +36,8 @@ libreosteoApp.run(function (editableOptions) {
 });
 
 libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
-    $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
-    $http.defaults.headers.put['X-CSRFToken'] = $cookies.csrftoken;
-    //$http.defaults.headers.delete['X-CSRFToken'] = $cookies.csrftoken;
+    $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $http.defaults.xsrfCookieName = 'csrftoken';
 }]);
 
 libreosteoApp.config(['growlProvider', function(growlProvider) {
@@ -73,7 +75,8 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
             {
                 url : '/search/:query',
                 templateUrl : function(params) {
-                    return 'web-view/partials/search-result?q='+params.query ;
+                    var url = 'web-view/partials/search-result?q='+params.query;
+                    return url ;
                 },
                 controller : 'SearchResultCtrl'
             }).
@@ -81,10 +84,11 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
             {
                 url : '/search/:query/:page',
                 templateUrl : function(params) {
-                    page = '';
+                    var page = '';
                     if(params.page)
                     {  page="&page="+params.page  }
-                    return 'web-view/partials/search-result?q='+params.query+page ;
+                    var url = 'web-view/partials/search-result?q='+params.query+page;
+                    return  url ;
                 },
                 controller : 'SearchResultCtrl'
             }).
@@ -100,6 +104,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl : 'web-view/partials/office-settings',
                 controller : 'OfficeSettingsCtrl'
             }).
+            state('import-file',
+                {
+                    url : '/office/import-file',
+                    templateUrl : 'web-view/partials/import-file',
+                    controller : 'ImportFileCtrl'
+                }).
 
             state('dashboard',
             {
@@ -110,11 +120,22 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
     }
 ]);
 
-// WEBShim configuration
-webshim.polyfill('forms forms-ext');
+webshim.setOptions('forms-ext', {
+    replaceUI: 'auto',
+    types: 'date',
+    date: {nopicker: false}
+});
 
-libreosteoApp.controller('MainController', ['$scope', function($scope) {
+// WEBShim configuration
+webshim.polyfill('forms-ext');
+
+libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', function($scope, loEditFormManager) {
 	$scope.$on('$viewContentLoaded', function() {
+                $('[type="date"].birthdate').prop('max', function(){
+                    return new Date().toJSON().split('T')[0];
+                });
                 $('body').updatePolyfill();
             });
+
+    $scope.editFormManager = loEditFormManager;
 }]);

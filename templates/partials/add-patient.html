@@ -26,10 +26,10 @@
                        name="first_name" placeholder="{{ patient.first_name }}"/>
             </div>
             <div class="form-group">
-                    <input type="text" class="form-control  input-lg"
+                    <label for="birthdate">{{patient.birth_date }}</label>
+                    <input type="date" id="birthdate" class="form-control  input-lg birthdate"
                            ng-model="patient.birth_date"  ng-required="true"
-                           placeholder="{{ patient.birth_date }}"
-                            onfocus="(this.type='date'); $(this).updatePolyfill();" onblur="(this.type='text')"/>
+                           placeholder="AAAA-MM-DD" data-date-split-input="true"/>
             </div>
             <button class="btn btn-primary"
                     ng-click="initPatient(patient)" ng-disabled="form.$invalid">{% trans 'Init the patient file' %}</button>

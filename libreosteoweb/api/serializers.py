@@ -1,8 +1,12 @@
 from rest_framework import serializers, validators
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice, FileImport
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
+from .validators import UniqueTogetherIgnoreCaseValidator
+from .filter import get_name_filters
+from django.core.exceptions import ObjectDoesNotExist
+from .file_integrator import Extractor
 
 
 class WithPkMixin(object):
@@ -19,31 +23,49 @@ def check_birth_date(value):
 class PatientSerializer (serializers.ModelSerializer):
     current_user_operation = None
     birth_date = serializers.DateField(label=_('Birth date'), validators=[check_birth_date] )
+    
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_original_name(self, value):
+        return get_name_filters().filter(value)
+    	
     class Meta:
         model = Patient
         validators = [
-            validators.UniqueTogetherValidator(
+            UniqueTogetherIgnoreCaseValidator(
                 queryset=Patient.objects.all(),
                 fields=('family_name', 'first_name', 'birth_date'),
                 message = _('This patient already exists'),
             )
         ]
 
+class PatientExportSerializer (serializers.ModelSerializer):
+    birth_date = serializers.DateField(label=_('Birth date'),)
+    
+    class Meta:
+        model = Patient
+        fields = ('family_name', 'first_name', 'original_name', 'birth_date')
+
 class UserInfoSerializer(serializers.ModelSerializer):
+    def validate_last_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta :
         model = User
         fields = ('username', 'email', 'first_name', 'last_name')
 
-
-    #def restore_object(self, attrs, instance=None):
-        # call set_password on user object. Without this
-        # the password will be stored in plain text.
-        #user = super(UserSerializer, self).restore_object(attrs, instance)
-        #if(attrs['password']):
-        #    user.set_password(attrs['password'])
-        #return user
-
 class RegularDoctorSerializer(serializers.ModelSerializer):
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta:
         model = RegularDoctor
 
@@ -59,6 +81,9 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
 
 class ExaminationSerializer(serializers.ModelSerializer):
+    invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True, read_only=True)
+    therapeut_detail = UserInfoSerializer(source="therapeut", required=False, allow_null=True, read_only=True)
+    patient_detail = PatientExportSerializer(source="patient", required=False, allow_null=True, read_only=True)
     class Meta:
         model = Examination
 
@@ -118,9 +143,12 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
             patient = Patient.objects.get(id = obj.reference)
             return "%s %s" % (patient.family_name, patient.first_name)
         if (obj.clazz == "Examination"):
-            examination = Examination.objects.get(id=obj.reference)
-            patient = examination.patient
-            return "%s %s" % (patient.family_name, patient.first_name)
+            try :
+                examination = Examination.objects.get(id=obj.reference)
+                patient = examination.patient
+                return "%s %s" % (patient.family_name, patient.first_name)
+            except ObjectDoesNotExist:
+                pass 
         return ""
 
     def get_translated_comment(self, obj):
@@ -135,9 +163,16 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeSettings
 
-
+class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = Invoice
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
+    def validate_family_name(self, value):
+        return get_name_filters().filter(value)
+    
+    def validate_first_name(self, value):
+        return get_name_filters().filter(value)
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'is_staff', 'is_active')
@@ -146,3 +181,17 @@ class PasswordSerializer(serializers.Serializer):
      password = serializers.CharField(
         required=False
      )
+
+class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
+    _status = None
+    class Meta:
+        model = FileImport
+    analyze = serializers.SerializerMethodField()
+    extract = serializers.SerializerMethodField()
+
+    def get_analyze(self, obj):
+        if obj.analyze is not None:
+            return obj.analyze
+
+    def get_extract(self, obj):
+        return Extractor().extract(obj)

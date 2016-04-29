@@ -14,6 +14,7 @@ examination.factory('ExaminationServ', ['$resource',
                 params : {examinationId : 'examinationId'},
                 url : 'api/examinations/:examinationId/close'
             },
+            delete : { method : 'DELETE', params : {examinationId : 'examinationId'}},
         });
     }
 ]);
@@ -43,7 +44,7 @@ function isEmpty(str) {
 }
 
 
-examination.directive('examination', function(){
+examination.directive('examination', ['ExaminationServ', function(ExaminationServ){
     "use strict";
     return {
         restrict: 'E',
@@ -52,33 +53,28 @@ examination.directive('examination', function(){
             saveModel : '&',
             close : '&',
             newExamination: '=',
+            onDelete : '&',
         },
       compile: function(element, attrs){
           if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
-        controller : function($scope, $filter)
+        controller : [ '$scope', '$filter', '$window', 'growl', '$q', function($scope, $filter, $window, growl, $q)
         {
             $scope.types = [
-                { value : 1, text : 'Consultation normale' },
-                { value : 2, text : 'Poursuite de traitement' },
-                { value : 3, text : 'Retour' },
-                { value : 4, text : 'Urgence' },
+                { value : 1, text : gettext('Normal examination') },
+                { value : 2, text : gettext('Continuing examination') },
+                { value : 3, text : gettext('Return') },
+                { value : 4, text : gettext('Emergency') },
             ];
             $scope.showTypes = function() {
                 if($scope.model) {
                     var selected = $filter('filter')($scope.types, {value: $scope.model.type});
-                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : 'Non renseigné';
+                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : gettext('not documented');
                 } else {
-                    return 'Non renseigné';
+                    return gettext('not documented');
                 }
             };
-
-            $scope.$watch('model.status', function(newValue, oldValue){
-                if (newValue){
-                    $scope.readOnly = newValue != 0; 
-                }
-            });
 
             $scope.examinationSettings = {
                 orl : false,
@@ -116,8 +112,96 @@ examination.directive('examination', function(){
             $scope.$watch('model.general_state', function(newValue, oldValue){
                 $scope.examinationSettings.general_state = !isEmpty(newValue);
             });
+
+            $scope.$watch('model.status', function(newValue, oldValue){
+               $scope.updateDeleteTrigger(); 
+            });
+
+            $scope.$watch('model.id', function(newValue, oldValue)
+            {
+                $scope.updateDeleteTrigger();
+            });
+
+            $scope.updateDeleteTrigger = function() {
+                if($scope.model == null)
+                {
+                    $scope.triggerEditForm.delete = false;
+                    return;
+                }
+                if( $scope.model.status != 0){
+                    $scope.triggerEditForm.delete = false;
+                } else {
+                    if($scope.model.id){
+                        $scope.triggerEditForm.delete = true;            
+                    } else {
+                        $scope.triggerEditForm.delete = false;
+                    }
+                }
+            };
+
+            $scope.printInvoice = function(examination)
+            {
+                var invoiceTab = $window.open('invoice/' + examination.invoice , '_blank');
+
+                setTimeout(function() {
+                    invoiceTab.print();
+                }, 750);
+            };
+
+            $scope.delete = function()
+            {
+                if($scope.model.id)
+                {
+                    ExaminationServ.delete({examinationId : $scope.model.id}, function(resultOk)
+                        {
+                            if ($scope.onDelete)
+                            {
+                                $scope.onDelete();
+                            }   
+                        }, function(resultNok)
+                        {
+                            console.log(resultNok);
+                            growl.addErrorMessage("This operation is not available");
+                        });
+                }
+                
+            };
+
+            $scope.$watch('editableForm.$visible', function(newValue, oldValue)
+            {
+                if(oldValue === false && newValue === true)
+                {
+                    $scope.triggerEditForm.edit = false;
+                    $scope.triggerEditForm.save = true;
+                } else if(oldValue === true && newValue === false )
+                {
+                    $scope.triggerEditForm.edit = true;
+                    $scope.triggerEditForm.save = false;
+                }
+            });
+
+            $scope.edit = function() {
+                $scope.editableForm.$show();
+            };
+
+            $scope.save = function()
+            {
+                $scope.editableForm.$save();
+            };
+
+            $scope.saveAndClose = function()
+            {
+                $scope.close($scope.model);
+            };
             
-        },
+            $scope.triggerEditForm = {
+                save: false,
+                edit: true,
+                cancel: null,
+                delete: false,
+            };
+            
+        }],
         templateUrl: 'web-view/partials/examination'
     }
-});
+}]);

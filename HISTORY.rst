@@ -2,8 +2,8 @@ Changelog for Libreosteo
 ========================
 
 
-0.5 (2016-04-27)
-----------------
+0.5.1 (2016-05-03)
+------------------
 
 - Finalize version
 - Release Docker file to create a docker container with the release

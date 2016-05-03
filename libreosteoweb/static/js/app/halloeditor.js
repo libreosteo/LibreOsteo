@@ -91,7 +91,6 @@ directives.directive('halloEditor', [ '$sce', function($sce) {
       });
 
       function read() {
-        console.log("ngModel "+angular.toJson(ngModel));
         var html = element.html();
         if ( html == '<br>' || html == '<br/>' || element == '') {
           element.empty();

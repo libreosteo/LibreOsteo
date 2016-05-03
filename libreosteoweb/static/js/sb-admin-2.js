@@ -25,4 +25,11 @@ $(function() {
             $("#page-wrapper").css("min-height", (height) + "px");
         }
     })
-})
+});
+
+
+$('#editorcommand').affix({
+    offset: {
+        top: $('#editorcommand').offset().top
+    }
+});

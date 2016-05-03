@@ -1,6 +1,7 @@
 import sys, glob, os
+import libreosteoweb
 
-VERSION = "0.4"
+version = libreosteoweb.__version__
 
 
 
@@ -24,12 +25,20 @@ def remove_useless_files(directory, keepfiles_list, keepdir_list):
             if os.path.join(root,d) not in keep_path_list:
                 shutil.rmtree(os.path.join(root,d))
 
+def collectstatic():
+    from subprocess import call
+    call(["python", "manage.py", "collectstatic", "--noinput"])
+
 # Build on Windows.
 #
 # usage :
 #     python setup.py build_exe 
 #
 if sys.platform in ['win32']:
+
+    # before all of things : collectstatic
+    collectstatic()
+
     from cx_Freeze import setup, Executable
     import shutil
     # GUI applications require a different base on Windows (the default is for a
@@ -96,11 +105,17 @@ if sys.platform in ['win32']:
         'email.mime.image',
         "django.contrib.admin.migrations.0001_initial",
         "django.contrib.auth.migrations.0001_initial",
+        "django.contrib.auth.migrations.0002_alter_permission_name_max_length",
+        "django.contrib.auth.migrations.0003_alter_user_email_max_length",
+        "django.contrib.auth.migrations.0004_alter_user_username_opts",
+        "django.contrib.auth.migrations.0005_alter_user_last_login_null",
+        "django.contrib.auth.migrations.0006_require_contenttypes_0002",
         "django.contrib.contenttypes.migrations.0001_initial",
+        "django.contrib.contenttypes.migrations.0002_remove_content_type_name",
         "django.contrib.sessions.migrations.0001_initial",
     ] + include_migration_files('libreosteoweb/migrations')
     
-    include_files = get_filepaths('static') + get_filepaths('locale') +get_djangolocale()
+    include_files = get_filepaths('static') + get_filepaths('locale') + get_djangolocale() + get_filepaths('media')
     zip_includes = get_filepaths('templates')
     packages = [
         "os",
@@ -132,7 +147,7 @@ if sys.platform in ['win32']:
     }
 
     setup(  name = "libreosteo",
-        version = VERSION,
+        version = version,
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
         executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
@@ -145,9 +160,6 @@ if sys.platform in ['win32']:
     shortlink.write("URL=http://localhost:8085/\n")
     shortlink.write("\n")
     shortlink.write("\n")
-
-    ##Copy the launchservice program
-    #shutil.copy2('Y:\LaunchServ_0.2\LaunchServ.exe', 'build/exe.win32-2.7/LaunchServ.exe')
 
     ##Remove useless locales
     remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])
@@ -171,9 +183,12 @@ if sys.platform in ['win32']:
 if sys.platform in ['darwin']:
     from setuptools import setup
 
+    # before all of things : collectstatic
+    collectstatic()
+
     APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates', 'macos']
+    DATA_FILES = ['static', 'locale','templates', 'macos', 'media']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
@@ -188,8 +203,8 @@ if sys.platform in ['darwin']:
             'CFBundleGetInfoString' : 'Libreosteo',
             'CFBundleDisplayName' : 'Libreosteo',
             'CFBundleName' : 'Libreosteo',
-            'CFBundleShortVersionString' : VERSION,
-            'CFBundleVersion' : VERSION,
+            'CFBundleShortVersionString' : version,
+            'CFBundleVersion' : version,
         },
         'extra_scripts': ['server.py','manage.py'],
         'optimize' : True,
@@ -202,3 +217,17 @@ if sys.platform in ['darwin']:
         setup_requires=['py2app'],
     )
     remove_useless_files("build/exe.win32-2.7/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
+else:
+    from setuptools import setup
+
+    collectstatic()
+
+    setup(
+        name='Libreosteo',
+        version=version,
+        description='Open source software and free software for osteopaths',
+        author='Jean-Baptiste Gury',
+        url='https://libreosteo.github.io',
+        packages=['Libreosteo','libreosteoweb'],
+        )
+

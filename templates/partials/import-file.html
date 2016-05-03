@@ -1,0 +1,206 @@
+{% load i18n %}
+{% load static from staticfiles %}
+<h1 class="page-header">
+    {% trans 'Managing import/export' %}
+</h1>
+
+<uib-tabset>
+
+<uib-tab heading="{% trans 'Import' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            {% blocktrans %}
+            <p>For importing patient or examination in the database, you have to download these both above templates. Fill them with your favorite Spreasheet editor and save them as csv files.</p>
+            <p>Do not change the format, because Libresoteo read only csv files.</p>
+            <br/>
+            <p>After you fill them, you upload your files with the import tool above.</p>
+            <br/>
+            <p>In order to add examinations for patients, you have to link each one with a number. If you read the Patient templates file you will see that the first column is "Number". This number should have been the same in the examination to add this examination to the patient.</p>
+            <div class="well">Note : It have no relation with the number that you can see in the system after integration.</div>
+            {% endblocktrans %}
+        </div>
+
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="{% static "files/patient-template.csv" %}">{%trans 'Patient template file'%}</a>
+                        </div>
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="{% static "files/consultation-template.csv" %}">{%trans 'Examination template file'%}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">{% trans 'Import' %}</div>
+      <div class="panel-body">
+        <form name="forms.form" novalidate>
+            <div class="form-group">
+                <label for="patient-file">{% trans 'Patient file' %}</label>
+                <input type="file" id="patient-file" ngf-select="" ng-model="files.patientFile" name="patientFile" ngf-accept="'.csv'" required="">
+                <label for="examination-file">{% trans 'Examination file' %}</label>
+                <input type="file" id="examination-file" ngf-select="" ng-model="files.examinationFile" name="examinationFile" ngf-accept="'.csv'">
+            </div>
+            <button class="btn btn-default" ng-click="analyze()" type="submit">{% trans 'Analyze' %}</button>
+        </form>
+    </div>
+</div>
+
+<div id="analyze-result">
+<div class="panel panel-default" ng-show="result_analyze != null">
+    <div ng-if="result_analyze != null">
+            <script type="text/javascript">
+                $('#analyze-result').animatescroll();
+            </script>
+        </div>
+
+  <div class="panel-heading">{% trans 'Analyze result' %}</div>
+
+  <div class="panel-body">
+
+    <div id="patient-file-analyze" ng-show="result_analyze.analyze.patient[0] == 'patient'">
+
+      <p class="bg-info">{% trans 'Patient file' %}<span ng-show="result_analyze.analyze.patient[1]" class="text-success"> <i class="fa fa-check"></i></span><span ng-show="!result_analyze.analyze.patient[1]" class="text-danger"> <i class="fa fa-close"></i></span></p>
+
+      <div>
+        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
+        <table class="table table-bordered" ng-show="!result_analyze.analyze.patient[2]">
+            <tr ng-repeat="(key,row) in result_analyze.extract.patient">
+                <td>{$ key $}</td>
+                <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
+                <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
+                <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
+                <td>{$ row[13] $}</td><td>{$ row[14] $}</td><td>{$ row[15] $}</td><td>{$ row[16] $}</td>
+                <td>{$ row[17] $}</td><td>{$ row[18] $}</td><td>{$ row[19] $}</td><td>{$ row[20] $}</td>
+                <td>{$ row[21] $}</td>
+            </tr>
+        </table>
+    </div>
+    <p ng-show="result_analyze.analyze.patient[2]">{% trans 'Empty file' %}</p>
+</div>
+
+<div id="examination-file-analyze" ng-show="result_analyze.analyze.examination[0] == 'examination'">
+    <p class="bg-info">{% trans 'Examination file' %}<span ng-show="result_analyze.analyze.examination[1]" class="text-success"> <i class="fa fa-check"></i></span><span ng-show="!result_analyze.analyze.examination[1]" class="text-danger"> <i class="fa fa-close"></i></span></p>
+    <div>
+        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
+
+        <table class="table table-bordered" ng-show="!result_analyze.analyze.examination[2]">
+            <tr ng-repeat="(key,row) in result_analyze.extract.examination">
+                <td>{$ key $}</td>
+                <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
+                <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
+                <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
+                <td>{$ row[13] $}</td>
+            </tr>
+        </table>
+    </div>
+    <p ng-show="result_analyze.analyze.examination[2]">{% trans 'Empty file' %}</p>
+</div>
+
+<p>
+    <button class="btn btn-success" ng-click="import()" ng-disabled="!result_analyze.analyze.patient[1] || !result_analyze.analyze.examination[1] && result_analyze.analyze.examination[0] == 'examination'">{% trans 'Import' %}</button>
+</p>
+<!--end panel body -->
+</div>
+<!-- end panel analyze -->
+</div>
+</div>
+
+<div id="import-result">
+    <div ng-if="import_result != null || import_error != null || import_fatal != null">
+            <script type="text/javascript">
+                $('#import-result').animatescroll();
+            </script>
+        </div>
+<div class="panel panel-success" ng-show="import_result != null && import_error == null">
+<div class="panel-heading">{% trans 'Importing succeed' %}</div>
+    <div class="panel-body">
+        <p>{$ import_result.patient.imported $} {% trans 'lines imported from file patient' %}</p>
+    </div>
+</div>
+
+<div class="panel panel-warning" ng-show="import_result != null && import_error != null">
+<div class="panel-heading">{% trans 'Importing succeed but some errors' %}</div>
+    <div class="panel-body">
+        <p>{$ import_result.patient.imported $} {% trans 'lines imported from file patient' %}</p>
+        <p ng-show="import_error.patient.errors.length != 0" >{% trans 'Errors when integrating patients' %}</p>
+        <div ng-repeat="error in import_error.patient.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
+        <ul>
+            <li ng-repeat="(key,value) in error[1]">
+                {$ value $}
+            </li>
+        </ul>
+        </div>
+        <p>{$ import_result.examination.imported $} {% trans 'lines imported from file examination' %}</p>
+        <p ng-repeat="import_error.patient.errors.length != 0">{% trans 'Errors when integrating examinations' %}</p>
+        <div ng-repeat="error in import_error.examination.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
+        <ul>
+            <li ng-repeat="(key,value) in error[1]">
+                {$ value $}
+            </li>
+        </ul>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-danger" ng-show="import_result == null && import_error != null">
+<div class="panel-heading">{% trans 'Importing failed' %}</div>
+    <div class="panel-body">
+        <p>{% trans 'Errors when integrating ' %}</p>
+        <div ng-repeat="error in import_error"><p>{% trans 'line : '%} {$ error[0]$}</p>
+        <ul>
+            <li ng-repeat="(key,value) in error[1]">
+                {$ value $}
+            </li>
+        </ul>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-danger" ng-show="import_fatal != null">
+<div class="panel-heading">{% trans 'Importing failed' %}</div>
+    <div class="panel-body">
+        <p>{$ import_fatal $}</p>
+    </div>
+</div>
+</div>
+
+</div>
+
+</uib-tab>
+<uib-tab heading="{% trans 'Export'%}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+<div class="container-fluid">
+    <div class="row">
+        <p>{% blocktrans %}Here you can download the full list of patients and examinations as CSV files{% endblocktrans %}</p>
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="/api/patients?format=csv">{%trans 'Patients file'%}</a>
+                        </div>
+                        <div class="col-md-6">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="/api/examinations?format=csv">{%trans 'Examinations file'%}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</uib-tab>
+</uib-tabset>

@@ -139,3 +139,15 @@ pre {
 .subtitle {
     padding-bottom:10px;
 }
+.inPlaceholderMode {
+  color: #ccc;
+}
+
+div.readyForEditMode {
+  height: auto;
+  min-height:34px;
+}
+
+.version {
+    font-size : 0.5em;
+}

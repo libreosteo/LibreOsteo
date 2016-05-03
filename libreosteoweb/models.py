@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
+from api.utils import enum
 
 
 # import the logging library
@@ -49,13 +50,16 @@ class Patient(models.Model):
         #family_situation = Column(Integer)
         doctor = models.ForeignKey(RegularDoctor, verbose_name=_('Regular doctor'), blank=True, null=True)
         smoker = models.BooleanField(_('Smoker'), default=False)
+        laterality = models.CharField(_('Laterality'), max_length=1, choices=(('L', _('Left-handed')), ('R', _('Right-handed'))), blank=True, null=True)
         important_info = models.TextField(_('Important note'), blank=True)
+        current_treatment = models.TextField(_('Current treatment'), blank=True, default="")
         surgical_history = models.TextField(_('Surgical history'), blank=True)
         medical_history = models.TextField(_('Medical history'), blank=True)
         family_history = models.TextField(_('Family history'), blank=True)
         trauma_history = models.TextField(_('Trauma history'), blank=True)
         medical_reports = models.TextField(_('Medical reports'), blank=True)
         creation_date = models.DateField(_('Creation date'), blank=True, null=True, editable=False)
+        sex = models.CharField(_('Sex'), max_length=1, choices=(('M', _('Male')), ('F', _('Female'))), blank=True, null=True)
 
         #Not mapped field, only for traceability purpose
         current_user_operation = None
@@ -116,8 +120,9 @@ class Examination(models.Model):
     status = models.SmallIntegerField(_('Status'))
     status_reason = models.TextField(_('Status reason'), blank=True, null=True)
     # Type : 1 -> normal examination
-    # Type : 2 -> Scheduled return
-    # Type : 3 -> Urgent return
+    # Type : 2 -> continuation of the examination
+    # Type : 3 -> return of a previous examination
+    # Type : 4 -> emergency examination
     type = models.SmallIntegerField(_('Type'))
     invoice = models.OneToOneField('Invoice', verbose_name=_('Invoice'), blank=True, null=True)
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
@@ -128,8 +133,30 @@ class Examination(models.Model):
     EXAMINATION_INVOICED_PAID = 2
     EXAMINATION_NOT_INVOICED = 3
 
+    # i18n
+    TYPE_NORMAL_EXAMINATION_I18N = _('Normal examination')
+    TYPE_CONTINUING_EXAMINATION_I18N = _('Continuing examination')
+    TYPE_RETURN_I18N = _('Return')
+    TYPE_EMERGENCY_I18N = _('Emergency')
+
     def __unicode__(self):
         return "%s %s" % (self.patient, self.date)
+
+ExaminationType = enum(
+    'ExaminationType',
+    'EMPTY',
+    'NORMAL',
+    'CONTINUING',
+    'RETURN',
+    'EMERGENCY',
+)
+
+ExaminationStatus = enum(
+    'ExaminationStatus',
+    'IN_PROGRESS',
+    'WAITING_FOR_PAIEMENT',
+    'INVOICED_PAID',
+    'NOT_INVOICED',)
 
 class ExaminationComment(models.Model):
     """This class represents a comment on examination
@@ -226,3 +253,39 @@ class TherapeutSettings(models.Model):
     adeli = models.TextField(_('Adeli'),blank=True)
     quality = models.TextField(_('Quality'), blank=True)
     user = models.OneToOneField(User, verbose_name=_('User'),   blank=True,null=True)
+    siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
+    invoice_footer = models.TextField(_('Invoice footer'), blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Ensure that empty string are none in DB
+        """
+        if self.siret == '':
+            self.siret = None
+        if self.invoice_footer == '':
+            self.invoice_footer = None
+        super(TherapeutSettings, self).save(*args, **kwargs)
+
+class FileImport(models.Model):
+    """
+    implements a couple of file for importing data.
+    It concerns only Patient and examination
+    """
+    file_patient = models.FileField(_('Patient file'))
+    file_examination = models.FileField(_('Examination file'),blank=True)
+    status = models.IntegerField(_('validity status'), blank=True, default=None, null=True)
+    analyze = None
+
+    def delete(self, *args, **kwargs):
+        """
+        Delete media file too.
+        """
+        if bool(self.file_patient) :
+            storage_patient, path_patient = self.file_patient.storage, self.file_patient.path
+        if bool(self.file_examination) : 
+            storage_examination, path_examination = self.file_examination.storage, self.file_examination.path
+        super(FileImport, self).delete(*args, **kwargs)
+        if bool(self.file_patient):
+            storage_patient.delete(path_patient)
+        if bool(self.file_examination) :
+            storage_examination.delete(path_examination)

@@ -15,12 +15,14 @@ timeline.directive('timeline', function()
             currentExamination : '=',
             currentExaminationManager : '&',
         },
-        controller : function($scope, ExaminationServ, ExaminationCommentServ, CommentServ) {
+        controller : function($scope, ExaminationServ, ExaminationCommentServ, CommentServ, loEditFormManager) {
           $scope.loadExamination = function(examinationId) {
             if ($scope.currentExamination.id == null)
             {
               ExaminationServ.get({examinationId : examinationId}, function(data){
                   $scope.archiveExamination.data = data;
+                  loEditFormManager.available = true;
+
               });
             } else if ($scope.currentExamination.id == examinationId) {
               // callback the currentExamination manager
@@ -28,6 +30,7 @@ timeline.directive('timeline', function()
             } else {
               ExaminationServ.get({examinationId : examinationId}, function(data){
                   $scope.archiveExamination.data = data;
+                  loEditFormManager.available = true;
                 });
             }
           }  ;

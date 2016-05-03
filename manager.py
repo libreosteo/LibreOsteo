@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import logging.config
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings")
@@ -18,6 +19,83 @@ if __name__ == "__main__":
     from django.utils import six
 
     from django.db.migrations.loader import MIGRATIONS_MODULE_NAME
+    if getattr(sys, 'frozen', False):
+        # frozen
+        DATA_FOLDER = os.path.dirname(sys.executable)
+    else:
+        # unfrozen
+        DATA_FOLDER = os.path.dirname(os.path.realpath(__file__))
+    LOG_CONF = {
+	    'version': 1,
+	
+	    'formatters': {
+	        'void': {
+	            'format': ''
+	        },
+	        'standard': {
+	            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+	        },
+	    },
+	    'handlers': {
+	        'default': {
+	            'level':'INFO',
+	            'class':'logging.StreamHandler',
+	            'formatter': 'standard',
+	            'stream': 'ext://sys.stdout'
+	        },
+	        'cherrypy_console': {
+	            'level':'INFO',
+	            'class':'logging.StreamHandler',
+	            'formatter': 'void',
+	            'stream': 'ext://sys.stdout'
+	        },
+	        'cherrypy_access': {
+	            'level':'INFO',
+	            'class': 'logging.handlers.RotatingFileHandler',
+	            'formatter': 'void',
+	            'filename': os.path.join(DATA_FOLDER, 'access.log'),
+	            'maxBytes': 10485760,
+	            'backupCount': 20,
+	            'encoding': 'utf8'
+	        },
+	        'cherrypy_error': {
+	            'level':'INFO',
+	            'class': 'logging.handlers.RotatingFileHandler',
+	            'formatter': 'void',
+	            'filename': os.path.join(DATA_FOLDER, 'errors.log'),
+	            'maxBytes': 10485760,
+	            'backupCount': 20,
+	            'encoding': 'utf8'
+	        },
+	    },
+	    'loggers': {
+            'django.utils.translation': {
+	            'handlers': ['default', 'cherrypy_error'],
+	            'level': 'INFO'
+	        },
+	        'patch': {
+	            'handlers': ['default', 'cherrypy_error'],
+	            'level': 'INFO'
+	        },
+	        'db': {
+	            'handlers': ['default'],
+	            'level': 'INFO' ,
+	            'propagate': False
+	        },
+	        'cherrypy.access': {
+	            'handlers': ['cherrypy_access'],
+	            'level': 'INFO',
+	            'propagate': False
+	        },
+	        'cherrypy.error': {
+	            'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+	        },
+	    }
+	}
+    
+    logging.config.dictConfig(LOG_CONF)
 
     def _load_disk(self):
         """
@@ -139,6 +217,8 @@ if __name__ == "__main__":
         
         MigrationLoader.load_disk = _load_disk
         MigrationQuestioner.ask_initial = _ask_initial
+        
+        import patch
         
 
     execute_from_command_line(sys.argv)

@@ -115,6 +115,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       edit: "=edit",
       cancel: "=cancel",
       delete: "=delete",
+      saveOnLostFocus: "=saveOnLostFocus"
     },
     compile: function(element, attr) {
       if (!attr.save) {
@@ -128,6 +129,9 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       }
       if (!attr.delete) {
         attr.delete = null;
+      }
+      if(!attr.saveOnLostFocus){
+        attr.saveOnLostFocus = false;
       }
     },
     controller: ['$scope', 'loEditFormManager', '$element', function($scope, loEditFormManager, $element) {
@@ -153,6 +157,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         var observer = new MutationObserver(function(mutations) {
           $scope.$apply(function() {
             loEditFormManager.isavailable();
+            $scope.lostFocusMgr();
           });
         });
         $($element).parents().map(function() {
@@ -160,6 +165,19 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         });
         observer.observe($($element).get(0), config);
       });
+
+      $scope.lostFocusMgr = function()
+      {
+        // When the component changes from isavailable true to isavailable false, and 
+        // in edit mode, then call save action if flag is saveOnLostFocus is true
+        if ($scope.saveOnLostFocus)
+        {
+          if(! $($element).is(':visible') && $scope.trigger.save){
+            $scope.save();
+            $scope.trigger.save = false;
+          }
+        }
+      };
     }],
   }
 }]);

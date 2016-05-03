@@ -10,7 +10,7 @@
 
 <uib-tab heading="{% trans 'General infos' %}" ui-sref="patient">
     <div class="row">
-        <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()">
+        <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()" save-on-lost-focus="true">
         <div class="col-md-8">
             <div class="panel panel-info">
                 <div class="panel-heading">
@@ -172,7 +172,7 @@
 </uib-tab>
 
 <uib-tab heading="{% trans 'History' %}" ui-sref="patient">
-    <form editable-form name="form.historyForm" edit-form-control edit="editHistory" save="saveHistory" trigger="triggerEditFormHistory" onaftersave="savePatient()">
+    <form editable-form name="form.historyForm" edit-form-control edit="editHistory" save="saveHistory" trigger="triggerEditFormHistory" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-primary">
@@ -228,7 +228,7 @@
 </uib-tab>
 
 <uib-tab heading="{% trans 'Medical reports' %}" ui-sref="patient">
-    <form editable-form name="form.medicalForm" edit-form-control edit="editMedical" save="saveMedical"  trigger="triggerEditFormMedical" onaftersave="savePatient()">
+    <form editable-form name="form.medicalForm" edit-form-control edit="editMedical" save="saveMedical"  trigger="triggerEditFormMedical" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="panel panel-primary">
                 <div class="panel-heading">
                     {{ patient.medical_reports }}

@@ -10,7 +10,7 @@ FROM ubuntu
 MAINTAINER Joseph Ligier
 
 
-ENV version 0.4.9.2
+ENV version 0.5.0
 ENV software Libreosteo
 ENV dir $software-$version
 

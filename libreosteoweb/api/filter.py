@@ -3,12 +3,19 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def get_firstname_filters():
+	filterChain = FilterManager()
+	filterChain.add(LowerNameFilter())
+	filterChain.add(CapitalizeJoinNameFilter())
+	filterChain.add(CapitalizeComposedNameFilter())
+	return filterChain
+
 def get_name_filters():
 	filterChain = FilterManager()
 	filterChain.add(LowerNameFilter())
 	filterChain.add(CapitalizeNameFilter())
-	filterChain.add(CapitalizeComposedNameFilter())
 	return filterChain
+
 
 class FilterException(Exception):
 	def __init__(self, value):
@@ -61,15 +68,27 @@ class CapitalizeNameFilter(AbstractFilter):
 		filtered_text = text
 		if filtered_text:
 			text_list = filtered_text.split(' ')
-			filtered_text = '-'.join([self._capitalize_word(t) for t in text_list])
+			filtered_text = ' '.join([self._capitalize_word(t) for t in text_list])
 		return super(CapitalizeNameFilter, self).filter(filtered_text)
-			
+		 
 	def _capitalize_word(self, word=None):
 		if word and len(word) > 0:
 			return word[0].upper() + word[1:]
 		return word
 
-class CapitalizeComposedNameFilter(CapitalizeNameFilter):
+
+class CapitalizeJoinNameFilter(CapitalizeNameFilter):
+	def __init__(self, next=None):
+		super(CapitalizeJoinNameFilter, self).__init__(next)
+
+	def filter(self, text=None):
+		filtered_text = text
+		if filtered_text:
+			text_list = filtered_text.split(' ')
+			filtered_text = '-'.join([self._capitalize_word(t) for t in text_list])
+		return super(CapitalizeJoinNameFilter, self).filter(filtered_text)
+
+class CapitalizeComposedNameFilter(CapitalizeJoinNameFilter):
 	def __init__(self, next=None):
 		super(CapitalizeComposedNameFilter, self).__init__(next)
 

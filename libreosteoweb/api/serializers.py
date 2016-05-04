@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from .validators import UniqueTogetherIgnoreCaseValidator
-from .filter import get_name_filters
+from .filter import get_name_filters, get_firstname_filters
 from django.core.exceptions import ObjectDoesNotExist
 from .file_integrator import Extractor
 
@@ -28,7 +28,7 @@ class PatientSerializer (serializers.ModelSerializer):
         return get_name_filters().filter(value)
     
     def validate_first_name(self, value):
-        return get_name_filters().filter(value)
+        return get_firstname_filters().filter(value)
     
     def validate_original_name(self, value):
         return get_name_filters().filter(value)

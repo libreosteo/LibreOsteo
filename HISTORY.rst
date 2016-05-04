@@ -2,11 +2,12 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.1 (unreleased)
+0.5.1 (2016-05-04)
 ------------------
 
 - Fix the command panel to edit patient file/examinations when scrolling page
 - autosave and close the edit mode when changing tab on the patient file (not the examination)
+- Change filter to manage name with "particule" specifically.
 
 0.5.0 (2016-04-27)
 ------------------

@@ -11,7 +11,10 @@ Changelog for Libreosteo
 0.5.1 (2016-05-03)
 ------------------
 
-0.5 (2016-04-27)
+- Fix the command panel to edit patient file/examinations when scrolling page
+- autosave and close the edit mode when changing tab on the patient file (not the examination)
+
+0.5.0 (2016-04-27)
 ----------------
 
 - Finalize version

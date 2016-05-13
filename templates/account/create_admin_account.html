@@ -1,4 +1,6 @@
-{% load i18n %}<!DOCTYPE html>
+{% load i18n %}
+{% load compress %}
+<!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,12 +11,13 @@
 
     <title>{% trans  "Create admin account on Libreosteo" %}</title>
 
+    {% compress css %}
     <!-- Bootstrap core CSS -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
 
      <!-- Custom styles for this template -->
     <link href="{{ STATIC_URL }}css/signin.css" rel="stylesheet">
-
+    {% endcompress %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>

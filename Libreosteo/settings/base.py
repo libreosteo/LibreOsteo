@@ -44,6 +44,7 @@ APPEND_SLASH = False
 
 DEMONSTRATION = False
 
+COMPRESS_ENABLED=True
 
 # Application definition
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = (
     'django_filters',
     'statici18n',
     'rest_framework',
+    'compressor'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,7 +78,7 @@ ROOT_URLCONF = 'Libreosteo.urls'
 
 WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
-STATIC_ROOT = "static/"
+STATIC_ROOT = os.path.join(SITE_ROOT, "static/")
 
 MEDIA_ROOT = "media/"
 
@@ -127,6 +129,7 @@ TEMPLATE_ZIP_FILES = (
 STATICFILES_FINDERS = (
 'django.contrib.staticfiles.finders.FileSystemFinder',
 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+'compressor.finders.CompressorFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -252,3 +255,5 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter','compressor.filters.cssmin.rCSSMinFilter']

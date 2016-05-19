@@ -11,7 +11,6 @@ class PatientIndex(indexes.SearchIndex, indexes.Indexable):
     address_complement = indexes.CharField(model_attr='address_complement')
     address_zipcode = indexes.CharField(model_attr='address_zipcode')
     address_city = indexes.CharField(model_attr='address_city')
-    email = indexes.EmailField(model_attr='email')
     phone = indexes.CharField(model_attr='phone')
     mobile_phone = indexes.CharField(model_attr='mobile_phone')
     doctor = indexes.CharField(model_attr='doctor', null=True)

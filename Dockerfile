@@ -9,6 +9,7 @@ FROM ubuntu
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Joseph Ligier
 
+
 ENV version 0.6.dev0
 ENV software Libreosteo
 ENV dir $software-$version

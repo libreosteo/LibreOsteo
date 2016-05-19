@@ -9,10 +9,12 @@ FROM ubuntu
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Joseph Ligier
 
-
 ENV version 0.6.dev0
+ENV branch develop
+ENV owner littlejo
 ENV software Libreosteo
 ENV dir $software-$version
+ENV git_repo https://github.com/$owner/$software.git
 
 # Update the default application repository sources list
 RUN apt-get update
@@ -28,9 +30,7 @@ RUN ln -s /usr/bin/nodejs /usr/bin/node
 RUN npm install -g bower
 
 # Download libreosteo
-RUN wget https://codeload.github.com/garthylou/Libreosteo/tar.gz/$version -O $software.tar.gz
-RUN tar zxf $software.tar.gz
-RUN mv $dir $software
+RUN git clone -b $branch $git_repo
 
 # Install libreosteo
 WORKDIR /$software

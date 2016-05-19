@@ -13,6 +13,7 @@ class PatientIndex(indexes.SearchIndex, indexes.Indexable):
     address_city = indexes.CharField(model_attr='address_city')
     phone = indexes.CharField(model_attr='phone')
     mobile_phone = indexes.CharField(model_attr='mobile_phone')
+    email = indexes.CharField(model_attr='email')
     doctor = indexes.CharField(model_attr='doctor', null=True)
     #family_situation = Column(Integer)
     smoker = indexes.BooleanField(model_attr='smoker')

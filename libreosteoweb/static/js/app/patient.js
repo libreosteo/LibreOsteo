@@ -81,7 +81,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         "use strict";
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
-            p.birth_date = new Date(p.birth_date);
+            p.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
         });
 
         $scope.form = {};
@@ -154,7 +154,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 {
                     // Should reload the patient
                     $scope.patient = data;
-                    $scope.patient.birth_date = new Date(data.birth_date);
+                    $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(data.birth_date));
                     $scope.patient.doctor_detail(function (detail) {$scope.doctor = detail; });
                 }, function(data)
             {
@@ -166,7 +166,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 }
                 $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
                      p.doctor_detail(function (detail) {$scope.doctor = detail; });
-                     $scope.patient.birth_date = new Date(p.birth_date);
+                     $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
                 });
             });
         };

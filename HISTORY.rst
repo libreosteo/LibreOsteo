@@ -2,6 +2,18 @@ Changelog for Libreosteo
 ========================
 
 
+0.5.3 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+0.5.2 (2016-07-13)
+------------------
+
+- Fix editing birthdate on patient file on a negative GMT timezone offset 
+
+
 0.5.1 (2016-05-04)
 ------------------
 

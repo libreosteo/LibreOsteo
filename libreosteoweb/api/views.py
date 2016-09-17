@@ -36,8 +36,9 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound
 from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
-from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination
+from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination,block_disconnect_all_signal
 from django.db.models import signals
+import os
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -424,3 +425,61 @@ class FileImportViewSet(viewsets.ModelViewSet):
         integrator.post_processing(files=[file_import_couple.file_patient, file_import_couple.file_examination])
         return Response( response ,
              status=status.HTTP_200_OK)
+
+
+from django.http import HttpResponse
+from django.core.servers.basehttp import FileWrapper
+
+@csrf_protect
+@never_cache
+def db_dump(request):
+    import os,sys
+    from cStringIO import StringIO
+
+    from django.core import management
+    buf = StringIO()
+    management.call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
+    buf.seek(0)
+
+    wrapper = FileWrapper(buf)
+    response = HttpResponse(wrapper, content_type='application/binary')
+    response['Content-Length'] = sys.getsizeof(buf)*8
+
+    return response
+
+from django.core.files.base import ContentFile
+from django.core.files import File
+import tempfile
+from django.core.management import call_command
+@csrf_protect
+def load_dump(request):
+    #Retrieve the content of the file uploaded.
+    if(request.FILES['file']):
+        # Write the received file into a file into settings.FIXTURE_DIRS
+        file_content = ContentFile(request.FILES['file'].read())
+        filename = 'load_dump.json'
+        fixture = os.path.join(tempfile.gettempdir(), filename)
+        tmp_dump = open(fixture, 'w')
+        f = File(tmp_dump)
+        f.write(file_content.read())
+        f.close()
+        receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
+
+        with block_disconnect_all_signal(
+            signal=signals.post_save,
+            receivers_senders=receivers_senders
+            ):
+            call_command('flush', interactive=False, load_initial_data=False)
+            # It means that the settings.FIXTURE_DIRS should be set in settings
+            previous = settings.FIXTURE_DIRS
+            settings.FIXTURE_DIRS = [tempfile.gettempdir()]
+            # And when loading dumps, write the file into this directory with the name : load_dump.json
+            call_command('loaddata', fixture)
+            # Delete the fixture
+            os.remove(fixture)
+            settings.FIXTURE_DIRS = previous
+        return HttpResponse(content=u'reloaded')
+    else :
+        return HttpResponse()
+    
+    

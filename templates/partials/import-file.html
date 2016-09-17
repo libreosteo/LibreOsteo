@@ -5,8 +5,51 @@
 </h1>
 
 <uib-tabset>
+<uib-tab heading="{% trans 'Archive and restore database' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+<div class="container-fluid">
+    <div class="row">
+        <p>{% blocktrans %}This system helps you to archive and restore the full system.{% endblocktrans %}</p>
+        <div class="col-md-12">
 
-<uib-tab heading="{% trans 'Import' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans 'Archive' %}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i style="font-size:24px" class="fa fa-file-excel-o"></i>
+                            <a href="{% url 'libreosteoweb.api.views.db_dump' %}">{% trans 'get archive'%}</a>
+                        </div>
+                        <div class="col-md-10">
+                            {% blocktrans %}
+                            This file is the full content of your database. It could only be used by Libreosteo. Use it to restore your database or transfert the content to an other machine.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans 'Restore' %}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <form name="forms.form_dump" novalidate>
+                            <div class="form-group">
+                                <label for="archive-file">{% trans 'Archive file' %}</label>
+                                <input type="file" id="archive-file" ngf-select="" ng-model="files.archiveFile" name="archiveFile" ngf-accept="'.json'" required="">
+                            </div>
+                            <button class="btn btn-default" ng-click="restore()" type="submit">{% trans 'Restore' %}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</uib-tab>
+
+
+
+<uib-tab heading="{% trans 'Import from external system' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -133,7 +176,7 @@
 <div class="panel-heading">{% trans 'Importing succeed but some errors' %}</div>
     <div class="panel-body">
         <p>{$ import_result.patient.imported $} {% trans 'lines imported from file patient' %}</p>
-        <p ng-show="import_error.patient.errors.length != 0" >{% trans 'Errors when integrating patients' %}</p>
+        <p ng-show="import_error.patient.errors != null && import_error.patient.errors.length != 0" >{% trans 'Errors when integrating patients' %}</p>
         <div ng-repeat="error in import_error.patient.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
         <ul>
             <li ng-repeat="(key,value) in error[1]">
@@ -142,7 +185,7 @@
         </ul>
         </div>
         <p>{$ import_result.examination.imported $} {% trans 'lines imported from file examination' %}</p>
-        <p ng-repeat="import_error.patient.errors.length != 0">{% trans 'Errors when integrating examinations' %}</p>
+        <p ng-rshow="import_error.examination.errors != null && import_error.examination.errors.length != 0">{% trans 'Errors when integrating examinations' %}</p>
         <div ng-repeat="error in import_error.examination.errors"><p>{% trans 'line : '%} {$ error[0]$}</p>
         <ul>
             <li ng-repeat="(key,value) in error[1]">
@@ -178,7 +221,7 @@
 </div>
 
 </uib-tab>
-<uib-tab heading="{% trans 'Export'%}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+<uib-tab heading="{% trans 'Export to an external system'%}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
 <div class="container-fluid">
     <div class="row">
         <p>{% blocktrans %}Here you can download the full list of patients and examinations as CSV files{% endblocktrans %}</p>

@@ -1,6 +1,6 @@
 var fileimport = angular.module('loFileImport', ['ngResource','ngFileUpload']);
 
-fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', function($scope, Upload, $http)
+fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', '$window', function($scope, Upload, $http, $window)
 {
     $scope.forms = {};
     $scope.files = {};
@@ -12,6 +12,36 @@ fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', function($
       if ($scope.forms.form.$valid && $scope.files.patientFile) {
         $scope.upload($scope.files);
       }
+    };
+
+    $scope.restore = function() {
+      if ($scope.forms.form_dump.$valid && $scope.files.archiveFile) {
+        $scope.upload_dump($scope.files);
+      }
+    };
+
+    $scope.upload_dump = function(dump)
+    {
+        Upload.upload({
+            url : 'internal/restore',
+            data : {file : dump.archiveFile}
+        }).then(function (resp)
+        {
+            console.log('Success ' + resp.config.data.file.name + ' uploaded. ');
+            $scope.result_restore = resp.data;
+            $scope.forms.form_dump.archiveFile = null;
+            if ($scope.result_restore = 'reloaded')
+            {
+                // Display a popup which indicates that all base wes reloaded and user was reinitialized. 
+                //  You have to be connected again
+                // After reload the page
+                $window.location.reload();
+            }
+        }, function(resp) {
+            console.log('Error status : '+resp.status);
+        }, function (evt){
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        });
     };
 // upload on file select or drop
     $scope.upload = function (files) {

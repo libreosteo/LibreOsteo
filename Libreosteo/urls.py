@@ -38,6 +38,8 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/statistics[/]?$', views.StatisticsView.as_view(), name='statistics_view'),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
+    url(r'^internal/dump.json', views.db_dump, name='db_dump'),
+    url(r'^internal/restore', views.load_dump, name='load_dump'),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),

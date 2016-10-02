@@ -16,7 +16,7 @@ from haystack.query import SearchQuerySet
 import json
 import logging
 from django.contrib.auth.models import User
-from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser
+from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available
 from .exceptions import Forbidden
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -32,12 +32,14 @@ from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
 from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination,block_disconnect_all_signal
 from django.db.models import signals
+from django.contrib.admin.views.decorators import staff_member_required
+
 import os
 
 # Get an instance of a logger
@@ -56,7 +58,7 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
     Displays the login form and handles the login action.
     """
     if len(User.objects.filter(is_staff__exact=True)) > 0 :
-        return HttpResponseNotFound()
+        raise Http404
     redirect_to = request.POST.get(redirect_field_name,
     request.GET.get(redirect_field_name, ''))
     if request.method == "POST":
@@ -76,6 +78,26 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
         form = registration_form()
         context = {
             'form': form,
+            redirect_field_name: redirect_to
+        }
+    return TemplateResponse(request, template_name, context)
+
+@csrf_protect
+@never_cache
+def install(request, template_name='install.html',
+    redirect_field_name=REDIRECT_FIELD_NAME,
+    registration_form=UserCreationForm):
+    """
+    Displays the install status and handle the action on install.
+    """
+    if len(User.objects.filter(is_staff__exact=True)) > 0 :
+        raise HttpResponseForbidden
+    redirect_to = request.POST.get(redirect_field_name,
+    request.GET.get(redirect_field_name, ''))
+    if request.method == "POST":
+        pass
+    else:
+        context = {
             redirect_field_name: redirect_to
         }
     return TemplateResponse(request, template_name, context)
@@ -432,6 +454,7 @@ from django.core.servers.basehttp import FileWrapper
 
 @csrf_protect
 @never_cache
+@staff_member_required   
 def db_dump(request):
     import os,sys
     from cStringIO import StringIO
@@ -451,10 +474,13 @@ from django.core.files.base import ContentFile
 from django.core.files import File
 import tempfile
 from django.core.management import call_command
+
 @csrf_protect
+@maintenance_available()
 def load_dump(request):
     #Retrieve the content of the file uploaded.
-    if(request.FILES['file']):
+    if('file' in request.FILES.keys() ):
+        logger.info("Load a dump from a sent file.")
         # Write the received file into a file into settings.FIXTURE_DIRS
         file_content = ContentFile(request.FILES['file'].read())
         filename = 'load_dump.json'
@@ -463,21 +489,27 @@ def load_dump(request):
         f = File(tmp_dump)
         f.write(file_content.read())
         f.close()
+        logger.info("Dump file was persisted for future loading.")
         receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
 
         with block_disconnect_all_signal(
             signal=signals.post_save,
             receivers_senders=receivers_senders
             ):
+            logger.info("Signals were disactivated, perform clearing of the database")
             call_command('flush', interactive=False, load_initial_data=False)
             # It means that the settings.FIXTURE_DIRS should be set in settings
             previous = settings.FIXTURE_DIRS
             settings.FIXTURE_DIRS = [tempfile.gettempdir()]
             # And when loading dumps, write the file into this directory with the name : load_dump.json
+            logger.info("Load the fixture from path : %s "% (fixture))
             call_command('loaddata', fixture)
             # Delete the fixture
+            logger.info("Clearing the fixture")
             os.remove(fixture)
             settings.FIXTURE_DIRS = previous
+            logger.info("Could restore signals")
+        logger.info("end of reloading.")
         return HttpResponse(content=u'reloaded')
     else :
         return HttpResponse()

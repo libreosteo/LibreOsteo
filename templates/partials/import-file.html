@@ -27,21 +27,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">{% trans 'Restore' %}</div>
-                <div class="panel-body">
-                    <div class="row">
-                        <form name="forms.form_dump" novalidate>
-                            <div class="form-group">
-                                <label for="archive-file">{% trans 'Archive file' %}</label>
-                                <input type="file" id="archive-file" ngf-select="" ng-model="files.archiveFile" name="archiveFile" ngf-accept="'.json'" required="">
-                            </div>
-                            <button class="btn btn-default" ng-click="restore()" type="submit">{% trans 'Restore' %}</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

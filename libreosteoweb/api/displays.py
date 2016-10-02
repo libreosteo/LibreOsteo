@@ -4,6 +4,7 @@ from libreosteoweb import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import libreosteoweb
+from .permissions import maintenance_available
 
 # import the logging library
 import logging
@@ -109,3 +110,7 @@ def display_setpassword(request):
 
 def display_import_files(request):
     return render_to_response('partials/import-file.html', {'request' : request})
+
+@maintenance_available()
+def display_restore(request):
+    return render_to_response('partials/restore.html', {'request' : request})

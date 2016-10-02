@@ -197,7 +197,8 @@ LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'accounts-login'
 LOGOUT_URL_NAME = 'accounts-logout'
 LOGIN_REDIRECT_URL= '/'
-INITIALIZE_ADMIN_URL_NAME = 'accounts-create-admin'
+INITIALIZE_ADMIN_URL_NAME = 'install'
+NO_REROUTE_PATTERN_URL = [ r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n', r'^web-view/partials/restore' ]
 
 
 

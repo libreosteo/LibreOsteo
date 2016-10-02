@@ -51,7 +51,7 @@ class temp_disconnect_signal():
             dispatch_uid=self.dispatch_uid
         )
 
-#@receiver(post_save, sender=Patient)
+@receiver(post_save, sender=Patient)
 def receiver_newpatient(sender, **kwargs):
 	event = OfficeEvent()
 	event.clazz = Patient.__name__
@@ -71,7 +71,7 @@ def receiver_newpatient(sender, **kwargs):
 		# Does not save update on patient
 		# event.save()
 
-#@receiver(post_save, sender=Examination)
+@receiver(post_save, sender=Examination)
 def receiver_examination(sender, **kwargs):
 	event = OfficeEvent()
 	event.clazz = Examination.__name__

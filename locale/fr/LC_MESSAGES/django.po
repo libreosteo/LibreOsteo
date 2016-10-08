@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-08 15:01+0200\n"
-"PO-Revision-Date: 2016-10-08 15:09+0200\n"
+"POT-Creation-Date: 2016-10-08 16:19+0200\n"
+"PO-Revision-Date: 2016-10-08 16:19+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -95,6 +95,10 @@ msgstr ""
 #: libreosteoweb/api/serializers.py:117
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
+
+#: libreosteoweb/api/views.py:518
+msgid "This archive file seems to be incorrect. Impossible to load it."
+msgstr "Ce fichier d'archive semble être incorrect. Impossible de le charger."
 
 #: libreosteoweb/models.py:24 libreosteoweb/models.py:38
 #: libreosteoweb/models.py:90 libreosteoweb/models.py:187
@@ -948,15 +952,15 @@ msgstr ""
 "archive doit être obtenue depuis le logiciel avec la fonction Importer/"
 "Exporter/Archiver."
 
-#: templates/partials/restore.html:12
+#: templates/partials/restore.html:15
 msgid "Archive file to restore"
 msgstr "Fichier d'archive à restaurer"
 
-#: templates/partials/restore.html:15
+#: templates/partials/restore.html:18
 msgid "Restore"
 msgstr "Restaurer"
 
-#: templates/partials/restore.html:17
+#: templates/partials/restore.html:20
 msgid "Loading in progress"
 msgstr "Chargement en cours"
 

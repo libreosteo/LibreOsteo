@@ -479,39 +479,41 @@ from django.core.management import call_command
 @maintenance_available()
 def load_dump(request):
     #Retrieve the content of the file uploaded.
-    if('file' in request.FILES.keys() ):
-        logger.info("Load a dump from a sent file.")
-        # Write the received file into a file into settings.FIXTURE_DIRS
-        file_content = ContentFile(request.FILES['file'].read())
-        filename = 'load_dump.json'
-        fixture = os.path.join(tempfile.gettempdir(), filename)
-        tmp_dump = open(fixture, 'w')
-        f = File(tmp_dump)
-        f.write(file_content.read())
-        f.close()
-        logger.info("Dump file was persisted for future loading.")
-        receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
+    try:
+        if('file' in request.FILES.keys() ):
+            logger.info("Load a dump from a sent file.")
+            # Write the received file into a file into settings.FIXTURE_DIRS
+            file_content = ContentFile(request.FILES['file'].read())
+            filename = 'load_dump.json'
+            fixture = os.path.join(tempfile.gettempdir(), filename)
+            tmp_dump = open(fixture, 'w')
+            f = File(tmp_dump)
+            f.write(file_content.read())
+            f.close()
+            logger.info("Dump file was persisted for future loading.")
+            receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
 
-        with block_disconnect_all_signal(
-            signal=signals.post_save,
-            receivers_senders=receivers_senders
-            ):
-            logger.info("Signals were disactivated, perform clearing of the database")
-            call_command('flush', interactive=False, load_initial_data=False)
-            # It means that the settings.FIXTURE_DIRS should be set in settings
-            previous = settings.FIXTURE_DIRS
-            settings.FIXTURE_DIRS = [tempfile.gettempdir()]
-            # And when loading dumps, write the file into this directory with the name : load_dump.json
-            logger.info("Load the fixture from path : %s "% (fixture))
-            call_command('loaddata', fixture)
-            # Delete the fixture
-            logger.info("Clearing the fixture")
-            os.remove(fixture)
-            settings.FIXTURE_DIRS = previous
-            logger.info("Could restore signals")
-        logger.info("end of reloading.")
-        return HttpResponse(content=u'reloaded')
-    else :
-        return HttpResponse()
-    
+            with block_disconnect_all_signal(
+                signal=signals.post_save,
+                receivers_senders=receivers_senders
+                ):
+                logger.info("Signals were disactivated, perform clearing of the database")
+                call_command('flush', interactive=False, load_initial_data=False)
+                # It means that the settings.FIXTURE_DIRS should be set in settings
+                previous = settings.FIXTURE_DIRS
+                settings.FIXTURE_DIRS = [tempfile.gettempdir()]
+                # And when loading dumps, write the file into this directory with the name : load_dump.json
+                logger.info("Load the fixture from path : %s "% (fixture))
+                call_command('loaddata', fixture)
+                # Delete the fixture
+                logger.info("Clearing the fixture")
+                os.remove(fixture)
+                settings.FIXTURE_DIRS = previous
+                logger.info("Could restore signals")
+            logger.info("end of reloading.")
+            return HttpResponse(content=u'reloaded')
+        else :
+            return HttpResponse()
+    except :
+        return HttpResponse(content=_(u'This archive file seems to be incorrect. Impossible to load it.'), status=412)
     

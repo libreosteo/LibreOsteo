@@ -5,6 +5,7 @@ restore.controller('RestoreCtrl', ['$scope', 'Upload', '$http', '$window', funct
     $scope.in_progress = false;
 	$scope.restore = function() {
       if ($scope.forms.form_dump.$valid && $scope.files.archiveFile) {
+        $scope.error = null;
         $scope.upload_dump($scope.files);
       }
     };
@@ -29,8 +30,8 @@ restore.controller('RestoreCtrl', ['$scope', 'Upload', '$http', '$window', funct
                 $window.location.assign("/");
             }
         }, function(resp) {
-            console.log('Error status : '+resp.status);
             $scope.in_progress = false;
+            $scope.error = resp.data;
         }, function (evt){
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
         });

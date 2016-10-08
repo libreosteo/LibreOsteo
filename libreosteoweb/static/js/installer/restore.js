@@ -23,7 +23,7 @@ restore.controller('RestoreCtrl', ['$scope', 'Upload', '$http', '$window', funct
             $scope.forms.form_dump.archiveFile = null;
             if ($scope.result_restore = 'reloaded')
             {
-                // Display a popup which indicates that all base wes reloaded and user was reinitialized. 
+                // Display a popup which indicates that all base was reloaded and user was reinitialized. 
                 //  You have to be connected again
                 // After reload the page
                 $window.location.assign("/");

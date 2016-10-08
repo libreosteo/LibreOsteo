@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
     url(r'^web-view/partials/import-file$', displays.display_import_files),
     url(r'^web-view/partials/restore$', displays.display_restore),
+    url(r'^web-view/partials/register$', displays.display_register, name='accounts-register'),
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

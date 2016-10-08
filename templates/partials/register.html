@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static from staticfiles %}
+
+    <form role="form" method="post" action="{% url 'libreosteoweb.api.views.create_admin_account' %}">
+          <input name="csrfmiddlewaretoken" value="{{csrf_token}}" type="hidden">
+        <h2 class="form-registration-heading">{% trans "Registration" %}</h2>
+        {% if form.errors %}
+          {% for error in form.password2.errors %}
+            <div class="alert alert-danger" role="alert">
+              <p>{{error}}</p>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <div class="well well-md">
+          <p>{% trans 'In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application.' %}</p>
+
+          <p>{% trans 'Then you will be redirected to be identified with this login and password.' %}</p>
+        </div>
+        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus=""/>
+        <input type="password" name="password1" class="form-control form-registration-password1" placeholder="{%  trans "Password" %}" required=""/>
+        <input type="password" name="password2" class="form-control form-registration-password2" placeholder="{%  trans "Confirm password" %}" required=""/>
+        <!--<label class="checkbox">
+          <input type="checkbox" value="remember-me"> {% trans "Remember me" %}
+        </label>-->
+        <input type="hidden" name="next" value="{{ next|escape }}" />
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">{% trans "Register" %}</button>
+      </form>

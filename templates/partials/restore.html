@@ -1,6 +1,10 @@
 {% load i18n %}
 {% load static from staticfiles %}
             <div>
+                 <h2 class="form-registration-heading">{% trans "Restore database" %}</h2>
+                 <div class="well well-md">
+                     <p>{% trans 'You can restore a previous archive of the database. This archive should be performed from the software with the Import/Export/Archive function.' %}</p>
+                 </div>
                 <div>
                     <div class="row">
                         <form name="forms.form_dump" novalidate>

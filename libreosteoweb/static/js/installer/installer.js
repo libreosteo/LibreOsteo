@@ -33,6 +33,8 @@ installer.config(['$stateProvider', '$urlRouterProvider',
             state('register',
             {
                 url : '/register',
+                templateUrl : '/web-view/partials/register',
+                controller : 'RegisterCtrl'
             })
             ;
     }

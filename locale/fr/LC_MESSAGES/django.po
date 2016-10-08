@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-23 21:38+0200\n"
-"PO-Revision-Date: 2016-04-23 21:40+0200\n"
+"POT-Creation-Date: 2016-10-08 15:01+0200\n"
+"PO-Revision-Date: 2016-10-08 15:09+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -17,11 +17,11 @@ msgstr ""
 "X-Loco-Target-Locale: zxx\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: Libreosteo/settings/base.py:151
+#: Libreosteo/settings/base.py:154
 msgid "French"
 msgstr "Français"
 
-#: Libreosteo/settings/base.py:152
+#: Libreosteo/settings/base.py:155
 msgid "English"
 msgstr "Anglais"
 
@@ -33,36 +33,36 @@ msgstr "L'analyse a échoué sur ce fichier"
 msgid "Cannot recognize the patient file"
 msgstr "Impossible de reconnaître le fichier patient"
 
-#: libreosteoweb/api/file_integrator.py:96
-#: libreosteoweb/api/file_integrator.py:265
+#: libreosteoweb/api/file_integrator.py:99
+#: libreosteoweb/api/file_integrator.py:275
 msgid "Cannot read the content file. Check the encoding."
 msgstr "Impossible de lire le contenu du fichier. Vérifiez l'encodage."
 
-#: libreosteoweb/api/file_integrator.py:392
+#: libreosteoweb/api/file_integrator.py:407
 msgid "Missing patient file to integrate it."
 msgstr "Il manque le fichier patient pour intégrer."
 
-#: libreosteoweb/api/file_integrator.py:418
+#: libreosteoweb/api/file_integrator.py:433
 msgid "Imported examination"
 msgstr "Consultations importées"
 
-#: libreosteoweb/api/file_integrator.py:431
+#: libreosteoweb/api/file_integrator.py:446
 msgid "There is a problem when reading this line :"
 msgstr "Il y a un problème lors de la lecture de la ligne :"
 
-#: libreosteoweb/api/file_integrator.py:434
+#: libreosteoweb/api/file_integrator.py:449
 msgid "There is a problem when reading this line."
 msgstr "Il y a un problème lors de la lecture de la ligne."
 
-#: libreosteoweb/api/receivers.py:39
+#: libreosteoweb/api/receivers.py:60
 msgid "New patient created"
 msgstr "Nouveau patient créé"
 
-#: libreosteoweb/api/receivers.py:46
+#: libreosteoweb/api/receivers.py:67
 msgid "Patient updated"
 msgstr "Fiche patient mise à jour"
 
-#: libreosteoweb/api/receivers.py:59
+#: libreosteoweb/api/receivers.py:80
 msgid "New examination"
 msgstr "Nouvelle consultation"
 
@@ -407,13 +407,13 @@ msgstr "Pied de page de facture"
 msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
-#: libreosteoweb/models.py:274 templates/partials/import-file.html:49
-#: templates/partials/import-file.html:73
+#: libreosteoweb/models.py:274 templates/partials/import-file.html:77
+#: templates/partials/import-file.html:101
 msgid "Patient file"
 msgstr "Fichier patient"
 
-#: libreosteoweb/models.py:275 templates/partials/import-file.html:51
-#: templates/partials/import-file.html:93
+#: libreosteoweb/models.py:275 templates/partials/import-file.html:79
+#: templates/partials/import-file.html:121
 msgid "Examination file"
 msgstr "Fichier de consultation"
 
@@ -421,36 +421,38 @@ msgstr "Fichier de consultation"
 msgid "validity status"
 msgstr "validité"
 
-#: templates/404.html:257 templates/index.html:260
+#: templates/404.html:257 templates/index.html:261
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/404.html:259 templates/index.html:262
+#: templates/404.html:259 templates/index.html:263
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/404.html:262 templates/index.html:267
+#: templates/404.html:262 templates/index.html:268
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/404.html:278 templates/index.html:283
+#: templates/404.html:278 templates/index.html:284
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/404.html:290 templates/index.html:295
+#: templates/404.html:290 templates/index.html:296
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
 
-#: templates/account/create_admin_account.html:10
+#: templates/account/create_admin_account.html:12
 msgid "Create admin account on Libreosteo"
 msgstr "Créé un compte administrateur sur Libreosteo"
 
-#: templates/account/create_admin_account.html:32
+#: templates/account/create_admin_account.html:35
+#: templates/partials/register.html:6
 msgid "Registration"
 msgstr "Enregistrement"
 
-#: templates/account/create_admin_account.html:41
+#: templates/account/create_admin_account.html:44
+#: templates/partials/register.html:15
 msgid ""
 "In order to use Libreosteo, you have to register a login and password on the "
 "application. Please select it before to use the application."
@@ -459,74 +461,120 @@ msgstr ""
 "de passe sur l'application. Veuillez les saisir avant d'utiliser "
 "l'application."
 
-#: templates/account/create_admin_account.html:43
+#: templates/account/create_admin_account.html:46
+#: templates/partials/register.html:17
 msgid ""
 "Then you will be redirected to be identified with this login and password."
 msgstr ""
 "Ensuite vous serez dirigé afin d'être identifié avec ce nom d'utilisateur et "
 "mot de passe."
 
-#: templates/account/create_admin_account.html:45
-#: templates/account/login.html:45
+#: templates/account/create_admin_account.html:48
+#: templates/account/login.html:49 templates/partials/register.html:19
 msgid "Your login"
 msgstr "Votre nom d'utilisateur"
 
-#: templates/account/create_admin_account.html:46
-#: templates/account/login.html:46 templates/partials/add-user-modal.html:17
+#: templates/account/create_admin_account.html:49
+#: templates/account/login.html:50 templates/partials/add-user-modal.html:17
 #: templates/partials/add-user-modal.html:19
 #: templates/partials/add-user-modal.html:25
+#: templates/partials/register.html:20
 #: templates/partials/set-password-user-modal.html:9
 #: templates/partials/set-password-user-modal.html:11
 #: templates/partials/set-password-user-modal.html:17
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/account/create_admin_account.html:47
+#: templates/account/create_admin_account.html:50
+#: templates/partials/register.html:21
 msgid "Confirm password"
 msgstr "Confirmation du mot de passe"
 
-#: templates/account/create_admin_account.html:49
-#: templates/account/login.html:48
+#: templates/account/create_admin_account.html:52
+#: templates/account/login.html:52 templates/partials/register.html:23
 msgid "Remember me"
 msgstr "Se rappeler de moi"
 
-#: templates/account/create_admin_account.html:52
+#: templates/account/create_admin_account.html:55
+#: templates/partials/register.html:26
 msgid "Register"
 msgstr "Enregistrer"
 
-#: templates/account/login.html:10
+#: templates/account/login.html:12
 msgid "Signin on Libreosto"
 msgstr "Identifiez-vous sur Libreosteo"
 
-#: templates/account/login.html:29
+#: templates/account/login.html:33
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
 "Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez "
 "réessayer s'il vous plaît."
 
-#: templates/account/login.html:34
+#: templates/account/login.html:38
 msgid "Please sign in"
 msgstr "Veuillez vous identifier"
 
-#: templates/account/login.html:51
+#: templates/account/login.html:55
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:264
+#: templates/index.html:265
 msgid "Import/export"
 msgstr "Import/export"
 
-#: templates/index.html:300 templates/index.html.py:303
+#: templates/index.html:301 templates/index.html.py:304
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/index.html:307
+#: templates/index.html:308
 msgid "End of editing"
 msgstr "Fin d'édition"
 
-#: templates/index.html:310
+#: templates/index.html:311
 msgid "Delete"
 msgstr "Supprimer"
+
+#: templates/install.html:15
+msgid "Install Libreosteo"
+msgstr "Installer Libreosteo"
+
+#: templates/install.html:39
+msgid ""
+"\n"
+"                    <h1>Libreosteo</h1>\n"
+"                    <p>Thank you to chose Libreosteo as your software to "
+"manage your patients.</p>\n"
+"                    <p>You successfully installed the software on your "
+"machine. Now you have to decide if you want to restore a previous backup of "
+"your patient file (performed from Libreosteo) or use a new installation and "
+"register your first user on the softwarewhich will be the administrator of "
+"the software</p>\n"
+"                    <p>Join the user community from the main <a href="
+"\"https://libreosteo.github.io/\" target=\"_blank\">website</a> in order to "
+"share your experience with this software.</p>\n"
+"                    "
+msgstr ""
+"\n"
+"                    <h1>Libreosteo</h1>\n"
+"                    <p>Merci d'avoir choisi Libreosteo comme votre logiciel "
+"pour gérer vos patients.</p>\n"
+"                    <p>Vous avez correctement installé le logiciel sur votre "
+"machine. Maintenant vous devez décider si vous voulez restaurer une "
+"précédente sauvegarde de votre fichier patient (réalisé depuis Libreosteo) "
+"ou bien utiliser cette nouvelle installation et enregistrer votre premier "
+"utilisateur sur le logiciel qui en sera l'administrateur.</p>\n"
+"                    <p>Rejoignez la communauté des utilisateurs depuis le <a "
+"href=\"https://libreosteo.github.io/\" target=\"_blank\">site web</a> "
+"principal afin de partager votre expérience de ce logiciel.</p>\n"
+"                    "
+
+#: templates/install.html:46 templates/partials/restore.html:4
+msgid "Restore database"
+msgstr "Restaurer la base de données"
+
+#: templates/install.html:48
+msgid "Register the administrator"
+msgstr "Enregistrer l'administrateur"
 
 #: templates/partials/add-patient.html:35
 msgid "Init the patient file"
@@ -618,12 +666,42 @@ msgstr "Clôturer"
 msgid "Managing import/export"
 msgstr "Gestion de l'import/export"
 
-#: templates/partials/import-file.html:9 templates/partials/import-file.html:45
-#: templates/partials/import-file.html:111
-msgid "Import"
-msgstr "Importer"
+#: templates/partials/import-file.html:8
+msgid "Archive and restore database"
+msgstr "Archiver la base de données"
 
-#: templates/partials/import-file.html:13
+#: templates/partials/import-file.html:11
+msgid "This system helps you to archive and restore the full system."
+msgstr "Cette fonction vous aider à archiver et restaurer le système entier."
+
+#: templates/partials/import-file.html:15
+msgid "Archive"
+msgstr "Archiver"
+
+#: templates/partials/import-file.html:20
+msgid "get archive"
+msgstr "Obtenir l'archive"
+
+#: templates/partials/import-file.html:23
+msgid ""
+"\n"
+"                            This file is the full content of your database. "
+"It could only be used by Libreosteo. Use it to restore your database or "
+"transfert the content to an other machine.\n"
+"                            "
+msgstr ""
+"\n"
+"                            Ce fichier est le contenu complet de votre base. "
+"Il peut uniquement être utilisé par Libreosteo. Utilisez-le afin de "
+"restaurer votre base de données ou pour transférer le contenu vers une autre "
+"machine.\n"
+"                            "
+
+#: templates/partials/import-file.html:37
+msgid "Import from external system"
+msgstr "Importer d'un système externe"
+
+#: templates/partials/import-file.html:41
 msgid ""
 "\n"
 "            <p>For importing patient or examination in the database, you "
@@ -663,24 +741,29 @@ msgstr ""
 "</div>\n"
 "            "
 
-#: templates/partials/import-file.html:31
+#: templates/partials/import-file.html:59
 msgid "Patient template file"
 msgstr "Gabarit du fichier patient"
 
-#: templates/partials/import-file.html:35
+#: templates/partials/import-file.html:63
 msgid "Examination template file"
 msgstr "Gabarit du fichier consultation"
 
-#: templates/partials/import-file.html:54
+#: templates/partials/import-file.html:73
+#: templates/partials/import-file.html:139
+msgid "Import"
+msgstr "Importer"
+
+#: templates/partials/import-file.html:82
 msgid "Analyze"
 msgstr "Analyser"
 
-#: templates/partials/import-file.html:67
+#: templates/partials/import-file.html:95
 msgid "Analyze result"
 msgstr "Résultats d'analyse"
 
-#: templates/partials/import-file.html:76
-#: templates/partials/import-file.html:95
+#: templates/partials/import-file.html:104
+#: templates/partials/import-file.html:123
 msgid ""
 "Please check that the file is correctly read by the software before to "
 "integrate the content. Here is an extract of some lines of the file. First "
@@ -691,67 +774,67 @@ msgstr ""
 "colonne est le numéro de ligne dans le fichier si vous rencontrez des "
 "problèmes."
 
-#: templates/partials/import-file.html:89
-#: templates/partials/import-file.html:107
+#: templates/partials/import-file.html:117
+#: templates/partials/import-file.html:135
 msgid "Empty file"
 msgstr "Fichier vide"
 
-#: templates/partials/import-file.html:126
+#: templates/partials/import-file.html:154
 msgid "Importing succeed"
 msgstr "Importation réussie"
 
-#: templates/partials/import-file.html:128
-#: templates/partials/import-file.html:135
+#: templates/partials/import-file.html:156
+#: templates/partials/import-file.html:163
 msgid "lines imported from file patient"
 msgstr "lignes importées du fichier patient"
 
-#: templates/partials/import-file.html:133
+#: templates/partials/import-file.html:161
 msgid "Importing succeed but some errors"
 msgstr "Importation réussie avec des erreurs"
 
-#: templates/partials/import-file.html:136
+#: templates/partials/import-file.html:164
 msgid "Errors when integrating patients"
 msgstr "Erreurs lors de l'importation des patients"
 
-#: templates/partials/import-file.html:137
-#: templates/partials/import-file.html:146
-#: templates/partials/import-file.html:160
+#: templates/partials/import-file.html:165
+#: templates/partials/import-file.html:174
+#: templates/partials/import-file.html:188
 msgid "line : "
 msgstr "ligne :"
 
-#: templates/partials/import-file.html:144
+#: templates/partials/import-file.html:172
 msgid "lines imported from file examination"
 msgstr "lignes importées du fichier consultation"
 
-#: templates/partials/import-file.html:145
+#: templates/partials/import-file.html:173
 msgid "Errors when integrating examinations"
 msgstr "Erreurs lors de l'importation des consultations"
 
-#: templates/partials/import-file.html:157
-#: templates/partials/import-file.html:171
+#: templates/partials/import-file.html:185
+#: templates/partials/import-file.html:199
 msgid "Importing failed"
 msgstr "L'importation a échoué"
 
-#: templates/partials/import-file.html:159
+#: templates/partials/import-file.html:187
 msgid "Errors when integrating "
 msgstr "Erreurs lors de l'importation "
 
-#: templates/partials/import-file.html:181
-msgid "Export"
-msgstr "Exporter"
+#: templates/partials/import-file.html:209
+msgid "Export to an external system"
+msgstr "Exporter vers un système externe"
 
-#: templates/partials/import-file.html:184
+#: templates/partials/import-file.html:212
 msgid ""
 "Here you can download the full list of patients and examinations as CSV files"
 msgstr ""
 "Vous pouvez télécharger ici la liste complète des patients et des "
 "consultations sous forme de fichiers CSV."
 
-#: templates/partials/import-file.html:192
+#: templates/partials/import-file.html:220
 msgid "Patients file"
 msgstr "Fichier patients"
 
-#: templates/partials/import-file.html:196
+#: templates/partials/import-file.html:224
 msgid "Examinations file"
 msgstr "Fichier des consultations"
 
@@ -856,6 +939,27 @@ msgstr "Antécédents"
 msgid "New Examination"
 msgstr "Nouvelle consultation"
 
+#: templates/partials/restore.html:6
+msgid ""
+"You can restore a previous archive of the database. This archive should be "
+"performed from the software with the Import/Export/Archive function."
+msgstr ""
+"Vous pouvez restaurer une archive précédente de la base de données. Cette "
+"archive doit être obtenue depuis le logiciel avec la fonction Importer/"
+"Exporter/Archiver."
+
+#: templates/partials/restore.html:12
+msgid "Archive file to restore"
+msgstr "Fichier d'archive à restaurer"
+
+#: templates/partials/restore.html:15
+msgid "Restore"
+msgstr "Restaurer"
+
+#: templates/partials/restore.html:17
+msgid "Loading in progress"
+msgstr "Chargement en cours"
+
 #: templates/partials/search-result.html:4
 msgid "Search for"
 msgstr "Recherche de"
@@ -900,6 +1004,9 @@ msgstr "Profil utilisateur"
 #: templates/partials/user-profile.html:68
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+#~ msgid "Export"
+#~ msgstr "Exporter"
 
 #~ msgid "Version"
 #~ msgstr "Version"

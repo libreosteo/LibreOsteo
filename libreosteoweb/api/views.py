@@ -466,7 +466,7 @@ def db_dump(request):
 
     wrapper = FileWrapper(buf)
     response = HttpResponse(wrapper, content_type='application/binary')
-    response['Content-Length'] = sys.getsizeof(buf)*8
+    response['Content-Length'] = buf.tell()
 
     return response
 

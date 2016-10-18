@@ -214,14 +214,14 @@ if sys.platform in ['darwin']:
 
     APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates', 'macos', 'media']
+    DATA_FILES = ['static', 'locale','templates', 'media']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
             'HTMLParser',
         ],
         'packages' : ["django","Libreosteo", "libreosteoweb","rest_framework",
-            "haystack","sqlite3","statici18n", "email"
+            "haystack","sqlite3","statici18n", "email", "compressor", 
         ],
         'plist' : {
             'LSBackgroundOnly' : True,

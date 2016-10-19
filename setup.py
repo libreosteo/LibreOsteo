@@ -73,7 +73,13 @@ if sys.platform in ['win32']:
         import django
         directory = os.path.join(django.__path__[0], 'conf', 'locale')
         return [(directory, 'django/conf/locale')]
-    
+
+    def get_compressor_templates():
+        import compressor
+        directory = os.path.join(compressor.__path__[0], 'templates')
+        list_files = get_filepaths(directory)
+        return map(lambda c: (c,c.replace(compressor.__path__[0]+os.sep, '')), list_files)
+
     
 
     def get_filepaths(directory):
@@ -137,10 +143,12 @@ if sys.platform in ['win32']:
         "django.contrib.contenttypes.migrations.0001_initial",
         "django.contrib.contenttypes.migrations.0002_remove_content_type_name",
         "django.contrib.sessions.migrations.0001_initial",
+        "rcssmin",
+        "rjsmin",
     ] + include_migration_files('libreosteoweb/migrations')
     
     include_files = get_filepaths('static') + get_filepaths('locale') + get_djangolocale() + get_filepaths('media')
-    zip_includes = get_filepaths('templates')
+    zip_includes = get_filepaths('templates')  + get_compressor_templates()
     packages = [
         "os",
         "django",
@@ -153,6 +161,7 @@ if sys.platform in ['win32']:
         "statici18n",
         "email",
         "Libreosteo",
+        "compressor",
         
         
     ]

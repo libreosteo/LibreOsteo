@@ -1,4 +1,6 @@
 from rest_framework import permissions
+from django.contrib.auth import get_user_model
+from .exceptions import Forbidden
 import logging
 
 # Get an instance of a logger
@@ -29,3 +31,24 @@ class IsStaffOrTargetUser(permissions.BasePermission):
         	return getattr(obj, 'user') == request.user
         except AttributeError:
         	return obj == request.user
+
+from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404, HttpResponseForbidden
+
+def maintenance_available():
+    """
+    A decorator for indicating if a function is available or not, otherwise raise an 
+    HttpException(400)
+
+    @maintenance_available
+    def display_restore_database(request):
+        ...
+    """
+
+    def _decorator(func):
+        UserModel = get_user_model()
+        if UserModel.objects.all().count() == 0 :
+            if(func) :
+                return func
+        else :
+            return HttpResponseForbidden
+    return _decorator

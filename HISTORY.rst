@@ -2,6 +2,13 @@ Changelog for Libreosteo
 ========================
 
 
+0.5.3 (2016-10-19)
+----------------
+
+- Add support to archive and restore database (restoring when installing)
+- Add support to compression for Css/Js (avoid blank pages when updating script and force refresh when releasing version)
+
+
 0.5.2 (2016-07-13)
 ------------------
 
@@ -14,6 +21,7 @@ Changelog for Libreosteo
 - Fix the command panel to edit patient file/examinations when scrolling page
 - autosave and close the edit mode when changing tab on the patient file (not the examination)
 - Change filter to manage name with "particule" specifically.
+
 
 0.5.0 (2016-04-27)
 ------------------

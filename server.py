@@ -11,6 +11,10 @@ from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 
+# For modulegraph import auto detect
+import rcssmin
+import rjsmin
+
 SERVER_PORT = 8085
 
 logger = logging.getLogger(__name__)

@@ -82,3 +82,21 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+// Class
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.center{
+  text-align: center;
+}
+// Usage as a mixin
+.element {
+  .center-block();
+}
+
+.td-middle{
+  vertical-align: middle;
+}

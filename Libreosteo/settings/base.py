@@ -44,6 +44,7 @@ APPEND_SLASH = False
 
 DEMONSTRATION = False
 
+COMPRESS_ENABLED=True
 
 # Application definition
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = (
     'django_filters',
     'statici18n',
     'rest_framework',
+    'compressor'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,7 +78,7 @@ ROOT_URLCONF = 'Libreosteo.urls'
 
 WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
-STATIC_ROOT = "static/"
+STATIC_ROOT = os.path.join(SITE_ROOT, "static/")
 
 MEDIA_ROOT = "media/"
 
@@ -84,8 +86,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'templates',
-            'static',
+            os.path.join(SITE_ROOT, 'templates'),
+            os.path.join(SITE_ROOT, 'static'),
         ],
         'OPTIONS': {
             'context_processors': [
@@ -127,6 +129,7 @@ TEMPLATE_ZIP_FILES = (
 STATICFILES_FINDERS = (
 'django.contrib.staticfiles.finders.FileSystemFinder',
 'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+'compressor.finders.CompressorFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -194,7 +197,8 @@ LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'accounts-login'
 LOGOUT_URL_NAME = 'accounts-logout'
 LOGIN_REDIRECT_URL= '/'
-INITIALIZE_ADMIN_URL_NAME = 'accounts-create-admin'
+INITIALIZE_ADMIN_URL_NAME = 'install'
+NO_REROUTE_PATTERN_URL = [ r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n', r'^web-view/partials/restore', r'^web-view/partials/register' ]
 
 
 
@@ -252,3 +256,5 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter','compressor.filters.cssmin.rCSSMinFilter']

@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load static from staticfiles %}
+{% load compress %}
+<!DOCTYPE html>
+<html lang="en"  xmlns:ng="http://angularjs.org" ng-app="libreosteoinstaller">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.png">
+
+    <title>{% trans  "Install Libreosteo" %}</title>
+
+    {% compress css %}
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+
+     <!-- Custom styles for this template -->
+    <link href="{{ STATIC_URL }}css/signin.css" rel="stylesheet">
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
+    {% endcompress %}
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  <style type="text/css"></style></head>
+
+  <body ng-controller="MainController">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="jumbotron">
+                    {% blocktrans %}
+                    <h1>Libreosteo</h1>
+                    <p>Thank you to chose Libreosteo as your software to manage your patients.</p>
+                    <p>You successfully installed the software on your machine. Now you have to decide if you want to restore a previous backup of your patient file (performed from Libreosteo) or use a new installation and register your first user on the softwarewhich will be the administrator of the software</p>
+                    <p>Join the user community from the main <a href="https://libreosteo.github.io/" target="_blank">website</a> in order to share your experience with this software.</p>
+                    {% endblocktrans %}
+                    <div class="center-block center">
+                        <button class="btn btn-default" ng-click="prepare_restore()" type="submit">{% trans 'Restore database' %}</button>
+                        or 
+                        <button class="btn btn-primary" ng-click="prepare_register()" type="submit">{% trans 'Register the administrator' %}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 td-middle" ui-view>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% compress js %}
+<!-- Core Scripts - Include with every page -->
+<script src="{% static "bower_components/jquery-1.11.1/dist/jquery.min.js" %}"></script>
+<script src="{% static "js/plugins/animatescroll.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+
+<script src="{% static "bower_components/angular/angular.min.js" %}"></script>
+<script src="{% static "bower_components/angular-resource/angular-resource.min.js" %}"></script>
+<script src="{% static "bower_components/angular-route/angular-route.min.js" %}"></script>
+<script src="{% static "bower_components/angular-cookies/angular-cookies.min.js" %}"></script>
+<script src="{% static "bower_components/angular-bootstrap/ui-bootstrap.min.js" %}"></script>
+<script src="{% static "bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js" %}"></script>
+<script src="{% static "bower_components/angular-i18n/angular-locale_fr-fr.js" %}"></script>
+<script src="{% static "bower_components/angular-animate/angular-animate.min.js" %}"></script>
+<script src="{% static "bower_components/angular-sanitize/angular-sanitize.min.js" %}"></script>
+<script src="{% static "bower_components/angular-loading-bar/build/loading-bar.min.js" %}"></script>
+<script src="{% static "bower_components/angular-ui-router/release/angular-ui-router.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/ng-file-upload/ng-file-upload-shim.min.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/ng-file-upload/ng-file-upload.min.js" %}"></script>
+
+<script src="{% static "js/installer/installer.js" %}"></script>
+<script src="{% static "js/installer/restore.js" %}"></script>
+<script src="{% static "js/installer/register.js" %}"></script>
+    {% endcompress %}
+<script src="{% url 'django.views.i18n.javascript_catalog' %}" type="text/javascript"></script>
+
+</body></html>

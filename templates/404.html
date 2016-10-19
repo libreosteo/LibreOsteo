@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load compress %}
 <!DOCTYPE html>
 <html xmlns:ng="http://angularjs.org" ng-app="libreosteo">
 
@@ -9,6 +10,7 @@
 
     <title>Libreosteo</title>
 
+    {% compress css %}
     <!-- Core CSS - Include with every page -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -23,10 +25,8 @@
 
     <!-- TypeAHead component -->
     <link href="{{ STATIC_URL }}css/typeahead.css" rel="stylesheet">
-
-    <!-- InlineEdit component -->
-    <link href="{{ STATIC_URL }}css/inlineedit.css" rel="stylesheet">
     <!-- compatibility for date input with all browsers -->
+    {% endcompress %}
 
 
 </head>
@@ -420,6 +420,8 @@
 </div>
 <!-- /#wrapper -->
 
+<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
+{% compress js %}
 <!-- Core Scripts - Include with every page -->
 <script src="{{ STATIC_URL }}js/jquery-1.11.0.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
@@ -448,7 +450,7 @@
 <script src="{{ STATIC_URL }}bower_components/angular-growl/build/angular-growl.min.js"></script>
 <script src="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 <link href="{{ STATIC_URL }}bower_components/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet">
-<script src="{{ STATIC_URL }}bower_components/webshim/js-webshim/minified/polyfiller.js"></script>
+
 
 <!-- web Application -->
 <script src="{{ STATIC_URL }}js/app/app.js"></script>
@@ -459,9 +461,12 @@
 <script src="{{ STATIC_URL }}js/app/timeline.js"></script>
 <script src="{{ STATIC_URL }}js/app/search.js"></script>
 <script src="{{ STATIC_URL }}js/app/user.js"></script>
+{% endcompress %}
 
+{% compress css %}
 <!--Specific libreosteo CSS -->
 <link href="{{ STATIC_URL }}css/libreosteo.css" rel="stylesheet"/>
+{% endcompress %}
 
 
 </body>

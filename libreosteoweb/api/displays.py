@@ -4,6 +4,9 @@ from libreosteoweb import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import libreosteoweb
+from .permissions import maintenance_available
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.views.decorators.cache import never_cache
 
 # import the logging library
 import logging
@@ -109,3 +112,18 @@ def display_setpassword(request):
 
 def display_import_files(request):
     return render_to_response('partials/import-file.html', {'request' : request})
+
+@csrf_protect
+@never_cache
+@ensure_csrf_cookie
+@maintenance_available()
+def display_restore(request):
+    return render_to_response('partials/restore.html', {'request' : request})
+
+
+@csrf_protect
+@never_cache
+@ensure_csrf_cookie
+@maintenance_available()
+def display_register(request):
+    return render_to_response('partials/register.html', {'csrf_token' : request.COOKIES['csrftoken']})

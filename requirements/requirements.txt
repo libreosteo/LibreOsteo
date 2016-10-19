@@ -10,3 +10,4 @@ djangorestframework==3.3.2
 six==1.10.0
 cherrypy
 djangorestframework-csv==1.4.1
+django_compressor

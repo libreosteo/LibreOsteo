@@ -1,4 +1,5 @@
 import sys, glob, os
+import shutil
 import libreosteoweb
 
 version = libreosteoweb.__version__
@@ -29,6 +30,29 @@ def collectstatic():
     from subprocess import call
     call(["python", "manage.py", "collectstatic", "--noinput"])
 
+def compress():
+    from subprocess import call
+    call(["python", "manage.py", "compress", "--force"])
+
+def purge_static():
+    purge_dir = ['bower_components']
+    keep_path = ['bower_components/webshim']
+    to_remove_list = []
+    # For each dir in purge dir from static : 
+    # delete each files
+    for root, directories, files in os.walk('static'):
+        for p in purge_dir:
+            for d in directories:
+                if root == os.path.join('static', p):
+                    for a in keep_path:
+                        if d not in os.path.split(a):
+                            shutil.rmtree(os.path.join(root,d))
+
+
+
+                
+
+
 # Build on Windows.
 #
 # usage :
@@ -39,8 +63,10 @@ if sys.platform in ['win32']:
     # before all of things : collectstatic
     collectstatic()
 
+
+    compress()
+
     from cx_Freeze import setup, Executable
-    import shutil
     # GUI applications require a different base on Windows (the default is for a
     # console application).
     base='Console'
@@ -49,7 +75,13 @@ if sys.platform in ['win32']:
         import django
         directory = os.path.join(django.__path__[0], 'conf', 'locale')
         return [(directory, 'django/conf/locale')]
-    
+
+    def get_compressor_templates():
+        import compressor
+        directory = os.path.join(compressor.__path__[0], 'templates')
+        list_files = get_filepaths(directory)
+        return map(lambda c: (c,c.replace(compressor.__path__[0]+os.sep, '')), list_files)
+
     
 
     def get_filepaths(directory):
@@ -113,10 +145,12 @@ if sys.platform in ['win32']:
         "django.contrib.contenttypes.migrations.0001_initial",
         "django.contrib.contenttypes.migrations.0002_remove_content_type_name",
         "django.contrib.sessions.migrations.0001_initial",
+        "rcssmin",
+        "rjsmin",
     ] + include_migration_files('libreosteoweb/migrations')
     
     include_files = get_filepaths('static') + get_filepaths('locale') + get_djangolocale() + get_filepaths('media')
-    zip_includes = get_filepaths('templates')
+    zip_includes = get_filepaths('templates')  + get_compressor_templates()
     packages = [
         "os",
         "django",
@@ -129,6 +163,7 @@ if sys.platform in ['win32']:
         "statici18n",
         "email",
         "Libreosteo",
+        "compressor",
         
         
     ]
@@ -186,16 +221,18 @@ if sys.platform in ['darwin']:
     # before all of things : collectstatic
     collectstatic()
 
+    compress()
+
     APP = ['application.py']
 
-    DATA_FILES = ['static', 'locale','templates', 'macos', 'media']
+    DATA_FILES = ['static', 'locale','templates', 'media']
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
             'HTMLParser',
         ],
         'packages' : ["django","Libreosteo", "libreosteoweb","rest_framework",
-            "haystack","sqlite3","statici18n", "email"
+            "haystack","sqlite3","statici18n", "email", "compressor", 
         ],
         'plist' : {
             'LSBackgroundOnly' : True,
@@ -221,6 +258,9 @@ else:
     from setuptools import setup
 
     collectstatic()
+
+    compress()
+    purge_static()
 
     setup(
         name='Libreosteo',

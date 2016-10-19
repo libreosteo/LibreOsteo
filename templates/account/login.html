@@ -1,4 +1,6 @@
-{% load i18n %}<!DOCTYPE html>
+{% load i18n %}
+{% load compress %}
+<!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +11,7 @@
 
     <title>{% trans  "Signin on Libreosto" %}</title>
 
+    {% compress css %}
     <!-- Bootstrap core CSS -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
 
@@ -21,6 +24,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   <style type="text/css"></style></head>
+  {% endcompress %}
 
   <body>
 
@@ -32,7 +36,7 @@
       <form class="form-signin" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
           {% csrf_token %}
         <h2 class="form-signin-heading">{% trans "Please sign in" %}</h2>
-        <!--
+        {% if demonstration %}
         <div class="well well-lg">
           <p>Pour vous identifier, vous pouvez utiliser 2 utilisateurs enregistrés, le mot de passe est identique à l'utilisateur.
           Ainsi l'utilisateur "demo" aura pour mot de passe "demo".</p>
@@ -41,7 +45,7 @@
               <li>demo2</li>
           </ul>
         </div>
-        -->
+        {% endif %}
         <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus="">
         <input type="password" name="password" class="form-control" placeholder="{%  trans "Password" %}" required="">
         <!--<label class="checkbox">

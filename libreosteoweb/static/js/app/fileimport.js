@@ -1,6 +1,6 @@
 var fileimport = angular.module('loFileImport', ['ngResource','ngFileUpload']);
 
-fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', function($scope, Upload, $http)
+fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', '$window', function($scope, Upload, $http, $window)
 {
     $scope.forms = {};
     $scope.files = {};
@@ -13,6 +13,7 @@ fileimport.controller('ImportFileCtrl', ['$scope', 'Upload', '$http', function($
         $scope.upload($scope.files);
       }
     };
+
 // upload on file select or drop
     $scope.upload = function (files) {
         Upload.upload({

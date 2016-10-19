@@ -2,10 +2,11 @@ Changelog for Libreosteo
 ========================
 
 
-0.6 (unreleased)
+0.5.3 (2016-10-19)
 ----------------
 
-- Nothing changed yet.
+- Add support to archive and restore database (restoring when installing)
+- Add support to compression for Css/Js (avoid blank pages when updating script and force refresh when releasing version)
 
 
 0.5.1 (2016-05-04)

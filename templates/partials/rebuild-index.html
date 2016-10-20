@@ -1,0 +1,32 @@
+{% load i18n %}
+<h1 class="page-header">
+    {% trans 'Rebuild index' %}
+</h1>
+
+
+<div class="row">
+    <p>{% blocktrans %}This function helps to rebuild index when for different reason, searching does not work.
+        Be sure that no body is adding new patient and examination before to do that.{% endblocktrans %}</p>
+        <div class="col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans 'Rebuild index' %}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <i style="font-size:24px" class="fa fa-wrench-o"></i>
+                            <button class="btn btn-success" ng-click="rebuildindex()">{% trans 'rebuild index'%}</button>
+                        </div>
+                        <div class)"col-md-2" ng-if="finished">
+                            <i style="font-size:24px" class="fa fa-check"></i>
+                            <span>{% trans 'Finished' %}
+                        </div>
+                        <div class)"col-md-2" ng-if="failed">
+                            <i style="font-size:24px" class="fa fa-exclamation"></i>
+                            <span>{% trans 'Failed' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

@@ -2,7 +2,7 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.4 (unreleased)
+0.5.4 (2016-10-20)
 ------------------
 
 - Add possibility to rebuild index at any time from the interface.

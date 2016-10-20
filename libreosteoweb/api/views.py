@@ -459,7 +459,7 @@ def db_dump(request):
     import os,sys
     from cStringIO import StringIO
 
-    from django.core import management
+    
     buf = StringIO()
     management.call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
     buf.seek(0)
@@ -469,6 +469,15 @@ def db_dump(request):
     response['Content-Length'] = buf.tell()
 
     return response
+
+@csrf_protect
+@never_cache
+@staff_member_required
+def rebuild_index(request):
+    from django.core import management
+    management.call_command('rebuild_index', interactive=False)
+    return HttpResponse(u'index rebuilt')
+
 
 from django.core.files.base import ContentFile
 from django.core.files import File

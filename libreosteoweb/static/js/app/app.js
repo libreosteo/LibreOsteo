@@ -23,6 +23,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loEditFormManager',
     'loHalloEditor',
     'loFileImport',
+    'loRebuildIndex',
     'ngFileUpload'
 ]);
 
@@ -110,7 +111,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                     templateUrl : 'web-view/partials/import-file',
                     controller : 'ImportFileCtrl'
                 }).
-
+            state('rebuild-index',
+                {
+                    url : '/office/rebuild-index',
+                    templateUrl : 'web-view/partials/rebuild-index',
+                    controller : 'RebuildIndexCtrl'
+                }).
             state('dashboard',
             {
                 url : '/',
@@ -138,4 +144,5 @@ libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', funct
             });
 
     $scope.editFormManager = loEditFormManager;
+
 }]);

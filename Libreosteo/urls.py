@@ -41,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
     url(r'^internal/dump.json', views.db_dump, name='db_dump'),
     url(r'^internal/restore', views.load_dump, name='load_dump'),
+    url(r'^internal/rebuild_index', views.rebuild_index, name="rebuild_index"),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),
@@ -57,9 +58,10 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/set-password-modal', displays.display_setpassword),
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
     url(r'^web-view/partials/import-file$', displays.display_import_files),
+    url(r'^web-view/partials/rebuild-index$', displays.display_rebuild_index),
     url(r'^web-view/partials/restore$', displays.display_restore),
     url(r'^web-view/partials/register$', displays.display_register, name='accounts-register'),
-    url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
+    url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),    
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

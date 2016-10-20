@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-08 16:19+0200\n"
-"PO-Revision-Date: 2016-10-08 16:19+0200\n"
+"POT-Creation-Date: 2016-10-20 13:57+0200\n"
+"PO-Revision-Date: 2016-10-20 13:59+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -96,7 +96,7 @@ msgstr ""
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
 
-#: libreosteoweb/api/views.py:518
+#: libreosteoweb/api/views.py:527
 msgid "This archive file seems to be incorrect. Impossible to load it."
 msgstr "Ce fichier d'archive semble être incorrect. Impossible de le charger."
 
@@ -433,15 +433,15 @@ msgstr "Profil utilisateur"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/404.html:262 templates/index.html:268
+#: templates/404.html:262 templates/index.html:270
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/404.html:278 templates/index.html:284
+#: templates/404.html:278 templates/index.html:286
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/404.html:290 templates/index.html:296
+#: templates/404.html:290 templates/index.html:298
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -526,15 +526,20 @@ msgstr "Identification"
 msgid "Import/export"
 msgstr "Import/export"
 
-#: templates/index.html:301 templates/index.html.py:304
+#: templates/index.html:267 templates/partials/rebuild-index.html:3
+#: templates/partials/rebuild-index.html:13
+msgid "Rebuild index"
+msgstr "Réindexer"
+
+#: templates/index.html:303 templates/index.html.py:306
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/index.html:308
+#: templates/index.html:310
 msgid "End of editing"
 msgstr "Fin d'édition"
 
-#: templates/index.html:311
+#: templates/index.html:313
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -942,6 +947,30 @@ msgstr "Antécédents"
 #: templates/partials/patient-detail.html:254
 msgid "New Examination"
 msgstr "Nouvelle consultation"
+
+#: templates/partials/rebuild-index.html:8
+msgid ""
+"This function helps to rebuild index when for different reason, searching "
+"does not work.\n"
+"        Be sure that no body is adding new patient and examination before to "
+"do that."
+msgstr ""
+"Cette fonction permet de reconstruire l'indexation de la base quand, pour "
+"des raisons diverses, la recherche ne fonctionne pas ou plus\n"
+"       Soyez certain que personne n'est en train d'ajouter de patient ou de "
+"consultation avant de faire ceci."
+
+#: templates/partials/rebuild-index.html:18
+msgid "rebuild index"
+msgstr "réindexer"
+
+#: templates/partials/rebuild-index.html:22
+msgid "Finished"
+msgstr "Terminé"
+
+#: templates/partials/rebuild-index.html:26
+msgid "Failed"
+msgstr "Echec"
 
 #: templates/partials/restore.html:6
 msgid ""

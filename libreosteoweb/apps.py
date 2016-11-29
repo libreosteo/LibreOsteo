@@ -19,3 +19,7 @@ class LibreosteoConfig(AppConfig):
     	except Exception:
     	   logger.debug("Exception when purging files at starting application")
         
+        office_settings_list = models.OfficeSettings.objects.all()
+        if len(office_settings_list) <= 0 :
+            default = models.OfficeSettings()
+            default.save()

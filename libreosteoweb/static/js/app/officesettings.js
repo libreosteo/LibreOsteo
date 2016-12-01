@@ -42,11 +42,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
         i18nService.setCurrentLang('fr');
         OfficeSettingsServ.get(function(settings){
-          $scope.officesettings = settings[0];
-          if (!$scope.officesettings)
-          {
-            $scope.officesettings = {'id' : 1,};
-          }
+            $scope.officesettings = settings[0];
         });
 
         $scope.users = OfficeUsersServ.query(function(data)

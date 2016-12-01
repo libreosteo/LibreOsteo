@@ -2,6 +2,12 @@ Changelog for Libreosteo
 ========================
 
 
+0.5.5 (2016-12-01)
+------------------
+
+- Fix problem when creating settings on the office on a new empty instance.
+
+
 0.5.4 (2016-10-20)
 ------------------
 

@@ -451,6 +451,8 @@ class FileImportViewSet(viewsets.ModelViewSet):
 
 from django.http import HttpResponse
 from django.core.servers.basehttp import FileWrapper
+from django.core.management import call_command
+
 
 @csrf_protect
 @never_cache
@@ -461,7 +463,7 @@ def db_dump(request):
 
     
     buf = StringIO()
-    management.call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
+    call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
     buf.seek(0)
 
     wrapper = FileWrapper(buf)
@@ -474,15 +476,13 @@ def db_dump(request):
 @never_cache
 @staff_member_required
 def rebuild_index(request):
-    from django.core import management
-    management.call_command('rebuild_index', interactive=False)
+    call_command('rebuild_index', interactive=False)
     return HttpResponse(u'index rebuilt')
 
 
 from django.core.files.base import ContentFile
 from django.core.files import File
 import tempfile
-from django.core.management import call_command
 
 @csrf_protect
 @maintenance_available()

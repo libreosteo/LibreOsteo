@@ -183,7 +183,7 @@ class FileContentAdapter(dict):
             header = None
             content = []
             for row in reader:
-                print row
+                print(row)
                 # Save header row.
                 if rownum == 0:
                     header = [self.filter(c) for c in row]
@@ -363,7 +363,7 @@ class FilePatientFactory(object):
         else :
             return False
     def get_default_date(self):
-        return date(2011, 01, 01)
+        return date(2011, 1, 1)
     def get_date(self, value):
         f = "%d/%m/%Y"
         return datetime.strptime(value, f).date()

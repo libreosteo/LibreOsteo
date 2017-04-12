@@ -10,15 +10,20 @@
               <p>{{error}}</p>
             </div>
           {% endfor %}
+          {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+              <p>{{error}}</p>
+            </div>
+          {% endfor %}
         {% endif %}
         <div class="well well-md">
           <p>{% trans 'In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application.' %}</p>
 
           <p>{% trans 'Then you will be redirected to be identified with this login and password.' %}</p>
         </div>
-        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus=""/>
-        <input type="password" name="password1" class="form-control form-registration-password1" placeholder="{%  trans "Password" %}" required=""/>
-        <input type="password" name="password2" class="form-control form-registration-password2" placeholder="{%  trans "Confirm password" %}" required=""/>
+        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="required" autofocus=""/>
+        <input type="password" name="password1" class="form-control form-registration-password1" placeholder="{%  trans "Password" %}" required="required"/>
+        <input type="password" name="password2" class="form-control form-registration-password2" placeholder="{%  trans "Confirm password" %}" required="required"/>
         <!--<label class="checkbox">
           <input type="checkbox" value="remember-me"> {% trans "Remember me" %}
         </label>-->

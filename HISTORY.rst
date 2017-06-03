@@ -2,16 +2,11 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.6 (unreleased)
+0.5.6 (2017-06-03)
 ------------------
 
-- Nothing changed yet.
-
-
-0.5.6 (unreleased)
-------------------
-
-- Nothing changed yet.
+- Fix problem when importing CSV file with complete data. use a buffer of 4Ko instead of 1Ko.
+- Fix missing error message when birth date is incorrect in patient file
 
 
 0.5.5 (2016-12-01)

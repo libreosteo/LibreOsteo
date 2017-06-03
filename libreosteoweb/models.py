@@ -288,3 +288,28 @@ class FileImport(models.Model):
             storage_patient.delete(path_patient)
         if bool(self.file_examination) :
             storage_examination.delete(path_examination)
+
+class Document(models.Model):
+    """
+    Implements a document to be attached to
+    an examination or patient file
+    """
+    document_file = models.FileField(_('Document file'), upload_to="documents")
+    title = models.TextField(_('Title'))
+    notes = models.TextField(_('Notes'), blank=True, null=True, default=None)
+    internal_date = models.DateField(_('Adding date'), blank=True, null=False)
+    date = models.DateField(_('Date'), blank=True, null=True, default=None)
+    user = models.OneToOneField(User, verbose_name=_('User'),   blank=True,null=True)
+
+
+    def delete(self, *args, **kwargs):
+        """
+        Delete the file
+        """
+        super(Document, self).delete(*args, **kwargs)
+        storage_document, path_document = self.document_file.storage, self.document_file.path
+        storage_document.delete(path_document)
+
+    def clean(self):
+        if self.internal_date is None:
+            self.internal_date = datetime.today()

@@ -39,6 +39,11 @@
               <p>{{error}}</p>
             </div>
           {% endfor %}
+          {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+              <p>{{error}}</p>
+            </div>
+          {% endfor %}
         {% endif %}
         <div class="well well-lg">
           <p>{% trans 'In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application.' %}</p>

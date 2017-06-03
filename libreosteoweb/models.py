@@ -4,8 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
-from api.utils import enum
-
+from libreosteoweb.api.utils import enum
 
 # import the logging library
 import logging

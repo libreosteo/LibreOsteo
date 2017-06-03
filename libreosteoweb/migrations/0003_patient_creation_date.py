@@ -10,7 +10,7 @@ def creation_date(apps, schema_editor):
     # version than this migration expects. We use the historical version.
     Patient = apps.get_model("libreosteoweb", "Patient")
     for patient in Patient.objects.all():
-        patient.creation_date = date(1970, 01, 01)
+        patient.creation_date = date(1970, 1, 1)
         patient.save()
 
 class Migration(migrations.Migration):

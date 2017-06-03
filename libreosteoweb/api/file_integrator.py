@@ -201,7 +201,7 @@ class FileContentAdapter(dict):
             return None
         self.file.open(mode='rb')
         logger.info("* Try to guess the dialect on csv")
-        dialect = csv.Sniffer().sniff(self.file.read(1024))
+        dialect = csv.Sniffer().sniff(self.file.read(4096))
         self.file.seek(0)
         reader = csv.reader(self.file, dialect)
         return reader
@@ -320,32 +320,38 @@ class FilePatientFactory(object):
         self.serializer_class = PatientSerializer
 
     def get_serializer(self, row):
-        data = {
-                'family_name' : row[1],
-                'original_name' : row[2],
-                'first_name' : row[3],
-                'birth_date' : self.get_date(row[4]),
-                'sex' : self.get_sex_value(row[5]),
-                'address_street' : row[6],
-                'address_complement' : row[7],
-                'address_zipcode' : row[8],
-                'address_city' : row[9],
-                'phone' : row[10],
-                'mobile_phone' : row[11],
-                'job' : row[12],
-                'hobbies' : row[13],
-                'smoker'  : self.get_boolean_value(row[14]),
-                'laterality'  : self.get_laterality_value(row[15]),
-                'important_info' : row[16],
-                'current_treatment' : row[17],
-                'surgical_history' : row[18],
-                'medical_history' : row[19],
-                'family_history' : row[20],
-                'trauma_history' : row[21],
-                'medical_report' : row[22],
-                'creation_date' : self.get_default_date(),
-            }
-        serializer = self.serializer_class(data=data)
+        try :
+            data = {
+                    'family_name' : row[1],
+                    'original_name' : row[2],
+                    'first_name' : row[3],
+                    'birth_date' : self.get_date(row[4]),
+                    'sex' : self.get_sex_value(row[5]),
+                    'address_street' : row[6],
+                    'address_complement' : row[7],
+                    'address_zipcode' : row[8],
+                    'address_city' : row[9],
+                    'phone' : row[10],
+                    'mobile_phone' : row[11],
+                    'job' : row[12],
+                    'hobbies' : row[13],
+                    'smoker'  : self.get_boolean_value(row[14]),
+                    'laterality'  : self.get_laterality_value(row[15]),
+                    'important_info' : row[16],
+                    'current_treatment' : row[17],
+                    'surgical_history' : row[18],
+                    'medical_history' : row[19],
+                    'family_history' : row[20],
+                    'trauma_history' : row[21],
+                    'medical_report' : row[22],
+                    'creation_date' : self.get_default_date(),
+                }
+            serializer = self.serializer_class(data=data)
+        except ValueError as e:
+            logger.exception("Exception when creating examination.")
+            serializer = { 'incomplete' : True, 'errors' : ["%s" % e], 'initial_data' : row}    
+        except :
+            logger.exception("Exception when creating examination.")
         return serializer
     def get_sex_value(self, value):
         if value.upper() == 'F':
@@ -386,14 +392,18 @@ class IntegratorPatient(AbstractIntegrator):
         for idx, r in enumerate(content['content']):
             logger.info("* Load line from content")
             serializer = factory.get_serializer(r)
-            if serializer.is_valid():
-                serializer.save()
-                nb_line += 1
-            else :
-                # idx + 2 because : we have header and the index start from 0
-                # To have the line number we have to add 2 to the index....
-                errors.append((idx+2, serializer.errors))
-                logger.info("errors detected, data is = %s "% serializer.initial_data)
+            try :
+                serializer['incomplete']
+                errors.append((idx+2, serializer['errors']))
+            except : 
+                if serializer.is_valid():
+                    serializer.save()
+                    nb_line += 1
+                else :
+                    # idx + 2 because : we have header and the index start from 0
+                    # To have the line number we have to add 2 to the index....
+                    errors.append((idx+2, serializer.errors))
+                    logger.info("errors detected, data is = %s "% serializer.initial_data)
         return ( nb_line, errors)
 
 

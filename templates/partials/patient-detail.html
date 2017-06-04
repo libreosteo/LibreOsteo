@@ -99,11 +99,10 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row col-md-6">
-                                <span class="glyphicons glyphicon-envelope"
-                                      tooltip="{{ patient.email }}"
-                                      tooltip-trigger="mouseenter"
-                                ></span>
-                                <span editable-text="patient.email"
+                                <span tooltip="{{ patient.email }}"
+                                      tooltip-trigger="mouseenter">@
+                                </span>
+                                <span editable-email="patient.email"
                                       e-placeholder="{{ patient.email }}"
                                       tooltip="{{ patient.email }}"
                                       tooltip-trigger="mouseenter"

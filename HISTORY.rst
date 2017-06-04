@@ -1,7 +1,7 @@
 Changelog for Libreosteo
 ========================
 
-0.5.6 (2017-06-03)
+0.6.dev0 (2017-06-04)
 ------------------
 
 - Fix problem when importing CSV file with complete data. use a buffer of 4Ko instead of 1Ko.

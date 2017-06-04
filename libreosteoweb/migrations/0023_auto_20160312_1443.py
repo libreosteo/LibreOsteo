@@ -2,7 +2,10 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 def convert_all_new_line(apps, schema_editor):
 	Patient = apps.get_model("libreosteoweb", "Patient")
@@ -35,16 +38,20 @@ from django.core.management import call_command
 
 
 def rebuild_index(apps, schema_editor):
-	call_command('clear_index', interactive=False)
-	call_command('update_index', remove=True)
+	try:
+		call_command('clear_index', interactive=False)
+		call_command('update_index', remove=True)
+	except Exception :
+		logger.error("Cannot rebuild index due to integrity model error.")
 
 class Migration(migrations.Migration):
 
     dependencies = [
         ('libreosteoweb', '0021_update_name_in_app'),
     ]
-
+    
     operations = [
-    	migrations.RunPython(convert_all_new_line),
-    	migrations.RunPython(rebuild_index),
+        migrations.RunPython(convert_all_new_line),
+        migrations.RunPython(rebuild_index),
     ]
+    

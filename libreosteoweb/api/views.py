@@ -33,7 +33,6 @@ from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
-from datetime import datetime
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination,block_disconnect_all_signal
@@ -449,9 +448,21 @@ class FileImportViewSet(viewsets.ModelViewSet):
              status=status.HTTP_200_OK)
 
 
+class DocumentViewSet(viewsets.ModelViewSet):
+    model = models.Document
+    serializer_class = apiserializers.DocumentSerializer
+    queryset = models.Document.objects.all()
+    
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        serializer.save(user=self.request.user, internal_date=datetime.today())
+
+
 from django.http import HttpResponse
 from django.core.servers.basehttp import FileWrapper
 from django.core.management import call_command
+import zipfile
 
 
 @csrf_protect
@@ -461,14 +472,25 @@ def db_dump(request):
     import os,sys
     from cStringIO import StringIO
 
+    zip_content = StringIO()
+    zf = zipfile.ZipFile(zip_content, "w")
     
     buf = StringIO()
     call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
     buf.seek(0)
 
-    wrapper = FileWrapper(buf)
-    response = HttpResponse(wrapper, content_type='application/binary')
-    response['Content-Length'] = buf.tell()
+    zf.writestr('dump.json',buf.getvalue())
+
+    documents = models.Document.objects.all()
+
+    for document in documents :
+        #zippath = 
+        zf.write(document.document_file.path, zippath)
+
+    zf.close()
+
+    response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
+    response['Content-Disposition'] = 'attachment; filename=%s' % "libreosteo.db"
 
     return response
 

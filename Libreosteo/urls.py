@@ -18,6 +18,7 @@ router = routers.SimpleRouter(trailing_slash = False)
 router.register(r'patients', views.PatientViewSet)
 router.register(r'doctors', views.RegularDoctorViewSet)
 router.register(r'examinations', views.ExaminationViewSet)
+router.register(r'documents', views.DocumentViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'events', views.OfficeEventViewSet)
 router.register(r'invoices', views.InvoiceViewSet)
@@ -75,3 +76,5 @@ js_info_dict = {
 urlpatterns += patterns('',
     (r'^jsi18n/$', javascript_catalog, js_info_dict),
 )
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

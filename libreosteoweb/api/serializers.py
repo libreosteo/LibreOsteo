@@ -1,5 +1,5 @@
 from rest_framework import serializers, validators
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice, FileImport
+from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice, FileImport, Document
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
@@ -195,3 +195,7 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 
     def get_extract(self, obj):
         return Extractor().extract(obj)
+
+class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta :
+        model = Document 

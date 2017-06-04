@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'Libreosteo.wsgi.application'
 
 STATIC_ROOT = os.path.join(SITE_ROOT, "static/")
 
-MEDIA_ROOT = "media/"
+MEDIA_ROOT = os.path.join(DATA_FOLDER, "media/")
 
 TEMPLATES = [
     {
@@ -212,7 +212,7 @@ LOGGING = {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {
-            'format': '%(levelname)s %(message)s'
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
         },
     },
     'handlers': {

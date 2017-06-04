@@ -2,7 +2,7 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.7 (unreleased)
+0.5.7 (2017-06-04)
 ------------------
 
 - Add support for email field

@@ -97,6 +97,18 @@
                                       >{$ patient.mobile_phone || '&nbsp;&nbsp;' $}</span>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="row col-md-6">
+                                <span tooltip="{{ patient.email }}"
+                                      tooltip-trigger="mouseenter">@
+                                </span>
+                                <span editable-email="patient.email"
+                                      e-placeholder="{{ patient.email }}"
+                                      tooltip="{{ patient.email }}"
+                                      tooltip-trigger="mouseenter"
+                                      >{$ patient.email || '&nbsp;&nbsp;' $}</span>
+                            </div>
+                        </div>
                     </div>
                     <hr/>
 

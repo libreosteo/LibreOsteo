@@ -42,6 +42,7 @@ class Patient(models.Model):
         address_complement = models.CharField(_('Address complement'), max_length=500, blank=True)
         address_zipcode = models.CharField(_('Zipcode'), max_length=200, blank=True)
         address_city = models.CharField(_('City'), max_length=200, blank=True)
+        email = models.EmailField(_('Email'), max_length=200, blank=True)
         phone = models.CharField(_('Phone'), max_length=200, blank=True)
         mobile_phone = models.CharField(_('Mobile phone'), max_length=200, blank=True)
         job = models.CharField(_('Job'), max_length=200, blank=True, default="")

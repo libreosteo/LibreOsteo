@@ -9,35 +9,34 @@ FROM ubuntu
 # Set the file maintainer (your name - the file's author)
 MAINTAINER Joseph Ligier
 
-
-ENV version 0.5.4
+ENV version 0.6.dev0
 ENV software Libreosteo
 ENV dir $software-$version
-
-# Update the default application repository sources list
-RUN apt-get update
+ENV url_base https://codeload.github.com/garthylou/Libreosteo/tar.gz
+ENV url $url_base/$version
 
 # Install dependancies
-RUN apt-get install -y wget \
-                       python-pip \
-                       python-dev \
-                       npm \
-                       gettext \
-                       git
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-RUN npm install -g bower
+RUN apt-get update && apt-get install -y \
+    curl \
+    gettext \
+    git \
+    npm \
+    python-dev \
+    python-pip \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/nodejs /usr/bin/node \
+ && npm install -g bower
 
 # Download libreosteo
-RUN wget https://codeload.github.com/garthylou/Libreosteo/tar.gz/$version -O $software.tar.gz
-RUN tar zxf $software.tar.gz
-RUN mv $dir $software
+RUN curl $url | tar xvz
 
 # Install libreosteo
-WORKDIR /$software
-RUN pip install -r requirements/requ-py2.txt
-RUN python manage.py migrate
-RUN bower install --allow-root
-RUN python manage.py collectstatic --noinput
+WORKDIR /$dir
+RUN pip install -r requirements/requ-py2.txt \
+ && python manage.py migrate \
+ && bower install --allow-root \
+ && python manage.py collectstatic --noinput
 
 # Port to expose
 EXPOSE 8085

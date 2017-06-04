@@ -349,7 +349,7 @@ class FilePatientFactory(object):
             serializer = self.serializer_class(data=data)
         except ValueError as e:
             logger.exception("Exception when creating examination.")
-            serializer = { 'incomplete' : True, 'errors' : ["%s" % e], 'initial_data' : row}    
+            serializer = { 'errors' : ["%s" % e]}    
         except :
             logger.exception("Exception when creating examination.")
         return serializer
@@ -390,12 +390,11 @@ class IntegratorPatient(AbstractIntegrator):
         factory = FilePatientFactory()
 
         for idx, r in enumerate(content['content']):
-            logger.info("* Load line from content")
             serializer = factory.get_serializer(r)
             try :
-                serializer['incomplete']
+                serializer['errors']
                 errors.append((idx+2, serializer['errors']))
-            except : 
+            except KeyError: 
                 if serializer.is_valid():
                     serializer.save()
                     nb_line += 1

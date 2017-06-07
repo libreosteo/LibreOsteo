@@ -183,7 +183,6 @@ class FileContentAdapter(dict):
             header = None
             content = []
             for row in reader:
-                print(row)
                 # Save header row.
                 if rownum == 0:
                     header = [self.filter(c) for c in row]

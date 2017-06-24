@@ -3,10 +3,19 @@ version: '3'
 services:
   db:
     image: postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./volumes/libreosteo-db-storage:/var/lib/postgresql/data
   web:
     build: .
-    command: postgres db
     ports:
       - "8085:8085"
     depends_on:
       - db
+    environment:
+      sql_type: postgres
+      sql_name: postgres
+      sql_host: db
+      sql_port: 5432
+    volumes:
+      - /etc/localtime:/etc/localtime:ro

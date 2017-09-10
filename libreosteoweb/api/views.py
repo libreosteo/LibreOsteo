@@ -450,7 +450,6 @@ class FileImportViewSet(viewsets.ModelViewSet):
 
 class DocumentViewSet(viewsets.ModelViewSet):
     model = models.Document
-    serializer_class = apiserializers.DocumentSerializer
     queryset = models.Document.objects.all()
     
     def perform_create(self, serializer):
@@ -458,12 +457,37 @@ class DocumentViewSet(viewsets.ModelViewSet):
             raise Http404()
         serializer.save(user=self.request.user, internal_date=datetime.today())
 
+    def get_serializer_class(self):
+        if self.request.method == 'PUT':
+            return apiserializers.DocumentUpdateSerializer
+        else :
+            return apiserializers.DocumentSerializer
+
+class PatientDocumentViewSet(viewsets.ModelViewSet):
+    model = models.PatientDocument
+    serializer_class = apiserializers.PatientDocumentSerializer
+
+    def get_queryset(self):
+        try : 
+            patient = self.kwargs['patient']
+            return models.PatientDocument.objects.filter(patient__id=patient)
+        except KeyError:
+            return models.PatientDocument.objects.all()
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated():
+            raise Http404()
+        serializer.save(user=self.request.user)
+
+
 
 from django.http import HttpResponse
 from django.core.servers.basehttp import FileWrapper
 from django.core.management import call_command
 import zipfile
 
+
+DUMP_FILE="libreosteo.db"
 
 @csrf_protect
 @never_cache
@@ -484,13 +508,12 @@ def db_dump(request):
     documents = models.Document.objects.all()
 
     for document in documents :
-        #zippath = 
-        zf.write(document.document_file.path, zippath)
+        zf.write(document.document_file.path, document.document_file.name)
 
     zf.close()
 
     response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
-    response['Content-Disposition'] = 'attachment; filename=%s' % "libreosteo.db"
+    response['Content-Disposition'] = 'attachment; filename=%s' % DUMP_FILE
 
     return response
 
@@ -515,14 +538,34 @@ def load_dump(request):
             logger.info("Load a dump from a sent file.")
             # Write the received file into a file into settings.FIXTURE_DIRS
             file_content = ContentFile(request.FILES['file'].read())
-            filename = 'load_dump.json'
-            fixture = os.path.join(tempfile.gettempdir(), filename)
-            tmp_dump = open(fixture, 'w')
-            f = File(tmp_dump)
-            f.write(file_content.read())
-            f.close()
+            filename = 'dump.json'
+            tmpdir = tempfile.gettempdir()
+            fixture = os.path.join(tmpdir, filename)
+            
+            #Check if zip file
+            if zipfile.is_zipfile(file_content):
+                # uncompress the files
+                #uncompress the dump file
+                zf = zipfile.ZipFile(file_content)
+                if filename in zf.namelist():
+                    zf.extract(filename, tmpdir)
+                    # uncompress all document
+                    for d in [ f for f in zf.namelist() if f != 'dump.json']:
+                        zf.extract(d, settings.MEDIA_ROOT)
+                else:
+                    raise Exception("This zipfile does not contain the db dump")
+            else :
+                # old fashioned style of import archive
+                tmp_dump = open(fixture, 'w')
+                f = File(tmp_dump)
+                for chunk in file_content.chunks() :
+                    f.write(chunk)
+                f.close()
+
             logger.info("Dump file was persisted for future loading.")
             receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
+
+
 
             with block_disconnect_all_signal(
                 signal=signals.post_save,
@@ -546,5 +589,6 @@ def load_dump(request):
         else :
             return HttpResponse()
     except :
+        logger.exception('Import failed')
         return HttpResponse(content=_(u'This archive file seems to be incorrect. Impossible to load it.'), status=412)
     

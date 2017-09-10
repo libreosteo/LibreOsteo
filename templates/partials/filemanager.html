@@ -1,0 +1,21 @@
+{% load i18n %}
+<div ng-repeat="f in files">
+	<div class="form-group document_create" ng-if="f.status != 2">
+    <form novalidate name="form">
+        <label for="titleDoc">{$ f.file.name $}</label> <button class="btn label" ng-class="{'label-info' : f.status == 0, 'label-warning': f.status == 1, 'label-success' : f.status==2 , 'label-danger' : f.status==5}" ng-enabled="form.$valid" ng-click="send(f)">
+        <span ng-switch="f.status">
+        	<span ng-switch-when="0">{% trans 'Click to send' %}</span>
+        	<span ng-switch-when="1">{% trans 'in progress...' %}</span>
+        	<span ng-switch-when="2">{% trans 'Loaded' %}</span>
+        	<span ng-switch-when="5">{% trans 'Error' %}</span>
+        </span>
+        </button>
+        <input type="text" class="form-control" ng-model="f.title" placeholder="{% trans 'Title' %}" required="true" ng-required="true">
+        <input type="date" class="form-control polyfill-updatable"
+                           ng-model="f.date"
+                           placeholder="{% trans 'Date' %}" style="width: 300px"/>
+        <p class="help-block">{% trans 'Notes' %}</p>
+        <div hallo-editor class="form-control" is-editable="true" ng-model="f.notes" ></div>
+    </form>
+    </div>
+</div>

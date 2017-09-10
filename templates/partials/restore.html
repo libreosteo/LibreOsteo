@@ -13,7 +13,7 @@
                         <form name="forms.form_dump" novalidate>
                             <div class="form-group">
                                 <label for="archive-file">{% trans 'Archive file to restore' %}</label>
-                                <input type="file" id="archive-file" ngf-select="" ng-model="files.archiveFile" name="archiveFile" ngf-accept="'.json'" required="">
+                                <input type="file" id="archive-file" ngf-select="" ng-model="files.archiveFile" name="archiveFile" ngf-accept="'.db'" required="">
                             </div>
                             <button class="btn btn-default" ng-click="restore()" type="submit">{% trans 'Restore' %}</button>
 

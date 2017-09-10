@@ -37,7 +37,7 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)
     title = indexes.CharField(model_attr='title')
     notes = indexes.CharField(model_attr='notes', null=True)
-    date = indexes.CharField(model_attr='date',null=True)
+    document_date = indexes.CharField(model_attr='document_date',null=True)
 
     def get_model(self):
         return models.Document

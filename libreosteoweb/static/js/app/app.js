@@ -24,7 +24,8 @@ var libreosteoApp = angular.module('libreosteo', [
     'loHalloEditor',
     'loFileImport',
     'loRebuildIndex',
-    'ngFileUpload'
+    'ngFileUpload',
+    'loFileManager'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -146,3 +147,23 @@ libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', funct
     $scope.editFormManager = loEditFormManager;
 
 }]);
+
+libreosteoApp.filter('htmlToPlaintext', function() {
+    return function(text) {
+      return  text ? String(text).replace(/<br[^>]*>/gm, ' ').replace(/<[^>]+>/gm, '') : '';
+    };
+  }
+);
+
+libreosteoApp.filter('mimeTypeToClass', function() {
+    return function(text) {
+        if (text) {
+            if (text.includes('application/pdf')){
+                return 'fa-file-pdf-o';
+            } else if (text.includes('image/')) {
+                return 'fa-file-image-o';
+            }
+        } 
+        return 'fa-file-text-o';
+    }
+});

@@ -116,6 +116,12 @@ def display_import_files(request):
 def display_rebuild_index(request):
     return render_to_response('partials/rebuild-index.html', {'request' : request})
 
+def display_file_manager(request):
+    return render_to_response('partials/filemanager.html', {'request' : request})
+
+def display_confirmation(request):
+    return render_to_response('partials/confirmation.html')
+
 @csrf_protect
 @never_cache
 @ensure_csrf_cookie

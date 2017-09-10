@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-20 13:57+0200\n"
-"PO-Revision-Date: 2016-10-20 13:59+0200\n"
+"POT-Creation-Date: 2017-09-10 09:56+0200\n"
+"PO-Revision-Date: 2017-09-10 09:27+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -34,23 +34,23 @@ msgid "Cannot recognize the patient file"
 msgstr "Impossible de reconnaître le fichier patient"
 
 #: libreosteoweb/api/file_integrator.py:99
-#: libreosteoweb/api/file_integrator.py:275
+#: libreosteoweb/api/file_integrator.py:274
 msgid "Cannot read the content file. Check the encoding."
 msgstr "Impossible de lire le contenu du fichier. Vérifiez l'encodage."
 
-#: libreosteoweb/api/file_integrator.py:407
+#: libreosteoweb/api/file_integrator.py:416
 msgid "Missing patient file to integrate it."
 msgstr "Il manque le fichier patient pour intégrer."
 
-#: libreosteoweb/api/file_integrator.py:433
+#: libreosteoweb/api/file_integrator.py:442
 msgid "Imported examination"
 msgstr "Consultations importées"
 
-#: libreosteoweb/api/file_integrator.py:446
+#: libreosteoweb/api/file_integrator.py:455
 msgid "There is a problem when reading this line :"
 msgstr "Il y a un problème lors de la lecture de la ligne :"
 
-#: libreosteoweb/api/file_integrator.py:449
+#: libreosteoweb/api/file_integrator.py:458
 msgid "There is a problem when reading this line."
 msgstr "Il y a un problème lors de la lecture de la ligne."
 
@@ -71,7 +71,7 @@ msgid "Birth date is invalid"
 msgstr "La date de naissance est invalide"
 
 #: libreosteoweb/api/serializers.py:25 libreosteoweb/api/serializers.py:47
-#: libreosteoweb/models.py:41 libreosteoweb/models.py:92
+#: libreosteoweb/models.py:40 libreosteoweb/models.py:92
 msgid "Birth date"
 msgstr "Date de naissance"
 
@@ -96,49 +96,53 @@ msgstr ""
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
 
-#: libreosteoweb/api/views.py:527
+#: libreosteoweb/api/views.py:593
 msgid "This archive file seems to be incorrect. Impossible to load it."
 msgstr "Ce fichier d'archive semble être incorrect. Impossible de le charger."
 
-#: libreosteoweb/models.py:24 libreosteoweb/models.py:38
+#: libreosteoweb/models.py:23 libreosteoweb/models.py:37
 #: libreosteoweb/models.py:90 libreosteoweb/models.py:187
 msgid "Family name"
 msgstr "Nom de famille"
 
-#: libreosteoweb/models.py:25 libreosteoweb/models.py:40
+#: libreosteoweb/models.py:24 libreosteoweb/models.py:39
 #: libreosteoweb/models.py:91 libreosteoweb/models.py:189
 msgid "Firstname"
 msgstr "Prénom"
 
-#: libreosteoweb/models.py:26 libreosteoweb/models.py:46
+#: libreosteoweb/models.py:25 libreosteoweb/models.py:46
 #: libreosteoweb/models.py:201 libreosteoweb/models.py:232
 msgid "Phone"
 msgstr "Téléphone"
 
-#: libreosteoweb/models.py:27 libreosteoweb/models.py:45
+#: libreosteoweb/models.py:26 libreosteoweb/models.py:44
 #: libreosteoweb/models.py:193 libreosteoweb/models.py:200
 #: libreosteoweb/models.py:231
 msgid "City"
 msgstr "Ville"
 
-#: libreosteoweb/models.py:39 libreosteoweb/models.py:188
+#: libreosteoweb/models.py:38 libreosteoweb/models.py:188
 msgid "Original name"
 msgstr "Nom de jeune fille"
 
-#: libreosteoweb/models.py:42 libreosteoweb/models.py:190
+#: libreosteoweb/models.py:41 libreosteoweb/models.py:190
 #: libreosteoweb/models.py:197 libreosteoweb/models.py:228
 msgid "Street"
 msgstr "Rue"
 
-#: libreosteoweb/models.py:43 libreosteoweb/models.py:191
+#: libreosteoweb/models.py:42 libreosteoweb/models.py:191
 #: libreosteoweb/models.py:198 libreosteoweb/models.py:229
 msgid "Address complement"
 msgstr "Complément d'adresse"
 
-#: libreosteoweb/models.py:44 libreosteoweb/models.py:192
+#: libreosteoweb/models.py:43 libreosteoweb/models.py:192
 #: libreosteoweb/models.py:199 libreosteoweb/models.py:230
 msgid "Zipcode"
 msgstr "Code postal"
+
+#: libreosteoweb/models.py:45
+msgid "Email"
+msgstr "email"
 
 #: libreosteoweb/models.py:47
 msgid "Mobile phone"
@@ -196,7 +200,7 @@ msgstr "Antécédents familiaux"
 msgid "Trauma history"
 msgstr "Antécédents traumatiques"
 
-#: libreosteoweb/models.py:60 templates/partials/patient-detail.html:230
+#: libreosteoweb/models.py:60 templates/partials/patient-detail.html:242
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
@@ -271,6 +275,8 @@ msgstr "Conclusion"
 
 #: libreosteoweb/models.py:115 libreosteoweb/models.py:166
 #: libreosteoweb/models.py:176 libreosteoweb/models.py:212
+#: templates/partials/filemanager.html:16
+#: templates/partials/patient-detail.html:277
 msgid "Date"
 msgstr "Date"
 
@@ -315,6 +321,7 @@ msgid "Emergency"
 msgstr "Urgence"
 
 #: libreosteoweb/models.py:164 libreosteoweb/models.py:255
+#: libreosteoweb/models.py:305
 msgid "User"
 msgstr "Utilisateur"
 
@@ -425,6 +432,46 @@ msgstr "Fichier de consultation"
 msgid "validity status"
 msgstr "validité"
 
+#: libreosteoweb/models.py:300
+msgid "Document file"
+msgstr "Fichier document"
+
+#: libreosteoweb/models.py:301 templates/partials/filemanager.html:13
+#: templates/partials/patient-detail.html:274
+msgid "Title"
+msgstr "Titre"
+
+#: libreosteoweb/models.py:302 templates/partials/filemanager.html:17
+#: templates/partials/patient-detail.html:250
+#: templates/partials/patient-detail.html:278
+#: templates/partials/patient-detail.html:282
+msgid "Notes"
+msgstr "Notes"
+
+#: libreosteoweb/models.py:303
+msgid "Adding date"
+msgstr "Date d'ajout"
+
+#: libreosteoweb/models.py:304
+msgid "Document date"
+msgstr "Date document"
+
+#: libreosteoweb/models.py:306
+msgid "Mime-Type"
+msgstr "Type mime"
+
+#: libreosteoweb/models.py:328
+msgid "patient"
+msgstr "patient"
+
+#: libreosteoweb/models.py:329
+msgid "document"
+msgstr "document"
+
+#: libreosteoweb/models.py:330
+msgid "attachmentType"
+msgstr "Type de pièce jointe"
+
 #: templates/404.html:257 templates/index.html:261
 msgid "User Profile"
 msgstr "Profil utilisateur"
@@ -455,8 +502,8 @@ msgstr "Créé un compte administrateur sur Libreosteo"
 msgid "Registration"
 msgstr "Enregistrement"
 
-#: templates/account/create_admin_account.html:44
-#: templates/partials/register.html:15
+#: templates/account/create_admin_account.html:49
+#: templates/partials/register.html:20
 msgid ""
 "In order to use Libreosteo, you have to register a login and password on the "
 "application. Please select it before to use the application."
@@ -465,42 +512,42 @@ msgstr ""
 "de passe sur l'application. Veuillez les saisir avant d'utiliser "
 "l'application."
 
-#: templates/account/create_admin_account.html:46
-#: templates/partials/register.html:17
+#: templates/account/create_admin_account.html:51
+#: templates/partials/register.html:22
 msgid ""
 "Then you will be redirected to be identified with this login and password."
 msgstr ""
 "Ensuite vous serez dirigé afin d'être identifié avec ce nom d'utilisateur et "
 "mot de passe."
 
-#: templates/account/create_admin_account.html:48
-#: templates/account/login.html:49 templates/partials/register.html:19
+#: templates/account/create_admin_account.html:53
+#: templates/account/login.html:49 templates/partials/register.html:24
 msgid "Your login"
 msgstr "Votre nom d'utilisateur"
 
-#: templates/account/create_admin_account.html:49
+#: templates/account/create_admin_account.html:54
 #: templates/account/login.html:50 templates/partials/add-user-modal.html:17
 #: templates/partials/add-user-modal.html:19
 #: templates/partials/add-user-modal.html:25
-#: templates/partials/register.html:20
+#: templates/partials/register.html:25
 #: templates/partials/set-password-user-modal.html:9
 #: templates/partials/set-password-user-modal.html:11
 #: templates/partials/set-password-user-modal.html:17
 msgid "Password"
 msgstr "Mot de passe"
 
-#: templates/account/create_admin_account.html:50
-#: templates/partials/register.html:21
+#: templates/account/create_admin_account.html:55
+#: templates/partials/register.html:26
 msgid "Confirm password"
 msgstr "Confirmation du mot de passe"
 
-#: templates/account/create_admin_account.html:52
-#: templates/account/login.html:52 templates/partials/register.html:23
+#: templates/account/create_admin_account.html:57
+#: templates/account/login.html:52 templates/partials/register.html:28
 msgid "Remember me"
 msgstr "Se rappeler de moi"
 
-#: templates/account/create_admin_account.html:55
-#: templates/partials/register.html:26
+#: templates/account/create_admin_account.html:60
+#: templates/partials/register.html:31
 msgid "Register"
 msgstr "Enregistrer"
 
@@ -610,11 +657,20 @@ msgid "Validate"
 msgstr "Valider"
 
 #: templates/partials/add-user-modal.html:32
+#: templates/partials/confirmation.html:11
 #: templates/partials/doctor-modal-add.html:26
 #: templates/partials/invoice-modal.html:69
 #: templates/partials/set-password-user-modal.html:24
 msgid "Cancel"
 msgstr "Annuler"
+
+#: templates/partials/confirmation.html:3
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: templates/partials/confirmation.html:10
+msgid "Ok"
+msgstr "Ok"
 
 #: templates/partials/dashboard.html:3
 msgid "Dashboard"
@@ -642,7 +698,7 @@ msgid "View Details"
 msgstr "Afficher les détails"
 
 #: templates/partials/dashboard.html:50
-#: templates/partials/patient-detail.html:244
+#: templates/partials/patient-detail.html:298
 msgid "Examinations"
 msgstr "Consultations"
 
@@ -651,7 +707,7 @@ msgid "Urgent return"
 msgstr "Retour"
 
 #: templates/partials/doctor-modal-add.html:3
-#: templates/partials/patient-detail.html:124
+#: templates/partials/patient-detail.html:136
 msgid "Add a doctor"
 msgstr "Ajouter un médecin"
 
@@ -670,6 +726,22 @@ msgstr "par"
 #: templates/partials/examination.html:186
 msgid "Close"
 msgstr "Clôturer"
+
+#: templates/partials/filemanager.html:7
+msgid "Click to send"
+msgstr "Cliquer pour envoyer"
+
+#: templates/partials/filemanager.html:8
+msgid "in progress..."
+msgstr "en cours..."
+
+#: templates/partials/filemanager.html:9
+msgid "Loaded"
+msgstr "Chargé"
+
+#: templates/partials/filemanager.html:10
+msgid "Error"
+msgstr "Erreur"
 
 #: templates/partials/import-file.html:4
 msgid "Managing import/export"
@@ -932,19 +1004,33 @@ msgid "Patient infos"
 msgstr "Infos patient"
 
 #: templates/partials/patient-detail.html:26
-#: templates/partials/patient-detail.html:122
+#: templates/partials/patient-detail.html:134
 msgid "not documented"
 msgstr "non renseigné"
 
-#: templates/partials/patient-detail.html:113
+#: templates/partials/patient-detail.html:125
 msgid "Not smoker"
 msgstr "Non fumeur"
 
-#: templates/partials/patient-detail.html:174
+#: templates/partials/patient-detail.html:186
 msgid "History"
 msgstr "Antécédents"
 
-#: templates/partials/patient-detail.html:254
+#: templates/partials/patient-detail.html:255
+msgid "Add document"
+msgstr "Ajouter des documents"
+
+#: templates/partials/patient-detail.html:257
+msgid "Add document as medical report. Could be image, pdf, text file, ..."
+msgstr ""
+"Ajouter des documents en tant que rapport médicaux. Cela peut-être une "
+"image, un pdf, un fichier texte, ..."
+
+#: templates/partials/patient-detail.html:283
+msgid "Click to expand the notes"
+msgstr "Cliquer pour étendre la note"
+
+#: templates/partials/patient-detail.html:308
 msgid "New Examination"
 msgstr "Nouvelle consultation"
 

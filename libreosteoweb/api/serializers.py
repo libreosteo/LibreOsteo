@@ -1,5 +1,5 @@
 from rest_framework import serializers, validators
-from libreosteoweb.models import Patient, Examination, OfficeEvent, TherapeutSettings, OfficeSettings, ExaminationComment, RegularDoctor, Invoice, FileImport, Document
+from libreosteoweb.models import *
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
@@ -199,3 +199,24 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta :
         model = Document 
+
+class DocumentUpdateSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta :
+        fields = ['title','notes','document_date']
+        model = Document 
+
+class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
+    document = DocumentSerializer()
+    patient = serializers.PrimaryKeyRelatedField(many=False, queryset=Patient.objects.all())
+    class Meta :
+        model = PatientDocument
+        depth=2
+    def create(self, validated_data):
+        document_data = validated_data.pop('document')
+        document_data['user'] = validated_data.pop('user')
+        patient = validated_data.pop("patient")
+        document = Document.objects.create(internal_date=datetime.today(), **document_data)
+        document.clean()
+        document.save()
+        patient_doc = PatientDocument.objects.create(patient=patient, document=document,**validated_data)
+        return patient_doc

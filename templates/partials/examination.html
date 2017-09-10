@@ -33,7 +33,7 @@
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model)"><i class="fa fa-print"></i> </button>
-                    <span><a href="invoice/{$ model.invoice $}"target="_blank">n° {$ model.invoice_number $}</a></span>
+                    <span><a ng-href="invoice/{$ model.invoice $}" target="_blank">n° {$ model.invoice_number $}</a></span>
                 </div>
             </div>            
         </div>

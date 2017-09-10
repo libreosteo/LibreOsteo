@@ -1,8 +1,8 @@
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager']);
 
 
-patient.factory('PatientServ', ['$resource', 'DoctorServ',
-    function ($resource, DoctorServ) {
+patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
+    function ($resource, DoctorServ, PatientDocumentServ) {
         "use strict";
         var serv = $resource('api/patients/:patientId', null, {
             query: {method: 'GET' },
@@ -19,6 +19,11 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ',
             }
             return;
         };
+
+        serv.prototype.medical_reports_doc = function(callback)
+        {
+            return PatientDocumentServ.get({patient : this.id}, callback);
+        }
         return serv;
     }
 ]);
@@ -32,10 +37,23 @@ patient.factory('PatientExaminationsServ', ['$resource',
                     method: 'GET',
                     params: { patient: 'patient'},
                     isArray: true,
-                }
+                },
             });
 
 }]);
+
+patient.factory('PatientDocumentServ', ['$resource', 
+    function($resource) {
+        "use strict";
+        return $resource('api/patients/:patient/documents', null, {
+            get: {
+                method: 'GET',
+                params : {patient : 'patient'},
+                isArray : true,
+            }
+        });
+    }
+]);
 
 patient.filter('format_age', function () {
     "use strict";
@@ -75,13 +93,34 @@ patient.filter('format_age', function () {
 });
 
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
-    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager',
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ',
     function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
-        loEditFormManager) {
+        loEditFormManager, loFileManager, FileServ) {
         "use strict";
+
+        var updateMedicalDocumentReports = function(docs) {
+            var medicalReportsDoc = [];
+                angular.forEach(docs, function(value, key) {
+                    if(value.attachment_type == 5) { // Medical reports
+                        this.push(value.document);
+                        value.document.expand = false;
+                        value.document.edit = false;
+                        if (value.document.title == 'null')
+                            value.document.title = null;
+                        if (value.document.notes == 'null')
+                            value.document.notes = null;
+                        var d = value.document.document_date;
+                        if (d)
+                            value.document.document_date = convertUTCDateToLocalDate(new Date(d));
+                    }
+                }, medicalReportsDoc);
+                $scope.patient.medicalReportsDoc = medicalReportsDoc;
+        };
+
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
             p.doctor_detail(function (detail) {$scope.doctor = detail; });
             p.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
+            p.medical_reports_doc(updateMedicalDocumentReports);
         });
 
         $scope.form = {};
@@ -156,6 +195,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     $scope.patient = data;
                     $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(data.birth_date));
                     $scope.patient.doctor_detail(function (detail) {$scope.doctor = detail; });
+                    $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
                 }, function(data)
             {
                 // Should display the error
@@ -167,6 +207,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
                      p.doctor_detail(function (detail) {$scope.doctor = detail; });
                      $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
+                     $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
                 });
             });
         };
@@ -526,7 +567,70 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             $scope.form.medicalForm.$save();
         };
-        
+
+        $scope.fillInfoFiles = function(files)
+        {
+            if (files && files.length) {
+                $scope.fileContext.files(files);
+                $scope.fileContext.patient($scope.patient);
+            }
+        };
+
+        $scope.fileContext = loFileManager.createFileContext();
+
+        $scope.fileContext.setDocumentAddedCb(function() {
+            console.log("Call callback");
+            $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
+        });
+
+        $scope.expand = function(document_view, flag)
+        {
+            document_view.expand = flag;
+        };
+
+        $scope.edit_doc = function(document_view, flag)
+        {
+            document_view.edit = flag;
+            document_view.expand = false;
+            if (!flag)
+                $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
+        };
+
+        $scope.save_doc = function(document_view)
+        {
+            document_view.edit = false;
+            var date_tostr = $filter('date')(document_view.document_date, 'yyyy-MM-dd');
+            var document_tosave = {
+                'id' : document_view.id,
+                'title' : document_view.title,
+                'notes' : document_view.notes,
+                'document_date': date_tostr,
+            };
+            FileServ.save({patientDocId: document_view.id}, document_tosave, function(value){
+                    growl.addSuccessMessage(gettext("Update success"));
+                });
+        };
+
+        $scope.delete_doc = function(document_view)
+        {
+            var modalInstance = $uibModal.open({
+                templateUrl: 'web-view/partials/confirmation-modal',
+                controller : ConfirmationCtrl,
+                resolve : {
+                    message : function() {
+                        return gettext("Are you sure to delete this document ?");
+                    },
+                }
+            });
+           modalInstance.result.then(function (){
+              FileServ.delete({patientDocId : document_view.id}, function(value){
+                $scope.patient.medicalReportsDoc = $scope.patient.medicalReportsDoc.filter(function(el) {
+                    return el.id !== document_view.id;
+                });
+              });
+           });
+        };
+
 }]);
 
 
@@ -547,6 +651,17 @@ var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
         $uibModalInstance.dismiss('cancel');
     };
 };
+
+var ConfirmationCtrl = function($scope, $uibModalInstance, message) {
+    $scope.message = message;
+    $scope.ok = function () {
+      $uibModalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
 
 var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ) {
     "use strict";

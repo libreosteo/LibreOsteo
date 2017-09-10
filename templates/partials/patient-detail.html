@@ -246,9 +246,51 @@
                     {{ patient.medical_reports }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="patient.medical_reports"
+                    <div class="form-group">
+                        <label for="notes">{% trans 'Notes' %}</label>
+                        <div hallo-editor ng-model="patient.medical_reports"
                             placeholder="'{{ patient.medical_reports }}'" is-editable="form.medicalForm.$visible"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="addDocumentMedicalReport">{% trans 'Add document' %}</label>
+                            <input type="file" id="addDocumentMedicalReport" ngf-select="fillInfoFiles($files)" ngf-multiple="true">
+                            <p class="help-block" ng-if="fileContext.files().length == 0">{% trans 'Add document as medical report. Could be image, pdf, text file, ...' %}</p>
+                            <file-manager context="fileContext"/>
+                    </div>
+                    <div>
+                        <ul class="row document_list" >
+                            <li class="documenttile animate" ng-class="{ 'col-md-12' : doc.expand || doc.edit, 'col-md-3' : !doc.expand && !doc.edit }"
+                            ng-repeat="doc in patient.medicalReportsDoc | orderBy : '-document_date' track by $index">
+                                <div class="thumbnail doc_thumbnail" ng-class="{ 'doc_thumbnail' : !doc.expand && !doc.edit, 'doc_expand': doc.expand || doc.edit}">
+                                    <button type="button" ng-if="!doc.edit" class="close document-edit" aria-label="Edit" ng-click="edit_doc(doc, true)"><span aria-hidden="true"><i class="fa fa-edit"/></span></button>
+                                    <button ng-if="doc.expand" type="button" class="left close document-close" aria-label="Close" ng-click="expand(doc,false)"><span aria-hidden="true">&times;</span></button>
+                                    <button ng-if="doc.edit" type="button" class="close document-close document-edit document-edit-ok" aria-label="Close" ng-click="save_doc(doc)"><i class="fa fa-1 fa-check"/></button>
+                                    <button ng-if="doc.edit" type="button" class="close document-close document-edit document-edit-cancel" aria-label="Close" ng-click="edit_doc(doc, false)"><i class="fa fa-1 fa-close"/></button>
+                                    <button ng-if="doc.edit" type="button" class="close document-close document-edit document-edit-delete" aria-label="Close" ng-click="delete_doc(doc)"><i class="fa fa-1 fa-trash"/></button>
+                                    <p class="document_title"><b>{$ doc.title $}</b></p>
+                                    <div class="document_ico"><a ng-href="{$ doc.document_file $}" target="_blank"><i class="fa fa-2x" ng-class="doc.mime_type | mimeTypeToClass"/></a></div >
+
+                                    <div class="form-group animate" ng-show="doc.edit">
+                                        <input type="text" class="form-control" ng-model="doc.title" placeholder="{% trans 'Title' %}">
+                                        <input type="date" class="form-control polyfill-updatable"
+                                                           ng-model="doc.document_date"  ng-required="true"
+                                                           placeholder="{% trans 'Date' %}" style="width: 300px"/>
+                                        <p class="help-block">{% trans 'Notes' %}</p>
+                                        <div hallo-editor class="form-control" is-editable="true" ng-model="doc.notes" ></div>
+                                    </div>
+                                    <div ng-show="doc.notes && !doc.edit">
+                                        <span class="document_notes">{% trans 'Notes' %}</span>
+                                        <div class="document_partialnote" ng-if="!doc.expand">{$ doc.notes | htmlToPlaintext| limitTo:40 $}<a class="expand" uib-tooltip="{% trans 'Click to expand the notes' %}" ng-click="expand(doc , true)" ng-if="doc.notes.length > 40 && !doc.expand">...</a></div>
+                                        <div class="document_fullnote" ng-if="doc.expand" hallo-editor class="form-control" is-editable="false" ng-model="doc.notes"/>
+                                        
+                                    </div>
+                                    <p class="doc_date">{$ doc.document_date |date : 'dd-MM-yyyy' $}</p>
+                                </div>                                
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
             </div>
     </form>
 </uib-tab>

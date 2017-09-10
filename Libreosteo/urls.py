@@ -27,6 +27,7 @@ router.register(r'profiles', views.TherapeutSettingsViewSet)
 router.register(r'comments', views.ExaminationCommentViewSet)
 router.register(r'office-users', views.UserOfficeViewSet)
 router.register(r'file-import', views.FileImportViewSet)
+router.register(r'patient-documents', views.PatientDocumentViewSet, 'PatientDocuments')
 
 urlpatterns = patterns('',
     # Examples:
@@ -39,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^install/$', views.install, name='install'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/statistics[/]?$', views.StatisticsView.as_view(), name='statistics_view'),
+    url(r'^api/patients/(?P<patient>.+)/documents$', views.PatientDocumentViewSet.as_view({'get' : 'list'}), name="patient_document_view"),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
     url(r'^internal/dump.json', views.db_dump, name='db_dump'),
     url(r'^internal/restore', views.load_dump, name='load_dump'),
@@ -60,16 +62,18 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/office-settings$', displays.display_officesettings),
     url(r'^web-view/partials/import-file$', displays.display_import_files),
     url(r'^web-view/partials/rebuild-index$', displays.display_rebuild_index),
+    url(r'^web-view/partials/filemanager$', displays.display_file_manager),
     url(r'^web-view/partials/restore$', displays.display_restore),
     url(r'^web-view/partials/register$', displays.display_register, name='accounts-register'),
-    url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),    
+    url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
+    url(r'^web-view/partials/confirmation', displays.display_confirmation),
 )+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
 from django.views.i18n import javascript_catalog
 
 js_info_dict = {
-    'domain' : 'django',
+    'domain' : 'djangojs',
     'packages' : ('libreosteoweb',)
 }
 

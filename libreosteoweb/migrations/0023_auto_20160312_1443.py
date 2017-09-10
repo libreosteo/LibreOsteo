@@ -52,6 +52,6 @@ class Migration(migrations.Migration):
     
     operations = [
         migrations.RunPython(convert_all_new_line),
-        migrations.RunPython(rebuild_index),
+   
     ]
     

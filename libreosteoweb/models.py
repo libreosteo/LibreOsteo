@@ -290,6 +290,8 @@ class FileImport(models.Model):
         if bool(self.file_examination) :
             storage_examination.delete(path_examination)
 
+import mimetypes
+
 class Document(models.Model):
     """
     Implements a document to be attached to
@@ -298,9 +300,10 @@ class Document(models.Model):
     document_file = models.FileField(_('Document file'), upload_to="documents")
     title = models.TextField(_('Title'))
     notes = models.TextField(_('Notes'), blank=True, null=True, default=None)
-    internal_date = models.DateField(_('Adding date'), blank=True, null=False)
-    date = models.DateField(_('Date'), blank=True, null=True, default=None)
-    user = models.OneToOneField(User, verbose_name=_('User'),   blank=True,null=True)
+    internal_date = models.DateTimeField(_('Adding date'), blank=True, null=False)
+    document_date = models.DateField(_('Document date'), blank=True, null=True, default=None)
+    user = models.ForeignKey(User, verbose_name=_('User'),   blank=True,null=True)
+    mime_type = models.TextField(_('Mime-Type'), blank=False, null=True, default=None)
 
 
     def delete(self, *args, **kwargs):
@@ -314,3 +317,26 @@ class Document(models.Model):
     def clean(self):
         if self.internal_date is None:
             self.internal_date = datetime.today()
+        self.mime_type = mimetypes.guess_type(self.document_file.path)[0]
+        logger.info("mime_type = %s " % self.mime_type)
+
+
+class PatientDocument(models.Model):
+    """
+    Implements a document to be attached to a patient file
+    """
+    patient = models.ForeignKey(Patient, verbose_name=_('patient'), on_delete=models.CASCADE)
+    document = models.OneToOneField(Document, verbose_name=_('document'), on_delete=models.CASCADE, primary_key=True)
+    attachment_type = models.SmallIntegerField(_('attachmentType'))
+
+    AttachmentType = enum(
+        'AttachmentType',
+        'SURGICAL',
+        'MEDICAL',
+        'FAMILIAL',
+        'TRAUMA',
+        'MEDICAL_REPORTS'
+        )
+    
+
+

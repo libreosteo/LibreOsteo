@@ -70,6 +70,7 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
         officeevents : '=',
         officeeventsByDay : '=',
         busy : '=',
+        officeEventLoader : '='
     },
     controller: function($scope, $location)
     {
@@ -89,7 +90,8 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
         };
         $scope.show = function(selector) {
             $scope.selector = selector;
-        }
+        };
+        console.log($scope.officeEventLoader);
     },
 
     templateUrl: 'web-view/partials/officeevent'

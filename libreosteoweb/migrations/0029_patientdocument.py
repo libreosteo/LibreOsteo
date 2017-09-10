@@ -16,8 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('attachment_type', models.SmallIntegerField(verbose_name='attachmentType')),
                 ('document', models.OneToOneField(primary_key=True, serialize=False, to='libreosteoweb.Document', verbose_name='document')),
-                ('patient', models.ForeignKey(verbose_name='patient', serialize=False, to='libreosteoweb.Patient')),
-                ('mime_type', models.TextField(default=None, null=True, verbose_name='Mime-Type'))
+                ('patient', models.ForeignKey(verbose_name='patient', serialize=False, to='libreosteoweb.Patient'))
             ],
         ),
     ]

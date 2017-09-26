@@ -72,6 +72,6 @@ The libreosteo team consist of:
   * littlejo_
 
 
-.. _github : https://github.com/garthylou
+.. _github : https://github.com/jbgury
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo

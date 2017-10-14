@@ -104,38 +104,38 @@
         </div>
         <div class="col-md-9">
             <!-- The accordion -->
-            <uib-accordion close-others="false">
-                <uib-accordion-group heading="{{ examination.orl }}" class="panel-primary" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
+            <div uib-accordion close-others="false">
+                <div uib-accordion-group heading="{{ examination.orl }}" class="panel-primary panel-sphere" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
                     <div hallo-editor ng-model="model.orl" 
                             placeholder="'{{ examination.orl }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
+                <div uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary panel-sphere" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
                     <div hallo-editor ng-model="model.visceral" 
                             placeholder="'{{ examination.visceral }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary" ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
+                <div uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary panel-sphere " ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
                     <div hallo-editor ng-model="model.pulmo" placeholder="'{{ examination.pulmo }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
+                <div uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary panel-sphere" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
                     <div hallo-editor ng-model="model.uro_gyneco"
                             placeholder="'{{ examination.uro_gyneco }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
+                <div uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary panel-sphere" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
                     <div  hallo-editor ng-model="model.periphery" 
                             placeholder="'{{ examination.periphery }}'" is-editable="editableForm.$visible"
                     ></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
+                <div uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary panel-sphere" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
                     <div hallo-editor ng-model="model.general_state" 
                             placeholder="'{{ examination.general_state }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-            </uib-accordion>
+            </div>
         </div>
      </div>
 

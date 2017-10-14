@@ -301,3 +301,6 @@ ul li.documenttile  {
 .document_create.ng-leave.ng-leave-active {
     opacity: 0;
 }
+.panel-title {
+    font-size : 14px;
+}

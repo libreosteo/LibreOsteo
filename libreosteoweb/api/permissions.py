@@ -1,6 +1,11 @@
 from rest_framework import permissions
 from django.contrib.auth import get_user_model
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from .exceptions import Forbidden
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse 
 import logging
 
 # Get an instance of a logger
@@ -33,6 +38,7 @@ class IsStaffOrTargetUser(permissions.BasePermission):
         	return obj == request.user
 
 from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404, HttpResponseForbidden
+from django.db import OperationalError
 
 def maintenance_available():
     """
@@ -46,9 +52,24 @@ def maintenance_available():
 
     def _decorator(func):
         UserModel = get_user_model()
-        if UserModel.objects.all().count() == 0 :
-            if(func) :
-                return func
-        else :
+        try:
+            if UserModel.objects.all().count() == 0 :
+                if(func) :
+                    return func
+            else :
+                return HttpResponseForbidden
+        except OperationalError :
             return HttpResponseForbidden
     return _decorator
+
+class StaffRequiredMixin(object):
+    """
+    View mixin which requires that the authenticated user is a staff member
+    (i.e. `is_staff` is True).
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return HttpResponseRedirect(reverse('login'))
+        return super(StaffRequiredMixin, self).dispatch(request,*args, **kwargs)

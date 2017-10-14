@@ -6,6 +6,7 @@ officeEvent.factory('OfficeEventServ', ['$http', '$filter', function ($http, $fi
         this.busy = false;
         this.after = '';
         this.itemsByDay = [];
+        this.hasFinish = false;
     };
     OfficeEventLoader.prototype.loadEvents = function() {
         if (this.busy) return;
@@ -18,6 +19,11 @@ officeEvent.factory('OfficeEventServ', ['$http', '$filter', function ($http, $fi
                 this.items.push(items[i]);
             }
             this.after = "" + this.items.length;
+            if (items.length == 0){
+                this.hasFinish = true;
+                this.busy = false;
+                return;
+            }
 
             // Build the list ordonned by Day to prepare the list to display.
             angular.forEach(this.items, function(officeevent, index){

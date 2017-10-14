@@ -35,6 +35,7 @@ class PatientSerializer (serializers.ModelSerializer):
     	
     class Meta:
         model = Patient
+        fields='__all__'
         validators = [
             UniqueTogetherIgnoreCaseValidator(
                 queryset=Patient.objects.all(),
@@ -86,6 +87,7 @@ class ExaminationSerializer(serializers.ModelSerializer):
     patient_detail = PatientExportSerializer(source="patient", required=False, allow_null=True, read_only=True)
     class Meta:
         model = Examination
+        fields= '__all__'
 
 
 class CheckSerializer(serializers.Serializer):
@@ -128,11 +130,13 @@ class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
     user_info = UserInfoSerializer(source="user", required=False, read_only=True)
     class Meta:
         model = ExaminationComment
+        fields = '__all__'
 
 class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
 
     class Meta:
         model = OfficeEvent
+        fields = '__all__'
 
     patient_name = serializers.SerializerMethodField()
     translated_comment = serializers.SerializerMethodField()
@@ -158,14 +162,17 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
 class TherapeutSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = TherapeutSettings
+        fields = '__all__'
 
 class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeSettings
+        fields = '__all__'
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = Invoice
+        fields = '__all__'
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):
@@ -186,6 +193,7 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
     _status = None
     class Meta:
         model = FileImport
+        fields = '__all__'
     analyze = serializers.SerializerMethodField()
     extract = serializers.SerializerMethodField()
 
@@ -199,6 +207,7 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta :
         model = Document 
+        fields = '__all__'
 
 class DocumentUpdateSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta :
@@ -210,6 +219,7 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     patient = serializers.PrimaryKeyRelatedField(many=False, queryset=Patient.objects.all())
     class Meta :
         model = PatientDocument
+        fields = '__all__'
         depth=2
     def create(self, validated_data):
         document_data = validated_data.pop('document')

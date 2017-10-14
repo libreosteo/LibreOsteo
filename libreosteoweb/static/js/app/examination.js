@@ -59,7 +59,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
           if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
-        controller : [ '$scope', '$filter', '$window', 'growl', '$q', function($scope, $filter, $window, growl, $q)
+        controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', function($scope, $filter, $window, growl, $q, $timeout)
         {
             $scope.types = [
                 { value : 1, text : gettext('Normal examination') },
@@ -95,22 +95,22 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             }
 
             $scope.$watch('model.orl', function(newValue, oldValue){
-                $scope.examinationSettings.orl = !isEmpty(newValue);
+                $scope.examinationSettings.orl = !isEmpty(newValue) || $scope.newExamination;
             });
             $scope.$watch('model.visceral', function(newValue, oldValue){
-                $scope.examinationSettings.visceral = !isEmpty(newValue);
+                $scope.examinationSettings.visceral = !isEmpty(newValue) || $scope.newExamination;
             });
             $scope.$watch('model.pulmo', function(newValue, oldValue){
-                $scope.examinationSettings.pulmo = !isEmpty(newValue);
+                $scope.examinationSettings.pulmo = !isEmpty(newValue) || $scope.newExamination;
             });
             $scope.$watch('model.uro_gyneco', function(newValue, oldValue){
-                $scope.examinationSettings.uro_gyneco = !isEmpty(newValue);
+                $scope.examinationSettings.uro_gyneco = !isEmpty(newValue) || $scope.newExamination;
             });
             $scope.$watch('model.periphery', function(newValue, oldValue){
-                $scope.examinationSettings.periphery = !isEmpty(newValue);
+                $scope.examinationSettings.periphery = !isEmpty(newValue) || $scope.newExamination;
             });
             $scope.$watch('model.general_state', function(newValue, oldValue){
-                $scope.examinationSettings.general_state = !isEmpty(newValue);
+                $scope.examinationSettings.general_state = !isEmpty(newValue) || $scope.newExamination;
             });
 
             $scope.$watch('model.status', function(newValue, oldValue){
@@ -199,8 +199,13 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 edit: true,
                 cancel: null,
                 delete: false,
-            };
-            
+            };            
+            $timeout(function () {
+                //DOM has finished rendering
+                if($scope.newExamination){
+                    $scope.editableForm.$show();
+                }
+            });
         }],
         templateUrl: 'web-view/partials/examination'
     }

@@ -32,7 +32,6 @@ fileManager.factory('loFileManager', function() {
 					return _patient;
 				},
 				setDocumentAddedCb : function(callback) {
-					console.log("define callback");
 					_callback = callback;
 				},
 				callback : function()

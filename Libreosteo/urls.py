@@ -1,6 +1,7 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LoginView,LogoutView
 
 
 from django.contrib import admin
@@ -29,22 +30,22 @@ router.register(r'office-users', views.UserOfficeViewSet)
 router.register(r'file-import', views.FileImportViewSet)
 router.register(r'patient-documents', views.PatientDocumentViewSet, 'PatientDocuments')
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     url(r'^$', displays.display_index ),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'account/login.html', 'extra_context' : {'demonstration' : settings.DEMONSTRATION}}, name='accounts-login'),
-    url(r'^accounts/logout', 'django.contrib.auth.views.logout', {'template_name' : 'account/login.html', 'extra_context' : {'demonstration' : settings.DEMONSTRATION}}, name="accounts-logout"),
-    url(r'^accounts/create-admin/$', views.create_admin_account, name='accounts-create-admin'),
-    url(r'^install/$', views.install, name='install'),
+    url(r'^accounts/login/$', LoginView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name='login'),
+    url(r'^accounts/logout', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
+    url(r'^accounts/create-admin/$', views.CreateAdminAccountView.as_view(), name='accounts-create-admin'),
+    url(r'^install/$', views.InstallView.as_view(), name='install'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/statistics[/]?$', views.StatisticsView.as_view(), name='statistics_view'),
     url(r'^api/patients/(?P<patient>.+)/documents$', views.PatientDocumentViewSet.as_view({'get' : 'list'}), name="patient_document_view"),
     url(r'^myuserid', TemplateView.as_view(template_name='account/myuserid.html')),
-    url(r'^internal/dump.json', views.db_dump, name='db_dump'),
-    url(r'^internal/restore', views.load_dump, name='load_dump'),
-    url(r'^internal/rebuild_index', views.rebuild_index, name="rebuild_index"),
+    url(r'^internal/dump.json', views.DbDump.as_view(), name='db_dump'),
+    url(r'^internal/restore', views.LoadDump.as_view(), name='load_dump'),
+    url(r'^internal/rebuild_index', views.RebuildIndex.as_view(), name="rebuild_index"),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),
@@ -67,18 +68,18 @@ urlpatterns = patterns('',
     url(r'^web-view/partials/register$', displays.display_register, name='accounts-register'),
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
     url(r'^web-view/partials/confirmation', displays.display_confirmation),
-)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 
-from django.views.i18n import javascript_catalog
+from django.views.i18n import JavaScriptCatalog
 
 js_info_dict = {
     'domain' : 'djangojs',
     'packages' : ('libreosteoweb',)
 }
 
-urlpatterns += patterns('',
-    (r'^jsi18n/$', javascript_catalog, js_info_dict),
-)
+urlpatterns += [
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(domain='djangojs', packages=['libreosteoweb',]), name='javascript-catalog'),
+]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

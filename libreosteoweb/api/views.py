@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from haystack.query import SearchQuerySet
 from django.core import serializers
 from django.http import HttpResponse
-from django.views.generic import View
 from haystack.utils import Highlighter
 from haystack.views import SearchView
 from haystack.query import SearchQuerySet
@@ -23,12 +22,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from datetime import date, datetime
 from rest_framework import status
-from django.views.generic.base import TemplateView
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import (REDIRECT_FIELD_NAME, get_user_model )
-from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.conf import settings
@@ -37,7 +33,9 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
 from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination,block_disconnect_all_signal
 from django.db.models import signals
-from django.contrib.admin.views.decorators import staff_member_required
+from .permissions import StaffRequiredMixin
+from django.views.generic.base import TemplateView
+from django.views import View
 
 import os
 
@@ -48,20 +46,25 @@ def create_superuser(request, user):
     UserModel = get_user_model()
     UserModel.objects.create_superuser(user['username'], '', user['password1'])
 
-@csrf_protect
-@never_cache
-def create_admin_account(request, template_name='account/create_admin_account.html',
-    redirect_field_name=REDIRECT_FIELD_NAME,
-    registration_form=UserCreationForm):
-    """
-    Displays the login form and handles the login action.
-    """
-    if len(User.objects.filter(is_staff__exact=True)) > 0 :
-        raise Http404
-    redirect_to = request.POST.get(redirect_field_name,
-    request.GET.get(redirect_field_name, ''))
-    if request.method == "POST":
-        form = registration_form(request.POST)
+class CreateAdminAccountView(TemplateView):
+    template_name='account/create_admin_account.html'
+
+    def get(self, request, *args, **kwargs):
+        """
+        Displays the login form and handles the login action.
+        """
+        if len(User.objects.filter(is_staff__exact=True)) > 0 :
+            raise Http404
+        self.redirect_to = request.POST.get(REDIRECT_FIELD_NAME,
+            request.GET.get(REDIRECT_FIELD_NAME, ''))
+        self.form = UserCreationForm()
+        return super(TemplateView, self).render_to_response(self.get_context_data())
+
+
+    def post(self, request, *args, **kwargs):
+        form = UserCreationForm(request.POST)
+        redirect_to = request.POST.get(REDIRECT_FIELD_NAME,
+            request.GET.get(REDIRECT_FIELD_NAME, ''))
         if form.is_valid():
             # Ensure the user-originating redirection url is safe.
             if not is_safe_url(url=redirect_to, host=request.get_host()):
@@ -70,37 +73,42 @@ def create_admin_account(request, template_name='account/create_admin_account.ht
             create_superuser(request, form.data)
             return HttpResponseRedirect(redirect_to)
         else :
-            context = {
-                'form':form
-            }
-    else:
-        form = registration_form()
-        context = {
-            'form': form,
-            redirect_field_name: redirect_to
-        }
-    return TemplateResponse(request, template_name, context)
+            self.form = form
+        return super(TemplateView, self).render_to_response(self.get_context_data())
 
-@csrf_protect
-@never_cache
-def install(request, template_name='install.html',
-    redirect_field_name=REDIRECT_FIELD_NAME,
-    registration_form=UserCreationForm):
-    """
-    Displays the install status and handle the action on install.
-    """
-    if len(User.objects.filter(is_staff__exact=True)) > 0 :
-        raise HttpResponseForbidden
-    redirect_to = request.POST.get(redirect_field_name,
-    request.GET.get(redirect_field_name, ''))
-    if request.method == "POST":
-        pass
-    else:
-        context = {
-            redirect_field_name: redirect_to
-        }
-    return TemplateResponse(request, template_name, context)
+    def get_context_data(self, **kwargs):
+        context = super(CreateAdminAccountView, self).get_context_data(**kwargs)
+        if self.form :
+            context['form'] = self.form
+            if self.redirect_to:
+                context[REDIRECT_FIELD_NAME] = self.redirect_to
+        return context
 
+class InstallView(TemplateView):
+    template_name='install.html'
+    http_method_names = ['get', 'post', 'head', 'options','trace']
+
+    def get(self, request, *args, **kwargs):
+        """
+        Displays the install status and handle the action on install.
+        """
+        if len(User.objects.filter(is_staff__exact=True)) > 0 :
+            raise HttpResponseForbidden
+        self.redirect_field_name = request.POST.get(REDIRECT_FIELD_NAME,
+            request.GET.get(REDIRECT_FIELD_NAME, ''))
+        return super(TemplateView, self).render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        if len(User.objects.filter(is_staff__exact=True)) > 0 :
+            raise HttpResponseForbidden
+        return super(TemplateView, self).render_to_response(self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        context = super(TemplateView, self).get_context_data(**kwargs)
+        if self.redirect_field_name :
+            context[REDIRECT_FIELD_NAME] = self.redirect_field_name
+        return context
+        
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
     results_per_page = 10
@@ -482,113 +490,109 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
 
 
 from django.http import HttpResponse
-from django.core.servers.basehttp import FileWrapper
 from django.core.management import call_command
 import zipfile
 
 
 DUMP_FILE="libreosteo.db"
 
-@csrf_protect
-@never_cache
-@staff_member_required   
-def db_dump(request):
-    import os,sys
-    from cStringIO import StringIO
+class DbDump(StaffRequiredMixin, View):
+    @never_cache
+    def get(self, request, *args, **kwargs):   
+        import os,sys
+        from cStringIO import StringIO
 
-    zip_content = StringIO()
-    zf = zipfile.ZipFile(zip_content, "w")
-    
-    buf = StringIO()
-    call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
-    buf.seek(0)
+        zip_content = StringIO()
+        zf = zipfile.ZipFile(zip_content, "w")
+        
+        buf = StringIO()
+        call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
+        buf.seek(0)
 
-    zf.writestr('dump.json',buf.getvalue())
+        zf.writestr('dump.json',buf.getvalue())
 
-    documents = models.Document.objects.all()
+        documents = models.Document.objects.all()
 
-    for document in documents :
-        zf.write(document.document_file.path, document.document_file.name)
+        for document in documents :
+            zf.write(document.document_file.path, document.document_file.name)
 
-    zf.close()
+        zf.close()
 
-    response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
-    response['Content-Disposition'] = 'attachment; filename=%s' % DUMP_FILE
+        response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
+        response['Content-Disposition'] = 'attachment; filename=%s' % DUMP_FILE
 
-    return response
+        return response
 
-@csrf_protect
-@never_cache
-@staff_member_required
-def rebuild_index(request):
-    call_command('rebuild_index', interactive=False)
-    return HttpResponse(u'index rebuilt')
+class RebuildIndex(StaffRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        call_command('rebuild_index', interactive=False)
+        return HttpResponse(u'index rebuilt')
 
 
 from django.core.files.base import ContentFile
 from django.core.files import File
 import tempfile
 
-@csrf_protect
-@maintenance_available()
-def load_dump(request):
-    #Retrieve the content of the file uploaded.
-    try:
-        if('file' in request.FILES.keys() ):
-            logger.info("Load a dump from a sent file.")
-            # Write the received file into a file into settings.FIXTURE_DIRS
-            file_content = ContentFile(request.FILES['file'].read())
-            filename = 'dump.json'
-            tmpdir = tempfile.gettempdir()
-            fixture = os.path.join(tmpdir, filename)
-            
-            #Check if zip file
-            if zipfile.is_zipfile(file_content):
-                # uncompress the files
-                #uncompress the dump file
-                zf = zipfile.ZipFile(file_content)
-                if filename in zf.namelist():
-                    zf.extract(filename, tmpdir)
-                    # uncompress all document
-                    for d in [ f for f in zf.namelist() if f != 'dump.json']:
-                        zf.extract(d, settings.MEDIA_ROOT)
-                else:
-                    raise Exception("This zipfile does not contain the db dump")
+class LoadDump(View):
+    @maintenance_available()
+    def post(self, request, *args, **kwargs):  
+        #Retrieve the content of the file uploaded.
+        try:
+            if('file' in request.FILES.keys() ):
+                logger.info("Load a dump from a sent file.")
+                # Write the received file into a file into settings.FIXTURE_DIRS
+                file_content = ContentFile(request.FILES['file'].read())
+                filename = 'dump.json'
+                tmpdir = tempfile.gettempdir()
+                fixture = os.path.join(tmpdir, filename)
+                
+                #Check if zip file
+                if zipfile.is_zipfile(file_content):
+                    # uncompress the files
+                    #uncompress the dump file
+                    zf = zipfile.ZipFile(file_content)
+                    if filename in zf.namelist():
+                        zf.extract(filename, tmpdir)
+                        # uncompress all document
+                        for d in [ f for f in zf.namelist() if f != 'dump.json']:
+                            zf.extract(d, settings.MEDIA_ROOT)
+                    else:
+                        raise Exception("This zipfile does not contain the db dump")
+                else :
+                    # old fashioned style of import archive
+                    tmp_dump = open(fixture, 'w')
+                    f = File(tmp_dump)
+                    for chunk in file_content.chunks() :
+                        f.write(chunk)
+                    f.close()
+
+                logger.info("Dump file was persisted for future loading.")
+                receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
+
+
+
+                with block_disconnect_all_signal(
+                    signal=signals.post_save,
+                    receivers_senders=receivers_senders
+                    ):
+                    logger.info("Signals were disactivated, perform clearing of the database")
+                    call_command('flush', interactive=False, load_initial_data=False)
+                    # It means that the settings.FIXTURE_DIRS should be set in settings
+                    previous = settings.FIXTURE_DIRS
+                    settings.FIXTURE_DIRS = [tempfile.gettempdir()]
+                    # And when loading dumps, write the file into this directory with the name : load_dump.json
+                    logger.info("Load the fixture from path : %s "% (fixture))
+                    call_command('loaddata', fixture)
+                    # Delete the fixture
+                    logger.info("Clearing the fixture")
+                    os.remove(fixture)
+                    settings.FIXTURE_DIRS = previous
+                    logger.info("Could restore signals")
+                logger.info("end of reloading.")
+                return HttpResponse(content=u'reloaded')
             else :
-                # old fashioned style of import archive
-                tmp_dump = open(fixture, 'w')
-                f = File(tmp_dump)
-                for chunk in file_content.chunks() :
-                    f.write(chunk)
-                f.close()
-
-            logger.info("Dump file was persisted for future loading.")
-            receivers_senders = [(receiver_examination, models.Examination), (receiver_newpatient, models.Patient)]
-
-
-
-            with block_disconnect_all_signal(
-                signal=signals.post_save,
-                receivers_senders=receivers_senders
-                ):
-                logger.info("Signals were disactivated, perform clearing of the database")
-                call_command('flush', interactive=False, load_initial_data=False)
-                # It means that the settings.FIXTURE_DIRS should be set in settings
-                previous = settings.FIXTURE_DIRS
-                settings.FIXTURE_DIRS = [tempfile.gettempdir()]
-                # And when loading dumps, write the file into this directory with the name : load_dump.json
-                logger.info("Load the fixture from path : %s "% (fixture))
-                call_command('loaddata', fixture)
-                # Delete the fixture
-                logger.info("Clearing the fixture")
-                os.remove(fixture)
-                settings.FIXTURE_DIRS = previous
-                logger.info("Could restore signals")
-            logger.info("end of reloading.")
-            return HttpResponse(content=u'reloaded')
-        else :
-            return HttpResponse()
-    except :
-        logger.exception('Import failed')
-        return HttpResponse(content=_(u'This archive file seems to be incorrect. Impossible to load it.'), status=412)
-    
+                return HttpResponse()
+        except :
+            logger.exception('Import failed')
+            return HttpResponse(content=_(u'This archive file seems to be incorrect. Impossible to load it.'), status=412)
+        

@@ -33,7 +33,7 @@
         <p>{% trans "Your username and password didn't match. Please try again." %}</p>
     {% endif %}
 
-      <form class="form-signin" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+      <form class="form-signin" role="form" method="post" action="{% url 'login' %}">
           {% csrf_token %}
         <h2 class="form-signin-heading">{% trans "Please sign in" %}</h2>
         {% if demonstration %}

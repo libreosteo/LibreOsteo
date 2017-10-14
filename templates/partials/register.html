@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static from staticfiles %}
 
-    <form role="form" method="post" action="{% url 'libreosteoweb.api.views.create_admin_account' %}">
+    <form role="form" method="post" action="{% url 'accounts-create-admin' %}">
           <input name="csrfmiddlewaretoken" value="{{csrf_token}}" type="hidden">
         <h2 class="form-registration-heading">{% trans "Registration" %}</h2>
         {% if form.errors %}

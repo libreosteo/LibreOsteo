@@ -30,7 +30,7 @@
 
     <div class="container">
 
-      <form class="form-registration" role="form" method="post" action="{% url 'libreosteoweb.api.views.create_admin_account' %}">
+      <form class="form-registration" role="form" method="post" action="{% url 'accounts-create-admin' %}">
           {% csrf_token %}
         <h2 class="form-registration-heading">{% trans "Registration" %}</h2>
         {% if form.errors %}

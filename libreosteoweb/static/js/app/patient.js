@@ -257,9 +257,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
        $scope.examinationsTab = {
         //Is the tab for new examination is displayed ?
         newExaminationDisplayTab : false,
-        // Should be it active ?
-        newExaminationDisplayActive : false,
-        examinationsListActive : false,
        };
 
        $scope.$watch('patient.id', function(newValue, oldValue)
@@ -347,8 +344,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // Function which manage the current examination
         $scope.currentExaminationManager = function() {
             $scope.examinationsTab.newExaminationDisplay = true;
-            $scope.examinationsTab.newExaminationActive = true;
-            $scope.examinationsTab.examinationsListActive = false;
+            $scope.indexTab = 6;
         };
 
         // Handle the invoice function
@@ -375,8 +371,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     // Hide the in progress examination
                     $scope.newExamination = {};
                     $scope.examinationsTab.newExaminationDisplay = false;
-                    $scope.examinationsTab.newExaminationActive = false;
-                    $scope.examinationsTab.examinationsListActive = true;
+                    $scope.indexTab = 5;
                 }
                 // Reload the examinations list
                 $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
@@ -401,8 +396,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 // Hide the in progress examination
                 Object.keys($scope.newExamination).forEach(function(key) { delete $scope.newExamination[key]; });
                 $scope.examinationsTab.newExaminationDisplay = false;
-                $scope.examinationsTab.newExaminationActive = false;
-                $scope.examinationsTab.examinationsListActive = true;
+                $scope.indexTab = 5;
             }
             if($scope.examinationsTab.examinationsListActive){
                 $scope.previousExamination.data = null;
@@ -413,9 +407,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         // Restore the state
         if ($state.includes('patient.examinations')){
-            $scope.examinationsTab.examinationsListActive = true;
+            $scope.indexTab = 5;
         } else if ($state.includes('patient.examination')){
-            $scope.examinationsTab.examinationsListActive = true;
+            $scope.indexTab = 5;
 
             $scope.previousExamination.data = ExaminationServ.get({examinationId : $state.params.examinationId},
                 function(data){

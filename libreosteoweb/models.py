@@ -204,6 +204,14 @@ class Invoice(models.Model):
         if self.date is None:
             self.date = datetime.today()
 
+class PaimentMean(models.Model):
+    """
+    This class implements object to represent
+    the mean of paiement of an examination
+    """
+    code = models.CharField(_('Code'), max_length=10)
+    text = models.CharField(_('Text'), max_length=50)
+
 class OfficeEvent(models.Model):
     """
     This class implements bean object to represent

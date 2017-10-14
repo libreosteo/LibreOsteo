@@ -34,8 +34,6 @@ SECRET_KEY = '8xmh#fjyiamw^-_ro9m29^6^81^kc!aiczp)gvb#7with$dzb6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'))
@@ -107,7 +105,7 @@ TEMPLATES = [
                 'django.template.loaders.app_directories.Loader',
                 'Libreosteo.zip_loader.Loader',
             ]
-        },
+        },       
     },
 ]
 
@@ -194,8 +192,8 @@ REST_FRAMEWORK = {
 
 
 LOGIN_URL = 'accounts/login'
-LOGIN_URL_NAME = 'accounts-login'
-LOGOUT_URL_NAME = 'accounts-logout'
+LOGIN_URL_NAME = 'login'
+LOGOUT_URL_NAME = 'logout'
 LOGIN_REDIRECT_URL= '/'
 INITIALIZE_ADMIN_URL_NAME = 'install'
 NO_REROUTE_PATTERN_URL = [ r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n', r'^web-view/partials/restore', r'^web-view/partials/register' ]

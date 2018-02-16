@@ -269,7 +269,10 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         comments = models.ExaminationComment.objects.filter(examination=current_examination).order_by('-date')
         return Response(apiserializers.ExaminationCommentSerializer(comments, many=True).data)
 
-
+    @list_route(methods=['GET'])
+    def unpaid(self, request, pk=None):
+        unpaid_examinations = models.Examination.objects.filter(status=models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT).order_by('-date')
+        return Response(apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data)
 
 
 class UserViewSet(viewsets.ModelViewSet):

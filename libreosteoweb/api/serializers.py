@@ -23,16 +23,16 @@ def check_birth_date(value):
 class PatientSerializer (serializers.ModelSerializer):
     current_user_operation = None
     birth_date = serializers.DateField(label=_('Birth date'), validators=[check_birth_date] )
-    
+
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
-    
+
     def validate_first_name(self, value):
         return get_firstname_filters().filter(value)
-    
+
     def validate_original_name(self, value):
         return get_name_filters().filter(value)
-    	
+
     class Meta:
         model = Patient
         fields='__all__'
@@ -46,7 +46,7 @@ class PatientSerializer (serializers.ModelSerializer):
 
 class PatientExportSerializer (serializers.ModelSerializer):
     birth_date = serializers.DateField(label=_('Birth date'),)
-    
+
     class Meta:
         model = Patient
         fields = ('family_name', 'first_name', 'original_name', 'birth_date')
@@ -54,7 +54,7 @@ class PatientExportSerializer (serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     def validate_last_name(self, value):
         return get_name_filters().filter(value)
-    
+
     def validate_first_name(self, value):
         return get_name_filters().filter(value)
     class Meta :
@@ -64,7 +64,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class RegularDoctorSerializer(serializers.ModelSerializer):
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
-    
+
     def validate_first_name(self, value):
         return get_name_filters().filter(value)
     class Meta:
@@ -79,7 +79,7 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
         depth = 1
 
     def get_nb_comments(self, obj):
-        return ExaminationComment.objects.filter(examination__exact=obj.id).count()         
+        return ExaminationComment.objects.filter(examination__exact=obj.id).count()
 
 class ExaminationSerializer(serializers.ModelSerializer):
     invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True, read_only=True)
@@ -152,7 +152,7 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
                 patient = examination.patient
                 return "%s %s" % (patient.family_name, patient.first_name)
             except ObjectDoesNotExist:
-                pass 
+                pass
         return ""
 
     def get_translated_comment(self, obj):
@@ -177,7 +177,7 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
-    
+
     def validate_first_name(self, value):
         return get_name_filters().filter(value)
     class Meta:
@@ -206,13 +206,13 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta :
-        model = Document 
+        model = Document
         fields = '__all__'
 
 class DocumentUpdateSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta :
         fields = ['title','notes','document_date']
-        model = Document 
+        model = Document
 
 class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     document = DocumentSerializer()

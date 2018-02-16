@@ -29,7 +29,7 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
             else:
                 filter_kwargs[field_name]=attrs[field_name]
         return queryset.filter(**filter_kwargs)
-    
+
     def __call__(self, attrs):
         self.enforce_required_fields(attrs)
         queryset = self.queryset

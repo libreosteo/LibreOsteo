@@ -1,8 +1,23 @@
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 # Python stdlib imports
 import sys
 import logging
 import os, os.path
- 
+
 # Third-party imports
 import cherrypy
 from cherrypy.process import wspbus, plugins
@@ -24,7 +39,7 @@ def _exit(self):
     exitstate = self.state
     try:
         self.stop()
-        
+
         self.state = states.EXITING
         self.log('Bus EXITING')
         self.publish('exit')
@@ -47,29 +62,29 @@ def _exit(self):
 
 original_exit = cherrypy.process.wspbus.Bus.exit
 cherrypy.process.wspbus.Bus.exit = _exit
- 
+
 class Server(object):
     def __init__(self):
         self.base_dir = os.path.abspath(os.getcwd())
- 
+
         #conf_path = os.path.join(self.base_dir, ".", "server.cfg")
         #cherrypy.config.update(conf_path)
- 
+
         # This registers a plugin to handle the Django app
         # with the CherryPy engine, meaning the app will
         # play nicely with the process bus that is the engine.
         DjangoAppPlugin(cherrypy.engine, self.base_dir).subscribe()
- 
+
     def run(self, callback=None):
         engine = cherrypy.engine
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
 
         engine.signal_handler.subscribe()
- 
+
         if hasattr(engine, "console_control_handler"):
             engine.console_control_handler.subscribe()
-    
+
         try :
             engine.start()
         except Exception as e :
@@ -81,7 +96,7 @@ class Server(object):
 
         if engine.state == cherrypy.engine.states.STARTED:
             engine.block()
- 
+
 class DjangoAppPlugin(plugins.SimplePlugin):
     def __init__(self, bus, base_dir):
         """
@@ -90,32 +105,32 @@ class DjangoAppPlugin(plugins.SimplePlugin):
         """
         plugins.SimplePlugin.__init__(self, bus)
         self.base_dir = base_dir
- 
+
     def start(self):
         self.bus.log("Configuring the Django application")
- 
+
         # Well this isn't quite as clean as I'd like so
         # feel free to suggest something more appropriate
         #from Libreosteo.settings import *
         #app_settings = locals().copy()
         #del app_settings['self']
         #settings.configure(**app_settings)
- 
+
         self.bus.log("Mounting the Django application")
         cherrypy.tree.graft(HTTPLogger(application), "/")
- 
+
         self.bus.log("Setting up the static directory to be served")
         # We server static files through CherryPy directly
         # bypassing entirely Django
         static_handler = cherrypy.tools.staticdir.handler(section="/", dir="static",
                                                           root=self.base_dir)
         cherrypy.tree.mount(static_handler, '/static')
- 
+
 class HTTPLogger(_cplogging.LogManager):
     def __init__(self, app):
         _cplogging.LogManager.__init__(self, id(self), cherrypy.log.logger_root)
         self.app = app
- 
+
     def __call__(self, environ, start_response):
         """
         Called as part of the WSGI stack to log the incoming request
@@ -129,7 +144,7 @@ class HTTPLogger(_cplogging.LogManager):
         except:
             self.error(traceback=True)
             return HttpResponseServerError(_cperror.format_exc())
- 
+
     def access(self, environ, response):
         """
         Special method that logs a request following the common
@@ -156,7 +171,7 @@ class HTTPLogger(_cplogging.LogManager):
             v = repr(v)[1:-1]
             # Escape double-quote.
             atoms[k] = v.replace('"', '\\"')
- 
+
         try:
             self.access_log.log(logging.INFO, self.access_log_format % atoms)
         except:
@@ -174,7 +189,7 @@ if __name__ == '__main__':
     	        os.makedirs(DATA_FOLDER)
     LOG_CONF = {
 	    'version': 1,
-	
+
 	    'formatters': {
 	        'void': {
 	            'format': ''
@@ -237,10 +252,10 @@ if __name__ == '__main__':
 	        },
 	    }
 	}
-	        
-    
+
+
     logging.config.dictConfig(LOG_CONF)
-    
+
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     result = sock.connect_ex(('127.0.0.1', SERVER_PORT))

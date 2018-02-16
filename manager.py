@@ -1,4 +1,19 @@
 #!/usr/bin/env python
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import sys
 import logging.config
@@ -27,7 +42,7 @@ if __name__ == "__main__":
         DATA_FOLDER = os.path.dirname(os.path.realpath(__file__))
     LOG_CONF = {
 	    'version': 1,
-	
+
 	    'formatters': {
 	        'void': {
 	            'format': ''
@@ -94,7 +109,7 @@ if __name__ == "__main__":
 	        },
 	    }
 	}
-    
+
     logging.config.dictConfig(LOG_CONF)
 
     def _load_disk(self):
@@ -205,7 +220,7 @@ if __name__ == "__main__":
             return old_restart_with_reloader(*args)
         finally:
             sys.argv.insert(0, a0)
-    
+
     if getattr(sys, 'frozen', False):
         # The application is frozen
         django.core.management.find_commands = _find_commands
@@ -214,12 +229,12 @@ if __name__ == "__main__":
         from django.db.migrations.questioner import MigrationQuestioner
         original_load_disk = MigrationLoader.load_disk
         original_ask_initial = MigrationQuestioner.ask_initial
-        
+
         MigrationLoader.load_disk = _load_disk
         MigrationQuestioner.ask_initial = _ask_initial
-        
+
         import patch
-        
+
 
     execute_from_command_line(sys.argv)
 

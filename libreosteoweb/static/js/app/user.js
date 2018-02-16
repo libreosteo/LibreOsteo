@@ -1,3 +1,20 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 var user = angular.module('loUser', ['ngResource']);
 
 user.factory('UserServ', ['$resource',
@@ -6,13 +23,13 @@ user.factory('UserServ', ['$resource',
         return $resource('api/users/:userId', null, {
             get : {method: 'GET', params: {userId: 'user'}},
             'update' : {method : 'PUT' , params : {userId : 'userId'}},
-            setpassword : {method : 'POST', params: {userId : 'userId'}, 
+            setpassword : {method : 'POST', params: {userId : 'userId'},
                     url : 'api/office-users/:userId/set_password'},
         });
     }
 ]);
 
-user.factory('TherapeutSettingsServ', ['$resource', 
+user.factory('TherapeutSettingsServ', ['$resource',
   function($resource) {
     "use strict";
     return $resource('api/profiles/:settingsId', null, {
@@ -38,7 +55,7 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
 
 
         $scope.updateUser = function(user, therapeutsettings){
-          
+
           var manageTherapeutSettings = function (callback) {
             if ($scope.therapeutsettings.id)
             {

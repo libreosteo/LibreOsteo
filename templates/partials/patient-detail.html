@@ -305,7 +305,7 @@
     current-examination-manager="currentExaminationManager()"/>
 </uib-tab>
 
-<uib-tab heading="{% trans 'New Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
+<uib-tab heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
     <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
 </uib-tab>
 </uib-tabset>

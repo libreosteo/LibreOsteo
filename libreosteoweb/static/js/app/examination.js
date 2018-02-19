@@ -123,6 +123,10 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             });
 
             $scope.updateDeleteTrigger = function() {
+                if ($scope.newExamination) {
+                    $scope.editableForm.$show();
+                }
+
                 if($scope.model == null)
                 {
                     $scope.triggerEditForm.delete = false;

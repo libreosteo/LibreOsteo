@@ -1,4 +1,28 @@
+# Database
+db.sqlite3
+
+# Python compiled files
 *.pyc
 
+# Assets
+libreosteoweb/static/bower_components/
+static/
+
+# Indexes
+whoosh_index/
+
+# IDE Files
+.idea
 .idea/
-db.sqlite3
+.sublime-project
+.sublime-workspace
+.komodoproject
+.idea
+.project
+.metadata
+
+# VirtualEnv files
+.env
+.venv
+env/
+venv/

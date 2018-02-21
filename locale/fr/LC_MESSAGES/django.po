@@ -17,478 +17,486 @@ msgstr ""
 "X-Loco-Target-Locale: zxx\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: Libreosteo/settings/base.py:154
+#: Libreosteo/settings/base.py:167
 msgid "French"
 msgstr "Français"
 
-#: Libreosteo/settings/base.py:155
+#: Libreosteo/settings/base.py:168
 msgid "English"
 msgstr "Anglais"
 
-#: libreosteoweb/api/file_integrator.py:55
+#: libreosteoweb/api/file_integrator.py:69
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
 
-#: libreosteoweb/api/file_integrator.py:62
+#: libreosteoweb/api/file_integrator.py:76
 msgid "Cannot recognize the patient file"
 msgstr "Impossible de reconnaître le fichier patient"
 
-#: libreosteoweb/api/file_integrator.py:99
-#: libreosteoweb/api/file_integrator.py:274
+#: libreosteoweb/api/file_integrator.py:113
+#: libreosteoweb/api/file_integrator.py:288
 msgid "Cannot read the content file. Check the encoding."
 msgstr "Impossible de lire le contenu du fichier. Vérifiez l'encodage."
 
-#: libreosteoweb/api/file_integrator.py:416
+#: libreosteoweb/api/file_integrator.py:430
 msgid "Missing patient file to integrate it."
 msgstr "Il manque le fichier patient pour intégrer."
 
-#: libreosteoweb/api/file_integrator.py:442
+#: libreosteoweb/api/file_integrator.py:456
 msgid "Imported examination"
 msgstr "Consultations importées"
 
-#: libreosteoweb/api/file_integrator.py:455
+#: libreosteoweb/api/file_integrator.py:469
 msgid "There is a problem when reading this line :"
 msgstr "Il y a un problème lors de la lecture de la ligne :"
 
-#: libreosteoweb/api/file_integrator.py:458
+#: libreosteoweb/api/file_integrator.py:472
 msgid "There is a problem when reading this line."
 msgstr "Il y a un problème lors de la lecture de la ligne."
 
-#: libreosteoweb/api/receivers.py:60
+#: libreosteoweb/api/receivers.py:74
 msgid "New patient created"
 msgstr "Nouveau patient créé"
 
-#: libreosteoweb/api/receivers.py:67
+#: libreosteoweb/api/receivers.py:81
 msgid "Patient updated"
 msgstr "Fiche patient mise à jour"
 
-#: libreosteoweb/api/receivers.py:80
+#: libreosteoweb/api/receivers.py:94
 msgid "New examination"
 msgstr "Nouvelle consultation"
 
-#: libreosteoweb/api/serializers.py:20
+#: libreosteoweb/api/serializers.py:35
 msgid "Birth date is invalid"
 msgstr "La date de naissance est invalide"
 
-#: libreosteoweb/api/serializers.py:25 libreosteoweb/api/serializers.py:47
-#: libreosteoweb/models.py:40 libreosteoweb/models.py:92
+#: libreosteoweb/api/serializers.py:40 libreosteoweb/api/serializers.py:63
+#: libreosteoweb/models.py:55 libreosteoweb/models.py:107
 msgid "Birth date"
 msgstr "Date de naissance"
 
-#: libreosteoweb/api/serializers.py:42
+#: libreosteoweb/api/serializers.py:58
 msgid "This patient already exists"
 msgstr "Ce patient existe déjà"
 
-#: libreosteoweb/api/serializers.py:109
+#: libreosteoweb/api/serializers.py:126
 msgid "Reason is mandatory when the examination is not invoiced"
 msgstr "La raison est obligatoire lorsque la consultation n'est pas facturée"
 
-#: libreosteoweb/api/serializers.py:112
+#: libreosteoweb/api/serializers.py:129
 msgid "Amount is invalid"
 msgstr "Le montant est invalide"
 
-#: libreosteoweb/api/serializers.py:114
+#: libreosteoweb/api/serializers.py:131
 msgid "Paiment mode is mandatory when the examination is invoiced"
 msgstr ""
 "Le mode de paiement est obligatoire lorsque la consultation est facturée"
 
-#: libreosteoweb/api/serializers.py:117
+#: libreosteoweb/api/serializers.py:134
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
 
-#: libreosteoweb/api/views.py:593
+#: libreosteoweb/api/views.py:615
 msgid "This archive file seems to be incorrect. Impossible to load it."
 msgstr "Ce fichier d'archive semble être incorrect. Impossible de le charger."
 
-#: libreosteoweb/models.py:23 libreosteoweb/models.py:37
-#: libreosteoweb/models.py:90 libreosteoweb/models.py:187
+#: libreosteoweb/models.py:38 libreosteoweb/models.py:52
+#: libreosteoweb/models.py:105 libreosteoweb/models.py:202
 msgid "Family name"
 msgstr "Nom de famille"
 
-#: libreosteoweb/models.py:24 libreosteoweb/models.py:39
-#: libreosteoweb/models.py:91 libreosteoweb/models.py:189
+#: libreosteoweb/models.py:39 libreosteoweb/models.py:54
+#: libreosteoweb/models.py:106 libreosteoweb/models.py:204
 msgid "Firstname"
 msgstr "Prénom"
 
-#: libreosteoweb/models.py:25 libreosteoweb/models.py:46
-#: libreosteoweb/models.py:201 libreosteoweb/models.py:232
+#: libreosteoweb/models.py:40 libreosteoweb/models.py:61
+#: libreosteoweb/models.py:216 libreosteoweb/models.py:255
 msgid "Phone"
 msgstr "Téléphone"
 
-#: libreosteoweb/models.py:26 libreosteoweb/models.py:44
-#: libreosteoweb/models.py:193 libreosteoweb/models.py:200
-#: libreosteoweb/models.py:231
+#: libreosteoweb/models.py:41 libreosteoweb/models.py:59
+#: libreosteoweb/models.py:208 libreosteoweb/models.py:215
+#: libreosteoweb/models.py:254
 msgid "City"
 msgstr "Ville"
 
-#: libreosteoweb/models.py:38 libreosteoweb/models.py:188
+#: libreosteoweb/models.py:53 libreosteoweb/models.py:203
 msgid "Original name"
 msgstr "Nom de jeune fille"
 
-#: libreosteoweb/models.py:41 libreosteoweb/models.py:190
-#: libreosteoweb/models.py:197 libreosteoweb/models.py:228
+#: libreosteoweb/models.py:56 libreosteoweb/models.py:205
+#: libreosteoweb/models.py:212 libreosteoweb/models.py:251
 msgid "Street"
 msgstr "Rue"
 
-#: libreosteoweb/models.py:42 libreosteoweb/models.py:191
-#: libreosteoweb/models.py:198 libreosteoweb/models.py:229
+#: libreosteoweb/models.py:57 libreosteoweb/models.py:206
+#: libreosteoweb/models.py:213 libreosteoweb/models.py:252
 msgid "Address complement"
 msgstr "Complément d'adresse"
 
-#: libreosteoweb/models.py:43 libreosteoweb/models.py:192
-#: libreosteoweb/models.py:199 libreosteoweb/models.py:230
+#: libreosteoweb/models.py:58 libreosteoweb/models.py:207
+#: libreosteoweb/models.py:214 libreosteoweb/models.py:253
 msgid "Zipcode"
 msgstr "Code postal"
 
-#: libreosteoweb/models.py:45
+#: libreosteoweb/models.py:60
 msgid "Email"
 msgstr "email"
 
-#: libreosteoweb/models.py:47
+#: libreosteoweb/models.py:62
 msgid "Mobile phone"
 msgstr "Mobile"
 
-#: libreosteoweb/models.py:48
+#: libreosteoweb/models.py:63
 msgid "Job"
 msgstr "Profession"
 
-#: libreosteoweb/models.py:49
+#: libreosteoweb/models.py:64
 msgid "Hobbies"
 msgstr "Loisirs"
 
-#: libreosteoweb/models.py:51
+#: libreosteoweb/models.py:66
 msgid "Regular doctor"
 msgstr "Médecin traitant"
 
-#: libreosteoweb/models.py:52
+#: libreosteoweb/models.py:67
 msgid "Smoker"
 msgstr "Fumeur"
 
-#: libreosteoweb/models.py:53
+#: libreosteoweb/models.py:68
 msgid "Laterality"
 msgstr "Latéralité"
 
-#: libreosteoweb/models.py:53
+#: libreosteoweb/models.py:68
 msgid "Left-handed"
 msgstr "Gaucher"
 
-#: libreosteoweb/models.py:53
+#: libreosteoweb/models.py:68
 msgid "Right-handed"
 msgstr "Droitier"
 
-#: libreosteoweb/models.py:54
+#: libreosteoweb/models.py:69
 msgid "Important note"
 msgstr "Note importante"
 
-#: libreosteoweb/models.py:55
+#: libreosteoweb/models.py:70
 msgid "Current treatment"
 msgstr "Traitement en cours"
 
-#: libreosteoweb/models.py:56
+#: libreosteoweb/models.py:71
 msgid "Surgical history"
 msgstr "Antécédents chirurgicaux"
 
-#: libreosteoweb/models.py:57
+#: libreosteoweb/models.py:72
 msgid "Medical history"
 msgstr "Antécédents médicaux"
 
-#: libreosteoweb/models.py:58
+#: libreosteoweb/models.py:73
 msgid "Family history"
 msgstr "Antécédents familiaux"
 
-#: libreosteoweb/models.py:59
+#: libreosteoweb/models.py:74
 msgid "Trauma history"
 msgstr "Antécédents traumatiques"
 
-#: libreosteoweb/models.py:60 templates/partials/patient-detail.html:242
+#: libreosteoweb/models.py:75 templates/partials/patient-detail.html:242
 msgid "Medical reports"
 msgstr "Compte-rendus médicaux"
 
-#: libreosteoweb/models.py:61
+#: libreosteoweb/models.py:76
 msgid "Creation date"
 msgstr "Date de création"
 
-#: libreosteoweb/models.py:62
+#: libreosteoweb/models.py:77
 msgid "Sex"
 msgstr "Sexe"
 
-#: libreosteoweb/models.py:62
+#: libreosteoweb/models.py:77
 msgid "Male"
 msgstr "Masculin"
 
-#: libreosteoweb/models.py:62
+#: libreosteoweb/models.py:77
 msgid "Female"
 msgstr "Féminin"
 
-#: libreosteoweb/models.py:93
+#: libreosteoweb/models.py:108
 msgid "Parent"
 msgstr "Parent"
 
-#: libreosteoweb/models.py:103 templates/partials/invoice-modal.html:21
+#: libreosteoweb/models.py:118 templates/partials/invoice-modal.html:21
 #: templates/partials/invoice-modal.html:23
 msgid "Reason"
 msgstr "Motif"
 
-#: libreosteoweb/models.py:104
+#: libreosteoweb/models.py:119
 msgid "Reason description/Context"
 msgstr "Détail du motif de consultation / Contexte"
 
-#: libreosteoweb/models.py:105
+#: libreosteoweb/models.py:120
 msgid "ORL Sphere"
 msgstr "Sphère ORL"
 
-#: libreosteoweb/models.py:106
+#: libreosteoweb/models.py:121
 msgid "Visceral Sphere"
 msgstr "Sphère viscérale"
 
-#: libreosteoweb/models.py:107
+#: libreosteoweb/models.py:122
 msgid "Cardio-Pulmo Sphere"
 msgstr "Sphère cardio-pulmonaire"
 
-#: libreosteoweb/models.py:108
+#: libreosteoweb/models.py:123
 msgid "Uro-gyneco Sphere"
 msgstr "Sphère uro-gynéco"
 
-#: libreosteoweb/models.py:109
+#: libreosteoweb/models.py:124
 msgid "Periphery Sphere"
 msgstr "Sphère périphérique"
 
-#: libreosteoweb/models.py:110
+#: libreosteoweb/models.py:125
 msgid "General state"
 msgstr "État général"
 
-#: libreosteoweb/models.py:111
+#: libreosteoweb/models.py:126
 msgid "Medical examination"
 msgstr "Examen médical"
 
-#: libreosteoweb/models.py:112
+#: libreosteoweb/models.py:127
 msgid "Diagnosis"
 msgstr "Diagnostic ostéopathique"
 
-#: libreosteoweb/models.py:113
+#: libreosteoweb/models.py:128
 msgid "Treatments"
 msgstr "Traitements"
 
-#: libreosteoweb/models.py:114
+#: libreosteoweb/models.py:129
 msgid "Conclusion"
 msgstr "Conclusion"
 
-#: libreosteoweb/models.py:115 libreosteoweb/models.py:166
-#: libreosteoweb/models.py:176 libreosteoweb/models.py:212
+#: libreosteoweb/models.py:130 libreosteoweb/models.py:181
+#: libreosteoweb/models.py:191 libreosteoweb/models.py:235
 #: templates/partials/filemanager.html:16
 #: templates/partials/patient-detail.html:277
 msgid "Date"
 msgstr "Date"
 
-#: libreosteoweb/models.py:120
+#: libreosteoweb/models.py:135
 msgid "Status"
 msgstr "État"
 
-#: libreosteoweb/models.py:121
+#: libreosteoweb/models.py:136
 msgid "Status reason"
 msgstr "Raison de l'état"
 
-#: libreosteoweb/models.py:126 libreosteoweb/models.py:214
+#: libreosteoweb/models.py:141 libreosteoweb/models.py:237
 msgid "Type"
 msgstr "Type"
 
-#: libreosteoweb/models.py:127 templates/partials/examination.html:32
+#: libreosteoweb/models.py:142 templates/partials/examination.html:32
 msgid "Invoice"
 msgstr "Facture"
 
-#: libreosteoweb/models.py:128
+#: libreosteoweb/models.py:143
 msgid "Patient"
 msgstr "Patient"
 
-#: libreosteoweb/models.py:129
+#: libreosteoweb/models.py:144
 msgid "Therapeut"
 msgstr "Thérapeute"
 
-#: libreosteoweb/models.py:137
+#: libreosteoweb/models.py:152
 msgid "Normal examination"
 msgstr "Consultation normale"
 
-#: libreosteoweb/models.py:138
+#: libreosteoweb/models.py:153
 msgid "Continuing examination"
 msgstr "Poursuite de traitement"
 
-#: libreosteoweb/models.py:139
+#: libreosteoweb/models.py:154
 msgid "Return"
 msgstr "Retour"
 
-#: libreosteoweb/models.py:140
+#: libreosteoweb/models.py:155
 msgid "Emergency"
 msgstr "Urgence"
 
-#: libreosteoweb/models.py:164 libreosteoweb/models.py:255
-#: libreosteoweb/models.py:305
+#: libreosteoweb/models.py:179 libreosteoweb/models.py:278
+#: libreosteoweb/models.py:328
 msgid "User"
 msgstr "Utilisateur"
 
-#: libreosteoweb/models.py:165 libreosteoweb/models.py:215
+#: libreosteoweb/models.py:180 libreosteoweb/models.py:238
 #: templates/partials/timeline.html:34
 msgid "Comment"
 msgstr "Commentaire"
 
-#: libreosteoweb/models.py:167
+#: libreosteoweb/models.py:182
 msgid "Examination"
 msgstr "Consultation"
 
-#: libreosteoweb/models.py:177 libreosteoweb/models.py:234
+#: libreosteoweb/models.py:192 libreosteoweb/models.py:257
 #: templates/partials/invoice-modal.html:27
 #: templates/partials/invoice-modal.html:29
 msgid "Amount"
 msgstr "Montant"
 
-#: libreosteoweb/models.py:178 libreosteoweb/models.py:235
+#: libreosteoweb/models.py:193 libreosteoweb/models.py:258
 msgid "Currency"
 msgstr "Monnaie"
 
-#: libreosteoweb/models.py:179
+#: libreosteoweb/models.py:194
 msgid "Paiment mode"
 msgstr "Mode de paiement"
 
-#: libreosteoweb/models.py:180
+#: libreosteoweb/models.py:195
 msgid "Header"
 msgstr "Entête"
 
-#: libreosteoweb/models.py:181
+#: libreosteoweb/models.py:196
 msgid "Therapeut name"
 msgstr "Nom du thérapeute"
 
-#: libreosteoweb/models.py:182
+#: libreosteoweb/models.py:197
 msgid "Therapeut firstname"
 msgstr "Prénom du thérapeute"
 
-#: libreosteoweb/models.py:183 libreosteoweb/models.py:254
+#: libreosteoweb/models.py:198 libreosteoweb/models.py:277
 msgid "Quality"
 msgstr "Qualité"
 
-#: libreosteoweb/models.py:184 libreosteoweb/models.py:253
+#: libreosteoweb/models.py:199 libreosteoweb/models.py:276
 msgid "Adeli"
 msgstr "Adeli"
 
-#: libreosteoweb/models.py:185
+#: libreosteoweb/models.py:200
 msgid "Location"
 msgstr "Lieu"
 
-#: libreosteoweb/models.py:186 templates/partials/invoice-modal.html:61
+#: libreosteoweb/models.py:201 templates/partials/invoice-modal.html:61
 #: templates/partials/invoice-modal.html:62
 msgid "Number"
 msgstr "Numéro"
 
-#: libreosteoweb/models.py:194
+#: libreosteoweb/models.py:209
 msgid "Content"
 msgstr "Contenu"
 
-#: libreosteoweb/models.py:195
+#: libreosteoweb/models.py:210
 msgid "Footer"
 msgstr "Pied de page"
 
-#: libreosteoweb/models.py:196 libreosteoweb/models.py:233
-#: libreosteoweb/models.py:256
+#: libreosteoweb/models.py:211 libreosteoweb/models.py:256
+#: libreosteoweb/models.py:279
 msgid "Siret"
 msgstr "Siret"
 
-#: libreosteoweb/models.py:213
+#: libreosteoweb/models.py:227
+msgid "Code"
+msgstr "Code"
+
+#: libreosteoweb/models.py:228
+msgid "Text"
+msgstr "Libellé"
+
+#: libreosteoweb/models.py:236
 msgid "Class"
 msgstr "Classe"
 
-#: libreosteoweb/models.py:216
+#: libreosteoweb/models.py:239
 msgid "Reference"
 msgstr "Référence"
 
-#: libreosteoweb/models.py:217
+#: libreosteoweb/models.py:240
 msgid "user"
 msgstr "utilisateur"
 
-#: libreosteoweb/models.py:227
+#: libreosteoweb/models.py:250
 msgid "Invoice office header"
 msgstr "Entête de facture"
 
-#: libreosteoweb/models.py:236
+#: libreosteoweb/models.py:259
 msgid "Invoice content"
 msgstr "Contenu de la facture"
 
-#: libreosteoweb/models.py:237 libreosteoweb/models.py:257
+#: libreosteoweb/models.py:260 libreosteoweb/models.py:280
 msgid "Invoice footer"
 msgstr "Pied de page de facture"
 
-#: libreosteoweb/models.py:238
+#: libreosteoweb/models.py:261
 msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
-#: libreosteoweb/models.py:274 templates/partials/import-file.html:77
+#: libreosteoweb/models.py:297 templates/partials/import-file.html:77
 #: templates/partials/import-file.html:101
 msgid "Patient file"
 msgstr "Fichier patient"
 
-#: libreosteoweb/models.py:275 templates/partials/import-file.html:79
+#: libreosteoweb/models.py:298 templates/partials/import-file.html:79
 #: templates/partials/import-file.html:121
 msgid "Examination file"
 msgstr "Fichier de consultation"
 
-#: libreosteoweb/models.py:276
+#: libreosteoweb/models.py:299
 msgid "validity status"
 msgstr "validité"
 
-#: libreosteoweb/models.py:300
+#: libreosteoweb/models.py:323
 msgid "Document file"
 msgstr "Fichier document"
 
-#: libreosteoweb/models.py:301 templates/partials/filemanager.html:13
+#: libreosteoweb/models.py:324 templates/partials/filemanager.html:13
 #: templates/partials/patient-detail.html:274
 msgid "Title"
 msgstr "Titre"
 
-#: libreosteoweb/models.py:302 templates/partials/filemanager.html:17
+#: libreosteoweb/models.py:325 templates/partials/filemanager.html:17
 #: templates/partials/patient-detail.html:250
 #: templates/partials/patient-detail.html:278
 #: templates/partials/patient-detail.html:282
 msgid "Notes"
 msgstr "Notes"
 
-#: libreosteoweb/models.py:303
+#: libreosteoweb/models.py:326
 msgid "Adding date"
 msgstr "Date d'ajout"
 
-#: libreosteoweb/models.py:304
+#: libreosteoweb/models.py:327
 msgid "Document date"
 msgstr "Date document"
 
-#: libreosteoweb/models.py:306
+#: libreosteoweb/models.py:329
 msgid "Mime-Type"
 msgstr "Type mime"
 
-#: libreosteoweb/models.py:328
+#: libreosteoweb/models.py:351
 msgid "patient"
 msgstr "patient"
 
-#: libreosteoweb/models.py:329
+#: libreosteoweb/models.py:352
 msgid "document"
 msgstr "document"
 
-#: libreosteoweb/models.py:330
+#: libreosteoweb/models.py:353
 msgid "attachmentType"
 msgstr "Type de pièce jointe"
 
-#: templates/404.html:257 templates/index.html:261
+#: templates/404.html:257 templates/index.html:66
 msgid "User Profile"
 msgstr "Profil utilisateur"
 
-#: templates/404.html:259 templates/index.html:263
+#: templates/404.html:259 templates/index.html:68
 msgid "Settings"
 msgstr "Paramètres"
 
-#: templates/404.html:262 templates/index.html:270
+#: templates/404.html:262 templates/index.html:75
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/404.html:278 templates/index.html:286
+#: templates/404.html:278 templates/index.html:96
 msgid "Search..."
 msgstr "Recherche..."
 
-#: templates/404.html:290 templates/index.html:298
+#: templates/404.html:290 templates/index.html:56
 #: templates/partials/add-patient.html:3
 msgid "New patient"
 msgstr "Nouveau patient"
@@ -983,15 +991,15 @@ msgstr "Utilisateurs"
 msgid "Add user"
 msgstr "Ajouter un utilisateur"
 
-#: templates/partials/officeevent.html:5
+#: templates/partials/officeevent.html:6
 msgid "Events"
 msgstr "Évènements"
 
-#: templates/partials/officeevent.html:13
+#: templates/partials/officeevent.html:14
 msgid "By day"
 msgstr "Par jour"
 
-#: templates/partials/officeevent.html:18
+#: templates/partials/officeevent.html:19
 msgid "All"
 msgstr "Tout"
 

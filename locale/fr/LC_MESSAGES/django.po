@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-19 15:54+0100\n"
-"PO-Revision-Date: 2016-10-20 13:59+0200\n"
+"POT-Creation-Date: 2018-02-21 19:30+0100\n"
+"PO-Revision-Date: 2018-02-21 19:36+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF-8\n" 
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -577,24 +577,40 @@ msgstr "Veuillez vous identifier"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:265
+#: templates/index.html:70
 msgid "Import/export"
 msgstr "Import/export"
 
-#: templates/index.html:267 templates/partials/rebuild-index.html:3
+#: templates/index.html:72 templates/partials/rebuild-index.html:3
 #: templates/partials/rebuild-index.html:13
 msgid "Rebuild index"
 msgstr "Réindexer"
 
-#: templates/index.html:303 templates/index.html.py:306
+#: templates/index.html:82
+msgid "Help"
+msgstr "Aide"
+
+#: templates/index.html:85
+msgid "Project web page"
+msgstr "Site vitrine"
+
+#: templates/index.html:86
+msgid "Community support (forum)"
+msgstr "Support communautaire (forum)"
+
+#: templates/index.html:88
+msgid "Version"
+msgstr "Version"
+
+#: templates/index.html:111
 msgid "Edit"
 msgstr "Éditer"
 
-#: templates/index.html:310
+#: templates/index.html:116
 msgid "End of editing"
 msgstr "Fin d'édition"
 
-#: templates/index.html:313
+#: templates/index.html:119
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -1138,6 +1154,3 @@ msgstr "Profil mis à jour"
 
 #~ msgid "Export"
 #~ msgstr "Exporter"
-
-#~ msgid "Version"
-#~ msgstr "Version"

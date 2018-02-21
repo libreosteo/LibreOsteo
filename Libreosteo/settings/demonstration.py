@@ -4,7 +4,7 @@ import os
 DEMONSTRATION = True
 
 DEBUG = False
-TEMPLATE_DEBUG = False
+TEMPLATES[0]['OPTIONS']['debug'] = True
 
 DATABASES['default']['NAME'] = os.path.join(DATA_FOLDER, '../db.sqlite3')
 REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)

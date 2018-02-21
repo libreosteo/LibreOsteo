@@ -51,8 +51,13 @@
 </div>
 <!-- /.navbar-header -->
 
+<ul class="nav navbar-nav navbar-top-links navbar-left">
+    <li>
+        <a href="#/addPatient"><i class="fa fa-pencil-square-o navbar-link"></i> {% trans 'New patient' %}</a>
+    </li>
+</ul>
 <ul class="nav navbar-top-links navbar-right">
-<!-- /.dropdown -->
+        <!-- /.dropdown -->
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
         <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
@@ -74,47 +79,42 @@
 </li>
 <!-- /.dropdown -->
 </ul>
-<!-- /.navbar-top-links -->
+    <form class="navbar-form navbar-right" ng-controller="SearchCtrl">
+        <div class="search-container">
+            <div class="input-group custom-search-form">
+                <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
+                       ng-model="query" ng-keydown="onEnterKeyDown($event)">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="search()">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <!-- /input-group -->
+    </form>
 
+    <ul class="nav navbar-top-links navbar-right">
+        <li ng-show="editFormManager.available">
+            <button ng-show="editFormManager.action_available('edit')" type="button" class="btn btn-default btn-xs navbar-btn" ng-click="editFormManager.call_action('edit')">
+                <i class="fa fa-edit"></i> {% trans 'Edit' %}
+            </button>
+            <!-- buttons to submit / cancel form -->
+            <span ng-show="editFormManager.action_available('save')">
+                <button type="button" class="btn btn-default btn-xs navbar-btn" ng-click="editFormManager.call_action('save')">
+                    <i class="fa fa-thumbs-o-up"></i> {% trans 'End of editing' %}
+                </button>
+            </span>
+            <button ng-show="editFormManager.action_available('delete')" type="button" class="btn btn-danger btn-xs navbar-btn" ng-click="editFormManager.call_action('delete')"><i class="fa fa-trash"></i> {% trans 'Delete' %}</button>
+
+        </li>
+    </ul>
+
+<!-- /.navbar-top-links -->
 
     <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav sidebar-collapse">
         <ul class="nav" id="side-menu">
-            <li class="sidebar-search" ng-controller="SearchCtrl">
-                <div class="search-container">
-                    <div class="input-group custom-search-form">
-                        <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
-                               ng-model="query" ng-keydown="onEnterKeyDown($event)">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" ng-click="search()">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                    </div>
-                </div>
-                <!-- /input-group -->
-            </li>
-            <li>
-                <a href="#/addPatient"><i class="fa fa-pencil-square-o"></i> {% trans 'New patient' %}</a>
-            </li>
-            <li ng-show="editFormManager.available">
-                <div id="editorcommand" class="panel panel-default editor" data-spy="affix">
-                    <div class="panel-heading">
-                        <span>{% trans 'Edit' %}</span>
-                    </div>
-                    <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                        <button ng-show="editFormManager.action_available('edit')" type="button" class="btn btn-default btn-xs" ng-click="editFormManager.call_action('edit')"><i class="fa fa-edit"></i> {% trans 'Edit' %}</button>
-                        <!-- buttons to submit / cancel form -->
-                          <span ng-show="editFormManager.action_available('save')">
-                            <button type="button" class="btn btn-default btn-xs" ng-click="editFormManager.call_action('save')">
-                              <i class="fa fa-thumbs-o-up"></i> {% trans 'End of editing' %}
-                            </button>
-                          </span>
-                        <button ng-show="editFormManager.action_available('delete')" type="button" class="btn btn-danger btn-xs" ng-click="editFormManager.call_action('delete')"><i class="fa fa-trash"></i> {% trans 'Delete' %}</button>
-
-                    </div>
-                </div>            
-            </li>
         </ul>
         <!-- /#side-menu -->
     </div>

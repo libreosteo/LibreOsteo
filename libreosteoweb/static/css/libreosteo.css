@@ -15,6 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+/* For fixed navbar */
+body { padding-top: 50px; }
+
 .editable-click {
     !important;
     color : black;

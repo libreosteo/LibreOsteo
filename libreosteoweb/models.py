@@ -219,6 +219,10 @@ class Invoice(models.Model):
         if self.date is None:
             self.date = datetime.today()
 
+    class Meta:
+        ordering = ['-date']
+
+
 class PaimentMean(models.Model):
     """
     This class implements object to represent

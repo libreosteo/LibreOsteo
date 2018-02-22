@@ -297,6 +297,9 @@
             <li>
                 <a href="#/addPatient"><i class="fa fa-pencil-square-o"></i> {% trans 'New patient' %}</a>
             </li>
+            <li>
+                <a href="#/invoices"><i class="fa fa-list-alt"></i> {% trans 'Accounting' %}</a>
+            </li>
             <li ng-show="editFormManager.available">
                 <div id="editorcommand" class="panel panel-default editor" data-spy="affix">
                     <div class="panel-heading">
@@ -484,6 +487,7 @@
 <script src="{% static "js/app/fileimport.js" %}"></script>
 <script src="{% static "js/app/rebuild_index.js" %}"></script>
 <script src="{% static "js/app/filemanager.js" %}"></script>
+<script src="{% static "js/app/invoice.js" %}"></script>
 {% endcompress %}
 <script src="{% url 'javascript-catalog' %}" type="text/javascript"></script>
 

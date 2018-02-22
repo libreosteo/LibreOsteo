@@ -333,7 +333,7 @@ class StatisticsView(APIView):
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
-    queryset = models.Invoice.objects.all()
+    queryset = models.Invoice.objects.select_related('examination').all()
     serializer_class = apiserializers.InvoiceSerializer
 
 

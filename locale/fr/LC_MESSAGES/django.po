@@ -578,7 +578,11 @@ msgstr "Import/export"
 msgid "Rebuild index"
 msgstr "Réindexer"
 
-#: templates/index.html:303 templates/index.html.py:306
+#: templates/index.html:301 templates/partials/invoice-list.html:2
+msgid "Accounting"
+msgstr "Comptabilité"
+
+#: templates/index.html:306 templates/index.html:309
 msgid "Edit"
 msgstr "Éditer"
 
@@ -935,14 +939,25 @@ msgstr "Facturé"
 #: templates/partials/invoice-modal.html:36
 msgid "Cash"
 msgstr "Espèces"
+#: templates/partials/invoice-list.html:23
+msgid "n/a"
+msgstr "n/a"
 
 #: templates/partials/invoice-modal.html:42
 msgid "Check"
 msgstr "Chèque"
 
+#: templates/partials/invoice-list.html:28
+msgid "Draft"
+msgstr "Brouillon"
+
 #: templates/partials/invoice-modal.html:48
 msgid "Not paid"
 msgstr "Non réglé"
+
+#: templates/partials/invoice-list.html:30
+msgid "Paid"
+msgstr "Payé"
 
 #: templates/partials/invoice-modal.html:53
 #: templates/partials/invoice-modal.html:54

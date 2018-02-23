@@ -64,16 +64,17 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
     function($scope, InvoiceService) {
         "use strict";
 
+        function buildAPIFilter() {
+            return {
+                date__lte: $scope.filters.dateRange.endDate.toISOString(),
+                date__gte: $scope.filters.dateRange.startDate.toISOString(),
+            };
+        }
+
         function getInvoices() {
-            var params = {};
-            InvoiceService.query(
-                {
-                    date__lte: $scope.filters.dateRange.endDate.toISOString(),
-                    date__gte: $scope.filters.dateRange.startDate.toISOString(),
-                },
-                function(result) {
-                    $scope.invoices = result;
-                });
+            InvoiceService.query(buildAPIFilter(), function(result) {
+                $scope.invoices = result;
+            });
         }
 
         /** Prepare pre-defined ranges for daterangepicker

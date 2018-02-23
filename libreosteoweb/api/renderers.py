@@ -23,3 +23,7 @@ class PatientCSVRenderer(renderers.CSVRenderer):
 class ExaminationCSVRenderer(renderers.CSVRenderer):
     header = ['patient_detail.first_name', 'patient_detail.family_name', 'patient_detail.birth_date', 'date', 'reason', 'reason_description', 'orl', 'visceral',
     'pulmo', 'uro_gyneco', 'periphery', 'general_state', 'medical_examination', 'diagnosis', 'treatments', 'conclusion','therapeut_detail.first_name', 'therapeut_detail.last_name']
+
+
+class InvoiceCSVRenderer(renderers.CSVRenderer):
+    pass

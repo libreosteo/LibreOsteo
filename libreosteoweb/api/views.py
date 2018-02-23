@@ -58,7 +58,9 @@ from .permissions import (
 from .receivers import (
     block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
     receiver_newpatient)
-from .renderers import PatientCSVRenderer, ExaminationCSVRenderer
+from .renderers import (
+    ExaminationCSVRenderer, InvoiceCSVRenderer,
+    PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 
@@ -332,6 +334,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Invoice.objects.select_related('examination').all()
     serializer_class = apiserializers.InvoiceSerializer
     filter_fields = {'date': ['lte', 'gte']}
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [InvoiceCSVRenderer]
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):

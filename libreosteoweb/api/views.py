@@ -336,6 +336,15 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = {'date': ['lte', 'gte']}
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [InvoiceCSVRenderer]
 
+    def get_renderer_context(self):
+        # allows to select which fields we want via ?fields=field1,field2
+        # works only for CSV renderer
+        context = super(InvoiceViewSet, self).get_renderer_context()
+        context['header'] = (
+            self.request.GET['fields'].split(',')
+            if 'fields' in self.request.GET else None)
+        return context
+
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent

@@ -335,7 +335,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
     queryset = models.Invoice.objects.select_related('examination').all()
     serializer_class = apiserializers.InvoiceSerializer
-
+    filter_fields = {'date': ['lte', 'gte']}
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):

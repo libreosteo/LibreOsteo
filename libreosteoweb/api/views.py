@@ -14,45 +14,54 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-from rest_framework import viewsets, filters, pagination
-from rest_framework.filters import DjangoFilterBackend
-import django_filters
-from libreosteoweb import models 
-from rest_framework.decorators import  detail_route, list_route
-from libreosteoweb.api import serializers as apiserializers
-from rest_framework.response import Response
-from haystack.query import SearchQuerySet
-from django.core import serializers
-from django.http import HttpResponse
-from haystack.utils import Highlighter
-from haystack.views import SearchView
-from haystack.query import SearchQuerySet
-import json
+from cStringIO import StringIO
+from datetime import datetime
 import logging
-from django.contrib.auth.models import User
-from .permissions import IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available
-from .exceptions import Forbidden
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from datetime import date, datetime
-from rest_framework import status
-from django.views.decorators.cache import never_cache
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import (REDIRECT_FIELD_NAME, get_user_model )
-from django.utils.http import is_safe_url
-from django.shortcuts import resolve_url
-from django.conf import settings
-from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.exceptions import ValidationError
-from .receivers import temp_disconnect_signal,receiver_newpatient, receiver_examination,block_disconnect_all_signal
-from django.db.models import signals
-from .permissions import StaffRequiredMixin
-from django.views.generic.base import TemplateView
-from django.views import View
-
 import os
+import tempfile
+import zipfile
+
+from rest_framework import pagination, viewsets, status
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
+from rest_framework.views import APIView
+
+from haystack.query import SearchQuerySet
+from haystack.views import SearchView
+from django.contrib.auth import get_user_model, REDIRECT_FIELD_NAME
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files import File
+from django.core.management import call_command
+from django.db.models import signals
+from django.http import (
+    HttpResponse, HttpResponseForbidden,
+    HttpResponseRedirect, Http404)
+from django.shortcuts import resolve_url
+from django.utils.http import is_safe_url
+from django.utils.translation import ugettext_lazy as _
+from django.views import View
+from django.views.decorators.cache import never_cache
+from django.views.generic.base import TemplateView
+
+from libreosteoweb.api import serializers as apiserializers
+from libreosteoweb import models
+from .exceptions import Forbidden
+from .permissions import StaffRequiredMixin
+from .permissions import (
+    IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available)
+from .receivers import (
+    block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
+    receiver_newpatient)
+from .renderers import PatientCSVRenderer, ExaminationCSVRenderer
+from .statistics import Statistics
+from .file_integrator import Extractor, IntegratorHandler
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -136,12 +145,6 @@ class InvoiceViewHtml(TemplateView):
         context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
         context['invoice'] = models.Invoice.objects.get(pk=kwargs['invoiceid'])
         return context
-
-
-
-from rest_framework.settings import api_settings
-from rest_framework_csv import renderers as r
-from .renderers import PatientCSVRenderer, ExaminationCSVRenderer
 
 
 class PatientViewSet(viewsets.ModelViewSet):
@@ -316,13 +319,6 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
 
 
 
-
-
-
-
-
-from .statistics import Statistics
-
 class StatisticsView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -400,8 +396,6 @@ class ExaminationCommentViewSet(viewsets.ModelViewSet):
             raise Http404()
         serializer.save(user=self.request.user,date=datetime.today())
 
-
-from .file_integrator import Extractor, IntegratorHandler
 
 class FileImportViewSet(viewsets.ModelViewSet):
     model = models.FileImport
@@ -506,20 +500,11 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-
-from django.http import HttpResponse
-from django.core.management import call_command
-import zipfile
-
-
 DUMP_FILE="libreosteo.db"
 
 class DbDump(StaffRequiredMixin, View):
     @never_cache
     def get(self, request, *args, **kwargs):   
-        import os,sys
-        from cStringIO import StringIO
-
         zip_content = StringIO()
         zf = zipfile.ZipFile(zip_content, "w")
         
@@ -546,10 +531,6 @@ class RebuildIndex(StaffRequiredMixin, View):
         call_command('rebuild_index', interactive=False)
         return HttpResponse(u'index rebuilt')
 
-
-from django.core.files.base import ContentFile
-from django.core.files import File
-import tempfile
 
 class LoadDump(View):
     @maintenance_available()

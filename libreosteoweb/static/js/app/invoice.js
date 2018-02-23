@@ -127,11 +127,15 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
             angular.element('input#billing-period').triggerHandler('click');
         }
 
-        $scope.buildCsvUrl = function() {
+        $scope.buildCsvUrl = function(fields) {
             var queryDict = buildAPIFilter();
             var url = '/api/invoices?';
 
             queryDict.format = 'csv';
+            if (fields) {
+                queryDict.fields = fields
+            }
+
             for (var key in queryDict) {
                 url += key + '=' + queryDict[key]+'&'
             }

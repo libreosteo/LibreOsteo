@@ -321,3 +321,18 @@ ul li.documenttile  {
 .panel-title {
     font-size : 14px;
 }
+
+/* We want that element:
+ - not to appear or fill space on page,
+ - to remain in CSS flow so that the calendar popup shows up there
+ */
+.hidden-datepicker-host {
+    border: 0px;
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+    height: 42px;
+    opacity: 0;
+    position: relative;
+    right: 16px;
+}

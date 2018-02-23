@@ -28,6 +28,38 @@ invoices.factory('InvoiceService', ['$resource', function ($resource) {
 }]);
 
 
+/** Localize daterangepicker using django built-in mechanisms
+ */
+function localizeDaterangePicker() {
+    return {
+            customRangeLabel: django.gettext("Custom range"),
+            daysOfWeek: [
+                django.gettext("Su"),
+                django.gettext("Mo"),
+                django.gettext("Tu"),
+                django.gettext("We"),
+                django.gettext("Th"),
+                django.gettext("Fr"),
+                django.gettext("Sa")
+            ],
+            monthNames: [
+                django.gettext("January"),
+                django.gettext("February"),
+                django.gettext("March"),
+                django.gettext("April"),
+                django.gettext("May"),
+                django.gettext("June"),
+                django.gettext("July"),
+                django.gettext("August"),
+                django.gettext("September"),
+                django.gettext("October"),
+                django.gettext("November"),
+                django.gettext("December")
+            ],
+            firstDay: django.get_format('FIRST_DAY_OF_WEEK'),
+    };
+}
+
 invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
     function($scope, InvoiceService) {
         "use strict";
@@ -74,6 +106,7 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
             opens: 'center',
             ranges: makeMomentRanges(),
             autoApply: true,
+            locale: localizeDaterangePicker()
         }
 
         $scope.filters = {

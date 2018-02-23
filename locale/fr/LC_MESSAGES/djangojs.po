@@ -7,8 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-10 14:47+0200\n"
-"PO-Revision-Date: 2017-09-10 14:49+0200\n"
+"POT-Creation-Date: 2018-02-23 15:19+0100\n"
+"PO-Revision-Date: 2018-02-23 15:20+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,7 +44,87 @@ msgstr "Urgence"
 msgid "not documented"
 msgstr "non renseigné"
 
-#: libreosteoweb/static/js/app/patient.js:435
+#: libreosteoweb/static/js/app/invoice.js:56
+msgid "Custom range"
+msgstr "Intervalle personalisé"
+
+#: libreosteoweb/static/js/app/invoice.js:58
+msgid "Su"
+msgstr "Dim"
+
+#: libreosteoweb/static/js/app/invoice.js:59
+msgid "Mo"
+msgstr "Lun"
+
+#: libreosteoweb/static/js/app/invoice.js:60
+msgid "Tu"
+msgstr "Mar"
+
+#: libreosteoweb/static/js/app/invoice.js:61
+msgid "We"
+msgstr "Mer"
+
+#: libreosteoweb/static/js/app/invoice.js:62
+msgid "Th"
+msgstr "Jeu"
+
+#: libreosteoweb/static/js/app/invoice.js:63
+msgid "Fr"
+msgstr "Ven"
+
+#: libreosteoweb/static/js/app/invoice.js:64
+msgid "Sa"
+msgstr "Sam"
+
+#: libreosteoweb/static/js/app/invoice.js:67
+msgid "January"
+msgstr "Janvier"
+
+#: libreosteoweb/static/js/app/invoice.js:68
+msgid "February"
+msgstr "Février"
+
+#: libreosteoweb/static/js/app/invoice.js:69
+msgid "March"
+msgstr "Mars"
+
+#: libreosteoweb/static/js/app/invoice.js:70
+msgid "April"
+msgstr "Avril"
+
+#: libreosteoweb/static/js/app/invoice.js:71
+msgid "May"
+msgstr "Mai"
+
+#: libreosteoweb/static/js/app/invoice.js:72
+msgid "June"
+msgstr "Juin"
+
+#: libreosteoweb/static/js/app/invoice.js:73
+msgid "July"
+msgstr "Juin"
+
+#: libreosteoweb/static/js/app/invoice.js:74
+msgid "August"
+msgstr "Août"
+
+#: libreosteoweb/static/js/app/invoice.js:75
+msgid "September"
+msgstr "Septembre"
+
+#: libreosteoweb/static/js/app/invoice.js:76
+msgid "October"
+msgstr "Octobre"
+
+#: libreosteoweb/static/js/app/invoice.js:77
+msgid "November"
+msgstr "Novembre"
+
+#: libreosteoweb/static/js/app/invoice.js:78
+msgid "December"
+msgstr "Décembre"
+
+#: libreosteoweb/static/js/app/patient.js:446
 msgid "Male"
 msgstr "Masculin"
 

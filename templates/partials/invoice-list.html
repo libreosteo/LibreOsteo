@@ -1,13 +1,23 @@
 {% load i18n %}
 <h1>{% trans 'Accounting' %}</h1>
-<p>
+<div class="btn-group">
     <button ng-click="openCalendar()" class="btn btn-default"><i class="fa fa-calendar"></i>
         {$ filters.dateRange.startDate.toDate() | date:'fullDate' $} → {$ filters.dateRange.endDate.toDate() | date:'fullDate' $} <span class="caret"></span>
     </button>
-    <input type="text" id="billing-period" class="hidden-datepicker-host"
-           date-range-picker ng-model="filters.dateRange"
-           options="daterangePickerOptions"/>
-</p>
+</div>
+<input type="text" id="billing-period" class="hidden-datepicker-host"
+       date-range-picker ng-model="filters.dateRange"
+       options="daterangePickerOptions"/>
+
+<div class="btn-group">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Exporter
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a href="{$ buildCsvUrl() $}"><i class="fa fa-download fa-fw"></i> CSV</a></li>
+    </ul>
+</div>
 
 <table class="table table-striped table-hover">
     <thead>

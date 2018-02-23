@@ -127,5 +127,15 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
             angular.element('input#billing-period').triggerHandler('click');
         }
 
+        $scope.buildCsvUrl = function() {
+            var queryDict = buildAPIFilter();
+            var url = '/api/invoices?';
+
+            queryDict.format = 'csv';
+            for (var key in queryDict) {
+                url += key + '=' + queryDict[key]+'&'
+            }
+            return url.slice(0, -1)
+        }
     }
 ]);

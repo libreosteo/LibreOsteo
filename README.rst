@@ -65,6 +65,13 @@ You can add other user from the admin console : http://localhost:8000
 
 Have fun !
 
+Contributing code
+=================
+
+Libreosteo is using AngularJS + Django. You can contribute to it via `pull requests`_ . 
+
+**Please target the** ``develop`` **branch with your pull requests** (``master`` points to the latest release).
+
 Contributors
 ============
 
@@ -77,3 +84,4 @@ The libreosteo team consist of:
 .. _github : https://github.com/jbgury
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
+.. _pull requests: https://github.com/libreosteo/Libreosteo/pulls

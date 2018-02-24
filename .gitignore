@@ -6,7 +6,7 @@ db.sqlite3
 
 # Assets
 libreosteoweb/static/bower_components/
-static/
+/static/
 
 # Indexes
 whoosh_index/

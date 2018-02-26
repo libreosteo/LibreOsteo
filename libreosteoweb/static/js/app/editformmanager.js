@@ -149,7 +149,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         attr.saveOnLostFocus = false;
       }
     },
-    controller: ['$scope', 'loEditFormManager', '$element', function($scope, loEditFormManager, $element) {
+    controller: ['$scope', '$routeParams', 'loEditFormManager', '$element', function($scope, $routeParams, loEditFormManager, $element) {
       var actions = [];
       if ($scope.save != null) {
         actions.push(new Callback('save', $scope.save));
@@ -192,11 +192,16 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         }
       }
 
+      // tab change
       $scope.$on('uiTabChange', function(event) {
         // :visible is a hack to figure out if we are current tab.
         if ($element.is(':visible')) {
           handleUnsavedForm(event, false);
         }
+      });
+      // router view change
+      $scope.$on('$locationChangeStart', function(event) {
+        handleUnsavedForm(event, true);
       });
     }],
   }

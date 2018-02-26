@@ -168,7 +168,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       });
 
       $scope.$on('uiTabChange', function(event) {
-        if ($scope.trigger.save && $scope.saveOnLostFocus) {
+        if ($element.hasClass('ng-dirty') && $scope.saveOnLostFocus) {
           $scope.save();
           $scope.trigger.save = false;
         }

@@ -17,8 +17,6 @@
 */
 var editFormManager = angular.module('loEditFormManager', []);
 
-var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-
 
 function Callback(name, callback) {
   this.name = name;
@@ -167,34 +165,14 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       }
       $timeout(function() {
         loEditFormManager.add($element, actions, $scope.trigger);
-
-        var config = {
-          attributes: true
-        };
-        var observer = new MutationObserver(function(mutations) {
-          $scope.$apply(function() {
-            loEditFormManager.isavailable();
-            $scope.lostFocusMgr();
-          });
-        });
-        $($element).parents().map(function() {
-          return observer.observe(this, config);
-        });
-        observer.observe($($element).get(0), config);
       });
 
-      $scope.lostFocusMgr = function()
-      {
-        // When the component changes from isavailable true to isavailable false, and 
-        // in edit mode, then call save action if flag is saveOnLostFocus is true
-        if ($scope.saveOnLostFocus)
-        {
-          if(! $($element).is(':visible') && $scope.trigger.save){
-            $scope.save();
-            $scope.trigger.save = false;
-          }
+      $scope.$on('uiTabChange', function(event) {
+        if ($scope.trigger.save && $scope.saveOnLostFocus) {
+          $scope.save();
+          $scope.trigger.save = false;
         }
-      };
+      });
     }],
   }
 }]);

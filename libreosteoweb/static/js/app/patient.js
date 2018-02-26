@@ -306,7 +306,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 }
             };
 
-
+        $scope.onTabChange = function(tabChangeEvent) {
+            var viewChangeEvent = $scope.$broadcast('uiTabChange');
+        };
 
         $scope.startExamination = function() {
             $scope.currentExaminationManager();

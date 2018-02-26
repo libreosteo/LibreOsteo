@@ -8,7 +8,7 @@
 
 <uib-tabset active="indexTab">
 
-<uib-tab heading="{% trans 'General infos' %}" ui-sref="patient" index="1">
+<uib-tab heading="{% trans 'General infos' %}" ui-sref="patient" index="1" deselect="onTabChange($event)">
     <div class="row">
         <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()" save-on-lost-focus="true">
         <div class="col-md-8">
@@ -183,7 +183,7 @@
     </div>
 </uib-tab>
 
-<uib-tab heading="{% trans 'History' %}" ui-sref="patient" index="2">
+<uib-tab heading="{% trans 'History' %}" ui-sref="patient" index="2" deselect="onTabChange($event)">
     <form editable-form name="form.historyForm" edit-form-control edit="editHistory" save="saveHistory" trigger="triggerEditFormHistory" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="row">
         <div class="col-md-6">
@@ -239,7 +239,7 @@
     </form>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Medical reports' %}" ui-sref="patient" index="3">
+<uib-tab heading="{% trans 'Medical reports' %}" ui-sref="patient" index="3" deselect="onTabChange($event)">
     <form editable-form name="form.medicalForm" edit-form-control edit="editMedical" save="saveMedical"  trigger="triggerEditFormMedical" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -295,7 +295,7 @@
     </form>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations" index="5">
+<uib-tab heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations" index="5" deselect="onTabChange($event)">
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
@@ -305,7 +305,7 @@
     current-examination-manager="currentExaminationManager()"/>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
+<uib-tab heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6" deselect="onTabChange($event)">
     <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
 </uib-tab>
 </uib-tabset>

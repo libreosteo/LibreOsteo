@@ -168,9 +168,12 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       });
 
       $scope.$on('uiTabChange', function(event) {
-        if ($element.hasClass('ng-dirty') && $scope.saveOnLostFocus) {
-          $scope.save();
-          $scope.trigger.save = false;
+        // :visible is a hack to figure out if we are current tab.
+        if ($element.is(':visible')) {
+          if ($element.hasClass('ng-dirty') && $scope.saveOnLostFocus) {
+            $scope.save();
+            $scope.trigger.save = false;
+          }
         }
       });
     }],

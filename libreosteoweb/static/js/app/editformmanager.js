@@ -167,13 +167,35 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         loEditFormManager.add($element, actions, $scope.trigger);
       });
 
+      /**
+       * Handle a user attempt to leave a view containing unsaved data
+       *
+       * May autosave, or prompt user, or let leave.
+       *
+       * @param {event} event - The event of leaving the view (cancel-able)
+       * @param{boolean} askUser - Wether we ask if he really wants to leave
+       */
+      function handleUnsavedForm(event, askUser) {
+        if ($element.hasClass('ng-dirty')) {
+          if ($scope.saveOnLostFocus) {
+            $scope.save();
+            $scope.trigger.save = false;
+
+          } else if (askUser) {
+            var quitAnyway = confirm(
+              gettext('There are unsaved changes. Do you really want to leave this page ?')
+            );
+            if (!quitAnyway) {
+              event.preventDefault(); // prevent view change
+            }
+          }
+        }
+      }
+
       $scope.$on('uiTabChange', function(event) {
         // :visible is a hack to figure out if we are current tab.
         if ($element.is(':visible')) {
-          if ($element.hasClass('ng-dirty') && $scope.saveOnLostFocus) {
-            $scope.save();
-            $scope.trigger.save = false;
-          }
+          handleUnsavedForm(event, false);
         }
       });
     }],

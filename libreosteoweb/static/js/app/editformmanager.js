@@ -175,6 +175,10 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
        * @param {event} event - The event of leaving the view (cancel-able)
        * @param{boolean} askUser - Wether we ask if he really wants to leave
        */
+      var quitConfirmationMsg = gettext(
+        'There are unsaved changes. Do you really want to leave this page ?'
+      );
+
       function handleUnsavedForm(event, askUser) {
         if ($element.hasClass('ng-dirty')) {
           if ($scope.saveOnLostFocus) {
@@ -182,9 +186,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
             $scope.trigger.save = false;
 
           } else if (askUser) {
-            var quitAnyway = confirm(
-              gettext('There are unsaved changes. Do you really want to leave this page ?')
-            );
+            var quitAnyway = confirm(quitConfirmationMsg);
             if (!quitAnyway) {
               event.preventDefault(); // prevent view change
             }
@@ -202,6 +204,30 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       // router view change
       $scope.$on('$locationChangeStart', function(event) {
         handleUnsavedForm(event, true);
+      });
+
+      // Window/tab quit or real link click
+      //
+      // beforeunload is an uncommon event:
+      // - on most browsers, confirm() calls within its body will be ignored
+      // - on some browsers, you can issue a custom message, but on others
+      //   won't accept it (in favor of built-in message)
+      // - it is hard to get sure an AJAX call is made (for autosave)
+      // - API depend on browser
+      //
+      // https://developer.mozilla.org/en-US/docs/Web/Events/beforeunload
+      //
+      // So, best-effort: we ask for confirmation, optionaly with custom
+      // message.
+      function onQuit(event) {
+        if ($element.hasClass('ng-dirty')) {
+          event.returnValue = quitConfirmationMsg;
+          return quitConfirmationMsg;
+        }
+      };
+      window.addEventListener('beforeunload', onQuit);
+      $scope.$on('$destroy', function() {
+        window.removeEventListener('beforeunload', onQuit);
       });
     }],
   }

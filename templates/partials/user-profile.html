@@ -3,66 +3,77 @@
     {% trans 'User profile' %}
 </h1>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-        <form novalidate name="form">
-           <div class="form-group">
-                <input type="text" ng-disabled="true" class="form-control  input-lg" ng-model="user.username"
-                               name="username" placeholder="{{ user.username }}">
-            </div>
+<uib-tabset>
+    <uib-tab heading="{% trans 'Identity' %}">
+        <div class="container-fluid tab-content">
             <div class="row">
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control input-lg" ng-model="user.last_name" required
-                               name="last_name" placeholder="{{ user.last_name }}"/>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control  input-lg" ng-model="user.first_name"
-                               name="first_name" placeholder="{{ user.first_name }}"/>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control  input-lg" ng-model="user.email" required
-                       name="email" placeholder="{{ user.email }}"/>
-            </div>
+                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                    <form novalidate name="form">
+                        <div class="form-group">
+                            <input type="text" ng-disabled="true" class="form-control  input-lg" ng-model="user.username"
+                                   name="username" placeholder="{{ user.username }}">
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control input-lg" ng-model="user.last_name" required
+                                           name="last_name" placeholder="{{ user.last_name }}"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control  input-lg" ng-model="user.first_name"
+                                           name="first_name" placeholder="{{ user.first_name }}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control  input-lg" ng-model="user.email" required
+                                   name="email" placeholder="{{ user.email }}"/>
+                        </div>
 
-            {% if not DEMONSTRATION %}
-            <button class="btn btn-default" ng-click="setPassword()">{% trans 'Change password'%}</button>
-            {% endif %}
-            <hr/>
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label for="inputAdeli" class="col-sm-2 control-label">{{ therapeutsettings.adeli }}</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.adeli" class="form-control" id="inputAdeli" placeholder="{{ therapeutsettings.adeli }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputSiret" class="col-sm-2 control-label">{{ therapeutsettings.siret }}</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.siret" class="form-control" id="inputSiret" placeholder="{{ therapeutsettings.siret }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputQuality" class="col-sm-2 control-label">{{ therapeutsettings.quality }}</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputQuality" placeholder="{{ therapeutsettings.quality }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputFooter" class="col-sm-2 control-label">{{ therapeutsettings.invoice_footer }}</label>
-                    <div class="col-sm-10">
-                      <textarea ng-model="therapeutsettings.invoice_footer" class="form-control" id="inputFooter" placeholder="{{ therapeutsettings.invoice_footer }}"/>
-                    </div>
+                        {% if not DEMONSTRATION %}
+                        <button class="btn btn-default" ng-click="setPassword()">{% trans 'Change password'%}</button>
+                        {% endif %}
+                        <hr/>
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputAdeli" class="col-sm-2 control-label">{{ therapeutsettings.adeli }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" ng-model="therapeutsettings.adeli" class="form-control" id="inputAdeli" placeholder="{{ therapeutsettings.adeli }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSiret" class="col-sm-2 control-label">{{ therapeutsettings.siret }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" ng-model="therapeutsettings.siret" class="form-control" id="inputSiret" placeholder="{{ therapeutsettings.siret }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputQuality" class="col-sm-2 control-label">{{ therapeutsettings.quality }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" ng-model="therapeutsettings.quality" class="form-control" id="inputQuality" placeholder="{{ therapeutsettings.quality }}"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputFooter" class="col-sm-2 control-label">{{ therapeutsettings.invoice_footer }}</label>
+                                <div class="col-sm-10">
+                                    <textarea ng-model="therapeutsettings.invoice_footer" class="form-control" id="inputFooter" placeholder="{{ therapeutsettings.invoice_footer }}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary"
+                                ng-click="updateUser(user)">{% trans 'Update' %}</button>
+                    </form>
                 </div>
             </div>
-            <button class="btn btn-primary"
-                    ng-click="updateUser(user)">{% trans 'Update' %}</button>
-        </form>
-    </div>
-</div>
-
+        </div>
+    </uib-tab>
+    <uib-tab heading="{% trans 'Display settings' %}">
+        <div class="container-fluid tab-content">
+            <div class="row">
+            </div>
+        </div>
+    </uib-tab>
+</uib-tabset>
 <div id="update-info" ng-hide="true">{% trans 'Profile was updated' %}</div>

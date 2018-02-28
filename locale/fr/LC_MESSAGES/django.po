@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-19 15:54+0100\n"
-"PO-Revision-Date: 2016-10-20 13:59+0200\n"
+"POT-Creation-Date: 2018-02-28 18:12+0100\n"
+"PO-Revision-Date: 2018-02-28 18:14+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -961,6 +961,10 @@ msgstr "Paramètres du cabinet"
 #: templates/partials/office-settings.html:8
 msgid "General"
 msgstr "Général"
+#: templates/partials/office-settings.html:7
+#: templates/partials/user-profile.html:7
+msgid "Identity"
+msgstr "Identité"
 
 #: templates/partials/office-settings.html:13
 msgid "Office"
@@ -1124,7 +1128,10 @@ msgstr "Pas de séance pour ce patient"
 msgid "User profile"
 msgstr "Profil utilisateur"
 
-#: templates/partials/user-profile.html:68
+#: templates/partials/user-profile.html:72
+msgid "Display settings"
+msgstr "Paramètres d'affichage"
+
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 

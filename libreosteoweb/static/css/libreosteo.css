@@ -321,3 +321,7 @@ ul li.documenttile  {
 .panel-title {
     font-size : 14px;
 }
+
+.nav-tabs {
+    margin-bottom: 15px;
+}

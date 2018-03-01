@@ -34,7 +34,6 @@ user.factory('TherapeutSettingsServ', ['$resource',
     "use strict";
     return $resource('api/profiles/:settingsId', null, {
         get : {method : 'GET', params: {settingsId : 'settings'}},
-        add : {method : 'POST'},
         save : {method : 'PUT'},
         'get_by_user' : {method : 'GET', url: 'api/profiles/get_by_user'},
       });
@@ -57,12 +56,7 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
         $scope.updateUser = function(user, therapeutsettings){
 
           var manageTherapeutSettings = function (callback) {
-            if ($scope.therapeutsettings.id)
-            {
               TherapeutSettingsServ.save({settingsId : $scope.therapeutsettings.id}, $scope.therapeutsettings).$promise.then(callback);
-            } else {
-              TherapeutSettingsServ.add($scope.therapeutsettings).$promise.then(callback);
-            }
           }
 
           UserServ.update({userId : $scope.userid }, user).

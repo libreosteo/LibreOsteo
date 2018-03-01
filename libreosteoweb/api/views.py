@@ -370,14 +370,11 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def get_by_user(self, request):
-        settings = models.TherapeutSettings.objects.filter(user=self.request.user)
-        if (len(settings)>0):
-            return Response(apiserializers.TherapeutSettingsSerializer(settings[0]).data)
-        else:
-            return Response({})
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+            user=self.request.user)
+        return Response(
+            apiserializers.TherapeutSettingsSerializer(
+                therapeut_settings).data)
 
     def perform_update(self, serializer):
         if not serializer.instance.user :

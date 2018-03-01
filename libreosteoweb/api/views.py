@@ -368,10 +368,8 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsStaffOrTargetUser]
     queryset = models.TherapeutSettings.objects.all()
 
-    @list_route(permission_classes=[AllowAny])
+    @list_route()
     def get_by_user(self, request):
-        if not self.request.user.is_authenticated():
-            raise Http404()
         settings = models.TherapeutSettings.objects.filter(user=self.request.user)
         if (len(settings)>0):
             return Response(apiserializers.TherapeutSettingsSerializer(settings[0]).data)
@@ -379,13 +377,9 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
             return Response({})
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
-            raise Http404()
         serializer.save(user=self.request.user)
 
     def perform_update(self, serializer):
-        if not self.request.user.is_authenticated():
-            raise Http404()
         if not serializer.instance.user :
             serializer.save(user=self.request.user)
         serializer.save(user=serializer.instance.user)

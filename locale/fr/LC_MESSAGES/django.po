@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-28 18:12+0100\n"
-"PO-Revision-Date: 2018-02-28 18:14+0100\n"
+"POT-Creation-Date: 2018-03-01 13:14+0100\n"
+"PO-Revision-Date: 2018-03-01 13:20+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -418,7 +418,14 @@ msgstr "Pied de page de facture"
 msgid "Invoice start sequence"
 msgstr "sequence de démarrage de facture"
 
-#: libreosteoweb/models.py:274 templates/partials/import-file.html:77
+#: libreosteoweb/models.py:283
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: libreosteoweb/models.py:284
+msgid "Events history"
+msgstr "Historique des évènements"
+
 #: templates/partials/import-file.html:101
 msgid "Patient file"
 msgstr "Fichier patient"
@@ -1128,7 +1135,15 @@ msgstr "Pas de séance pour ce patient"
 msgid "User profile"
 msgstr "Profil utilisateur"
 
-#: templates/partials/user-profile.html:72
+#: templates/partials/user-profile.html:9
+msgid "Identity"
+msgstr "Identité"
+
+#: templates/partials/user-profile.html:68
+#: templates/partials/user-profile.html:99
+msgid "Save"
+msgstr "Enregistrer"
+
 msgid "Display settings"
 msgstr "Paramètres d'affichage"
 

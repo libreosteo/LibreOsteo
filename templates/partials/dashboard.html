@@ -4,7 +4,7 @@
 </h1>
 
 <!-- /.row -->
-            <div class="row">
+            <div class="row" ng-if="statistics">
                 <div class="col-lg-3 col-md-8">
                     <span class="label" style='cursor:pointer' ng-class="{'label-primary' : selector == 'week', 'label-default' : selector != 'week'}" ng-click="show('week')">{% trans 'Week' %}</span>
                     <span class="label" style='cursor:pointer' ng-class="{'label-primary' : selector == 'month', 'label-default' : selector != 'month'}" ng-click="show('month')">{% trans 'Month' %}</span>
@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" ng-if="statistics">
                 <div class="col-lg-4 col-md-6">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -107,4 +107,4 @@
                 </div>
             </div>
             <!-- /.row -->
-            <officeevent officeevents="officeEventLoader.items" officeevents-by-day="officeEventLoader.itemsByDay" office-event-loader="officeEventLoader" busy="officeEventLoader.busy" />
+            <officeevent ng-if="officeEventLoader" officeevents="officeEventLoader.items" officeevents-by-day="officeEventLoader.itemsByDay" office-event-loader="officeEventLoader" busy="officeEventLoader.busy" />

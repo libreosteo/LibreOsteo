@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load static from staticfiles %}
+
 <h1 class="page-header">
     {% trans 'User profile' %}
 </h1>
@@ -72,6 +74,32 @@
     <uib-tab heading="{% trans 'Display settings' %}">
         <div class="container-fluid tab-content">
             <div class="row">
+                <form novalidate name="form">
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
+                        <h2>{% trans 'Dashboard' %}</h2>
+                        <em>modules activés</em>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-9">
+                        {% for module in dashboard_modules %}
+                        <div class="row dashboard-catalog-item">
+                            <div class="col-xs-12 col-sm-4 col-md-4 checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="therapeutsettings.{{ module.field.name }}" />
+                                    {{ module.field.verbose_name }}
+                                </label>
+                            </div>
+                            <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-md-7">
+                                <img src="{% static module.image %}" alt="" />
+                            </div>
+                        </div>
+                        <hr />
+                        {% endfor %}
+                        <div class="row">
+                            <button class="btn btn-primary "
+                                    ng-click="updateUser(user)">{% trans 'Save' %}</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </uib-tab>

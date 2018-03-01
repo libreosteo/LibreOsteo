@@ -279,6 +279,15 @@ class TherapeutSettings(models.Model):
     siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
     invoice_footer = models.TextField(_('Invoice footer'), blank=True, null=True)
 
+    # dashboard modules
+    stats_enabled = models.BooleanField(_('Statistics'), default=True)
+    last_events_enabled = models.BooleanField(_('Events history'), default=True)
+
+    DASHBOARD_MODULES_FIELDS = [
+        {'field': stats_enabled, 'image': 'images/dashboard-stats.png'},
+        {'field': last_events_enabled, 'image': 'images/dashboard-events.png'},
+    ]
+
     def save(self, *args, **kwargs):
         """
         Ensure that empty string are none in DB

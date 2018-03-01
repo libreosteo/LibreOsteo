@@ -103,10 +103,15 @@ def display_userprofile(request):
     displayTherapeutSettings = TherapeutSettingsDisplay()
     return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields(), 
         'therapeutsettings': displayTherapeutSettings.display_fields(),
+        'dashboard_modules': models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
         'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):
-    return render_to_response('partials/dashboard.html', {})
+    therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+        user=request.user)
+    return render_to_response('partials/dashboard.html', {
+        'therapeutsettings': therapeut_settings,
+    })
 
 def display_officeevent(request):
     return render_to_response('partials/officeevent.html', {})

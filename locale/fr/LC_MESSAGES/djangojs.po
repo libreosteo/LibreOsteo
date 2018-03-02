@@ -16,134 +16,97 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: libreosteoweb/static/js/app/examination.js:65
 msgid "Normal examination"
 msgstr "Consultation normale"
 
-#: libreosteoweb/static/js/app/examination.js:66
 msgid "Continuing examination"
 msgstr "Poursuite de consultation"
 
-#: libreosteoweb/static/js/app/examination.js:67
 msgid "Return"
 msgstr "Retour"
 
-#: libreosteoweb/static/js/app/examination.js:68
 msgid "Emergency"
 msgstr "Urgence"
 
-#: libreosteoweb/static/js/app/examination.js:73
-#: libreosteoweb/static/js/app/examination.js:75
-#: libreosteoweb/static/js/app/patient.js:443
-#: libreosteoweb/static/js/app/patient.js:445
-#: libreosteoweb/static/js/app/patient.js:461
 msgid "not documented"
 msgstr "non renseigné"
 
-#: libreosteoweb/static/js/app/invoice.js:56
 msgid "Custom range"
 msgstr "Intervalle personalisé"
 
-#: libreosteoweb/static/js/app/invoice.js:58
 msgid "Su"
 msgstr "Dim"
 
-#: libreosteoweb/static/js/app/invoice.js:59
 msgid "Mo"
 msgstr "Lun"
 
-#: libreosteoweb/static/js/app/invoice.js:60
 msgid "Tu"
 msgstr "Mar"
 
-#: libreosteoweb/static/js/app/invoice.js:61
 msgid "We"
 msgstr "Mer"
 
-#: libreosteoweb/static/js/app/invoice.js:62
 msgid "Th"
 msgstr "Jeu"
 
-#: libreosteoweb/static/js/app/invoice.js:63
 msgid "Fr"
 msgstr "Ven"
 
-#: libreosteoweb/static/js/app/invoice.js:64
 msgid "Sa"
 msgstr "Sam"
 
-#: libreosteoweb/static/js/app/invoice.js:67
 msgid "January"
 msgstr "Janvier"
 
-#: libreosteoweb/static/js/app/invoice.js:68
 msgid "February"
 msgstr "Février"
 
-#: libreosteoweb/static/js/app/invoice.js:69
 msgid "March"
 msgstr "Mars"
 
-#: libreosteoweb/static/js/app/invoice.js:70
 msgid "April"
 msgstr "Avril"
 
-#: libreosteoweb/static/js/app/invoice.js:71
 msgid "May"
 msgstr "Mai"
 
-#: libreosteoweb/static/js/app/invoice.js:72
 msgid "June"
 msgstr "Juin"
 
-#: libreosteoweb/static/js/app/invoice.js:73
 msgid "July"
 msgstr "Juin"
 
-#: libreosteoweb/static/js/app/invoice.js:74
 msgid "August"
 msgstr "Août"
 
-#: libreosteoweb/static/js/app/invoice.js:75
 msgid "September"
 msgstr "Septembre"
 
-#: libreosteoweb/static/js/app/invoice.js:76
 msgid "October"
 msgstr "Octobre"
 
-#: libreosteoweb/static/js/app/invoice.js:77
 msgid "November"
 msgstr "Novembre"
 
-#: libreosteoweb/static/js/app/invoice.js:78
 msgid "December"
 msgstr "Décembre"
 
-#: libreosteoweb/static/js/app/patient.js:446
 msgid "Male"
 msgstr "Masculin"
 
-#: libreosteoweb/static/js/app/patient.js:436
 msgid "Female"
 msgstr "Féminin"
 
-#: libreosteoweb/static/js/app/patient.js:451
 msgid "Left-handed"
 msgstr "Gaucher"
 
-#: libreosteoweb/static/js/app/patient.js:452
 msgid "Right-handed"
 msgstr "Droitier"
 
-#: libreosteoweb/static/js/app/patient.js:610
 msgid "Update success"
 msgstr "Mise à jour effectuée"
 
-#: libreosteoweb/static/js/app/patient.js:621
 msgid "Are you sure to delete this document ?"
 msgstr "Êtes-vous sûr(e) de supprimer ce document ?"

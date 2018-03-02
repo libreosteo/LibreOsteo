@@ -185,6 +185,8 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         fields = '__all__'
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
+    status = serializers.IntegerField(source='examination.status')
+
     class Meta:
         model = Invoice
         fields = '__all__'

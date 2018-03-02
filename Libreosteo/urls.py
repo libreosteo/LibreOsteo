@@ -81,6 +81,8 @@ urlpatterns = [
     url(r'^web-view/partials/filemanager$', displays.display_file_manager),
     url(r'^web-view/partials/restore$', displays.display_restore),
     url(r'^web-view/partials/register$', displays.display_register, name='accounts-register'),
+    url(r'^web-view/partials/invoice-list$', displays.display_invoices),
+
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
     url(r'^web-view/partials/confirmation', displays.display_confirmation),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

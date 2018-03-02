@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-02 14:32+0100\n"
+"POT-Creation-Date: 2018-03-02 15:07+0100\n"
 "PO-Revision-Date: 2016-10-20 13:59+0200\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -407,6 +407,9 @@ msgstr "Veuillez vous identifier"
 msgid "Sign in"
 msgstr "Identification"
 
+msgid "Accounting"
+msgstr "Comptabilité"
+
 msgid "Import/export"
 msgstr "Import/export"
 
@@ -688,23 +691,53 @@ msgstr "Fichier patients"
 msgid "Examinations file"
 msgstr "Fichier des consultations"
 
-msgid "Invoicing"
-msgstr "Facturation"
+msgid "Export"
+msgstr "Exporter"
 
-msgid "Not invoiced"
-msgstr "Non facturé"
+msgid "CSV"
+msgstr "CSV"
 
-msgid "Invoiced"
-msgstr "Facturé"
+msgid "anonym CSV"
+msgstr "CSV anonymisé"
 
-msgid "Cash"
-msgstr "Espèces"
+msgid "Invoice nr"
+msgstr "N° de facture"
+
+msgid "Paiment mean"
+msgstr "Moyen de paiement"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "n/a"
+msgstr "n/a"
 
 msgid "Check"
 msgstr "Chèque"
 
+msgid "Cash"
+msgstr "Espèces"
+
+msgid "Draft"
+msgstr "Brouillon"
+
 msgid "Not paid"
-msgstr "Non réglé"
+msgstr "Non réglée"
+
+msgid "Paid"
+msgstr "Payée"
+
+msgid "Not invoiced"
+msgstr "Non facturée"
+
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "Invoicing"
+msgstr "Facturation"
+
+msgid "Invoiced"
+msgstr "Facturé"
 
 msgid "Bank"
 msgstr "Banque"

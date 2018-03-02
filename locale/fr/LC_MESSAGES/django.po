@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-01 13:14+0100\n"
-"PO-Revision-Date: 2018-03-01 13:20+0100\n"
+"POT-Creation-Date: 2018-03-02 15:07+0100\n"
+"PO-Revision-Date: 2016-10-20 13:59+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -17,11 +17,9 @@ msgstr ""
 "X-Loco-Target-Locale: zxx\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: Libreosteo/settings/base.py:154
 msgid "French"
 msgstr "Français"
 
-#: Libreosteo/settings/base.py:155
 msgid "English"
 msgstr "Anglais"
 
@@ -390,7 +388,12 @@ msgstr "Pied de page"
 msgid "Siret"
 msgstr "Siret"
 
-#: libreosteoweb/models.py:213
+msgid "Code"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
 msgid "Class"
 msgstr "Classe"
 
@@ -576,7 +579,9 @@ msgstr "Veuillez vous identifier"
 msgid "Sign in"
 msgstr "Identification"
 
-#: templates/index.html:265
+msgid "Accounting"
+msgstr "Comptabilité"
+
 msgid "Import/export"
 msgstr "Import/export"
 
@@ -585,7 +590,18 @@ msgstr "Import/export"
 msgid "Rebuild index"
 msgstr "Réindexer"
 
-#: templates/index.html:303 templates/index.html.py:306
+msgid "Help"
+msgstr "Aide"
+
+msgid "Project web page"
+msgstr "Site vitrine"
+
+msgid "Community support (forum)"
+msgstr "Support communautaire (forum)"
+
+msgid "Version"
+msgstr "Version"
+
 msgid "Edit"
 msgstr "Éditer"
 
@@ -926,33 +942,54 @@ msgstr "Fichier patients"
 msgid "Examinations file"
 msgstr "Fichier des consultations"
 
-#: templates/partials/invoice-modal.html:3
-#: templates/partials/office-settings.html:70
-msgid "Invoicing"
-msgstr "Facturation"
+msgid "Export"
+msgstr "Exporter"
 
-#: templates/partials/invoice-modal.html:10
-msgid "Not invoiced"
-msgstr "Non facturé"
+msgid "CSV"
+msgstr "CSV"
 
-#: templates/partials/invoice-modal.html:16
-msgid "Invoiced"
-msgstr "Facturé"
+msgid "anonym CSV"
+msgstr "CSV anonymisé"
 
-#: templates/partials/invoice-modal.html:36
-msgid "Cash"
-msgstr "Espèces"
+msgid "Invoice nr"
+msgstr "N° de facture"
 
-#: templates/partials/invoice-modal.html:42
+msgid "Paiment mean"
+msgstr "Moyen de paiement"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "n/a"
+msgstr "n/a"
+
 msgid "Check"
 msgstr "Chèque"
 
-#: templates/partials/invoice-modal.html:48
-msgid "Not paid"
-msgstr "Non réglé"
+msgid "Cash"
+msgstr "Espèces"
 
-#: templates/partials/invoice-modal.html:53
-#: templates/partials/invoice-modal.html:54
+msgid "Draft"
+msgstr "Brouillon"
+
+msgid "Not paid"
+msgstr "Non réglée"
+
+msgid "Paid"
+msgstr "Payée"
+
+msgid "Not invoiced"
+msgstr "Non facturée"
+
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "Invoicing"
+msgstr "Facturation"
+
+msgid "Invoiced"
+msgstr "Facturé"
+
 msgid "Bank"
 msgstr "Banque"
 
@@ -968,10 +1005,6 @@ msgstr "Paramètres du cabinet"
 #: templates/partials/office-settings.html:8
 msgid "General"
 msgstr "Général"
-#: templates/partials/office-settings.html:7
-#: templates/partials/user-profile.html:7
-msgid "Identity"
-msgstr "Identité"
 
 #: templates/partials/office-settings.html:13
 msgid "Office"
@@ -1135,18 +1168,7 @@ msgstr "Pas de séance pour ce patient"
 msgid "User profile"
 msgstr "Profil utilisateur"
 
-#: templates/partials/user-profile.html:9
-msgid "Identity"
-msgstr "Identité"
-
 #: templates/partials/user-profile.html:68
-#: templates/partials/user-profile.html:99
-msgid "Save"
-msgstr "Enregistrer"
-
-msgid "Display settings"
-msgstr "Paramètres d'affichage"
-
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 

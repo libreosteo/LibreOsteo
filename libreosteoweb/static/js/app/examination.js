@@ -44,7 +44,7 @@ examination.factory('ExaminationCommentServ', ['$resource',
     }
     ]);
 
-examination.factory('CommentServ', ['$resource', 
+examination.factory('CommentServ', ['$resource',
     function($resource) {
         return $resource('api/comments', null)
     }
@@ -131,7 +131,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             });
 
             $scope.$watch('model.status', function(newValue, oldValue){
-               $scope.updateDeleteTrigger(); 
+               $scope.updateDeleteTrigger();
             });
 
             $scope.$watch('model.id', function(newValue, oldValue)
@@ -149,7 +149,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                     $scope.triggerEditForm.delete = false;
                 } else {
                     if($scope.model.id){
-                        $scope.triggerEditForm.delete = true;            
+                        $scope.triggerEditForm.delete = true;
                     } else {
                         $scope.triggerEditForm.delete = false;
                     }
@@ -174,14 +174,14 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                             if ($scope.onDelete)
                             {
                                 $scope.onDelete();
-                            }   
+                            }
                         }, function(resultNok)
                         {
                             console.log(resultNok);
                             growl.addErrorMessage("This operation is not available");
                         });
                 }
-                
+
             };
 
             $scope.$watch('editableForm.$visible', function(newValue, oldValue)
@@ -197,6 +197,15 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 }
             });
 
+	    $scope.$watch('model.id', function(newValue, oldValue)
+	    {
+		console.log("change on model.id = "+oldValue+" to "+newValue);
+	        if (oldValue != null && newValue == null)
+		{
+	    		$scope.edit();
+		}
+	    });
+
             $scope.edit = function() {
                 $scope.editableForm.$show();
             };
@@ -210,13 +219,13 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             {
                 $scope.close($scope.model);
             };
-            
+
             $scope.triggerEditForm = {
                 save: false,
                 edit: true,
                 cancel: null,
                 delete: false,
-            };            
+            };
             $timeout(function () {
                 //DOM has finished rendering
                 if($scope.newExamination){

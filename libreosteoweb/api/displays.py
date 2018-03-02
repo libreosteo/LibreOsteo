@@ -70,6 +70,10 @@ class OfficeSettingsDisplay(GenericDisplay):
         model = models.OfficeSettings
         fields = [ f.name for f in model._meta.fields if f.editable ]
 
+
+def display_invoices(request):
+    return render_to_response("partials/invoice-list.html", {})
+
 def display_index(request):
     return render_to_response('index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
 

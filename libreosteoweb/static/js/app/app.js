@@ -24,6 +24,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loTimeline',
     'loDashboard',
     'loOfficeEvent',
+    'loInvoice',
     'yaru22.angular-timeago',
     'ngAnimate',
     'duScroll',
@@ -42,7 +43,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loFileImport',
     'loRebuildIndex',
     'ngFileUpload',
-    'loFileManager'
+    'loFileManager',
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -135,6 +136,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                     templateUrl : 'web-view/partials/rebuild-index',
                     controller : 'RebuildIndexCtrl'
                 }).
+            state('invoice-list',
+            {
+                url : '/invoices',
+                templateUrl : 'web-view/partials/invoice-list',
+                controller : 'InvoiceListCtrl'
+            }).
             state('dashboard',
             {
                 url : '/',

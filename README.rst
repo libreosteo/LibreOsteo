@@ -68,9 +68,7 @@ Have fun !
 Contributing code
 =================
 
-Libreosteo is using AngularJS + Django. You can contribute to it via `pull requests`_ . 
-
-**Please target the** ``develop`` **branch with your pull requests** (``master`` points to the latest release).
+You are more than welcome ! Please read `CONTRIBUTING.md`_ and happy hacking !
 
 Contributors
 ============
@@ -85,3 +83,4 @@ The libreosteo team consist of:
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
 .. _pull requests: https://github.com/libreosteo/Libreosteo/pulls
+.. _CONTRIBUTING.md: CONTRIBUTING.md

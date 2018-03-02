@@ -73,7 +73,7 @@ class CreateAdminAccountView(TemplateView):
         self.redirect_to = request.POST.get(REDIRECT_FIELD_NAME,
             request.GET.get(REDIRECT_FIELD_NAME, ''))
         self.form = UserCreationForm()
-        return super(TemplateView, self).render_to_response(self.get_context_data())
+        return super(TemplateView, self).render(request, self.get_context_data())
 
 
     def post(self, request, *args, **kwargs):
@@ -89,7 +89,7 @@ class CreateAdminAccountView(TemplateView):
             return HttpResponseRedirect(redirect_to)
         else :
             self.form = form
-        return super(TemplateView, self).render_to_response(self.get_context_data())
+        return super(TemplateView, self).render(request, self.get_context_data())
 
     def get_context_data(self, **kwargs):
         context = super(CreateAdminAccountView, self).get_context_data(**kwargs)
@@ -111,12 +111,12 @@ class InstallView(TemplateView):
             raise HttpResponseForbidden
         self.redirect_field_name = request.POST.get(REDIRECT_FIELD_NAME,
             request.GET.get(REDIRECT_FIELD_NAME, ''))
-        return super(TemplateView, self).render_to_response(self.get_context_data())
+        return super(TemplateView, self).render(request, self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         if len(User.objects.filter(is_staff__exact=True)) > 0 :
             raise HttpResponseForbidden
-        return super(TemplateView, self).render_to_response(self.get_context_data())
+        return super(TemplateView, self).render(request, self.get_context_data())
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)

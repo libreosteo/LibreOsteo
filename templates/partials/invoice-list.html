@@ -11,25 +11,25 @@
 
 <div class="btn-group">
     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Exporter
+	    {% trans 'Export' %}
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li><a href="{$ buildCsvUrl() $}"><i class="fa fa-download fa-fw"></i> CSV</a></li>
-        <li><a href="{$ buildCsvUrl('date,number,amount,paiment_mode,currency,status') $}"><i class="fa fa-download fa-fw"></i> CSV anonymisé</a></li>
+	    <li><a href="{$ buildCsvUrl() $}"><i class="fa fa-download fa-fw"></i> {% trans 'CSV' %}</a></li>
+	    <li><a href="{$ buildCsvUrl('date,number,amount,paiment_mode,currency,status') $}"><i class="fa fa-download fa-fw"></i> {% trans 'anonym CSV'%}</a></li>
     </ul>
 </div>
 
 <table class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>N° de facture</th>
-            <th>Date</th>
-            <th>Patient</th>
-            <th>Montant</th>
-            <th>Moyen de paiement</th>
-            <th>Status</th>
-            <th>Actions</th>
+		<th>{% trans 'Invoice nr' %}</th>
+		<th>{% trans 'Date' %}</th>
+		<th>{% trans 'Patient' %}</th>
+		<th>{% trans 'Amount' %}</th>
+		<th>{% trans 'Paiment mean' %}</th>
+		<th>{% trans 'Status' %}</th>
+		<th>{% trans 'Actions' %}</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +52,7 @@
             <td>
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions <span class="caret"></span></button>
-                    <ul class="dropdown-menu"><li><a href="/invoice/{$ invoice.id $}">Imprimer</a></li></ul>
+		    <ul class="dropdown-menu"><li><a href="/invoice/{$ invoice.id $}" target="_blank">{% trans 'Print' %}</a></li></ul>
                 </div>
             </td>
         </tr>

@@ -35,10 +35,10 @@
                     <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model)"><i class="fa fa-print"></i> </button>
                     <span><a ng-href="invoice/{$ model.invoice $}" target="_blank">n° {$ model.invoice_number $}</a></span>
                 </div>
-            </div>            
+            </div>
         </div>
         <div class="col-md-3">
-            
+
         </div>
         <div class="col-md-12">
             <div class="panel panel-danger">
@@ -57,16 +57,16 @@
                             </div>
                             <div class="col-md-12">&nbsp;</div>
                             <div class="col-md-12">
-                                <div hallo-editor ng-model="model.reason_description" 
+                                <div hallo-editor ng-model="model.reason_description"
                                     placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
                                 ></div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
-                                
+
                                 <div class="col-md-12">
                                     <div hallo-editor ng-model="model.medical_examination"
                                     placeholder="'{{ examination.medical_examination }}'" is-editable="editableForm.$visible"></div>
@@ -106,12 +106,12 @@
             <!-- The accordion -->
             <div uib-accordion close-others="false">
                 <div uib-accordion-group heading="{{ examination.orl }}" class="panel-primary panel-sphere" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
-                    <div hallo-editor ng-model="model.orl" 
+                    <div hallo-editor ng-model="model.orl"
                             placeholder="'{{ examination.orl }}'" is-editable="editableForm.$visible"></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary panel-sphere" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
-                    <div hallo-editor ng-model="model.visceral" 
+                    <div hallo-editor ng-model="model.visceral"
                             placeholder="'{{ examination.visceral }}'" is-editable="editableForm.$visible"></div>
                 </div>
 
@@ -125,13 +125,13 @@
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary panel-sphere" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
-                    <div  hallo-editor ng-model="model.periphery" 
+                    <div  hallo-editor ng-model="model.periphery"
                             placeholder="'{{ examination.periphery }}'" is-editable="editableForm.$visible"
                     ></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary panel-sphere" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
-                    <div hallo-editor ng-model="model.general_state" 
+                    <div hallo-editor ng-model="model.general_state"
                             placeholder="'{{ examination.general_state }}'" is-editable="editableForm.$visible"></div>
                 </div>
 
@@ -147,7 +147,7 @@
                     {{ examination.diagnosis }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="model.diagnosis" 
+                    <div hallo-editor ng-model="model.diagnosis"
                             placeholder="'{{ examination.diagnosis }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>

@@ -73,7 +73,8 @@ pre {
 
 .growl
 {
-    z-index : 1000;
+    z-index : 3000;
+    top: 55px;
 }
 
 .timeline-panel
@@ -169,6 +170,9 @@ div.readyForEditMode {
   min-height:34px;
 }
 
+.version {
+    font-size : 0.5em;
+}
 .editor {
     width: 250px;
     top:0px;
@@ -321,6 +325,15 @@ ul li.documenttile  {
 }
 .panel-title {
     font-size : 14px;
+}
+
+.nav-tabs {
+    margin-bottom: 15px;
+}
+
+.dashboard-catalog-item img {
+    box-shadow: 3px 3px 5px 6px #ccc;
+    max-width: 100%;
 }
 
 /* We want that element:

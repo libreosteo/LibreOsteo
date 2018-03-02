@@ -26,10 +26,12 @@ dashboard.factory('DashboardServ', ['$resource',
     }
 ]);
 
-dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardServ', 'OfficeEventServ',
-    function($scope, $filter, growl, DashboardServ, OfficeEventServ) {
+dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardServ', 'OfficeEventServ', 'TherapeutSettingsServ',
+    function($scope, $filter, growl, DashboardServ, OfficeEventServ, TherapeutSettingsServ) {
         "use strict";
         $scope.selector = 'week';
+        $scope.statistics = null;
+        $scope.officeEventLoader = null;
 
         var describe_map = function(range_array){
             var map = {};
@@ -74,24 +76,32 @@ dashboard.controller('DashboardCtrl', ['$scope', '$filter', 'growl', 'DashboardS
 
         $scope.show = function(selector) {
             $scope.selector = selector;
-          if(selector == 'week'){
+            if(selector == 'week'){
                 showStatistics($scope.statistics.week);
                 showObjSparklines($scope.statistics.history.week);
-          } else if (selector == 'month') {
+            } else if (selector == 'month') {
                 showStatistics($scope.statistics.month);
                 showObjSparklines($scope.statistics.history.month);
-          } else if (selector == 'year') {
+            } else if (selector == 'year') {
                 showStatistics($scope.statistics.year)
                 showObjSparklines($scope.statistics.history.year);
-          }
+            }
         };
 
-        $scope.statistics = DashboardServ.get(function(data){
-           $scope.statistics = data;
-            $scope.show($scope.selector);
+        TherapeutSettingsServ.get_by_user().$promise.then(function(therapeutSettings) {
+
+            if (therapeutSettings.stats_enabled) {
+                $scope.statistics = DashboardServ.get(function(data){
+                    $scope.statistics = data;
+                    $scope.show($scope.selector);
+                });
+            }
+
+
+            if (therapeutSettings.last_events_enabled) {
+                $scope.officeEventLoader = new OfficeEventServ();
+            }
+
         });
-
-        $scope.officeEventLoader = new OfficeEventServ();
-
     }
 ]);

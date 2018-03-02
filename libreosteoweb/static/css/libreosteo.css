@@ -73,7 +73,8 @@ pre {
 
 .growl
 {
-    z-index : 1000;
+    z-index : 3000;
+    top: 55px;
 }
 
 .timeline-panel

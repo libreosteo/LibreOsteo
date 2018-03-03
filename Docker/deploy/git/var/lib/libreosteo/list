@@ -1,0 +1,4 @@
+function list {
+    ls $LO_DIR
+}
+

@@ -6,6 +6,14 @@ check_root() {
 	fi
 }
 
+check_noroot() {
+	if id -u | grep -q '^0$'
+	then
+		echo "Please don't launch the script on root"
+		exit 1
+	fi
+}
+
 check_docker() {
 	if ! which docker > /dev/null
 	then
@@ -60,5 +68,10 @@ check_remove_all() {
 	check_root
 	check_docker
 	check_docker_compose
+	check_rm_rank_lo
+}
+
+check_launch_all(){
+	check_noroot
 	check_rm_rank_lo
 }

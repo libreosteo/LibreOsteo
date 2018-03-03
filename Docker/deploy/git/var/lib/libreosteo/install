@@ -1,16 +1,10 @@
-#!/bin/bash
+function install {
+    rank=$2
+    port=$3
+    rank=${rank:-prod}
+    port=${port:-8085}
+    check_install_all
 
-rank=$1
-port=$2
-
-rank=${rank:-prod}
-port=${port:-8085}
-
-source check_libreosteo.sh
-source constant.sh
-
-#MAIN
-main() {
     lo_rank_dir=$LO_DIR/$rank
     lo_media_dir=$lo_rank_dir/media
     lo_sql_dir=$lo_rank_dir/sql
@@ -32,8 +26,4 @@ services:
 EOM
     chown -R 1000:1000 $lo_rank_dir
     cd $lo_rank_dir && docker-compose up -d 2> /dev/null
-    echo "To use libreosteo: Please launch firefox and go to http://localhost:$port"
 }
-
-check_install_all
-main

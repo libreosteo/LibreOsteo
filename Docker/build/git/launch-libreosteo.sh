@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 local_file='Libreosteo/settings/local.py'
 bin_local_file='Libreosteo/settings/local.pyc'
@@ -20,4 +20,4 @@ else
 fi
 
 python manage.py migrate
-python server.py
+python manage.py runserver 0.0.0.0:8085

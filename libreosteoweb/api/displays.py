@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.forms.models import ModelForm
 from libreosteoweb import models 
 from django.contrib.auth.models import User
@@ -72,40 +72,40 @@ class OfficeSettingsDisplay(GenericDisplay):
 
 
 def display_invoices(request):
-    return render_to_response("partials/invoice-list.html", {})
+    return render(request, "partials/invoice-list.html", {})
 
 def display_index(request):
-    return render_to_response('index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
+    return render(request, 'index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
 
 def display_patient(request):
     display = PatientDisplay()
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields(),
+    return render(request, 'partials/patient-detail.html', {'patient' : display.display_fields(),
                                                                'examination' : displayExamination.display_fields()})
 
 def display_newpatient(request):
     display = PatientDisplay()
-    return render_to_response('partials/add-patient.html', {'patient' : display.display_fields()})
+    return render(request, 'partials/add-patient.html', {'patient' : display.display_fields()})
 
 def display_doctor(request):
     display = RegularDoctorDisplay()
-    return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields()})
+    return render(request, 'partials/doctor-modal-add.html', {'doctor':display.display_fields()})
 
 def display_examination_timeline(request):
     display = ExaminationDisplay()
-    return render_to_response('partials/timeline.html', {'examination' : display.display_fields()})
+    return render(request, 'partials/timeline.html', {'examination' : display.display_fields()})
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields()})
+    return render(request, 'partials/examination.html', {'examination' : displayExamination.display_fields()})
 
 def display_search_result(request):
-    return render_to_response('partials/search-result.html', {})
+    return render(request, 'partials/search-result.html', {})
 
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
-    return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields(), 
+    return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(), 
         'therapeutsettings': displayTherapeutSettings.display_fields(),
         'dashboard_modules': models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
         'DEMONSTRATION' : settings.DEMONSTRATION })
@@ -113,45 +113,45 @@ def display_userprofile(request):
 def display_dashboard(request):
     therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
         user=request.user)
-    return render_to_response('partials/dashboard.html', {
+    return render(request, 'partials/dashboard.html', {
         'therapeutsettings': therapeut_settings,
     })
 
 def display_officeevent(request):
-    return render_to_response('partials/officeevent.html', {})
+    return render(request, 'partials/officeevent.html', {})
 
 def display_invoicing(request):
-    return render_to_response('partials/invoice-modal.html', {})
+    return render(request, 'partials/invoice-modal.html', {})
 
 def display_officesettings(request):
     displayOfficeSettings = OfficeSettingsDisplay()
-    return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
+    return render(request, 'partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
 
 def display_adduser(request):
-    return render_to_response('partials/add-user-modal.html', {})
+    return render(request, 'partials/add-user-modal.html', {})
 
 def display_setpassword(request):
-    return render_to_response('partials/set-password-user-modal.html', {})
+    return render(request, 'partials/set-password-user-modal.html', {})
 
 def display_import_files(request):
-    return render_to_response('partials/import-file.html', {'request' : request})
+    return render(request, 'partials/import-file.html', {'request' : request})
 
 def display_rebuild_index(request):
-    return render_to_response('partials/rebuild-index.html', {'request' : request})
+    return render(request, 'partials/rebuild-index.html', {'request' : request})
 
 def display_file_manager(request):
-    return render_to_response('partials/filemanager.html', {'request' : request})
+    return render(request, 'partials/filemanager.html', {'request' : request})
 
 def display_confirmation(request):
-    return render_to_response('partials/confirmation.html')
+    return render(request, 'partials/confirmation.html')
 
 @never_cache
 @maintenance_available()
 def display_restore(request):
-    return render_to_response('partials/restore.html', {'request' : request})
+    return render(request, 'partials/restore.html', {'request' : request})
 
 
 @never_cache
 @maintenance_available()
 def display_register(request):
-    return render_to_response('partials/register.html', {'csrf_token' : request.COOKIES['csrftoken']})
+    return render(request, 'partials/register.html', {'csrf_token' : request.COOKIES['csrftoken']})

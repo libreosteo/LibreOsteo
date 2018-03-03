@@ -17,8 +17,8 @@ check_docker() {
 check_docker_compose() {
 	if ! which docker-compose > /dev/null
 	then
-		echo "Please install docker-compose, see https://docs.docker.com/compose/install/#install-compose"
-		exit 1
+		curl -L --fail https://github.com/docker/compose/releases/download/1.19.0/run.sh -o /usr/local/bin/docker-compose
+		chmod a+x /usr/local/bin/docker-compose
 	fi
 }
 

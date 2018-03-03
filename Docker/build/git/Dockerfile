@@ -3,12 +3,14 @@
 ############################################################
 
 FROM littlejo/libreosteo-common
+
 LABEL maintainer "Joseph Ligier"
-
 ENV version 0.6-dev
-
 ENV software Libreosteo
 
+RUN mkdir /$software && chown libreosteo: /$software
+
+USER libreosteo
 # Download libreosteo
 RUN git clone https://github.com/libreosteo/Libreosteo.git
 
@@ -16,15 +18,12 @@ RUN git clone https://github.com/libreosteo/Libreosteo.git
 WORKDIR /Libreosteo
 
 RUN git checkout develop
+USER root
 RUN pip install -r requirements/requ-py2.txt
-RUN bower install --allow-root 
-RUN python manage.py collectstatic --noinput
 
-
-# Security: use another user than root
-RUN chown -R libreosteo: .
 USER libreosteo
-
+RUN bower install
+RUN python manage.py collectstatic --noinput
 COPY launch-libreosteo.sh .
 COPY local.py.pg Libreosteo/settings/
 COPY local.py.sqlite Libreosteo/settings/

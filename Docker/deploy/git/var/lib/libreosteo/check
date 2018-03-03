@@ -1,7 +1,7 @@
 check_root() {
 	if ! id -u | grep -q '^0$'
 	then
-		echo "Please launch the script on root, maybe sudo $0"
+		echo "Please launch the script on root"
 		exit 1
 	fi
 }
@@ -33,7 +33,7 @@ check_docker_compose() {
 check_rank_lo() {
 	if [[ -d $LO_DIR/$rank ]]
 	then
-		echo "Please use another rank, it already exist, for example: $0 preprod 8086"
+		echo "Please use another rank, it already exist, for example: $0 install preprod 8086"
 		exit 1
 	fi
 }
@@ -51,7 +51,7 @@ check_rm_rank_lo() {
 check_port_lo() {
 	if wget localhost:$port -o /dev/null
 	then
-		echo "Please use another port, for example: $0 $rank 8086"
+		echo "Please use another port, for example: $0 install $rank 8086"
 		exit 1
 	fi
 }

@@ -5,12 +5,9 @@
 FROM littlejo/libreosteo-common
 LABEL maintainer "Joseph Ligier"
 
-ENV version 0.5.7
+ENV version 0.6-dev
 
 ENV software Libreosteo
-ENV url_base https://codeload.github.com/garthylou/Libreosteo/tar.gz
-ENV url $url_base/$version
-ENV dir $software-$version
 
 # Download libreosteo
 RUN git clone https://github.com/libreosteo/Libreosteo.git

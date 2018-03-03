@@ -7,18 +7,22 @@ FROM littlejo/libreosteo-alpine-common
 LABEL maintainer "Joseph Ligier"
 ENV version 0.6-dev
 ENV software Libreosteo
+ENV REPO Libreosteo
+ENV USER libreosteo
+ENV BRANCH develop
 
 RUN mkdir /$software && chown libreosteo: /$software
 
 USER libreosteo
+
 # Download libreosteo
-RUN git clone -b develop https://github.com/libreosteo/Libreosteo.git
+ADD https://api.github.com/repos/$USER/$REPO/git/refs/heads/$BRANCH version.json
+RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git
 
 # Install libreosteo
 WORKDIR /Libreosteo
 
 USER root
-RUN sed -i 's/cherrypy/cherrypy==10.2.2/' requirements/requirements.txt
 RUN pip install -r requirements/requ-py2.txt
 
 COPY launch-libreosteo.sh .

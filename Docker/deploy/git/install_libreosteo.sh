@@ -6,7 +6,7 @@ port=$2
 rank=${rank:-prod}
 port=${port:-8085}
 
-source ../check_libreosteo.sh
+source check_libreosteo.sh
 source constant.sh
 
 #MAIN

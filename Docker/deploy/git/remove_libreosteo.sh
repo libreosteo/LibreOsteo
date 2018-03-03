@@ -4,7 +4,7 @@ rank=$1
 
 rank=${rank:-prod}
 
-source ../check_libreosteo.sh
+source check_libreosteo.sh
 source constant.sh
 
 #MAIN

@@ -26,4 +26,6 @@ services:
 EOM
     chown -R 1000:1000 $lo_rank_dir
     cd $lo_rank_dir && docker-compose up -d 2> /dev/null
+    echo "To launch libreosteo: ./libreosteo launch $2"
+    sleep 4
 }

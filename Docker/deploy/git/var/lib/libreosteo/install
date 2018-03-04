@@ -2,7 +2,8 @@ function install {
     rank=$2
     port=$3
     rank=${rank:-prod}
-    port=${port:-8085}
+    default_port=$PORT
+    port=${port:-$default_port}
     check_install_all
 
     lo_rank_dir=$LO_DIR/$rank

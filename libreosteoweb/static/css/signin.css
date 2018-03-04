@@ -21,6 +21,7 @@ body {
 }
 
 .form-wrapper {padding-bottom: 20px;}
+.form-wrapper:empty {display: none;} /* Because empty panel still have a shadow */
 
 .form-signin {
   max-width: 330px;
@@ -101,7 +102,7 @@ body {
   border-top-right-radius: 0;
 }
 
-// Class
+/* Class */
 .center-block {
   display: block;
   margin-left: auto;
@@ -110,13 +111,12 @@ body {
 .center{
   text-align: center;
 }
-// Usage as a mixin
+/* Usage as a mixin */
 .element {
-  .center-block();
+  /* mixin are not available in vanilla CSS. */
+  /* .center-block(); */
 }
 
 .td-middle{
   vertical-align: middle;
 }
-
-.form-wrapper:empty {display: none;} // Because empty panel still have a shadow

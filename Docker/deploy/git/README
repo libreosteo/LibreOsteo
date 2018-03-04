@@ -9,6 +9,9 @@ $ ./libreosteo launch
 Pour le mettre à jour :
 $ sudo ./libreosteo update
 
+Pour changer le mot de passe :
+$ sudo ./libreosteo passwd user #user est l'utilisateur de libreosteo
+
 Pour le désinstaller :
 $ sudo ./libreosteo remove
 

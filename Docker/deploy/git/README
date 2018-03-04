@@ -1,0 +1,15 @@
+Il faut installer Docker pour que cela fonctionne : https://docs.docker.com/install/
+
+Pour l'installation de libreosteo :
+$ sudo ./libreosteo install
+
+Pour lancer libreosteo :
+$ ./libreosteo launch
+
+Pour le mettre à jour :
+$ sudo ./libreosteo update
+
+Pour le désinstaller :
+$ sudo ./libreosteo remove
+
+La configuration est là : etc/libreosteo/settings.sh

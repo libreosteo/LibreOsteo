@@ -1,0 +1,5 @@
+function help {
+    help_dir=.
+    cat $help_dir/README
+}
+

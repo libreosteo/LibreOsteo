@@ -11,5 +11,6 @@ source $LIB_DIR/remove
 source $LIB_DIR/update
 source $LIB_DIR/list
 source $LIB_DIR/launch
+source $LIB_DIR/help
 
 $1 $@

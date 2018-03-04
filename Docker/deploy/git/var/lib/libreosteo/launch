@@ -1,6 +1,6 @@
 function launch {
     rank=$2
-    rank=${rank:-prod}
+    rank=${rank:-$RANK}
     check_launch_all
     lo_rank_dir=$LO_DIR/$rank
     compose_file=$lo_rank_dir/docker-compose.yml

@@ -13,6 +13,7 @@ source $LIB_DIR/list
 source $LIB_DIR/launch
 source $LIB_DIR/passwd
 source $LIB_DIR/backup
+source $LIB_DIR/restore
 source $LIB_DIR/help
 
 $1 $@

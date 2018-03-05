@@ -202,8 +202,12 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
         }
       });
       // router view change
-      $scope.$on('$locationChangeStart', function(event) {
-        handleUnsavedForm(event, true);
+      $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl, newState, oldState) {
+        if ($element.is(':visible') &&
+            // Avoid handling both $locationChangestart and uiTabChange on same click.
+            ! (oldUrl.includes('#/patient/') && newUrl.includes('#/patient/'))) {
+          handleUnsavedForm(event, true);
+        }
       });
 
       // Window/tab quit or real link click

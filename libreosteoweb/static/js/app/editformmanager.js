@@ -23,6 +23,14 @@ function Callback(name, callback) {
   this.callback = callback;
 }
 
+/** A generic modal form controller
+ *
+ * Modal because two modes : read/write, togglable with a button.
+ * Toggling to read mode make the save action to be called.
+ *
+ * Appart the mode toggle, buttons are also offered for acting on visible
+ * controlled forms models: reset and delete.
+ */
 editFormManager.factory('loEditFormManager', function() {
   var forms = [];
   var actions = ['edit', 'cancel', 'save', 'delete'];
@@ -58,34 +66,44 @@ editFormManager.factory('loEditFormManager', function() {
       if (trigger)
         triggers_form[idx_form] = trigger;
     },
-    isavailable: function() {
-      this.available = this._visibleCtrl() != null;
+
+    /** Should we show the modal-related buttons
+     */
+    isAvailable: function() {
+      this.available = this._visibleCtrls().length > 0;
       return this.available;
     },
     available: false,
     action_available: function(name_action) {
-      return this.action_callback(name_action) != null && this.action_trigger(name_action);
+      return this.action_callbacks(name_action).length > 0 && this.action_trigger(name_action);
     },
-    action_callback: function(name_action) {
-      var idx_form = forms.indexOf(this._visibleCtrl());
-      var callbacks = null;
-      var callback = null;
-      angular.forEach(callback_form, function(value, key) {
-        if (value.id == idx_form) {
-          callbacks = value.callbacks;
-        }
+
+    /** Returns a list of callbacks for a given action name
+
+     Each form may or may not expose a callback; callback will be returned if
+     the form is currently visible.
+
+     * @param{string} name_action - edit/save/delete/cancel
+     * @return{CallBack[]}
+     */
+    action_callbacks: function(name_action) {
+      var form_idx_list = this._visibleCtrls().map(function(el) {
+        return forms.indexOf(el);
       });
-      if (callbacks != null) {
-        angular.forEach(callbacks, function(value, key) {
-          if (value.name == name_action) {
-            callback = value;
-          }
-        });
-      }
-      return callback;
+
+      var visible_forms = callback_form.filter(function(form) {
+        return form_idx_list.includes(form.id);
+      });
+
+      return visible_forms.map(function(form) {
+        return form.callbacks.find(function(callback) {return callback.name == name_action});
+      }).filter(function(i) {return i !== undefined});
     },
+
+    /** Run the named action for all visible forms
+     */
     action_trigger: function(name_action) {
-      var idx_form = forms.indexOf(this._visibleCtrl());
+      var idx_form = forms.indexOf(this._visibleCtrls());
       var triggers = null;
       var trigger = true;
       angular.forEach(triggers_form, function(value, key) {
@@ -104,19 +122,16 @@ editFormManager.factory('loEditFormManager', function() {
       return trigger;
     },
     call_action: function(name) {
-      this.action_callback(name).callback();
-    },
-    _visibleCtrl: function() {
-      var visibleCtrl = null;
-      angular.forEach(forms, function(value, key) {
-        if (visibleCtrl != null && $(value).is(':visible')) {
-          console.log("Cannot manage many ctrl....");
-        }
-        if (visibleCtrl == null && $(value).is(':visible')) {
-          visibleCtrl = value;
-        }
+      angular.forEach(this.action_callbacks(name), function(callback) {
+        callback.callback();
       });
-      return visibleCtrl;
+    },
+    _visibleCtrls: function() {
+      /** Return the visible forms
+       */
+      return forms.filter(function(el) {
+        return $(el).is(':visible');
+      });
     }
   };
 });

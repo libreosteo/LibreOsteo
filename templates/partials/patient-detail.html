@@ -116,9 +116,12 @@
                         <div class="col-md-2">
                             {{ patient.laterality }} :
                         </div>
-                        <div class="col-md-6"><span e-name="laterality" editable-select="patient.laterality"
-                                                         e-ng-options="l.value as l.text for l in laterality"
-                                >{$ showLaterality() $}</span>
+
+                        <div class="col-md-6">
+                            <span e-name="laterality" editable-select="patient.laterality"
+                                  e-ng-options="l.value as l.text for l in lateralities">
+                                {$ patient.laterality | verboseLaterality $}
+                            </span>
                         </div>
                         <div class="col-md-4">
                         <span e-name="smoker" editable-checkbox="patient.smoker"

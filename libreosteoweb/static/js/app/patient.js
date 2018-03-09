@@ -41,7 +41,17 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
         serv.prototype.medical_reports_doc = function(callback)
         {
             return PatientDocumentServ.get({patient : this.id}, callback);
-        }
+        };
+
+        serv.lateralitiesMap = {
+            L: gettext('Left-handed'),
+            R: gettext('Right-handed'),
+        };
+
+        serv.lateralities = [];
+        angular.forEach(serv.lateralitiesMap, function (v, k) {
+            serv.lateralities.push({value: k, text: v});
+        });
         return serv;
     }
 ]);
@@ -466,20 +476,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         };
 
         // Load the values for the sex
-        $scope.laterality = [
-                { value : 'L', text : gettext('Left-handed') },
-                { value :'R', text : gettext('Right-handed') },
-        ];
-
-        // display the translated value for the sex
-        $scope.showLaterality = function() {
-            if($scope.patient) {
-                var selected = $filter('filter')($scope.laterality, {value: $scope.patient.laterality});
-                return ($scope.patient && $scope.patient.laterality && selected.length) ? selected[0].text : '';
-            } else {
-                return gettext('not documented');
-            }
-        };
+        $scope.lateralities = PatientServ.lateralities;
 
         $scope.triggerEditFormPatient = {
             save: false,
@@ -839,3 +836,12 @@ patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
         };
     }
 ]);
+
+/** Given a laterality code, provides the translated verbose name
+*/
+patient.filter('verboseLaterality', function(PatientServ) {
+    return function(value) {
+        var t = PatientServ.lateralitiesMap[value];
+        return t || gettext('not documented');
+    };
+});

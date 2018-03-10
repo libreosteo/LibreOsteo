@@ -2,8 +2,8 @@ Il faut installer Docker pour que cela fonctionne : https://docs.docker.com/inst
 
 Pour installer de façon optimale la solution :
 
-sudo sh install-libreosteo.sh
+sudo bash install-libreosteo.sh
 
 Pour desinstaller la solution
 
-sudo sh uninstall-libreosteo.sh
+sudo bash uninstall-libreosteo.sh

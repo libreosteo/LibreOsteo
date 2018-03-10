@@ -20,7 +20,4 @@ $ sudo ./libreosteo backup
 
 => Backup dans le r√pertoire /var/backups/libreosteo/
 
-Pour restorer :
-$ sudo ./libreosteo restore /var/backups/libreosteo/prod/libreosteo-2018-03-04-204308.tar.gz
-
 La configuration est l√† : etc/libreosteo/settings.sh

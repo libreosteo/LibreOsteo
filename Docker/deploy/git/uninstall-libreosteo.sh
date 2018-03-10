@@ -14,6 +14,6 @@ do
     libreosteo remove $rank
 done
 
-rm -rf $CONF_DIR $LIB_DIR
-rm $BIN_DIR/libreosteo
+rm -rvf $CONF_DIR $LIB_DIR
+rm -v $BIN_DIR/libreosteo
 

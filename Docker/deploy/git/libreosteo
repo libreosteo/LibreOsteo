@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CONFIG_DIR=etc/libreosteo
+CONF_DIR=etc/libreosteo
 LIB_DIR=var/lib/libreosteo
 
-source $CONFIG_DIR/settings.sh
+source $CONF_DIR/settings.sh
 
 source $LIB_DIR/check
 source $LIB_DIR/install

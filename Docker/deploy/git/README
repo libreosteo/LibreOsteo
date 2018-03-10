@@ -1,23 +1,9 @@
 Il faut installer Docker pour que cela fonctionne : https://docs.docker.com/install/
 
-Pour l'installation de libreosteo :
-$ sudo ./libreosteo install
+Pour installer de façon optimale la solution :
 
-Pour lancer libreosteo :
-$ ./libreosteo launch
+sudo sh install-libreosteo.sh
 
-Pour le mettre à jour :
-$ sudo ./libreosteo update
+Pour desinstaller la solution
 
-Pour changer le mot de passe :
-$ sudo ./libreosteo passwd user #user est l'utilisateur de libreosteo
-
-Pour le désinstaller :
-$ sudo ./libreosteo remove
-
-Pour le backupper :
-$ sudo ./libreosteo backup
-
-=> Backup dans le r�pertoire /var/backups/libreosteo/
-
-La configuration est là : etc/libreosteo/settings.sh
+sudo sh uninstall-libreosteo.sh

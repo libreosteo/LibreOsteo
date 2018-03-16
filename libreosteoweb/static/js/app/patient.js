@@ -52,6 +52,17 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
         angular.forEach(serv.lateralitiesMap, function (v, k) {
             serv.lateralities.push({value: k, text: v});
         });
+
+        serv.sexMap = {
+            M: gettext('Male'),
+            F: gettext('Female'),
+        };
+
+        serv.sexes = [];
+        angular.forEach(serv.sexMap, function(v, k) {
+            serv.sexes.push({value: k, text: v});
+        });
+
         return serv;
     }
 ]);
@@ -466,14 +477,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         ];
 
         // display the translated value for the sex
-        $scope.showSex = function() {
-            if($scope.patient) {
-                var selected = $filter('filter')($scope.sexes, {value: $scope.patient.sex});
-                return ($scope.patient && $scope.patient.sex && selected.length) ? selected[0].text : gettext('not documented');
-            } else {
-                return gettext('not documented');
-            }
-        };
 
         // Load the values for the sex
         $scope.lateralities = PatientServ.lateralities;
@@ -842,6 +845,14 @@ patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
 patient.filter('verboseLaterality', function(PatientServ) {
     return function(value) {
         var t = PatientServ.lateralitiesMap[value];
+        return t || gettext('not documented');
+    };
+});
+
+
+patient.filter('verboseSex', function(PatientServ) {
+    return function(value) {
+        var t = PatientServ.sexMap[value];
         return t || gettext('not documented');
     };
 });

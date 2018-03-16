@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-md-10"><span e-name="sex" editable-select="patient.sex"
                                                          e-ng-options="s.value as s.text for s in sexes"
-                                >{$ showSex() $}</span></div>
+                                >{$ patient.sex | verboseSex $}</span></div>
                     </div>
                     <hr/>
                     <div class="row">

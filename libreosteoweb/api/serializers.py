@@ -93,6 +93,7 @@ class RegularDoctorSerializer(serializers.ModelSerializer):
         model = RegularDoctor
         fields = '__all__'
 
+
 class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer()
     comments = serializers.SerializerMethodField('get_nb_comments')

@@ -151,13 +151,17 @@ class HTTPLogger(_cplogging.LogManager):
         log format. This is mostly taken from CherryPy and adapted
         to the WSGI's style of passing information.
         """
+        if hasattr(response, 'streaming_content'):
+            resp_len = 0
+        else:
+            resp_len = len(response.content)
         atoms = {'h': environ.get('REMOTE_ADDR', ''),
                  'l': '-',
                  'u': "-",
                  't': self.time(),
                  'r': "%s %s %s" % (environ['REQUEST_METHOD'], environ['REQUEST_URI'], environ['SERVER_PROTOCOL']),
                  's': response.status_code,
-                 'b': str(len(response.content)),
+                 'b': str(resp_len),
                  'f': environ.get('HTTP_REFERER', ''),
                  'a': environ.get('HTTP_USER_AGENT', ''),
                  }

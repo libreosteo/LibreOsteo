@@ -113,6 +113,7 @@ doctor.directive('doctorSelector', ['DoctorServ', function(DoctorServ) {
                         }
                     );
                 });
+                $event.preventDefault();
             };
         },
     };

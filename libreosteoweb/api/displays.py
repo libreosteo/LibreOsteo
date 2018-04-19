@@ -91,6 +91,10 @@ def display_doctor(request):
     display = RegularDoctorDisplay()
     return render(request, 'partials/doctor-modal-add.html', {'doctor':display.display_fields()})
 
+def select_doctor(request):
+    display = RegularDoctorDisplay()
+    return render(request, 'partials/doctor-selector.html', {'doctor':display.display_fields()})
+
 def display_examination_timeline(request):
     display = ExaminationDisplay()
     return render(request, 'partials/timeline.html', {'examination' : display.display_fields()})

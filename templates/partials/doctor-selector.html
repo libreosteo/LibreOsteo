@@ -1,0 +1,10 @@
+{% load i18n %}
+<span e-name="doctor" editable-select="doctorHolder.{$ doctorHolderProperty $}" onshow="onSwitchToEdit()" onhide="onSwitchToView()"
+      e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
+      tooltip-html-unsafe="{$ doctorDetails.family_name$} {$ doctorDetails.first_name $}<br>{$ doctorDetails.phone $} - {$ doctorDetails.city $}"
+      tooltip-trigger="mouseenter"
+>{$ doctorDetails.family_name || "{% trans 'not documented' %}" $} - {$ doctorDetails.city || "{% trans 'not documented' %}" $}</span>
+<button title="{% trans 'Add a doctor' %}" class="btn btn-default btn-xs fa fa-plus"
+        ng-show="addDoctorButtonVisible" ng-click="formAddDoctor($event)"></button>
+
+</button>

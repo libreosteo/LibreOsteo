@@ -18,8 +18,8 @@
 var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'angular-bind-html-compile']);
 
 
-patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
-    function ($resource, DoctorServ, PatientDocumentServ) {
+patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
+    function ($resource, PatientDocumentServ) {
         "use strict";
         var serv = $resource('api/patients/:patientId', null, {
             query: {method: 'GET' },
@@ -29,14 +29,6 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
             delete : { method : 'DELETE', params : {patientId : 'patientId'}},
             delete_gdpr : { method : 'DELETE', url : 'api/patients/:patientId?gdpr=True', params : {patientId : 'patientId'}}
         });
-
-        serv.prototype.doctor_detail = function (callback) {
-            if (this.doctor)
-            {
-                return DoctorServ.get({doctorId : this.doctor}, callback);
-            }
-            return;
-        };
 
         serv.prototype.medical_reports_doc = function(callback)
         {
@@ -124,17 +116,17 @@ patient.filter('format_age', function () {
             if (ans == '') {
                 out += ' ' + jour || '';
             }
-            return out;
+            return out.trim();
         } else {
             return '';
         }
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http','$sce', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
-    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ','OfficePaimentMeansServ',
-    function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
-        loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
+            patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', '$sce', 'growl', 'PatientServ',
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ', 'OfficePaimentMeansServ',
+    function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+             loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
         "use strict";
 
         var updateMedicalDocumentReports = function(docs) {
@@ -155,9 +147,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 }, medicalReportsDoc);
                 $scope.patient.medicalReportsDoc = medicalReportsDoc;
         };
-
         $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
-            p.doctor_detail(function (detail) {$scope.doctor = detail; });
             p.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
             p.medical_reports_doc(updateMedicalDocumentReports);
         });
@@ -218,13 +208,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 	    });
         }
 
-        // Handle the doctor of the patient.
-        $scope.$watch('patient.doctor', function(newValue, oldValue){
-            if (newValue){
-                $scope.doctor = DoctorServ.get({doctorId : newValue});
-            }
-        });
-
         // Handle the patient object to be saved.
         $scope.savePatient = function () {
             // Be sure that the birth_date has a correct format to be registered.
@@ -235,7 +218,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     // Should reload the patient
                     $scope.patient = data;
                     $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(data.birth_date));
-                    $scope.patient.doctor_detail(function (detail) {$scope.doctor = detail; });
                     $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
                 }, function(data)
             {
@@ -246,31 +228,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     growl.addErrorMessage(formatGrowlError(data.data), {enableHtml:true});
                 }
                 $scope.patient = PatientServ.get({patientId : $stateParams.patientId}, function (p) {
-                     p.doctor_detail(function (detail) {$scope.doctor = detail; });
                      $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
                      $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
                 });
-            });
-        };
-
-        // Prepare the doctors function to be selected.
-        $scope.doctors = null;
-        $scope.loadDoctors = function() {
-                return DoctorServ.query(function(result){
-                    $scope.doctors = result;
                 });
         };
 
-        // Prepare and define the modal function to add doctor.
-       $scope.formAddDoctor = function() {
-            var modalInstance = $uibModal.open({
-                templateUrl: 'web-view/partials/doctor-modal',
-                controller : DoctorAddFormCtrl
-            });
-           modalInstance.result.then(function (newDoctor){
-              DoctorServ.add(newDoctor);
-           });
-        };
 
         //Handle examinations
 

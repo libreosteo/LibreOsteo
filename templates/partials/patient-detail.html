@@ -130,15 +130,11 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            {{ patient.doctor }} : <span e-name="doctor" editable-select="patient.doctor" onshow="loadDoctors()"
-                                                         e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
-                                                         tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"
-                                                         tooltip-trigger="mouseenter"
-                                >{$ doctor.family_name || "{% trans 'not documented' %}" $} - {$ doctor.city || "{% trans 'not documented' %}" $}</span>
-                            <button class="btn btn-default btn-xs fa fa-plus"
-                                    title="{% trans 'Add a doctor' %}" ng-show="form.patientForm.$visible" ng-click="formAddDoctor()"></button>
+                            {% trans 'Regular doctor' %} :
+                            <doctor-selector doctor-holder="patient" doctor-holder-property="'doctor'"></doctor-selector>
                         </div>
                     </div>
+
                     <hr/>
                     <div class="row">
                         <div class="col-md-6">

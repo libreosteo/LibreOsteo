@@ -453,7 +453,7 @@ class IntegratorExamination(AbstractIntegrator):
                     'therapeut': user.id,
                     'type' : ExaminationType.NORMAL,
                     'status' : ExaminationStatus.NOT_INVOICED,
-                    'status_reason': _('Imported examination'),
+                    'status_reason': u'%s' % _('Imported examination'),
                 }
                 serializer = self.serializer_class(data=data)
                 if serializer.is_valid():
@@ -463,7 +463,7 @@ class IntegratorExamination(AbstractIntegrator):
                     # idx + 2 because : we have header and the index start from 0
                     # To have the line number we have to add 2 to the index....
                     errors.append((idx+2, serializer.errors))
-                    logger.info("errors detected, data is = %s "% data)
+                    logger.info("errors detected, data is = %s, errors = %s "% (data,serializer.errors))
             except ValueError as e:
                 logger.exception("Exception when creating examination.")
                 errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line :') + unicode(e) } ))

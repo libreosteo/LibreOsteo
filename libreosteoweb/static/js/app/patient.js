@@ -188,10 +188,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.updateComponentPolyfill = function() {
             // To be compliant with all browser.
             var els = angular.element(".polyfill-updatable");
-            for (var i = 0; i < els.length; ++i)
-            {
-                $(els[i]).updatePolyfill();
-            }
+	    angular.forEach(els, function(el) {
+		    var jqEl = $(el);
+		    if (jqEl.is(':visible')) {
+			jqEl.updatePolyfill();
+		    }
+	    });
         }
 
         // Handle the doctor of the patient.

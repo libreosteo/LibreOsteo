@@ -76,7 +76,7 @@ fileManager.factory('FileServ', ['$resource',
 ]);
 
 
-fileManager.directive('fileManager', [ 'FileServ', 'Upload', '$filter', function(fileService, Upload, $filter) 
+fileManager.directive('fileManager', [ 'FileServ', 'Upload', '$filter', function(fileService, Upload, $filter)
 {
 	return {
 		restrict : 'E',
@@ -112,7 +112,7 @@ fileManager.directive('fileManager', [ 'FileServ', 'Upload', '$filter', function
 
     		Upload.upload({
 	            url: 'api/patient-documents',
-	            data: {	'patient': $scope.context.patient().id, 
+	            data: {	'patient': $scope.context.patient().id,
 	            		'document.document_file' : doc.file,
 	            		'document.title' : doc.title,
 	            		'document.notes' : doc_notes,
@@ -154,10 +154,12 @@ fileManager.directive('fileManager', [ 'FileServ', 'Upload', '$filter', function
     	$scope.updateComponentPolyfill = function() {
             // To be compliant with all browser.
             var els = angular.element(".polyfill-updatable");
-            for (var i = 0; i < els.length; ++i)
-            {
-                $(els[i]).updatePolyfill();
-            }
+	    angular.forEach(els, function(el) {
+		var jqEl = $(el);
+		if (jqEl.is(':visible')) {
+			jqEl.updatePolyfill();
+		}
+	    });
         }
 
     }],

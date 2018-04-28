@@ -39,7 +39,7 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
         # Determine the filter keyword arguments and filter the queryset.
         filter_kwargs = {}
         for field_name in self.fields :
-            if type(attrs[field_name]) is str or type(attrs[field_name]) is unicode:
+            if self.__is_str(attrs[field_name]):
                 filter_kwargs[field_name+'__iexact']=attrs[field_name].lower()
             else:
                 filter_kwargs[field_name]=attrs[field_name]
@@ -53,10 +53,18 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
 
         # Ignore validation if any field is None
         checked_values = [
-            value.lower() if (type(value) is str or type(value) is unicode) else value for field, value in attrs.items() if field in self.fields
+            value.lower() if (self.__is_str(value)) else value for field, value in attrs.items() if field in self.fields
         ]
 
 
         if None not in checked_values and queryset.exists():
             field_names = ', '.join(self.fields)
             raise ValidationError(self.message.format(field_names=field_names))
+
+    def __is_str(self, value):
+        is_str = type(value) is str
+        try :
+            is_str = is_str or type(value) is unicode
+        except NameError:
+            pass
+        return is_str

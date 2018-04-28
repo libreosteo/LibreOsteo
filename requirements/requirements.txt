@@ -3,7 +3,7 @@ Whoosh==2.7.0
 argparse==1.2.1
 django-appconf==1.0.1
 django-filter==1.0.4
-django-haystack==2.5.1
+django-haystack==2.8.1
 django-statici18n==1.4.0
 djangorestframework==3.6.4
 six==1.11.0

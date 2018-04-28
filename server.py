@@ -166,9 +166,12 @@ class HTTPLogger(_cplogging.LogManager):
                  'a': environ.get('HTTP_USER_AGENT', ''),
                  }
         for k, v in atoms.items():
-            if isinstance(v, unicode):
-                v = v.encode('utf8')
-            elif not isinstance(v, str):
+            try :
+                if isinstance(v, unicode):
+                    v = v.encode('utf8')
+            except NameError:
+                pass
+            if not isinstance(v, str):
                 v = str(v)
             # Fortunately, repr(str) escapes unprintable chars, \n, \t, etc
             # and backslash for us. All we have to do is strip the quotes.

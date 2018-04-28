@@ -14,7 +14,10 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-from cStringIO import StringIO
+try:
+    from cStringIo import StringIO
+except ImportError:
+    from io import StringIO
 from datetime import datetime
 import logging
 import os
@@ -50,6 +53,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 
 from libreosteoweb.api import serializers as apiserializers
+from libreosteoweb.api.utils import _unicode
 from libreosteoweb import models
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
@@ -134,7 +138,7 @@ class InstallView(TemplateView):
         if self.redirect_field_name :
             context[REDIRECT_FIELD_NAME] = self.redirect_field_name
         return context
-        
+
 class SearchViewHtml(SearchView):
     template = 'partials/search-result.html'
     results_per_page = 10
@@ -261,7 +265,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             invoice.footer = therapeutsettings.invoice_footer
         invoice.date = datetime.today()
         invoice.save()
-        invoice.number += unicode(10000+invoice.id)
+        invoice.number += _unicode(10000+invoice.id)
         invoice.save()
         return invoice
 
@@ -404,7 +408,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
     model = models.FileImport
     serializer_class = apiserializers.FileImportSerializer
     queryset = models.FileImport.objects.all()
-    
+
 
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
@@ -463,7 +467,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
             if file_import_couple.file_examination :
                 # Start integration of each examination in the file
                 (nb_line_examination, errors_examination) = integrator.integrate(
-                    file_import_couple.file_examination,  
+                    file_import_couple.file_examination,
                     file_additional=file_import_couple.file_patient, user=request.user)
                 response['examination'] = {'imported' : nb_line_examination, 'errors': errors_examination}
         integrator.post_processing(files=[file_import_couple.file_patient, file_import_couple.file_examination])
@@ -474,7 +478,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
 class DocumentViewSet(viewsets.ModelViewSet):
     model = models.Document
     queryset = models.Document.objects.all()
-    
+
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
@@ -491,7 +495,7 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.PatientDocumentSerializer
 
     def get_queryset(self):
-        try : 
+        try :
             patient = self.kwargs['patient']
             return models.PatientDocument.objects.filter(patient__id=patient)
         except KeyError:
@@ -507,10 +511,10 @@ DUMP_FILE="libreosteo.db"
 
 class DbDump(StaffRequiredMixin, View):
     @never_cache
-    def get(self, request, *args, **kwargs):   
+    def get(self, request, *args, **kwargs):
         zip_content = StringIO()
         zf = zipfile.ZipFile(zip_content, "w")
-        
+
         buf = StringIO()
         call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
         buf.seek(0)
@@ -537,7 +541,7 @@ class RebuildIndex(StaffRequiredMixin, View):
 
 class LoadDump(View):
     @maintenance_available()
-    def post(self, request, *args, **kwargs):  
+    def post(self, request, *args, **kwargs):
         #Retrieve the content of the file uploaded.
         try:
             if('file' in request.FILES.keys() ):
@@ -547,7 +551,7 @@ class LoadDump(View):
                 filename = 'dump.json'
                 tmpdir = tempfile.gettempdir()
                 fixture = os.path.join(tmpdir, filename)
-                
+
                 #Check if zip file
                 if zipfile.is_zipfile(file_content):
                     # uncompress the files
@@ -597,4 +601,4 @@ class LoadDump(View):
         except :
             logger.exception('Import failed')
             return HttpResponse(content=_(u'This archive file seems to be incorrect. Impossible to load it.'), status=412)
-        
+

@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var officesettings = angular.module('loOfficeSettings', ['ngResource', 
+var officesettings = angular.module('loOfficeSettings', ['ngResource',
   'ui.grid', 'ui.grid.edit', 'ui.grid.cellNav'
   ]);
 
@@ -36,11 +36,21 @@ officesettings.factory('OfficeUsersServ', ['$resource',
       save : {method : 'PUT', params: {userId : 'userId'}},
       add : { method : 'POST'},
       query : { method : 'GET', isArray : true},
-      setpassword : {method : 'POST', params: {userId : 'userId'}, 
+      setpassword : {method : 'POST', params: {userId : 'userId'},
         url : 'api/office-users/:userId/set_password'},
     });
   }
   ]);
+
+officesettings.factory('OfficePaimentMeansServ', ['$resource',
+		function($resource) {
+			return $resource('api/paiment-mean/:paimentMeanId', null, {
+				get : {method :  'GET', params: {paimentMeanId : 'paimentMeanId'}},
+				save : {method : 'PUT', params: {paimentMeanId: 'paimentMeanId'}},
+				add : {method: 'POST'},
+				query : {method: 'GET', isArray: true}
+			});
+		}]);
 
 officesettings.filter('true_false', function() {
               return function(text, length, end) {
@@ -52,9 +62,9 @@ officesettings.filter('true_false', function() {
           });
 
 
-officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl', 
-  'OfficeSettingsServ', 'OfficeUsersServ', 'i18nService', '$uibModal',
-    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, i18nService, $uibModal){
+officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
+  'OfficeSettingsServ', 'OfficeUsersServ', 'OfficePaimentMeansServ', 'i18nService', '$uibModal', '$q',
+    function($scope, $http, growl, OfficeSettingsServ, OfficeUsersServ, OfficePaimentMeansServ, i18nService, $uibModal, $q){
         "use strict";
 
         i18nService.setCurrentLang('fr');
@@ -66,6 +76,11 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
         {
           $scope.users = data;
         });
+
+	$scope.paiment_means = OfficePaimentMeansServ.query(function(data)
+			{
+				$scope.paiment_means = data;
+			});
 
         $scope.gridOptions = {
           enableSorting: true,
@@ -96,15 +111,34 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
             });
         };
 
-        $scope.updateSettings = function(settings) {
-          OfficeSettingsServ.save({settingsId : $scope.officesettings.id }, settings).
-            $promise.then( function(settings){
-              $scope.officesettings = settings;
-              // Display info that it is updated
-              var e = document.getElementById('update-info');
-              var text = angular.element(e).text();
-              growl.addSuccessMessage(text);
-              },
+	$scope.resetPaimentMeans = function(paimentmeans) {
+		angular.forEach($scope.paiment_means, function(paiment_mean, key) {
+			angular.forEach(paimentmeans, function(update, key) {
+				if (paimentmeans.id == this.id) {
+					this.enable = paimentmeans.enable;
+				}
+
+			}, paiment_mean);
+		});
+	};
+
+	$scope.updateSettings = function(settings) {
+		var update1 = OfficeSettingsServ.save({settingsId : $scope.officesettings.id }, settings);
+		var updatePromises = [ update1.$promise ];
+		angular.forEach($scope.paiment_means, function(paimentmean, key) {
+			var updatePaimentMean = OfficePaimentMeansServ.save({paimentMeanId : paimentmean.id}, paimentmean);
+
+			this.push(updatePaimentMean.$promise);
+		}
+		, updatePromises);
+		$q.all(updatePromises).then(function(settings) {
+			$scope.officesettings = settings[0];
+			$scope.paiment_means = $scope.resetPaimentMeans(settings.slice(0));
+			// Display info that it is updated
+              		var e = document.getElementById('update-info');
+              		var text = angular.element(e).text();
+              		growl.addSuccessMessage(text);
+              	},
                 function(reason) {
                   // Should display the error
                   if(reason.data.detail) {
@@ -112,8 +146,8 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
                   } else {
                     growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
                   }
-                });
-        };
+		});
+	};
 
         $scope.setPassword = function(entity)
         {
@@ -148,7 +182,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
               OfficeUsersServ.add(newUser).$promise.then(function (data)
                 {
                   OfficeUsersServ.setpassword({userId : data.id}, newUser).$promise.then(function (result)
-                  { 
+                  {
                     $scope.users.push(data);
                   });
                 });
@@ -178,7 +212,7 @@ officesettings.controller('AddUserFormCtrl', ['$scope', '$uibModalInstance', 'Of
       var deferred = $q.defer();
 
       OfficeUsersServ
-        .query(function(data) { 
+        .query(function(data) {
 
             var user = data.find(function(element, index, array)
             {

@@ -144,7 +144,7 @@ pre {
 
 .chat-panel .panel-body{
     height: auto;
-    overflow-y : initial; 
+    overflow-y : initial;
 }
 
 .dashboard-sparkline
@@ -210,7 +210,7 @@ ul li.documenttile  {
     margin-left: 10px;
 }
 .doc_expand {
-    margin-left: 10px;   
+    margin-left: 10px;
 }
 .doc_date {
     font-size : smaller;
@@ -349,4 +349,7 @@ ul li.documenttile  {
     opacity: 0;
     position: relative;
     right: 16px;
+}
+.checkbox.paimentmean {
+	width : 10%;
 }

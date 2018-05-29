@@ -506,6 +506,10 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
             raise Http404()
         serializer.save(user=self.request.user)
 
+class PaimentMeanViewSet(viewsets.ModelViewSet):
+    model = models.PaimentMean
+    serializer_class = apiserializers.PaimentMeanSerializer
+    queryset = models.PaimentMean.objects.all()
 
 DUMP_FILE="libreosteo.db"
 

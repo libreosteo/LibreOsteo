@@ -44,6 +44,7 @@ router.register(r'comments', views.ExaminationCommentViewSet)
 router.register(r'office-users', views.UserOfficeViewSet)
 router.register(r'file-import', views.FileImportViewSet)
 router.register(r'patient-documents', views.PatientDocumentViewSet, 'PatientDocuments')
+router.register(r'paiment-mean', views.PaimentMeanViewSet, 'PaimentMean')
 
 urlpatterns = [
     # Examples:

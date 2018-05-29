@@ -17,9 +17,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('code', models.CharField(max_length=10, verbose_name='Code')),
                 ('text', models.CharField(max_length=50, verbose_name='Text')),
+                ('enable', models.BooleanField(default=True, verbose_name='Enabled')),
             ],
         ),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text) VALUES ('check', 'Chèque');"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text) VALUES ('cash', 'Espèce');"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text) VALUES ('ecard', 'CB');")
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('check', 'Chèque', True);"),
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('cash', 'Espèce', True);"),
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('ecard', 'CB', True);")
     ]

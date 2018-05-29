@@ -90,6 +90,22 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
+				<div class="form-group">
+					<label for="paiement-means">{% trans 'Paiment means' %}</label>
+					<div class="form-inline">
+					<div class="form-group checkbox paimentmean" ng-repeat="paiment_mean in paiment_means">
+						<label>
+						<input type="checkbox" ng-model="paiment_mean.enable"
+							tooltip="{% trans 'Paiment means' %}"
+                                			tooltip-trigger="mouseenter"
+                                			ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+						{$ paiment_mean.text $}
+						</label>
+					</div>
+					</div>
+				</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="invoice_office_header">{{officesettings.invoice_office_header}}</label>
                                 <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_office_header" required name="invoice_office_header" id="invoice_office_header" placeholder="{{ officesettings.invoice_office_header }}"

@@ -230,6 +230,7 @@ class PaimentMean(models.Model):
     """
     code = models.CharField(_('Code'), max_length=10)
     text = models.CharField(_('Text'), max_length=50)
+    enable = models.BooleanField(_('Enabled'), default=True)
 
 class OfficeEvent(models.Model):
     """
@@ -262,7 +263,7 @@ class OfficeSettings(models.Model):
     currency = models.CharField(_('Currency'), max_length=10)
     invoice_content = models.TextField(_('Invoice content'), blank=True)
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)
-    invoice_start_sequence = models.TextField(_('Invoice start sequence'), blank=True)    
+    invoice_start_sequence = models.TextField(_('Invoice start sequence'), blank=True)
 
     def save(self, *args, **kwargs):
         """

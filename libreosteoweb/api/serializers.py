@@ -247,3 +247,8 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
         document.save()
         patient_doc = PatientDocument.objects.create(patient=patient, document=document,**validated_data)
         return patient_doc
+
+class PaimentMeanSerializer(WithPkMixin, serializers.ModelSerializer):
+    class Meta:
+        model = PaimentMean
+        fields = '__all__'

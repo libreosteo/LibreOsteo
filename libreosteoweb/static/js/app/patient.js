@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
@@ -59,7 +59,7 @@ patient.factory('PatientExaminationsServ', ['$resource',
 
 }]);
 
-patient.factory('PatientDocumentServ', ['$resource', 
+patient.factory('PatientDocumentServ', ['$resource',
     function($resource) {
         "use strict";
         return $resource('api/patients/:patient/documents', null, {
@@ -110,9 +110,9 @@ patient.filter('format_age', function () {
 });
 
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
-    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ',
+    'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ','OfficePaimentMeansServ',
     function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
-        loEditFormManager, loFileManager, FileServ) {
+        loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
         "use strict";
 
         var updateMedicalDocumentReports = function(docs) {
@@ -298,7 +298,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                         if( data.length != 0){
                             $scope.triggerEditFormPatient.delete = false;
                         } else {
-                            $scope.triggerEditFormPatient.delete = true;            
+                            $scope.triggerEditFormPatient.delete = true;
                         }
                     });
                 } else {
@@ -343,7 +343,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             if (!examinationToSave)
             {
                 examinationToSave = $scope.newExamination;
-            } 
+            }
             var localExamination;
             if( !examinationToSave.id ) {
                 localExamination = ExaminationServ.add(examinationToSave, function(value)
@@ -384,7 +384,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         $scope.close = function(examination, invoicing)
         {
-            
+
             ExaminationServ.close({examinationId : examination.id}, invoicing , function() {
                 if ($scope.examinationsTab.newExaminationDisplay){
                     // Hide the in progress examination
@@ -398,7 +398,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     function(data){
                         $scope.previousExamination.data = data;
                 });
-            });
+            }, function(reason) {
+		    if(reason.data.detail) {
+			growl.addErrorMessage(reason.data.detail);
+		    } else {
+			growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
+		    }
+	    });
         };
 
         $scope.examinationDeleted = function(examination)
@@ -409,8 +415,8 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 {
                     return el.id !== examination.id;
                 });
-                
-            }                            
+
+            }
             if ($scope.examinationsTab.newExaminationDisplay){
                 // Hide the in progress examination
                 Object.keys($scope.newExamination).forEach(function(key) { delete $scope.newExamination[key]; });
@@ -506,13 +512,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             $scope.form.patientForm.$save();
         };
 
-        $scope.delete = function() 
+        $scope.delete = function()
         {
             if($scope.patient.id)
                 {
                     PatientServ.delete({patientId : $scope.patient.id}, function(resultOk)
                         {
-                            $state.go('dashboard'); 
+                            $state.go('dashboard');
                         }, function(resultNok)
                         {
                             console.log(resultNok);
@@ -676,7 +682,7 @@ var ConfirmationCtrl = function($scope, $uibModalInstance, message) {
     };
 }
 
-var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ) {
+var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, OfficePaimentMeansServ) {
     "use strict";
     $scope.invoicing = {
         status : null,
@@ -693,6 +699,16 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ) {
     OfficeSettingsServ.get(function(settings){
           $scope.officesettings = settings[0];
           $scope.invoicing.amount = $scope.officesettings.amount;
+    });
+
+    OfficePaimentMeansServ.query(function(paimentmeans) {
+	var enabledPm = [];
+	angular.forEach(paimentmeans, function(value, key) {
+		if(value.enable) {
+			enabledPm.push(value);
+		}
+	}, enabledPm);
+	$scope.paimentmeans = enabledPm;
     });
 
     $scope.ok = function() {
@@ -758,7 +774,7 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'P
         $scope.initPatient = function(patient) {
             var model = angular.copy(patient);
             model.birth_date = $filter('date')(patient.birth_date, 'yyyy-MM-dd');
-            
+
             PatientServ.add(model, function(data)
             {
                 $location.path('/patient/'+data.id);

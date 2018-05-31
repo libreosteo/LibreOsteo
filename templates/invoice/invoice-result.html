@@ -33,7 +33,7 @@
 					<hr/>
 			</div>
 		</div>
-		
+
 		<div id="patient">
 			<p>
 				<span>{{ invoice.patient_first_name }} {{invoice.patient_family_name}}</span><br/>
@@ -52,21 +52,19 @@
 		</div>
 
 		<div class="spacer"></div>
-		
+
 		<div id="invoice-number">
 			<p> Facture {{invoice.number}}</p>
 		</div>
 
 
-		
+
 		<div id="main">
 			{% localize on %}
 			<p>{{ invoice.content_invoice | templatize:invoice | linebreaksbr }}</p>
 			{% endlocalize %}
-			{% if invoice.paiment_mode == 'check' %}
-				<p>Règlement par chèque </p>
-			{% elif invoice.paiment_mode == 'cash' %}
-				<p>Règlement par espèce </p>
+			{% if invoice.paiment_mode != 'not_paid'  %}
+			<p>Règlement par {{paiment_mean}}</p>
 			{% else %}
 			<p>Non réglé en date de facture</p>
 			{% endif %}

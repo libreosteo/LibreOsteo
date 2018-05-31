@@ -15,7 +15,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from django.shortcuts import render
 from django.forms.models import ModelForm
-from libreosteoweb import models 
+from libreosteoweb import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import libreosteoweb
@@ -33,10 +33,10 @@ def filter_fields(f):
 
 class GenericDisplay(ModelForm):
     class Meta:
-        model = User 
+        model = User
         fields = [ f.name for f in model._meta.fields if f.editable ]
 
-    def display_fields(self): 
+    def display_fields(self):
         return dict([ (f.name, f.formfield().label) for f in filter( filter_fields, self.Meta.model._meta.fields)])
 
 
@@ -105,7 +105,7 @@ def display_search_result(request):
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
-    return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(), 
+    return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(),
         'therapeutsettings': displayTherapeutSettings.display_fields(),
         'dashboard_modules': models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
         'DEMONSTRATION' : settings.DEMONSTRATION })

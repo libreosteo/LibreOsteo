@@ -127,7 +127,7 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
         if attrs['status'] == 'invoiced':
             if attrs['amount'] is None or attrs['amount'] <= 0:
                 raise serializers.ValidationError(_("Amount is invalid"))
-            if attrs['paiment_mode'] is None or len(attrs['paiment_mode'].strip()) == 0 or attrs['paiment_mode'] not in ['check', 'cash', 'notpaid']:
+            if attrs['paiment_mode'] is None or len(attrs['paiment_mode'].strip()) == 0 or attrs['paiment_mode'] not in [ p.code for p in PaimentMean.objects.filter(enable=True) ]+ ['notpaid']:
                 raise serializers.ValidationError(_("Paiment mode is mandatory when the examination is invoiced"))
             if attrs['paiment_mode'] == 'check':
                 if attrs['check'] is None :
@@ -186,10 +186,17 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
     status = serializers.IntegerField(source='examination.status')
+    paiment_mode_text = serializers.SerializerMethodField()
 
     class Meta:
         model = Invoice
         fields = '__all__'
+
+    def get_paiment_mode_text(self, obj):
+        paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode)
+        if len(paiment_mean) > 0 :
+            return paiment_mean[0].text
+        return 'n/a'
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):

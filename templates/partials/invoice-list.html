@@ -40,8 +40,7 @@
             <td>{$ invoice.amount $} €</td>
 
             <td ng-if="invoice.paiment_mode == null">{% trans 'n/a' %}</td>
-            <td ng-if="invoice.paiment_mode === 'check'">{% trans 'Check' %}</td>
-            <td ng-if="invoice.paiment_mode === 'cash'">{% trans 'Cash' %}</td>
+	    <td ng-if="invoice.paiment_mode != null">{$ invoice.paiment_mode_text | translate $}</td>
 
             <td>
                 <span class="label label-default" ng-if="invoice.status === null || invoice.status === 0">{% trans  'Draft' %}</span>

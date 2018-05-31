@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('check', 'Chèque', True);"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('cash', 'Espèce', True);"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('ecard', 'CB', True);")
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('cash', 'Espèces', True);"),
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('ecard', 'Carte Bancaire', True);")
     ]

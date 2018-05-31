@@ -21,9 +21,6 @@ invoices.factory('InvoiceService', ['$resource', function ($resource) {
     return $resource('api/invoices/:InvoiceId', null, {
         query: {method: 'GET' , isArray: true},
         get : {method: 'GET', params: {InvoiceId: 'invoiceId'}},
-        save : {method : 'PUT', params : {InvoiceId : 'InvoiceId'}},
-        add : {method : 'POST'},
-        delete : { method : 'DELETE', params : {InvoiceId : 'InvoiceId'}},
     });
 }]);
 

@@ -15,6 +15,17 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+var utils = angular.module('loUtils', []) ;
+
+utils.filter('translate', function() {
+	return function(input) {
+		if(input){
+			return gettext(input);
+		}
+	};
+});
+
 function getFields(obj)
 {
     "use strict";
@@ -74,5 +85,5 @@ function convertUTCDateToLocalDate(date) {
 
     newDate.setHours(hours - offset);
 
-    return newDate;   
+    return newDate;
 }

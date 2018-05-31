@@ -150,6 +150,7 @@ class InvoiceViewHtml(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
         context['invoice'] = models.Invoice.objects.get(pk=kwargs['invoiceid'])
+        context['paiment_mean'] = _(models.PaimentMean.objects.get(code=context['invoice'].paiment_mode).text).lower()
         return context
 
 
@@ -215,7 +216,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 if serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
                     current_examination.save()
-                if serializer.data['paiment_mode'] in ['check', 'cash']:
+                if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
                     current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
                     current_examination.save()
             return Response({'invoiced': current_examination.invoice.id})

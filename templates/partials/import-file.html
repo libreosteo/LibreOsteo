@@ -101,18 +101,49 @@
       <p class="bg-info">{% trans 'Patient file' %}<span ng-show="result_analyze.analyze.patient[1]" class="text-success"> <i class="fa fa-check"></i></span><span ng-show="!result_analyze.analyze.patient[1]" class="text-danger"> <i class="fa fa-close"></i></span></p>
 
       <div>
-        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file.{% endblocktrans %}</p>
         <table class="table table-bordered" ng-show="!result_analyze.analyze.patient[2]">
-            <tr ng-repeat="(key,row) in result_analyze.extract.patient">
-                <td>{$ key $}</td>
-                <td>{$ row[0] $}</td>
-                <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
-                <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
-                <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
-                <td>{$ row[13] $}</td><td>{$ row[14] $}</td><td>{$ row[15] $}</td><td>{$ row[16] $}</td>
-                <td>{$ row[17] $}</td><td>{$ row[18] $}</td><td>{$ row[19] $}</td><td>{$ row[20] $}</td>
-                <td>{$ row[21] $}</td><td>{$ row[22] $}</td><td>{$ row[23] $}</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>{% trans 'CSV line number' %}</th>
+                    <th>{% trans 'Patient num. (internal use)' %}</th>
+                    <th>{% trans 'Family name' %}</th>
+                    <th>{% trans 'Original name' %}</th>
+                    <th>{% trans 'Firstname' %}</th>
+                    <th>{% trans 'Birth date (DD/MM/AAAA)' %}</th>
+                    <th>{% trans 'Sex (M/F)' %}</th>
+                    <th>{% trans 'Street' %}</th>
+                    <th>{% trans 'Address complement' %}</th>
+                    <th>{% trans 'Zipcode' %}</th>
+                    <th>{% trans 'City' %}</th>
+                    <th>{% trans 'Email' %}</th>
+                    <th>{% trans 'Phone' %}</th>
+                    <th>{% trans 'Mobile phone' %}</th>
+                    <th>{% trans 'Job' %}</th>
+                    <th>{% trans 'Hobbies' %}</th>
+                    <th>{% trans 'Smoker (O/N)' %}</th>
+                    <th>{% trans 'Laterality (G/D)' %}</th>
+                    <th>{% trans 'Important note' %}</th>
+                    <th>{% trans 'Current treatment' %}</th>
+                    <th>{% trans 'Surgical history' %}</th>
+                    <th>{% trans 'Medical history' %}</th>
+                    <th>{% trans 'Family history' %}</th>
+                    <th>{% trans 'Trauma history' %}</th>
+                    <th>{% trans 'Medical reports' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key,row) in result_analyze.extract.patient">
+                    <td>{$ key $}</td>
+                    <td>{$ row[0] $}</td>
+                    <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
+                    <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
+                    <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
+                    <td>{$ row[13] $}</td><td>{$ row[14] $}</td><td>{$ row[15] $}</td><td>{$ row[16] $}</td>
+                    <td>{$ row[17] $}</td><td>{$ row[18] $}</td><td>{$ row[19] $}</td><td>{$ row[20] $}</td>
+                    <td>{$ row[21] $}</td><td>{$ row[22] $}</td><td>{$ row[23] $}</td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <p ng-show="result_analyze.analyze.patient[2]">{% trans 'Empty file' %}</p>
@@ -121,17 +152,38 @@
 <div id="examination-file-analyze" ng-show="result_analyze.analyze.examination[0] == 'examination'">
     <p class="bg-info">{% trans 'Examination file' %}<span ng-show="result_analyze.analyze.examination[1]" class="text-success"> <i class="fa fa-check"></i></span><span ng-show="!result_analyze.analyze.examination[1]" class="text-danger"> <i class="fa fa-close"></i></span></p>
     <div>
-        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file. First column is the line number in the file.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Please check that the file is correctly read by the software before to integrate the content. Here is an extract of some lines of the file.{% endblocktrans %}</p>
 
         <table class="table table-bordered" ng-show="!result_analyze.analyze.examination[2]">
-            <tr ng-repeat="(key,row) in result_analyze.extract.examination">
-                <td>{$ key $}</td>
-                <td>{$ row[0] $}</td>
-                <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
-                <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
-                <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
-                <td>{$ row[13] $}</td>
-            </tr>
+            <thead>
+                <tr>
+                    <th>{% trans 'CSV line number' %}</th>
+                    <th>{% trans 'Patient num. (internal use)' %}</th>
+                    <th>{% trans 'Date' %}</th>
+                    <th>{% trans 'Reason' %}</th>
+                    <th>{% trans 'Reason description/Context' %}</th>
+                    <th>{% trans 'ORL Sphere' %}</th>
+                    <th>{% trans 'Visceral Sphere' %}</th>
+                    <th>{% trans 'Cardia-Pulmo Sphere' %}</th>
+                    <th>{% trans 'Uro-gyneco Sphere' %}</th>
+                    <th>{% trans 'Periphery Sphere' %}</th>
+                    <th>{% trans 'General state' %}</th>
+                    <th>{% trans 'Medical examination' %}</th>
+                    <th>{% trans 'Diagnosis' %}</th>
+                    <th>{% trans 'Treatments' %}</th>
+                    <th>{% trans 'Conclusion' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(key,row) in result_analyze.extract.examination">
+                    <td>{$ key $}</td>
+                    <td>{$ row[0] $}</td>
+                    <td>{$ row[1] $}</td><td>{$ row[2] $}</td><td>{$ row[3] $}</td><td>{$ row[4] $}</td>
+                    <td>{$ row[5] $}</td><td>{$ row[6] $}</td><td>{$ row[7] $}</td><td>{$ row[8] $}</td>
+                    <td>{$ row[9] $}</td><td>{$ row[10] $}</td><td>{$ row[11] $}</td><td>{$ row[12] $}</td>
+                    <td>{$ row[13] $}</td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <p ng-show="result_analyze.analyze.examination[2]">{% trans 'Empty file' %}</p>

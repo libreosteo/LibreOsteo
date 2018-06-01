@@ -103,7 +103,7 @@ msgid "Zipcode"
 msgstr "Code postal"
 
 msgid "Email"
-msgstr "email"
+msgstr "Email"
 
 msgid "Mobile phone"
 msgstr "Mobile"
@@ -283,10 +283,10 @@ msgid "Siret"
 msgstr "Siret"
 
 msgid "Code"
-msgstr ""
+msgstr "Code"
 
 msgid "Text"
-msgstr ""
+msgstr "Texte"
 
 msgid "Class"
 msgstr "Classe"
@@ -404,13 +404,13 @@ msgstr "Enregistrer"
 msgid "Signin on Libreosto"
 msgstr "Identifiez-vous sur Libreosteo"
 
+msgid "Please sign in"
+msgstr "Veuillez vous identifier"
+
 msgid "Your username and password didn't match. Please try again."
 msgstr ""
 "Votre nom d'utilisateur et mot de passe ne correspondent pas. Veuillez "
 "réessayer s'il vous plaît."
-
-msgid "Please sign in"
-msgstr "Veuillez vous identifier"
 
 msgid "Sign in"
 msgstr "Identification"
@@ -883,7 +883,7 @@ msgid "Identity"
 msgstr "Utilisateur"
 
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 msgid "Display settings"
 msgstr "Paramètres d'affichage"

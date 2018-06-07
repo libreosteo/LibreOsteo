@@ -439,9 +439,6 @@ patient.filter('format_age', function () {
                 { value :'F', text : gettext('Female') },
         ];
 
-        // display the translated value for the sex
-
-        // Load the values for the sex
         $scope.lateralities = PatientServ.lateralities;
 
         $scope.triggerEditFormPatient = {

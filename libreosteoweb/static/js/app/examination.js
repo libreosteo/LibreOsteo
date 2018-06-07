@@ -60,11 +60,6 @@ examination.factory('CommentServ', ['$resource',
     ]);
 
 
-function isEmpty(str) {
-    return (!str || 0 === str.length);
-}
-
-
 examination.directive('examination', ['ExaminationServ', function(ExaminationServ){
     "use strict";
     return {

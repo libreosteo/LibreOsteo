@@ -4,6 +4,7 @@
     <span ng-show="patient.original_name || form.patientForm.$visible">(<span blur="submit" e-name="original_name" e-placeholder="{{ patient.original_name }}" e-form="originalNameInput" buttons="no" editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
     </span>
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
+    <small ng-if="age || patient.job"><span ng-if="patient.job">{$ patient.job $}, </span>{$ age | format_age $}</small>
 </h1>
 
 <uib-tabset active="indexTab">
@@ -25,7 +26,6 @@
                                                  onshow="updateComponentPolyfill()"
                                 >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
                         </div>
-                        <div class="col-md-4"><span> ( {$ age | format_age $} )</span></div>
                     </div>
                     <div class="row">
                         <div class="col-md-2">

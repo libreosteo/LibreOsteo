@@ -19,11 +19,25 @@
 /* For fixed navbar */
 body { padding-top: 50px; }
 
+
+/* angular-xeditable override */
+
 .editable-click {
     !important;
     color : black;
     border-bottom : none;
 }
+
+.editable-empty,
+.editable-empty:hover,
+.editable-empty:focus,
+a.editable-empty,
+a.editable-empty:hover,
+a.editable-empty:focus {
+    color: #ccc;
+}
+
+/* end angular-xeditable override */
 
 pre {
     background-color : transparent;

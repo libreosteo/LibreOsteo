@@ -355,6 +355,22 @@ ul li.documenttile  {
     margin-bottom: 15px;
 }
 
+.panel-heading .badge {
+    float: right;
+}
+
+.panel-primary > .panel-heading .badge-danger {
+	color: #a94442;
+}
+
+.panel-primary > .panel-heading .badge-danger  {
+	color: #c9302c;
+}
+
+.panel-primary > .panel-heading .badge-warning  {
+	color: #ec971f;
+}
+
 .dashboard-catalog-item img {
     box-shadow: 3px 3px 5px 6px #ccc;
     max-width: 100%;

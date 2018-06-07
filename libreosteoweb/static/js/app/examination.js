@@ -59,11 +59,6 @@ examination.factory('CommentServ', ['$resource',
     }
     ]);
 
-examination.controller('ExaminationCtrl', ['$scope', '$routeParams', 'ExaminationServ', function ($scope, $routeParams, DoctorServ) {
-        "use strict";
-        $scope.examination = ExaminationServ.get({examinationId : $routeParams.examinationId});
-    }
-]);
 
 function isEmpty(str) {
     return (!str || 0 === str.length);

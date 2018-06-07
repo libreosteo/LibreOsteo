@@ -183,6 +183,10 @@ div.readyForEditMode {
     margin-right : 5px;
 }
 
+.left-bordered-col {
+    border-left: 2px solid #eee;
+}
+
 ul li.documenttile  {
     list-style-type: none;
     margin: 0;

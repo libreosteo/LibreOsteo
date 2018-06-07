@@ -19,113 +19,109 @@
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-7">
                             {{ patient.birth_date }} :
+                            <span e-class="polyfill-updatable birthdate" editable-date="patient.birth_date"
+                                  onshow="updateComponentPolyfill()"
+                            >{$ (patient.birth_date | date:"dd/MM/yyyy") || "{% trans 'not documented' %}" $}</span>
                         </div>
-                        <div class="col-md-6"><span e-class="polyfill-updatable birthdate" editable-date="patient.birth_date"
-                                                 onshow="updateComponentPolyfill()"
-                                >{$ (patient.birth_date | date:"dd/MM/yyyy") || '{% trans 'not documented' %}' $}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-5 left-bordered-col">
                             {{ patient.sex }} :
-                        </div>
-                        <div class="col-md-10"><span e-name="sex" editable-select="patient.sex"
-                                                         e-ng-options="s.value as s.text for s in sexes"
-                                >{$ patient.sex | verboseSex $}</span></div>
-                    </div>
-                    <hr/>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span e-name="street" editable-text="patient.address_street"
-                                e-placeholder="{{ patient.address_street }}"
-                                tooltip="{{ patient.address_street }}"
-                                tooltip-trigger="mouseenter"
-                              >{$ patient.address_street || '&nbsp;&nbsp;' $}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span e-name="address_complement" editable-text="patient.address_complement"
-                                e-placeholder="{{ patient.address_complement }}"
-                                tooltip="{{ patient.address_complement }}"
-                                tooltip-trigger="mouseenter"
-                              >{$ patient.address_complement || '&nbsp;&nbsp;' $}</span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span e-name="zipcode" editable-text="patient.address_zipcode"
-                        e-placeholder="{{ patient.address_zipcode }}"
-                        tooltip="{{ patient.address_zipcode }}"
-                        tooltip-trigger="mouseenter"
-                        class="row col-md-5" e-width="66px"
-                      >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
-
-                            <span e-name="city" editable-text="patient.address_city"
-                        e-placeholder="{{ patient.address_city }}"
-                        tooltip="{{ patient.address_city }}"
-                        tooltip-trigger="mouseenter"
-                        class="row col-md-7" e-width="200px"
-                      >{$ patient.address_city || '&nbsp;&nbsp;' $}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row col-md-6">
-                                <span class="glyphicon glyphicon-phone-alt"
-                                      tooltip="{{ patient.phone }}"
-                                      tooltip-trigger="mouseenter"
-                                ></span>
-                                <span e-name="phone" editable-tel="patient.phone"
-                                      e-placeholder="{{ patient.phone }}"
-                                      tooltip="{{ patient.phone }}"
-                                      tooltip-trigger="mouseenter"
-                                      >{$ patient.phone || '&nbsp;&nbsp;' $}</span>
-                            </div>
-                            <div class="row col-md-6">
-                                <span class="glyphicon glyphicon-earphone"
-                                      tooltip="{{ patient.mobile_phone }}"
-                                      tooltip-trigger="mouseenter"
-                                ></span>
-                                <span e-name="mobile" editable-tel="patient.mobile_phone"
-                                      e-placeholder="{{ patient.mobile_phone }}"
-                                      tooltip="{{ patient.mobile_phone }}"
-                                      tooltip-trigger="mouseenter"
-                                      >{$ patient.mobile_phone || '&nbsp;&nbsp;' $}</span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="row col-md-6">
-                                <span tooltip="{{ patient.email }}"
-                                      tooltip-trigger="mouseenter">@
-                                </span>
-                                <span e-name="email" editable-email="patient.email"
-                                      e-placeholder="{{ patient.email }}"
-                                      tooltip="{{ patient.email }}"
-                                      tooltip-trigger="mouseenter"
-                                      >{$ patient.email || '&nbsp;&nbsp;' $}</span>
-                            </div>
+                            <span e-name="sex" editable-select="patient.sex" e-ng-options="s.value as s.text for s in sexes"
+                            >{$ (patient.sex | verboseSex) || "{% trans 'not documented' %}" $}</span>
                         </div>
                     </div>
                     <hr/>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span editable-text="patient.address_street"
+                                          e-name="street"
+                                          e-placeholder="{{ patient.address_street }}"
+                                          tooltip="{{ patient.address_street }}"
+                                          tooltip-trigger="mouseenter"
+                                    >{$ patient.address_street || '&nbsp;&nbsp;' $}</span>
+                                </div>
+                                <div class="col-md-12" ng-if="patient.address_complement || form.patientForm.$visible">
+                                    <span editable-text="patient.address_complement"
+                                          e-name="address_complement"
+                                          e-placeholder="{{ patient.address_complement }}"
+                                          tooltip="{{ patient.address_complement }}"
+                                          tooltip-trigger="mouseenter"
+                                    >{$ patient.address_complement || '&nbsp;&nbsp;' $}</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span editable-text="patient.address_zipcode"
+                                          e-name="zipcode"
+                                          e-placeholder="{{ patient.address_zipcode }}"
+                                          tooltip="{{ patient.address_zipcode }}"
+                                          tooltip-trigger="mouseenter"
+                                          e-width="66px"
+                                    >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
+
+                                    <span editable-text="patient.address_city"
+                                          e-name="city"
+                                          e-placeholder="{{ patient.address_city }}"
+                                          tooltip="{{ patient.address_city }}"
+                                          tooltip-trigger="mouseenter"
+                                          e-width="200px""
+                                    >{$ patient.address_city || '&nbsp;&nbsp;' $}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 left-bordered-col">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span e-name="phone" class="glyphicon glyphicon-phone-alt"
+                                          tooltip="{{ patient.phone }}"
+                                          tooltip-trigger="mouseenter"
+                                    ></span>
+                                    <span editable-tel="patient.phone"
+                                          e-placeholder="{{ patient.phone }}"
+                                          tooltip="{{ patient.phone }}"
+                                          tooltip-trigger="mouseenter"
+                                    >{$ patient.phone || "{% trans 'not documented' %}" $}</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span class="glyphicon glyphicon-earphone"
+                                          tooltip="{{ patient.mobile_phone }}"
+                                          tooltip-trigger="mouseenter"
+                                    ></span>
+                                    <span e-name="mobile" editable-tel="patient.mobile_phone"
+                                          e-placeholder="{{ patient.mobile_phone }}"
+                                          tooltip="{{ patient.mobile_phone }}"
+                                          tooltip-trigger="mouseenter"
+                                    >{$ patient.mobile_phone || "{% trans 'not documented' %}" $}</span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span e-name="email"
+                                          tooltip="{{ patient.email }}"
+                                          tooltip-trigger="mouseenter">@
+                                    </span>
+                                    <span editable-email="patient.email"
+                                          e-placeholder="{{ patient.email }}"
+                                          tooltip="{{ patient.email }}"
+                                          tooltip-trigger="mouseenter"
+                                    >{$ patient.email || "{% trans 'not documented' %}" $}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
 
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-7">
                             {{ patient.laterality }} :
-                        </div>
 
-                        <div class="col-md-6">
                             <span e-name="laterality" editable-select="patient.laterality"
                                   e-ng-options="l.value as l.text for l in lateralities">
                                 {$ patient.laterality | verboseLaterality $}
                             </span>
                         </div>
-                        <div class="col-md-4">
-                        <span e-name="smoker" editable-checkbox="patient.smoker"
-                              e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
+                        <div class="col-md-5 left-bordered-col" >
+                            <span e-name="smoker" editable-checkbox="patient.smoker"
+                                  e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
                         </div>
                     </div>
                     <div class="row">
@@ -137,19 +133,21 @@
 
                     <hr/>
                     <div class="row">
-                        <div class="col-md-6">
-                            <p>{{ patient.job }} :</p>
-                            <span e-name="job" editable-text="patient.job"
-                        e-placeholder="{{ patient.job }}"
-                        tooltip="{{ patient.job }}"
-                        tooltip-trigger="mouseenter"
-                        e-width="200px"
-                      >{$ patient.job || '&nbsp;&nbsp;' $}</span>
+                            <div class="col-md-7">
+                                {{ patient.hobbies }} : <span hallo-editor ng-model="patient.hobbies"
+                                                              name="hobbies"
+                                                              placeholder="'{{ patient.hobbies }}'"
+                                                              is-editable="form.patientForm.$visible"></span>
                         </div>
-                        <div class="col-md-6">
-                            <p>{{ patient.hobbies }} :</p><div name="hobbies" hallo-editor ng-model="patient.hobbies"
-                            placeholder="'{{ patient.hobbies }}'"
-                            is-editable="form.patientForm.$visible"></div>
+                        <div class="col-md-5 left-bordered-col">
+                            {{ patient.job }} :
+                            <span e-name="job"
+                                  editable-text="patient.job"
+                                  e-placeholder="{{ patient.job }}"
+                                  tooltip="{{ patient.job }}"
+                                  tooltip-trigger="mouseenter"
+                                  e-width="200px"
+                            >{$ patient.job || "{% trans 'not documented' %}" $}</span>
                         </div>
                     </div>
                 </div>

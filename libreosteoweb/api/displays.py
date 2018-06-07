@@ -115,7 +115,7 @@ def display_userprofile(request):
     displayTherapeutSettings = TherapeutSettingsDisplay()
     return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(),
         'therapeutsettings': displayTherapeutSettings.display_fields(),
-        'dashboard_modules': models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
+        'optional_modules': models.TherapeutSettings.MODULES_FIELDS,
         'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):

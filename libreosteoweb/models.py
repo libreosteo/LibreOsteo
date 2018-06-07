@@ -335,9 +335,16 @@ class TherapeutSettings(models.Model):
     stats_enabled = models.BooleanField(_('Statistics'), default=True)
     last_events_enabled = models.BooleanField(_('Events history'), default=True)
 
-    DASHBOARD_MODULES_FIELDS = [
-        {'field': stats_enabled, 'image': 'images/dashboard-stats.png'},
-        {'field': last_events_enabled, 'image': 'images/dashboard-events.png'},
+    MODULES_FIELDS = [
+        {
+            'name': _('Dashboard'),
+            'modules': [
+                {'field': stats_enabled,
+                 'image': 'images/dashboard-stats.png'},
+                {'field': last_events_enabled,
+                 'image': 'images/dashboard-events.png'},
+            ]
+        },
     ]
 
     def save(self, *args, **kwargs):

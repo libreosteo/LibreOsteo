@@ -102,9 +102,12 @@ def display_examination_timeline(request):
 def display_examination(request):
     displayExamination = ExaminationDisplay()
     displayPatient = PatientDisplay()
+    therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+        user=request.user)
     return render(request, 'partials/examination.html', {
         'examination': displayExamination.display_fields(),
         'patient': displayPatient.display_fields(),
+        'therapeutsettings': therapeut_settings,
     })
 
 def display_search_result(request):

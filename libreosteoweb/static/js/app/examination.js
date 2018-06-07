@@ -60,7 +60,7 @@ examination.factory('CommentServ', ['$resource',
     ]);
 
 
-examination.directive('examination', ['ExaminationServ', 'PatientServ', function(ExaminationServ, PatientServ){
+examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ){
     "use strict";
     return {
         restrict: 'E',
@@ -94,20 +94,34 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', function
                 }
             };
 
-            // Initialize UI
-            $scope.examinationSettings = initWithKeys(
-                ExaminationServ.SPHERES_LIST,
-                false
-            );
-            $scope.accordionOpenState = initWithKeys(
-                ExaminationServ.SPHERES_LIST,
-                true
-            );
-
-            angular.forEach(ExaminationServ.SPHERES_LIST, function(sphere, _) {
-                $scope.$watch('model.' + sphere, function(newValue, oldValue){
-                    $scope.examinationSettings[sphere] = !isEmpty(newValue) || $scope.newExamination;
+            TherapeutSettingsServ.get_by_user().$promise.then(function(therapeutSettings) {
+                /* Display spheres if the examination has notes about spheres,
+                 *  even if spheres display is disabled in settings (to avoid
+                 *  hiding information).
+                 */
+                var filled = ExaminationServ.SPHERES_LIST.map(function(sphere) {
+                    return !isEmpty($scope.model[sphere]);
+                }).reduce(function(enabled, atLeastOne) {
+                    return atLeastOne || enabled;
                 });
+
+                if (therapeutSettings.spheres_enabled || filled) {
+                    // Initialize UI
+                    $scope.examinationSettings = initWithKeys(
+                        ExaminationServ.SPHERES_LIST,
+                        false
+                    );
+                    $scope.accordionOpenState = initWithKeys(
+                        ExaminationServ.SPHERES_LIST,
+                        true
+                    );
+
+                    angular.forEach(ExaminationServ.SPHERES_LIST, function(sphere, _) {
+                        $scope.$watch('model.' + sphere, function(newValue, oldValue){
+                            $scope.examinationSettings[sphere] = !isEmpty(newValue) || $scope.newExamination;
+                        });
+                    });
+                }
             });
 
             $scope.$watch('model.status', function(newValue, oldValue){

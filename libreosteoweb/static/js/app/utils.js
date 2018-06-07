@@ -77,6 +77,15 @@ Array.prototype.find = function(predicate, thisArg) {
 }
 
 
+/** Initialize a new object, sourcing keys from an array
+ *
+ * All values are initialized to the same argument-provided value.
+ */
+function initWithKeys(keysArray, initValue) {
+    return keysArray.reduce(function(obj, i) {obj[i] = false;return obj}, {});
+};
+
+
 function convertUTCDateToLocalDate(date) {
     var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
 

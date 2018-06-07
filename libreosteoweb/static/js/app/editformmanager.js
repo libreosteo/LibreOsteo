@@ -195,7 +195,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       );
 
       function handleUnsavedForm(event, askUser) {
-        if ($element.hasClass('ng-dirty')) {
+        if ($element.find('.ng-dirty').length > 0) {
           if ($scope.saveOnLostFocus) {
             $scope.save();
             $scope.trigger.save = false;
@@ -239,7 +239,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       // So, best-effort: we ask for confirmation, optionaly with custom
       // message.
       function onQuit(event) {
-        if ($element.hasClass('ng-dirty')) {
+        if ($element.find('.ng-dirty').length > 0) {
           event.returnValue = quitConfirmationMsg;
           return quitConfirmationMsg;
         }

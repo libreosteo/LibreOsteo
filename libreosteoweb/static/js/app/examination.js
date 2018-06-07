@@ -207,6 +207,14 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 }
             });
 
+	    $scope.$watch('model.id', function(newValue, oldValue)
+	    {
+	        if (oldValue != null && newValue == null)
+		{
+	    		$scope.edit();
+		}
+	    });
+
             $scope.edit = function() {
                 $scope.editableForm.$show();
             };

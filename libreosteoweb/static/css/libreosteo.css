@@ -177,6 +177,12 @@ div.readyForEditMode {
     width: 250px;
     top:0px;
 }
+
+.inner-spaced .panel-body {
+    margin-left: 5px;
+    margin-right : 5px;
+}
+
 ul li.documenttile  {
     list-style-type: none;
     margin: 0;

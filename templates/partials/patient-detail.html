@@ -291,21 +291,28 @@
                     </div>
                 </div>
 
-            </div>
+    </div>
     </form>
 </uib-tab>
 
 <uib-tab id="examinations" heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations" index="5" deselect="onTabChange($event)">
-    <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
-    save-model="saveExamination(previousExamination.data)"
-    new-examination="false"
-    close="invoiceExamination(previousExamination.data)" on-delete='examinationDeleted(previousExamination.data)'/>
+    <examination
+        model="previousExamination.data" save-model="saveExamination(previousExamination.data)"
+        new-examination="false"
+        close="invoiceExamination(previousExamination.data)" on-delete='examinationDeleted(previousExamination.data)'
+        ng-if="previousExamination.data != null" ng-animate="displayExamination"
+        patient="patient" external-patient-save="savePatient()"
+    />
     <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="examinationsTab.newExaminationDisplay" ng-if="previousExamination.data == null"
-    current-examination="newExamination"
-    current-examination-manager="currentExaminationManager()"/>
+              current-examination="newExamination"
+              current-examination-manager="currentExaminationManager()"/>
 </uib-tab>
 
-<uib-tab id="current-examination" heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6" deselect="onTabChange($event)">
-    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
+
+<uib-tab id="current-examination" heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive"  index="6" deselect="onTabChange($event)">
+    <examination
+        model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)"
+        new-examination="true" on-delete='examinationDeleted(newExamination)'
+        patient="patient" external-patient-save="savePatient()" />
 </uib-tab>
 </uib-tabset>

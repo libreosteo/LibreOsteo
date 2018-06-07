@@ -60,7 +60,7 @@ examination.factory('CommentServ', ['$resource',
     ]);
 
 
-examination.directive('examination', ['ExaminationServ', function(ExaminationServ){
+examination.directive('examination', ['ExaminationServ', 'PatientServ', function(ExaminationServ, PatientServ){
     "use strict";
     return {
         restrict: 'E',
@@ -70,6 +70,8 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             close : '&',
             newExamination: '=',
             onDelete : '&',
+            patient: '=?',
+            externalPatientSave: '&',
         },
       compile: function(element, attrs){
           if (!attrs.newExamination) {attrs.newExamination = false};
@@ -239,9 +241,29 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 //DOM has finished rendering
                 if($scope.newExamination){
                     $scope.editableForm.$show();
+                    $scope.form.partialPatientForm.$show();
                 }
             });
+
+            // Patient
+            $scope.lateralities = PatientServ.lateralities;
+
+            // No need to handle buttons with partialPatientForm ; editableForm
+            // controls it.
+            $scope.triggerEditFormPatient = initWithKeys(
+                ['save', 'edit', 'cancel', 'delete'],
+                false
+            );
+
+            $scope.editPatient = function() {
+                $scope.form.partialPatientForm.$show();
+            };
+
+            $scope.saveEditPatient = function() {
+                $scope.form.partialPatientForm.$save();
+            };
         }],
+
         templateUrl: 'web-view/partials/examination'
-    }
+    };
 }]);

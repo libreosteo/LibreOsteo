@@ -11,22 +11,19 @@
             </button>
         </div>
     </div>
-    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()" disable-enter >
-    <div class="row">
-        <div class="col-md-5">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $} {% trans 'by'%} <span class="text-uppercase">{$ model.therapeut_detail.last_name $}</span> {$ model.therapeut_detail.first_name $}</span>
-                </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()" class="col-md-7" disable-enter >
+        <div class="row" style="margin-bottom: 15px">
+        <div class="col-md-12">
+
+            <h4>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $} {% trans 'by'%} <span class="text-uppercase">{$ model.therapeut_detail.last_name $}</span> {$ model.therapeut_detail.first_name $}</h4>
                     <div class="badge" ng-class="{'alert-success' : model.type == 1, 'alert-warning' : model.type == 2, 'alert-danger' : model.type >= 3 }"><i class="fa fa-check" ></i></div>
                     <span ng-if="!readOnly"><span editable-select="model.type" e-ng-options="t.value as t.text for t in types">{$ showTypes() $}
                     </span></span>
                     <span ng-if="readOnly">{$ showTypes() $}</span>
-                </div>
-            </div>
         </div>
-        <div class="col-md-4" ng-show="model.status > 0 && model.invoices.length > 0">
+    </div>
+    <div class="row">
+        <div class="col-md-3" ng-show="model.status > 0 && model.status < 3">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{% trans 'Invoice' %}</span>
@@ -68,9 +65,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
-
-        </div>
         <div class="col-md-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
@@ -78,7 +72,7 @@
                 </div>
                 <div class="panel-body row" style="margin-left: 1px; margin-right: 1px;">
                     <div class="row">
-                        <div class="col-md-5" style="padding-bottom:25px">
+                        <div class="col-md-12" style="padding-bottom:25px">
                             <div class="col-md-12">
                                 <span editable-text="model.reason"
                                     e-placeholder="{{ examination.reason }}"
@@ -93,8 +87,7 @@
                                 ></div>
                             </div>
                         </div>
-
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
 
@@ -110,30 +103,32 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <!-- the button command -->
+            <h4>Sphères</h4>
+
             <div class="btn-group btn-group-vertical">
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.orl" uib-btn-checkbox>{{ examination.orl }}</label>
                 </div>
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.visceral" uib-btn-checkbox>{{ examination.visceral }}</label>
                 </div>
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.pulmo" uib-btn-checkbox>{{ examination.pulmo }}</label>
                 </div>
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.uro_gyneco" uib-btn-checkbox>{{ examination.uro_gyneco }}</label>
                 </div>
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.periphery" uib-btn-checkbox>{{ examination.periphery }}</label>
                 </div>
-                <div class="col-md-12 btn-group">
+                <div class="btn-group">
                     <label class="btn btn-default" ng-model="examinationSettings.general_state" uib-btn-checkbox>{{ examination.general_state }}</label>
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <!-- The accordion -->
             <div uib-accordion close-others="false">
                 <div uib-accordion-group heading="{{ examination.orl }}" class="panel-primary panel-sphere" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
@@ -169,7 +164,7 @@
             </div>
         </div>
      </div>
-
+    </div>
 
     <div class="row" style="padding-top:15px">
         <div class="col-md-12">
@@ -200,11 +195,11 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-success">
+            <div class="panel panel-success inner-spaced">
                 <div class="panel-heading">
                     {{ examination.conclusion }}
                 </div>
-                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                <div class="panel-body row">
                     <div hallo-editor ng-model="model.conclusion" placeholder="'{{ examination.conclusion }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>
@@ -217,5 +212,145 @@
                     ng-click="saveAndClose()">{% trans 'Close' %}</button>
         </div>
 
+    </div>
+    </form>
+    <form name="form.partialPatientForm"
+          editable-form edit-form-control
+          edit="editPatient" save="saveEditPatient" trigger="triggerEditFormPatient"
+          onaftersave="externalPatientSave()" save-on-lost-focus="true">
+
+        <div class="col-md-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            {{ patient.important_info }}
+                        </div>
+                        <div class="panel-body">
+                            <div placeholder="'{{patient.important_info}}'"
+                                 hallo-editor
+                                 ng-model="patient.important_info"
+                                 is-editable="form.partialPatientForm.$visible" >
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            {{ patient.current_treatment }}
+                        </div>
+                        <div class="panel-body">
+                            <div placeholder="'{{patient.current_treatment}}'"
+                                 hallo-editor
+                                 ng-model="patient.current_treatment"
+                                 is-editable="form.partialPatientForm.$visible">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-info inner-spaced">
+                        <div class="panel-heading">
+                            {% trans 'Infos patient' %}
+                        </div>
+                        <div class="panel-body row">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{ patient.laterality }} :
+                                </div>
+                                <div class="col-md-4">
+                                    <span editable-select="patient.laterality"
+                                          e-ng-options="l.value as l.text for l in lateralities">
+                                        {$ patient.laterality | verboseLaterality $}
+                                    </span>
+                                </div>
+                                <div class="col-md-5" style="border-left: 2px solid #eee">
+                                    <span editable-checkbox="patient.smoker"
+                                          e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ patient.hobbies }} :
+                                    <span hallo-editor ng-model="patient.hobbies"
+                                          placeholder="'{{ patient.hobbies }}'"
+                                          is-editable="form.partialPatientForm.$visible">
+                                    </span>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% trans 'Regular doctor' %} :
+                                    <doctor-selector doctor-holder="patient" doctor-holder-property="'doctor'"></doctor-selector>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary inner-spaced">
+                        <div class="panel-heading">
+                            {{ patient.surgical_history }}
+                        </div>
+                        <div class="panel-body row">
+                            <div hallo-editor ng-model="patient.surgical_history"
+                                 placeholder="'{{ patient.surgical_history }}'"
+                                 is-editable="form.partialPatientForm.$visible">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-primary inner-spaced">
+                        <div class="panel-heading">
+                            {{ patient.medical_history }}
+                        </div>
+                        <div class="panel-body row" >
+                            <div hallo-editor ng-model="patient.medical_history"
+                                 placeholder="'{{ patient.medical_history }}'"
+                                 is-editable="form.partialPatientForm.$visible">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="panel panel-primary inner-spaced">
+                        <div class="panel-heading">
+                            {{ patient.family_history }}
+                        </div>
+                        <div class="panel-body row">
+                            <div placeholder="'{{ patient.family_history }}'"
+                                 hallo-editor ng-model="patient.family_history"
+                                 is-editable="form.partialPatientForm.$visible">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="panel panel-primary inner-spaced">
+                        <div class="panel-heading">
+                            {{ patient.trauma_history }}
+                        </div>
+                        <div class="panel-body row">
+                            <div hallo-editor ng-model="patient.trauma_history"
+                                 placeholder="'{{ patient.trauma_history }}'"
+                                 is-editable="form.partialPatientForm.$visible">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     </form>

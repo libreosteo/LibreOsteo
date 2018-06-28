@@ -19,6 +19,15 @@
 	    <li><a href="{$ buildCsvUrl('date,number,amount,paiment_mode,currency,status') $}"><i class="fa fa-download fa-fw"></i> {% trans 'anonym CSV'%}</a></li>
     </ul>
 </div>
+<div class="btn-group" ng-if="users.length > 1">
+    <button class="btn btn-default dropdown-toggle" type="button" id="therapeutSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+	    {$ user.last_name $} {$ user.first_name $}
+	    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="therapeutSelect">
+	    <li ng-repeat="u in users"><a ng-click="changeTherapeut(u)"><i class="fa fa-user fa-fw"></i>{$ u.last_name $} {$ u.first_name $}</a></li>
+    </ul>
+</div>
 
 <table class="table table-striped table-hover">
     <thead>

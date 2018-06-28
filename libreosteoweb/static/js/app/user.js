@@ -25,9 +25,21 @@ user.factory('UserServ', ['$resource',
             'update' : {method : 'PUT' , params : {userId : 'userId'}},
             setpassword : {method : 'POST', params: {userId : 'userId'},
                     url : 'api/office-users/:userId/set_password'},
+	    query : {method: 'GET', isArray : true }
         });
     }
 ]);
+
+user.factory('MyUserIdServ', ['$http', 'UserServ',
+		function($http, UserServ) {
+      return $http.get('myuserid').then(
+        function(result){
+          return UserServ.get({userId : result.data }).$promise.then(function(data) {
+            data.id = result.data;
+            return data;
+            });
+          });
+		}]);
 
 user.factory('TherapeutSettingsServ', ['$resource',
   function($resource) {

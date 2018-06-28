@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('enable', models.BooleanField(default=True, verbose_name='Enabled')),
             ],
         ),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('check', 'Chèque', True);"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('cash', 'Espèces', True);"),
-        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('ecard', 'Carte Bancaire', True);")
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('check', 'Chèque', 1);"),
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('cash', 'Espèces', 1);"),
+        migrations.RunSQL("INSERT INTO libreosteoweb_paimentmean (code, text, enable) VALUES ('ecard', 'Carte Bancaire', 0);")
     ]

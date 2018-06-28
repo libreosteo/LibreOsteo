@@ -350,6 +350,12 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             if 'fields' in self.request.GET else None)
         return context
 
+    def get_queryset(self):
+        queryset = models.Invoice.objects.select_related('examination').all()
+        therapeut_id = self.request.query_params.get('therapeut_id', None)
+        if therapeut_id is not None:
+            queryset = queryset.filter(examination__therapeut__id=therapeut_id)
+        return queryset
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent

@@ -193,9 +193,9 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
         fields = '__all__'
 
     def get_paiment_mode_text(self, obj):
-        paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode)
-        if len(paiment_mean) > 0 :
-            return paiment_mean[0].text
+        paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode).first()
+        if paiment_mean is not None :
+            return paiment_mean.text
         return 'n/a'
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):

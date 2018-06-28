@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var invoices = angular.module('loInvoice', ['ngResource', 'daterangepicker']);
+var invoices = angular.module('loInvoice', ['ngResource', 'daterangepicker', 'loUser', 'loOfficeSettings']);
 
 invoices.factory('InvoiceService', ['$resource', function ($resource) {
     "use strict";
@@ -57,14 +57,15 @@ function localizeDaterangePicker() {
     };
 }
 
-invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
-    function($scope, InvoiceService) {
+invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ',
+    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ) {
         "use strict";
 
         function buildAPIFilter() {
             return {
                 date__lte: $scope.filters.dateRange.endDate.toISOString(),
                 date__gte: $scope.filters.dateRange.startDate.toISOString(),
+		            therapeut_id : $scope.filters.therapeut_id,
             };
         }
 
@@ -95,6 +96,14 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
             return ranges;
         }
 
+	      $scope.user = MyUserIdServ.then(function(result) {
+          $scope.user = result;
+          if ($scope.filters)
+          {
+            $scope.filters.therapeut_id = $scope.user.id;
+          }
+        });
+	      $scope.users = OfficeUsersServ.query();
 
         $scope.invoices = [];
 
@@ -112,6 +121,7 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
                 startDate: moment().startOf('month'),
                 endDate: moment().endOf('month')
             },
+		        therapeut_id : $scope.user.id
         };
 
         // Initial API call
@@ -138,5 +148,11 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService',
             }
             return url.slice(0, -1)
         }
+
+	$scope.changeTherapeut = function(user) {
+		$scope.user = user;
+		$scope.filters.therapeut_id = user.id;
+		getInvoices();
+	};
     }
 ]);

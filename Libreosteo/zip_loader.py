@@ -17,6 +17,7 @@ import os
 from django.conf import settings
 from django.template import TemplateDoesNotExist
 import zipfile
+from django.template.base import Origin
 
 
 from django.template.loaders.base import Loader as BaseLoader
@@ -24,25 +25,40 @@ from django.template.loaders.base import Loader as BaseLoader
 
 
 class Loader(BaseLoader):
-    is_usable = True
+    
+    def __init(self, engine) :
+        self.templates_dict = {}
+        super().__init__(engine)
 
-    def load_template_source(self, template_name, template_dirs=None):
+    def get_contents(self, origin) :
+        try :
+            return self.templates_dict[origin.name]._content
+        except KeyError:
+            raise TemplateDoesNotExist(origin)
+
+
+    def get_template_sources(self, template_name, template_dirs=None):
         "Template loader that loads templates from a ZIP file."
 
         template_zipfiles = getattr(settings, "TEMPLATE_ZIP_FILES", ['library.zip'])
 
-        # Try each ZIP file in TEMPLATE_ZIP_FILES.
-        for fname in template_zipfiles:
-            try:
-                z = zipfile.ZipFile(fname)
-                source = z.read('templates/%s' % (template_name))
-            except (IOError, KeyError):
-                continue
-            z.close()
-            # We found a template, so return the source.
-            template_path = "%s:%s" % (fname, template_name)
-            return (source, template_path)
+        try :
+            yield self.templates_dict[template_name]._origin
+        except KeyError:
+            # Try each ZIP file in TEMPLATE_ZIP_FILES.
+            for fname in template_zipfiles:
+                try:
+                    z = zipfile.ZipFile(fname)
+                    source = z.read('templates/%s' % (template_name))
+                except (IOError, KeyError):
+                    continue
+                z.close()
+                origin = Origin(name=template_name, template_name=template_name, loader=self)
+                self.templates_dict[template_name]= EntryLoaderCache(origin=origin, content=source)
+                yield origin
 
-        # If we reach here, the template couldn't be loaded
-        raise TemplateDoesNotExist(template_name)
+class EntryLoaderCache:
 
+    def __init__(self, origin, content):
+        self._origin = origin
+        self._content = content

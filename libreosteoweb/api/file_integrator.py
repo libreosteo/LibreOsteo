@@ -214,7 +214,7 @@ class FileContentAdapter(dict):
             return None
         self.file.open(mode='rb')
         logger.info("* Try to guess the dialect on csv")
-        dialect = csv.Sniffer().sniff(self.file.read(4096))
+        dialect = csv.Sniffer().sniff(self.file.read(1024 * 1024 * 10))
         self.file.seek(0)
         reader = csv.reader(self.file, dialect)
         return reader

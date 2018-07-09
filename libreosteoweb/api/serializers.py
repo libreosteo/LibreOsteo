@@ -84,6 +84,7 @@ class RegularDoctorSerializer(serializers.ModelSerializer):
         return get_name_filters().filter(value)
     class Meta:
         model = RegularDoctor
+        fields = '__all__'
 
 class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer()

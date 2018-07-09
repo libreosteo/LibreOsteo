@@ -495,6 +495,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 $scope.triggerEditFormPatient.edit = false;
                 $scope.triggerEditFormPatient.save = true;
                 loEditFormManager.available = true;
+                $scope.originalNameInput.$show();
             } else if(newValue === false )
             {
                 $scope.triggerEditFormPatient.edit = true;

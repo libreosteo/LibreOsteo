@@ -136,9 +136,8 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
 
         $scope.buildCsvUrl = function(fields) {
             var queryDict = buildAPIFilter();
-            var url = '/api/invoices?';
+            var url = '/api/invoices.csv?';
 
-            queryDict.format = 'csv';
             if (fields) {
                 queryDict.fields = fields
             }

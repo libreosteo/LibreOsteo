@@ -25,6 +25,7 @@ admin.autodiscover()
 from libreosteoweb.api import views
 
 from rest_framework import  routers
+from rest_framework.urlpatterns import format_suffix_patterns
 from django.views.generic.base import TemplateView
 from libreosteoweb.api import displays
 
@@ -49,7 +50,7 @@ router.register(r'paiment-mean', views.PaimentMeanViewSet, 'PaimentMean')
 urlpatterns = [
     # Examples:
     url(r'^$', displays.display_index ),
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include(format_suffix_patterns(router.urls))),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/login/$', LoginView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name='login'),
     url(r'^accounts/logout', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),

@@ -376,8 +376,8 @@ elif True :
     build_exe_options = {
         "packages": packages,
         "includes": includes,
-        "include_files": include_files,
-        "zip_includes" : zip_includes,
+        #"include_files": include_files,
+        "zip_includes" : zip_includes + include_files,
         "excludes" : ['cStringIO','tcl','Tkinter'],
         #"compressed" : True,
         #"create_shared_zip": True,
@@ -385,6 +385,8 @@ elif True :
         #"include_in_shared_zip" : True,
         "optimize" : 2,
         "namespace_packages" : namespace_packages,
+        "zip_include_packages" : ["*"],
+        "zip_exclude_packages" : [],
     }
 
     setup(  name = "libreosteo",

@@ -169,9 +169,10 @@ if sys.platform in ['win32']:
         "email",
         "Libreosteo",
         "compressor",
-        
+       "jaraco.functools", 
         
     ]
+    namespace_packages = [ ]
     build_exe_options = {
         "packages": packages,
         "includes": includes,
@@ -184,6 +185,7 @@ if sys.platform in ['win32']:
         "include_in_shared_zip" : True,
         "optimize" : 2,
         "include_msvcr" : True,
+        "namespace_packages" : namespace_packages,
     }
 
     setup(  name = "libreosteo",
@@ -368,8 +370,9 @@ elif True :
         "Libreosteo",
         "compressor",
         
-        
-    ]
+    
+        ]
+    namespace_packages = [ "jaraco" ]
     build_exe_options = {
         "packages": packages,
         "includes": includes,
@@ -380,7 +383,8 @@ elif True :
         #"create_shared_zip": True,
         #"append_script_to_exe": True,
         #"include_in_shared_zip" : True,
-        "optimize" : 2
+        "optimize" : 2,
+        "namespace_packages" : namespace_packages,
     }
 
     setup(  name = "libreosteo",

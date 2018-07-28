@@ -31,7 +31,7 @@ Requirements :
   - Python 2.7+ or Python 3.3+
   - pip 
   - nodejs
-  - bower
+  - ~bower~ yarn
 
 Retrieve the content of the project from Git repository ::
 
@@ -45,9 +45,9 @@ or python 3 ::
 
     pip install -r requirements/requirements.txt
 
-Install Javascript dependencies with bower ::
+Install Javascript dependencies with ~bower~ ::
 
-    bower install
+    yarn
 
 Initialize the database ::
 

@@ -44,3 +44,19 @@ if getattr(sys, 'frozen', False):
     original_init_translation_catalog = DjangoTranslation._init_translation_catalog
     DjangoTranslation._init_translation_catalog = new_init_translation_catalog
 
+
+def patch_and_generate_compiled_file():
+    import pkgutil
+    import imp
+    import time
+    import marshal
+    loader = pkgutil.get_loader('django.db.migrations.loader')
+    code = compile(loader.get_source().replace('".py"', '".pyc"'), "<string>", "exec")
+    open('/tmp/result.pyc', 'wb')
+    f.write('\0\0\0\0')
+    f.write(struct.pack('<I', time.time()))
+    marshal.dump(code, f)
+    f.flush()
+    f.seek(0, 0)
+    f.write(imp.get_magic())
+    f.close()

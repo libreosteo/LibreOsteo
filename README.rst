@@ -28,22 +28,58 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 2.7+ or Python 3.3+
+  - Python 2.7+ or Python 3.3+ (if you have no opinion, 2.7+ is the recommended choice for now)
   - pip 
-  - nodejs
+  - virtualenv
+  - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
   - bower
+
+.. _nodesource packages: https://github.com/nodesource/distributions#debinstall
+
+Install system dependencies, for example, on Debian-like sytem, that would **one of** those two lines:
+
+Python 2.x ::
+
+    sudo apt install python-pip python-virtualenv nodejs
+
+Python 3.x ::
+
+    sudo apt install python3-pip virtualenv nodejs
 
 Retrieve the content of the project from Git repository ::
 
     git clone https://github.com/libreosteo/Libreosteo.git
 
-Then retrieve the python 2 requirements with ::
+Enter the cloned folder ::
+
+    cd Libreosteo
+
+Create a virtualenv with **one of those** two commands.
+
+Python 2 ::
+
+    virtualenv venv
+    
+
+Python 3 ::
+    
+    virtualenv --python /usr/bin/python3 venv
+
+(at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
+
+Then retrieve the python requirements with **one of those**.
+
+Python 2 ::
 
     pip install -r requirements/requ-py2.txt
 
-or python 3 ::
+Python 3 ::
 
     pip install -r requirements/requirements.txt
+
+Install bower ::
+
+    sudo npm install -g bower
 
 Install Javascript dependencies with bower ::
 
@@ -53,15 +89,11 @@ Initialize the database ::
 
     python manage.py migrate
     
-It should ask for the administrator user.
-
 Now you can start the server with ::
 
     python manage.py runserver
 
-Point your browser on : http://localhost:8000/
-
-You can add other user from the admin console : http://localhost:8000
+Point your browser on : http://localhost:8000/ it will guide you towards creating the first admin user.
 
 Have fun !
 

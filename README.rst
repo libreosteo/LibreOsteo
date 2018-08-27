@@ -155,8 +155,8 @@ Use Http Service to provide the web application
 -----------------------------------------------
 
 In order to have a compliant solution to serve libreosteo, you can use Apache HTTP Server or Nginx. Details for setting these http server
-are not provided at this step, but you can inspire you with this `article <https://www.thecodeship.com/deployment/deploy-django-apache-virtualenv-and-mod_wsgi/>` or
-this other `one <https://docs.nginx.com/nginx/admin-guide/web-server/app-gateway-uwsgi-django/>`
+are not provided at this step, but you can inspire you with this `article <https://www.thecodeship.com/deployment/deploy-django-apache-virtualenv-and-mod_wsgi/>`_ or
+this other `one <https://docs.nginx.com/nginx/admin-guide/web-server/app-gateway-uwsgi-django/>`_
 
 With the software, a basic solution is provided with CherryPy_ which provides the ability to have Http server and WSGI implementation. 
 Use the following script to start the server already configured to start as is.

@@ -25,6 +25,7 @@ from cherrypy import _cplogging, _cperror
 from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
+import ConfigParser
 
 # For modulegraph import auto detect
 import rcssmin
@@ -33,6 +34,12 @@ import rjsmin
 SERVER_PORT = 8085
 
 logger = logging.getLogger(__name__)
+
+config = ConfigParser.SafeConfigParser({'server.port' : '%s' % SERVER_PORT})
+config.read('server.cfg')
+
+if config.has_option('server', 'server.port'):
+    SERVER_PORT = config.getint('server', 'server.port')
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""

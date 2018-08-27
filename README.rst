@@ -161,11 +161,17 @@ this other `one <https://docs.nginx.com/nginx/admin-guide/web-server/app-gateway
 With the software, a basic solution is provided with CherryPy_ which provides the ability to have Http server and WSGI implementation. 
 Use the following script to start the server already configured to start as is.
 You can encapsulate the call to this script into your boot manager. This script listen on all interfaces of the host to provide the web application.
-The configured port to provide the application is 8085 (set in the script. Should be configurable in the future)
+The default configured port to provide the application is 8085.
 ::
 
    ./server.py
 
+
+To change the default port of the server, write a file server.cfg like this  (to set to 9000 in this example)
+::
+
+   [server]
+   server.port = 9000
 
 .. _base : Libreosteo/settings/base.py
 .. _standalone : Libreosteo/settings/standalone.py

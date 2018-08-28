@@ -81,7 +81,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 			{
 				$scope.paiment_means = data;
 			});
-
+        
         $scope.gridOptions = {
           enableSorting: true,
           columnDefs: [

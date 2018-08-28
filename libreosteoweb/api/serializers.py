@@ -22,7 +22,12 @@ from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters, get_firstname_filters
 from django.core.exceptions import ObjectDoesNotExist
 from .file_integrator import Extractor
+import netifaces
+import sys
+import socket
+import logging
 
+logger = logging.getLogger(__name__)
 
 class WithPkMixin(object):
     def get_pk_field(self, model_field):
@@ -54,7 +59,7 @@ class PatientSerializer (serializers.ModelSerializer):
         validators = [
             UniqueTogetherIgnoreCaseValidator(
                 queryset=Patient.objects.all(),
-                fields=('family_name', 'first_name', 'birth_date'),
+                    fields=('family_name', 'first_name', 'birth_date'),
                 message = _('This patient already exists'),
             )
         ]
@@ -184,6 +189,18 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = OfficeSettings
         fields = '__all__'
+
+    network_list = serializers.SerializerMethodField()
+
+    def get_network_list(self, obj):
+        addresses = []
+        try :
+            addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.ifaddresses(it).has_key(netifaces.AF_INET) ]
+            port = self.context.get("request").META['SERVER_PORT'] 
+            addresses = [ 'http://%s:%s' % (a,port) for a in addresses if a != '127.0.0.1' ]
+        except :
+            logger.exception("Cannot obtain address on the host")
+        return addresses
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
     status = serializers.IntegerField(source='examination.status')

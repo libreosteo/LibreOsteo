@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-01 15:59+0200\n"
-"PO-Revision-Date: 2018-06-01 15:59+0200\n"
+"POT-Creation-Date: 2018-08-28 22:35+0200\n"
+"PO-Revision-Date: 2018-08-28 22:34+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -22,6 +22,21 @@ msgstr "Français"
 
 msgid "English"
 msgstr "Anglais"
+
+msgid "Query"
+msgstr ""
+
+msgid "Backend Alias"
+msgstr ""
+
+msgid "Timeline"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Kwargs"
+msgstr ""
 
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
@@ -287,6 +302,9 @@ msgstr "Code"
 
 msgid "Text"
 msgstr "Texte"
+
+msgid "Enabled"
+msgstr ""
 
 msgid "Class"
 msgstr "Classe"
@@ -735,12 +753,6 @@ msgstr "Actions"
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Check"
-msgstr "Chèque"
-
-msgid "Cash"
-msgstr "Espèces"
-
 msgid "Draft"
 msgstr "Brouillon"
 
@@ -774,8 +786,18 @@ msgstr "Paramètres du cabinet"
 msgid "General"
 msgstr "Général"
 
+msgid ""
+"This instance of libreosteo could be accessed on the following addresses of "
+"the network : "
+msgstr ""
+"Cette instance de libreosteo peut être utilisée en utilisant les adresses "
+"suivantes sur le réseau :"
+
 msgid "Office"
 msgstr "Cabinet"
+
+msgid "Paiment means"
+msgstr "Moyens de paiement"
 
 msgid "Update"
 msgstr "Mettre à jour"
@@ -905,3 +927,4 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+

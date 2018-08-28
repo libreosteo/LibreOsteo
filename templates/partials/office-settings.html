@@ -8,6 +8,12 @@
 <uib-tab heading="{% trans 'General' %}">
 <div class="container-fluid">
     <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <p>{% trans 'This instance of libreosteo could be accessed on the following addresses of the network : '%}
+              <span ng-repeat="addr in officesettings.network_list"><a ng-href="{$ addr $}">{$ addr $}</a><span ng-if="!$last">, </span></span>
+              </p>
+            </div>
+            <div class="clearfix">
             <form novalidate name="form">
                 <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
                     <h2>{% trans 'Office' %}</h2>

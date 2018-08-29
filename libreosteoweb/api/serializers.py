@@ -26,6 +26,7 @@ import netifaces
 import sys
 import socket
 import logging
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -194,6 +195,8 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
     def get_network_list(self, obj):
         addresses = []
+        if settings.DISPLAY_SERVICE_NET_HELPER is False:
+            return addresses
         try :
             addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.ifaddresses(it).has_key(netifaces.AF_INET) ]
             port = self.context.get("request").META['SERVER_PORT'] 

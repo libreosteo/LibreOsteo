@@ -1,0 +1,12 @@
+*** Settings ***
+Library     SeleniumLibrary
+
+*** Variables ***
+${LOGIN_URL}  http://localhost:8000/
+${BROWSER}    Chrome
+
+*** Keywords ***
+Open Browser To Login Page
+  Open Browser  ${LOGIN_URL}  ${BROWSER}
+
+

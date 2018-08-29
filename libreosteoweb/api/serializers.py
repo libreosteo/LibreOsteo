@@ -22,11 +22,9 @@ from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters, get_firstname_filters
 from django.core.exceptions import ObjectDoesNotExist
 from .file_integrator import Extractor
-import netifaces
-import sys
-import socket
 import logging
 from django.conf import settings
+from .utils import NetworkHelper
 
 logger = logging.getLogger(__name__)
 
@@ -197,12 +195,10 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         addresses = []
         if settings.DISPLAY_SERVICE_NET_HELPER is False:
             return addresses
-        try :
-            addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.ifaddresses(it).has_key(netifaces.AF_INET) ]
-            port = self.context.get("request").META['SERVER_PORT'] 
-            addresses = [ 'http://%s:%s' % (a,port) for a in addresses if a != '127.0.0.1' ]
-        except :
-            logger.exception("Cannot obtain address on the host")
+        net_helper = NetworkHelper()
+        port = self.context.get('request').META['SERVER_PORT']
+        addresses = net_helper.get_bound_addresses(net_helper.get_all_addresses(), port) 
+        addresses = [ 'http://%s:%s' % (a,port) for a in addresses if a != '127.0.0.1' ]
         return addresses
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):

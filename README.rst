@@ -34,6 +34,9 @@ Requirements :
   - virtualenv
   - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
   - bower
+  - if on linux system, you need linux-headers package. On debian and derivated uses ::
+  
+    sudo apt install linux-headers-$(uname -r)
 
 .. _nodesource packages: https://github.com/nodesource/distributions#debinstall
 
@@ -189,10 +192,12 @@ The libreosteo team consist of:
 
   * jbgury_
   * littlejo_
+  * jocelynDelalande_
 
 
 .. _github : https://github.com/jbgury
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
+.. _jocelynDelalande: https://github.com/JocelynDelalande 
 .. _pull requests: https://github.com/libreosteo/Libreosteo/pulls
 .. _CONTRIBUTING.md: CONTRIBUTING.md

@@ -23,7 +23,7 @@ RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git
 WORKDIR /Libreosteo
 
 USER root
-#RUN pip install -r requirements/requ-py2.txt
+RUN pip install -r requirements/requ-py2.txt
 ADD django-secret-key /usr/local/bin/
 
 COPY launch-libreosteo.sh .

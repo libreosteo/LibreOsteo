@@ -20,6 +20,7 @@ RUN apk add --no-cache \
     nodejs-npm \
     gcc \
     libc-dev \
+    linux-headers \
     py2-pip
 
 RUN adduser -S -g '' libreosteo -u 1000

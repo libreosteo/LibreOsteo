@@ -3,7 +3,7 @@ Library     SeleniumLibrary
 
 *** Variables ***
 ${LOGIN_URL}  http://localhost:8000/
-${BROWSER}    Chrome
+${BROWSER}    Firefox 
 
 *** Keywords ***
 Open Browser To Login Page

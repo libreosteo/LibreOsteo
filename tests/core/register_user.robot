@@ -8,7 +8,7 @@ Resource   resources.txt
 First Installation
   [Documentation]   Register an administrator on freshed installation
   Open Browser To Login Page 
-  Title Should Be     Install Libreosteo
+  Title Should Be     Installer Libreosteo
   Click RegisterUser
   Input Username    test 
   Input Password1   test

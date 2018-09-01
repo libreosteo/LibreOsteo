@@ -40,7 +40,6 @@ RUN bower install
 RUN python manage.py collectstatic --noinput
 COPY local.py.pg Libreosteo/settings/
 COPY local.py.sqlite Libreosteo/settings/
-USER libreosteo
 
 VOLUME ["/Libreosteo/media", "/Libreosteo/sql"]
 

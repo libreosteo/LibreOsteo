@@ -1,0 +1,6 @@
+version: '2'
+services:
+  libreosteo:
+    build:
+      context: .
+    image: littlejo/libreosteo-git

@@ -3,7 +3,7 @@
 ############################################################
 
 FROM littlejo/libreosteo-common
-MAINTAINER Joseph Ligier
+LABEL maintainer "Joseph Ligier"
 
 ENV version 0.5.7
 

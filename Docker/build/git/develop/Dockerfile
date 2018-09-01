@@ -10,6 +10,12 @@ ENV software Libreosteo
 ENV REPO Libreosteo
 ENV USER libreosteo
 ENV BRANCH develop
+ENV debug False
+ENV sql_host db
+ENV sql_port 5432
+ENV sql_name postgres
+ENV sql_user postgres
+
 
 RUN mkdir /$software && chown libreosteo: /$software
 

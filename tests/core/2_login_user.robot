@@ -1,3 +1,4 @@
+# -*- coding: robot -*-
 *** Settings ***
 Resource   resources.txt
 
@@ -18,6 +19,7 @@ Invalid Login
   Title Should Be     Signin on Libreosteo
   Login with      demo   demo
   Title Should Be     Signin on Libreosteo
+  Element Should Be Visible     class:alert-danger
   [TearDown]    Close Browser
 
 

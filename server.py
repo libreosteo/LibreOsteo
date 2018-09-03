@@ -25,7 +25,10 @@ from cherrypy import _cplogging, _cperror
 from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
-import ConfigParser
+try:
+    import ConfigParser    
+except ModuleNotFoundError:
+    import configparser as ConfigParser
 
 # For modulegraph import auto detect
 import rcssmin

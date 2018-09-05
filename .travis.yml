@@ -2,6 +2,7 @@ language: python
 install:
   - pip install -r requirements/requ-py2.txt
   - pip install -r requirements/requ-testing.txt
+  - yarn global bower
   - bower install 
 python:
   - "2.7"

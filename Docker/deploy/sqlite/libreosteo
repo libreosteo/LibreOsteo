@@ -1,0 +1,26 @@
+#!/bin/bash
+
+CONF_DIR=etc/libreosteo
+LIB_DIR=var/lib/libreosteo
+
+source $CONF_DIR/settings.sh
+
+source $LIB_DIR/check
+source $LIB_DIR/install
+source $LIB_DIR/remove
+source $LIB_DIR/update
+source $LIB_DIR/list
+source $LIB_DIR/launch
+source $LIB_DIR/passwd
+source $LIB_DIR/backup
+source $LIB_DIR/help
+
+command=$1
+
+if echo "$command" | grep -q 'install\|remove\|update\|list\|launch\|passwd\|backup'
+then
+    $command $@
+else
+    help
+fi
+

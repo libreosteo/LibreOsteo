@@ -1,0 +1,16 @@
+function launch {
+    rank=$2
+    rank=${rank:-$RANK}
+    check_launch_all
+    lo_rank_dir=$LO_DIR/$rank
+    compose_file=$lo_rank_dir/docker-compose.yml
+    port=$(grep :8085 $compose_file | awk -F: '{print $1}' | sed 's|[^0-9]||g')
+
+    browser=$(echo $BROWSER | awk '{print $1}')
+    if which $browser > /dev/null
+    then
+        $BROWSER http://localhost:$port
+    fi
+    echo "To use libreosteo: Please launch your favorite browser and go to http://localhost:$port"
+}
+

@@ -42,7 +42,7 @@ Login With
 Edit Settings
   Click Element                   jquery:li.open
   Click Element                   jquery:li#office-settings
-  Wait Until Element Contains     jquery:h1.page-header         Office settings
+  Wait Until Element Contains     jquery:h1.page-header         Paramètres du cabinet  
   Input Text                      office_address_street         ${OFFICE_ADDRESS_STREET}
   Input Text                      office_address_complement     ${OFFICE_ADDRESS_COMPLEMENT}
   Input Text                      office_address_zipcode                ${OFFICE_ADDRESS_ZIPCODE}

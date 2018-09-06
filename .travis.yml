@@ -20,9 +20,6 @@ branches:
 env:
   - MOZ_HEADLESS=1
 
-addons:
-  firefox: latest
-
 before_script:
   - python ./server.py &
   - sleep 3

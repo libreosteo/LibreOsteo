@@ -1,12 +1,15 @@
 language: python
-install_firefox:
-  - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr'
+before_install:  
+  - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
+  - wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
+  - tar -xjf /tmp/firefox-latest.tar.bz2 
+  - export PATH=$PWD/firefox:$PATH
 install:
   - pip install -r requirements/requ-py2.txt
   - pip install -r requirements/requ-testing.txt
   - yarn global add bower
   - bower install 
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux32.tar.gz -O /tmp/geckodriver.tar.gz
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
   - tar -xvf /tmp/geckodriver.tar.gz
   - export PATH=$PATH:$PWD
 python:

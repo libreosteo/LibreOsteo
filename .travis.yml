@@ -1,6 +1,6 @@
 language: python
 before_install:
-  - sudo apt-get install -y firefox-locale-fr
+  - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr'
 install:
   - pip install -r requirements/requ-py2.txt
   - pip install -r requirements/requ-testing.txt

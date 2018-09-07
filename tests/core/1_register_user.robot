@@ -37,7 +37,7 @@ Submit Credentials
   Click Button  login 
 
 Login Page Should Be Open
-  Title Should Be   Signin on Libreosteo
+  Title Should Be  Identifiez-vous sur Libreosteo 
 
 Clear database
   Remove File   db.sqlite3

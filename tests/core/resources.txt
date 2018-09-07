@@ -1,8 +1,10 @@
 *** Settings ***
 Library     SeleniumLibrary   timeout=5    implicit_wait=2
+Library     Collections
+Library     RequestsLibrary
 
 *** Variables ***
-${LOGIN_URL}  http://localhost:8085/
+${LOGIN_URL}  http://localhost:8085
 ${BROWSER}    Firefox 
 
 *** Keywords ***

@@ -419,7 +419,7 @@ msgstr "Se rappeler de moi"
 msgid "Register"
 msgstr "Enregistrer"
 
-msgid "Signin on Libreosto"
+msgid "Signin on Libreosteo"
 msgstr "Identifiez-vous sur Libreosteo"
 
 msgid "Please sign in"

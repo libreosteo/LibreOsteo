@@ -5,7 +5,7 @@ before_install:
   - tar -xjf /tmp/firefox-latest.tar.bz2 
   - export PATH=$PWD/firefox:$PATH
 install:
-  - if [[ ${TRAVIS_PYTHON_VERSION == 2.7 ]] ; then pip install -r requirements/requ-py2.txt; else pip install -r requirements/requirements.txt ; fi 
+  - if [[ ${TRAVIS_PYTHON_VERSION} == 2.7 ]] ; then pip install -r requirements/requ-py2.txt; else pip install -r requirements/requirements.txt ; fi 
   - pip install -r requirements/requ-testing.txt
   - yarn global add bower
   - bower install 

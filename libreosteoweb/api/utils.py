@@ -15,7 +15,9 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 import socket
 import netifaces
+import logging 
 
+logger = logging.getLogger(__file__)
 def enum(enumName, *listValueNames):
     listValueNumbers = range(len(listValueNames))
     dictAttrib = dict( zip(listValueNames, listValueNumbers) )

@@ -11,4 +11,10 @@ ${BROWSER}    Firefox
 Open Browser To Login Page
   Open Browser  ${LOGIN_URL}  ${BROWSER}
 
+Login With
+  [Arguments]   ${login}  ${password}
+  Input Text    username  ${login}
+  Input Text    password    ${password}
+  Click Button  login
+
 

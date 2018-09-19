@@ -8,7 +8,7 @@
 
 <uib-tabset active="indexTab">
 
-<uib-tab heading="{% trans 'General infos' %}" ui-sref="patient" index="1">
+<uib-tab id="general" heading="{% trans 'General infos' %}" ui-sref="patient" index="1">
     <div class="row">
         <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()" save-on-lost-focus="true">
         <div class="col-md-8">
@@ -31,14 +31,14 @@
                         <div class="col-md-2">
                             {{ patient.sex }} :
                         </div>
-                        <div class="col-md-10"><span editable-select="patient.sex"
+                        <div class="col-md-10"><span e-name="sex" editable-select="patient.sex"
                                                          e-ng-options="s.value as s.text for s in sexes"
                                 >{$ showSex() $}</span></div>
                     </div>
                     <hr/>
                     <div class="row">
                         <div class="col-md-12">
-                            <span editable-text="patient.address_street"
+                            <span e-name="street" editable-text="patient.address_street"
                                 e-placeholder="{{ patient.address_street }}"
                                 tooltip="{{ patient.address_street }}"
                                 tooltip-trigger="mouseenter"
@@ -47,7 +47,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <span editable-text="patient.address_complement"
+                            <span e-name="address_complement" editable-text="patient.address_complement"
                                 e-placeholder="{{ patient.address_complement }}"
                                 tooltip="{{ patient.address_complement }}"
                                 tooltip-trigger="mouseenter"
@@ -57,14 +57,14 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <span editable-text="patient.address_zipcode"
+                            <span e-name="zipcode" editable-text="patient.address_zipcode"
                         e-placeholder="{{ patient.address_zipcode }}"
                         tooltip="{{ patient.address_zipcode }}"
                         tooltip-trigger="mouseenter"
                         class="row col-md-5" e-width="66px"
                       >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
 
-                            <span editable-text="patient.address_city"
+                            <span e-name="city" editable-text="patient.address_city"
                         e-placeholder="{{ patient.address_city }}"
                         tooltip="{{ patient.address_city }}"
                         tooltip-trigger="mouseenter"
@@ -79,7 +79,7 @@
                                       tooltip="{{ patient.phone }}"
                                       tooltip-trigger="mouseenter"
                                 ></span>
-                                <span editable-tel="patient.phone"
+                                <span e-name="phone" editable-tel="patient.phone"
                                       e-placeholder="{{ patient.phone }}"
                                       tooltip="{{ patient.phone }}"
                                       tooltip-trigger="mouseenter"
@@ -90,7 +90,7 @@
                                       tooltip="{{ patient.mobile_phone }}"
                                       tooltip-trigger="mouseenter"
                                 ></span>
-                                <span editable-tel="patient.mobile_phone"
+                                <span e-name="mobile" editable-tel="patient.mobile_phone"
                                       e-placeholder="{{ patient.mobile_phone }}"
                                       tooltip="{{ patient.mobile_phone }}"
                                       tooltip-trigger="mouseenter"
@@ -102,7 +102,7 @@
                                 <span tooltip="{{ patient.email }}"
                                       tooltip-trigger="mouseenter">@
                                 </span>
-                                <span editable-email="patient.email"
+                                <span e-name="email" editable-email="patient.email"
                                       e-placeholder="{{ patient.email }}"
                                       tooltip="{{ patient.email }}"
                                       tooltip-trigger="mouseenter"
@@ -116,18 +116,18 @@
                         <div class="col-md-2">
                             {{ patient.laterality }} :
                         </div>
-                        <div class="col-md-6"><span editable-select="patient.laterality"
+                        <div class="col-md-6"><span e-name="laterality" editable-select="patient.laterality"
                                                          e-ng-options="l.value as l.text for l in laterality"
                                 >{$ showLaterality() $}</span>
                         </div>
                         <div class="col-md-4">
-                        <span editable-checkbox="patient.smoker"
+                        <span e-name="smoker" editable-checkbox="patient.smoker"
                               e-title="{{ patient.smoker }}?">{$ patient.smoker && "{{ patient.smoker }}" || "{% trans 'Not smoker' %}" $}</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            {{ patient.doctor }} : <span editable-select="patient.doctor" onshow="loadDoctors()"
+                            {{ patient.doctor }} : <span e-name="doctor" editable-select="patient.doctor" onshow="loadDoctors()"
                                                          e-ng-options="d.id as (d.family_name + ' - ' + d.city) for d in doctors|orderBy:'family_name'"
                                                          tooltip-html-unsafe="{$ doctor.family_name$} {$doctor.first_name$}<br>{$doctor.phone$} - {$doctor.city$}"
                                                          tooltip-trigger="mouseenter"
@@ -140,7 +140,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <p>{{ patient.job }} :</p>
-                            <span editable-text="patient.job"
+                            <span e-name="job" editable-text="patient.job"
                         e-placeholder="{{ patient.job }}"
                         tooltip="{{ patient.job }}"
                         tooltip-trigger="mouseenter"
@@ -148,7 +148,7 @@
                       >{$ patient.job || '&nbsp;&nbsp;' $}</span>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ patient.hobbies }} :</p><div hallo-editor ng-model="patient.hobbies" 
+                            <p>{{ patient.hobbies }} :</p><div name="hobbies" hallo-editor ng-model="patient.hobbies" 
                             placeholder="'{{ patient.hobbies }}'"
                             is-editable="form.patientForm.$visible"></div>
                         </div>
@@ -163,7 +163,7 @@
                     {{ patient.important_info }}
                 </div>
                 <div class="panel-body row">
-                    <div hallo-editor ng-model="patient.important_info" placeholder="'{{patient.important_info}}'" is-editable="form.patientForm.$visible"></div>
+                    <div hallo-editor name="important_info" ng-model="patient.important_info" placeholder="'{{patient.important_info}}'" is-editable="form.patientForm.$visible"></div>
                 </div>
             </div>
 
@@ -174,7 +174,7 @@
                     {{ patient.current_treatment }}
                 </div>
                 <div class="panel-body row">
-                    <div hallo-editor ng-model="patient.current_treatment" placeholder="'{{patient.current_treatment}}'" is-editable="form.patientForm.$visible"></div>
+                    <div hallo-editor name="current_treatment" ng-model="patient.current_treatment" placeholder="'{{patient.current_treatment}}'" is-editable="form.patientForm.$visible"></div>
                 </div>
             </div>
 
@@ -183,7 +183,7 @@
     </div>
 </uib-tab>
 
-<uib-tab heading="{% trans 'History' %}" ui-sref="patient" index="2">
+<uib-tab id="history" heading="{% trans 'History' %}" ui-sref="patient" index="2">
     <form editable-form name="form.historyForm" edit-form-control edit="editHistory" save="saveHistory" trigger="triggerEditFormHistory" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="row">
         <div class="col-md-6">
@@ -192,7 +192,7 @@
                     {{ patient.surgical_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="patient.surgical_history"
+                    <div name="surgical_history" hallo-editor ng-model="patient.surgical_history"
                             placeholder="'{{ patient.surgical_history }}'" is-editable="form.historyForm.$visible"></div>
                 </div>
             </div>
@@ -203,7 +203,7 @@
                     {{ patient.medical_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <div hallo-editor ng-model="patient.medical_history"  
+                    <div name="medical_history" hallo-editor ng-model="patient.medical_history"  
                             placeholder="'{{ patient.medical_history }}'" is-editable="form.historyForm.$visible"
                             ></div>
                 </div>
@@ -217,7 +217,7 @@
                     {{ patient.family_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="patient.family_history" 
+                    <div name="family_history" hallo-editor ng-model="patient.family_history" 
                             placeholder="'{{ patient.family_history }}'" is-editable="form.historyForm.$visible"
                             ></div>
                 </div>
@@ -229,7 +229,7 @@
                     {{ patient.trauma_history }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right : 5px">
-                    <div hallo-editor ng-model="patient.trauma_history"
+                    <div name="trauma_history" hallo-editor ng-model="patient.trauma_history"
                             placeholder="'{{ patient.trauma_history }}'" is-editable="form.historyForm.$visible"
                             ></div>
                 </div>
@@ -239,7 +239,7 @@
     </form>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Medical reports' %}" ui-sref="patient" index="3">
+<uib-tab id="medicalreports" heading="{% trans 'Medical reports' %}" ui-sref="patient" index="3">
     <form editable-form name="form.medicalForm" edit-form-control edit="editMedical" save="saveMedical"  trigger="triggerEditFormMedical" onaftersave="savePatient()" save-on-lost-focus="true">
     <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -248,7 +248,7 @@
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <div class="form-group">
                         <label for="notes">{% trans 'Notes' %}</label>
-                        <div hallo-editor ng-model="patient.medical_reports"
+                        <div name="medical_reports" hallo-editor ng-model="patient.medical_reports"
                             placeholder="'{{ patient.medical_reports }}'" is-editable="form.medicalForm.$visible"></div>
                     </div>
                     <div class="form-group">
@@ -276,7 +276,7 @@
                                                            ng-model="doc.document_date"  ng-required="true"
                                                            placeholder="{% trans 'Date' %}" style="width: 300px"/>
                                         <p class="help-block">{% trans 'Notes' %}</p>
-                                        <div hallo-editor class="form-control" is-editable="true" ng-model="doc.notes" ></div>
+                                        <div data-name="doc-notes" hallo-editor class="form-control" is-editable="true" ng-model="doc.notes" ></div>
                                     </div>
                                     <div ng-show="doc.notes && !doc.edit">
                                         <span class="document_notes">{% trans 'Notes' %}</span>

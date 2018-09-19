@@ -70,11 +70,11 @@ Check Rest User Profile
 
 Login REST with 
   [Arguments]   ${login}    ${cookie_session}
-  Create Session        restapi   ${LOGIN_URL}    cookies=${cookie_session}
+  Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
   ${resp} =             Get Request   restapi   /api/users
   Should Be Equal As Strings    ${resp.status_code}    200
   Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
 
 Logout
-  Go To   ${LOGIN_URL}/logout
+  Go To   ${ROOT_URL}/logout
  

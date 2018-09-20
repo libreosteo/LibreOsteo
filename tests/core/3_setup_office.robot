@@ -22,7 +22,7 @@ Open Settings
   [Documentation]   login a user and check that the user is asked to setup the office
   Open Browser To Login Page 
   Title Should Be     Identifiez-vous sur Libreosteo
-  Login with      test   test
+  Login with      test   test 
   Title Should Be     Libreosteo
   ${COOKIE} =         Get Cookie      sessionid
   Element Should Not Be Visible     class:alert-danger
@@ -36,10 +36,11 @@ Open Settings
 
 *** Keywords ***
 Login With
-  [Arguments]   ${login}  ${password}
-  Input Text    username  ${login}
-  Input Text    password    ${password}
-  Click Button  login
+  [Arguments]                               ${login}  ${password}
+  Input Text                                username  ${login}
+  Input Text                                password    ${password}
+  Click Button                              login
+  Wait Until Page Does Not Contain          "Veuillez vous identifier"
 
 Edit Settings
   Click Element                   jquery:li.open

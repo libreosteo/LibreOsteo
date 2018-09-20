@@ -39,12 +39,12 @@ Login With
 Edit Therapeut Settings
   Click Element                   jquery:li.open
   Click Element                   jquery:li#user-profile
-  Wait Until Element Contains     jquery:h1.page-header         Profil utilisateur  
-  Input Text                      last_name                     ${LAST_NAME}
-  Input Text                      first_name                    ${FIRST_NAME}
-  Input Text                      email                         ${EMAIL}
-  Input Text                      inputAdeli                    ${ADELI}
-  Input Text                      inputQuality                  ${QUALITY}
+  Wait Until Element Contains     jquery:h1.page-header             Profil utilisateur  
+  Input Text                      jquery:input[name="last_name"]    ${LAST_NAME}
+  Input Text                      first_name                        ${FIRST_NAME}
+  Input Text                      email                             ${EMAIL}
+  Input Text                      inputAdeli                        ${ADELI}
+  Input Text                      inputQuality                      ${QUALITY}
   Click Button                    jquery:button.btn.btn-primary
   Wait Until Element Is Enabled   jquery:div.growl-item
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success

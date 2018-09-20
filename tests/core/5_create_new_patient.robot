@@ -3,12 +3,12 @@
 Resource   resources.txt
 
 *** Variables ***
-${LAST_NAME}        Tester
-${FIRST_NAME}       Robot
-${EMAIL}            test@robot.com
-${BIRTH_DAY}        12
-${BIRTH_MONTH}      12
-${BIRTH_YEAR}       1972
+${LAST_NAME}        Picard 
+${FIRST_NAME}       Jean-Luc
+${EMAIL}            jean-luc.picard@starfleet.com
+${BIRTH_DAY}        13
+${BIRTH_MONTH}      07 
+${BIRTH_YEAR}       1935 
 &{COOKIE}
 
 *** Test Cases ***
@@ -38,16 +38,16 @@ Edit The New Patient
   Check That Form Has             Fin d'édition
   Check That Form Does Not Have   Éditer
   Select From List By Label       sex                     Masculin  
-  Input Text                      street                  10 rue du Moulin
+  Input Text                      street                  4 rue de l'Angle
   Input Text                      address_complement      Appt A
-  Input Text                      zipcode                 32110
-  Input Text                      city                    Le Vigen 
+  Input Text                      zipcode                 70190 
+  Input Text                      city                    La Barre 
   Input Text                      phone                   01 01 01 01 01 
   Input Text                      mobile                  07 07 07 07 07 
-  Input Text                      email                   tester@robot.fr 
+  Input Text                      email                   ${EMAIL} 
   Select From List By Label       laterality              Gaucher 
   Select Checkbox                 smoker
-  Input Text                      job                     Antiquaire
+  Input Text                      job                     Navigateur 
   Input Text                      hobbies                 Ski, Roller, Musique
   Input Text                      important_info          WARNING
   Input Text                      current_treatment       Traitement H2O
@@ -141,20 +141,20 @@ Check Rest Patient
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/patients/1
   Should Be Equal As Numbers      ${resp.json()['id']}                    1
-  Should Be Equal As Strings      ${resp.json()['birth_date']}            1972-12-12 
-  Should Be Equal As Strings      ${resp.json()['family_name']}           Tester 
-  Should Be Equal As Strings      ${resp.json()['original_name']}         ""
-  Should Be Equal As Strings      ${resp.json()['first_name']}            Robot 
-  Should Be Equal As Strings      ${resp.json()['address_street']}        10 rue du Moulin 
+  Should Be Equal As Strings      ${resp.json()['birth_date']}            1935-07-13 
+  Should Be Equal As Strings      ${resp.json()['family_name']}           ${LAST_NAME} 
+  Should Be Empty                 ${resp.json()['original_name']}         ""
+  Should Be Equal As Strings      ${resp.json()['first_name']}            ${FIRST_NAME} 
+  Should Be Equal As Strings      ${resp.json()['address_street']}        4 rue de l'Angle 
   Should Be Equal As Strings      ${resp.json()['address_complement']}    Appt A 
-  Should Be Equal As Strings      ${resp.json()['address_zipcode']}       32110 
-  Should Be Equal As Strings      ${resp.json()['address_city']}          Le Vigen 
-  Should Be Equal As Strings      ${resp.json()['email']}                 tester@robot.fr 
+  Should Be Equal As Strings      ${resp.json()['address_zipcode']}       70190 
+  Should Be Equal As Strings      ${resp.json()['address_city']}          La Barre 
+  Should Be Equal As Strings      ${resp.json()['email']}                 jean-luc.picard@starfleet.com 
   Should Be Equal As Strings      ${resp.json()['phone']}                 01 01 01 01 01 
   Should Be Equal As Strings      ${resp.json()['mobile_phone']}          07 07 07 07 07 
-  Should Be Equal As Strings      ${resp.json()['job']}                   Antiquaire 
+  Should Be Equal As Strings      ${resp.json()['job']}                   Navigateur 
   Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique<br>
-  Should Be Equal As Boolean      ${resp.json()['smoker']}                True
-  Should Be Equal As Boolean      ${resp.json()['laterality']}            L 
+  Should Be True                  ${resp.json()['smoker']}
+  Should Be Equal As Strings      ${resp.json()['laterality']}            L 
 
 

@@ -25,5 +25,6 @@ before_script:
   - python ./server.py &
   - sleep 3
 script:
+  - python ./manage.py test
   - xvfb-run --server-args="-screen 0 1024x768x24" robot tests 
 

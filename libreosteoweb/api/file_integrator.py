@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 import random
 from libreosteoweb.models import Patient, Examination, ExaminationType, ExaminationStatus
 from datetime import date, datetime
-from .utils import enum, Singleton
+from .utils import enum, Singleton,_unicode
 
 logger = logging.getLogger(__name__)
 
@@ -101,6 +101,8 @@ class Extractor(object):
 
 
 def filter( line):
+    if not hasattr('', 'decode'):
+        return line
     result_line = None
     try:
         result_line = line.decode('utf-8')
@@ -157,7 +159,8 @@ class Analyzer(object):
                 return False
         return False
     def _parse_header(self, header):
-        unicode(header[:]).lower().index(self.__class__.identifier)
+        print(header)
+        _unicode(header[:]).lower().index(self.__class__.identifier)
 
     def get_report(self):
         is_empty = self.content.nb_row <= 1
@@ -267,6 +270,7 @@ class AnalyzerHandler(object):
             instance = analyzer(content)
             if instance.is_instance() :
                 return instance.get_report()
+        print("No Analyzer found")
         return AnalyzeReport(False,False, None)
     def get_content(self, ourfile):
         return FileContentProxy().get_content(ourfile, line_filter=filter)
@@ -466,7 +470,7 @@ class IntegratorExamination(AbstractIntegrator):
                     logger.info("errors detected, data is = %s, errors = %s "% (data,serializer.errors))
             except ValueError as e:
                 logger.exception("Exception when creating examination.")
-                errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line :') + unicode(e) } ))
+                errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line :') + _unicode(e) } ))
             except :
                 logger.exception("Exception when creating examination.")
                 errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line.') } ) )

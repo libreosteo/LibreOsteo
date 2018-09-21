@@ -83,6 +83,7 @@ Edit The New Patient
   Input Text                      jquery:p.help-block ~ div                   Licence GNU GPLv3
   Click Element                   jquery:button.btn.label.label-info
   Check Rest Patient              ${COOKIE.value}
+  Check Rest Patient Documents    ${COOKIE.value}
 
 *** Keywords ***
 Create Patient
@@ -157,4 +158,14 @@ Check Rest Patient
   Should Be True                  ${resp.json()['smoker']}
   Should Be Equal As Strings      ${resp.json()['laterality']}            L 
 
-
+Check Rest Patient Documents 
+  [Arguments]     ${session_token}
+  ${session_cookie}   Create Dictionary   sessionid=${session_token}
+  Login REST with     test        ${session_cookie}
+  ${resp} =           Get Request     restapi     /api/patient-documents/1
+  Should Be Equal As Numbers      ${resp.json()['patient']}               1 
+  Should Be Equal As Numbers      ${resp.json()['attachment_type']}       5 
+  Should Be Equal As Strings      ${resp.json()['document']['title']}     Licence Libreosteo 
+  Should Be Equal As Strings      ${resp.json()['document']['notes']}     Licence GNU GPLv3<br>
+  Should Be Equal As Strings      ${resp.json()['document']['document_date']}   2012-01-10 
+  Should Contain                  ${resp.json()['document']['document_file']}         http://localhost:8085/files/documents/resources  

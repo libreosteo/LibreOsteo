@@ -81,7 +81,7 @@ class TestFileIntegrator(TestCase):
 	def test_analyze_handler(self):
 		handler = file_integrator.AnalyzerHandler()
 
-		header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
+		header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
 
 		f = MagicMock()
 		f.read.return_value = header
@@ -94,7 +94,7 @@ class TestFileIntegrator(TestCase):
 	def test_analyze_handler_not_empty(self):
 		handler = file_integrator.AnalyzerHandler()
 
-		header = u'Numero;Nom de Famille;Nom de jeune fille/ou jeune homme;Prenom;Date de naissance (JJ/MM/AAAA);Sex (M/F);Rue;Complement dadresse;code postal;ville;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
+		header = u'Numero;Nom de Famille;Nom de jeune fille/ou jeune homme;Prenom;Date de naissance (JJ/MM/AAAA);Sex (M/F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
 		value = u'Test;Test;Test'
 
 		f = MagicMock()

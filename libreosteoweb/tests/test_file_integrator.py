@@ -15,7 +15,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 from django.test import TestCase
-
+import libreosteoweb.api.utils
 from libreosteoweb.api import file_integrator
 from mock import mock_open
 from mock import patch

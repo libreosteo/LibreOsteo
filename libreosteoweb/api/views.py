@@ -14,10 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-try:
-    from cStringIo import StringIO
-except ImportError:
-    from io import StringIO
+from io import BytesIO
 from datetime import datetime
 import logging
 import os
@@ -523,10 +520,10 @@ DUMP_FILE="libreosteo.db"
 class DbDump(StaffRequiredMixin, View):
     @never_cache
     def get(self, request, *args, **kwargs):
-        zip_content = StringIO()
+        zip_content = BytesIO()
         zf = zipfile.ZipFile(zip_content, "w")
 
-        buf = StringIO()
+        buf = BytesIO()
         call_command('dumpdata', exclude=['contenttypes', 'admin', 'auth.Permission'], stdout=buf)
         buf.seek(0)
 
@@ -540,7 +537,7 @@ class DbDump(StaffRequiredMixin, View):
         zf.close()
 
         response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
-        response['Content-Disposition'] = 'attachment; filename=%s' % DUMP_FILE
+        response['Content-Disposition'] = 'attachment; filename=%s-%s' % (datetime.now().isoformat(), DUMP_FILE)
 
         return response
 

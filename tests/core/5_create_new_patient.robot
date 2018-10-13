@@ -82,6 +82,7 @@ Edit The New Patient
   Input Text                      jquery:input[placeholder~="Date"]:visible   10/01/2012
   Input Text                      jquery:p.help-block ~ div                   Licence GNU GPLv3
   Click Element                   jquery:button.btn.label.label-info
+  Wait Until Element Is Not Visible     jquery:button.btn.label 
   Check Rest Patient              ${COOKIE.value}
   Check Rest Patient Documents    ${COOKIE.value}
 

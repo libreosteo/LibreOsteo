@@ -34,6 +34,7 @@ Login With
   [Arguments]   ${login}  ${password}
   Input Text    username  ${login}
   Input Text    password    ${password}
+  Set Selenium Speed      0.1 second
   Click Button  login
 
 Edit Therapeut Settings

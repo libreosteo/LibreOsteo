@@ -14,7 +14,7 @@ ${BIRTH_YEAR}       1935
 *** Test Cases ***
 Create New Patient  
   [Documentation]   Create a new patient
-  Open Browser To Login Page 
+  Open Browser To Login Page
   Title Should Be     Identifiez-vous sur Libreosteo
   Login with      test   test
   Title Should Be     Libreosteo
@@ -25,6 +25,7 @@ Create New Patient
 
 Edit The New Patient                          
   Go To                           ${ROOT_URL}
+  Set Selenium Speed              0
   ${COOKIE} =         Get Cookie      sessionid
   Wait That Page Is Ready
   Wait Until Element Contains     jquery:div[class~="chat-body"]>div[class~="header"]            ${LAST_NAME} ${FIRST_NAME}      10

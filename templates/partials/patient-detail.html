@@ -295,7 +295,7 @@
     </form>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations" index="5">
+<uib-tab id="examinations" heading="{% trans 'Examinations' %}" active="examinationsTab.examinationsListActive" ui-sref="patient.examinations" index="5">
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
@@ -305,7 +305,7 @@
     current-examination-manager="currentExaminationManager()"/>
 </uib-tab>
 
-<uib-tab heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
+<uib-tab id="current-examination" heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
     <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
 </uib-tab>
 </uib-tabset>

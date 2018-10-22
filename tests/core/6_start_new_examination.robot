@@ -22,11 +22,27 @@ Search For Patient
   Click Button                          new-examination-btn
   Wait Until Element Is Visible         current-examination
 
-Write New Examination
+Write New Examination Not Invoiced
   Input Text                            jquery:input[placeholder~="Motif"]      Motif de consultation
   Input Text                            jquery:div[class~="inPlaceholderMode"]:contains(Examen)         Examen normal
-  Click Button                          jquery:button[class~="btn-success"]
+  Click Button                          close-examination
   Click Element                         jquery:input[value="notinvoiced"]
   Input Text                            reason                                  Test
-  Element Should Be Enabled             jquery:button[class~="btn-primary"]        
-  Click Button                          jquery:button[class~="btn-primary"]
+  Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider') 
+  Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')
+
+Write New Examination Invoiced 
+  Go To                                 ${ROOT_URL}
+  Go To                                 ${ROOT_URL}/${PATIENT_URL}/examinations
+  Click Button                          new-examination-btn
+  Wait Until Element Is Visible         current-examination 
+  Input Text                            jquery:input[placeholder~="Motif"]      Motif de consultation
+  Input Text                            jquery:div[class~="inPlaceholderMode"]:contains(Examen)         Examen normal
+  Click Button                          close-examination
+  Click Element                         jquery:input[value="invoiced"]
+  Click Element                         jquery:input[value="check"]
+  Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
+  Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')
+  Go To                                 ${ROOT_URL}/invoice/1
+  Element Should Contain                patient                 ${FIRST_NAME} ${LAST_NAME}
+  Element Should Contain                main                    Template with 55 EUR

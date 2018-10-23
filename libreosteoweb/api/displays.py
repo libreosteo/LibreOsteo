@@ -154,4 +154,4 @@ def display_restore(request):
 @never_cache
 @maintenance_available()
 def display_register(request):
-    return render(request, 'partials/register.html', {'csrf_token' : request.COOKIES['csrftoken']})
+    return render(request, 'partials/register.html', {'request' : request })

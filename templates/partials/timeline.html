@@ -2,7 +2,7 @@
 <div ng-switch="examinations.length > 0">
 
     <div style="margin-top:20px">
-        <button class="btn btn-primary center-block"
+        <button id="new-examination-btn" class="btn btn-primary center-block"
                     ng-click="startExamination()" ng-disabled="examinationIsActive">{% trans 'Start an examination' %}</button>
     </div>
     <ul class="timeline" ng-switch-when="true">

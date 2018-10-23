@@ -75,7 +75,6 @@ Running unit tests
 ------------------
 
 You have to run tests before developing any functionality. To run theses tests:
-
 ```
 ./manage.py test
 ```
@@ -84,30 +83,30 @@ Running functional tests
 ------------------------
 
 1. Ensure you have all requirements :
+```
+pip install -r requirements/requ-testing.txt
+```
 
-   ``` 
- pip install -r requirements/requ-testing.txt
-   ```
 1. Ensure you have Firefox with French support language. You can download it with an url like https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64
-2. Download and install geckodriver into your PATH: 
 
-   ```
+2. Download and install geckodriver into your PATH: 
+```
 wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
 tar -xvf /tmp/geckodriver.tar.gz
 export PATH=$PATH:$PWD
-   ```
+```
+
 3. Be sure that your static are up to date:
-
-   ```
+```
 ./manage.py collectstatic --no-input
-   ```
+```
+
 4. Launch the server instance:
-
-   ```
+```
   python ./server.py
-   ```
-5. Execute tests suite:
+```
 
-   ```
+5. Execute tests suite:
+```
   robot tests
-   ```
+```

@@ -42,7 +42,7 @@ class NetworkHelper():
     def get_all_addresses(self):
         addresses = []
         try :
-            addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.ifaddresses(it).has_key(netifaces.AF_INET) ]
+            addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.AF_INET in netifaces.ifaddresses(it) ]
         except :
             logger.exception("Cannot obtain address on the host")
         return addresses

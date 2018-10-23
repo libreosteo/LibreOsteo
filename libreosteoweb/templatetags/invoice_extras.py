@@ -17,6 +17,7 @@
 from django import template
 from django.utils.translation import to_locale, get_language
 import locale
+from libreosteoweb.api.utils import _unicode
 
 register = template.Library()
 
@@ -35,9 +36,9 @@ def templatize(value, obj):
 			todisplay = getattr(obj, val)
 			if type(todisplay) is float :
 				locale_desc = to_locale(get_language())
-				return unicode(locale.str(todisplay))
+				return _unicode(locale.str(todisplay))
 			else :
-				return unicode(getattr(obj, val))
+				return _unicode(getattr(obj, val))
 		return val
 	p = re.compile(r'<(?P<tag>.*?)>')
 	return p.sub(replace, value)

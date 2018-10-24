@@ -201,7 +201,8 @@ if sys.platform in ['win32']:
         description = "Libreosteo, suite for osteopaths",
         options = {"build_exe": build_exe_options},
         executables = [Executable("winserver.py", base=base,targetName="Libreosteo.exe"),
-                       Executable("manage.py", base=base, targetName="manager.exe")])
+                       Executable("manage.py", base=base, targetName="manager.exe"),
+                       Executable("application.py", base=base, targetName="launcher.exe")])
 
 
     # Create a web shorcut link

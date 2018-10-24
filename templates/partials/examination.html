@@ -81,18 +81,20 @@
                                     e-placeholder="{{ examination.reason }}"
                                     tooltip="{{ model.reason }}"
                                     tooltip-trigger="mouseenter"
-                                >{$ model.reason || '&nbsp;&nbsp;' $}</span>
+                                ><strong>{$ model.reason || '&nbsp;&nbsp;' $}</strong></span>
                             </div>
                             <div class="col-md-12">&nbsp;</div>
                             <div class="col-md-12">
                                 <div hallo-editor ng-model="model.reason_description"
-                                    placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
+                                     placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
                                 ></div>
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <hr />
+
                             <div class="row">
-                                <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
+                                <div class="col-md-12 subtitle">{{ examination.medical_examination }} :</div>
 
                                 <div class="col-md-12">
                                     <div hallo-editor ng-model="model.medical_examination"

@@ -215,7 +215,7 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
                 'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
                 'tools.log_tracebacks.on' : True,
                 'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
-                'server.socket_port': 8085,
+                'server.socket_port': SERVER_PORT,
                 'server.socket_host': '0.0.0.0',
                 }
             })
@@ -310,6 +310,16 @@ if __name__ == '__main__':
 	            'level': 'INFO',
 	            'propagate': False
 	        },
+                'libreosteoweb.api' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
+                'Libreosteo' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
 	    }
 	}
 	        
@@ -317,8 +327,11 @@ if __name__ == '__main__':
     logging.config.dictConfig(LOG_CONF)
     os.chdir(DATA_FOLDER)
     logging.info(os.getcwd())
+    logger = logging.getLogger(__name__)
+    logger.info("Frozen with attribute value %s" % (getattr(sys, 'frozen', False)))
     if len(sys.argv) == 1:
         logging.info("Start service")
+        logging.info("Handle starting of the service")
         try:
             servicemanager.Initialize()
             servicemanager.PrepareToHostSingle(LibreosteoService)
@@ -327,6 +340,7 @@ if __name__ == '__main__':
             logging.exception("Exception when starting service")
     else:
         logging.info("Start Controller")
+        logging.info("Handle command line on service manager")
         try:
             win32serviceutil.HandleCommandLine(LibreosteoService)
         except Exception as e:

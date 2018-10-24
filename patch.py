@@ -44,3 +44,28 @@ if getattr(sys, 'frozen', False):
     original_init_translation_catalog = DjangoTranslation._init_translation_catalog
     DjangoTranslation._init_translation_catalog = new_init_translation_catalog
 
+def patch_file(module_name, file_name, patch_function):
+    import pkgutil
+    import imp
+    import time
+    import marshal
+    import glob, struct
+    loader = pkgutil.get_loader(module_name)
+    code = compile(patch_function(loader.get_source()), "<string>", "exec")
+    loader_file = glob.glob('build/exe.*/'+file_name)[0]
+    try :
+        f = open(loader_file, 'wb')
+        f.write('\0\0\0\0')
+        f.write(struct.pack('<I', time.time()))
+        marshal.dump(code, f)
+        f.flush()
+        f.seek(0, 0)
+        f.write(imp.get_magic())
+        f.close()
+    except IOError:
+        print("Cannot patch file %s" % file_name)
+
+
+def patch_django_loader_pyc():
+    patch_file('django.db.migrations.loader', 'lib/django/db/migrations/loader.pyc', lambda src : src.replace('".py"', '".pyc"'))
+    

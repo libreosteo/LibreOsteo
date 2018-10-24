@@ -318,7 +318,7 @@ if __name__ == '__main__':
     os.chdir(DATA_FOLDER)
     logging.info(os.getcwd())
     if len(sys.argv) == 1:
-        logging.info("Start from 1")
+        logging.info("Start service")
         try:
             servicemanager.Initialize()
             servicemanager.PrepareToHostSingle(LibreosteoService)
@@ -326,7 +326,7 @@ if __name__ == '__main__':
         except Exception as e:
             logging.exception("Exception when starting service")
     else:
-        logging.info("Start from 2")
+        logging.info("Start Controller")
         try:
             win32serviceutil.HandleCommandLine(LibreosteoService)
         except Exception as e:

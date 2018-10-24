@@ -1,0 +1,28 @@
+*** Settings ***
+Library     SeleniumLibrary   timeout=5    implicit_wait=2
+Library     Collections
+Library     RequestsLibrary
+
+*** Variables ***
+${ROOT_URL}  http://localhost:8085
+${BROWSER}    Firefox 
+
+*** Keywords ***
+Open Browser To Login Page
+  Open Browser  ${ROOT_URL}  ${BROWSER}
+
+Login With
+  [Arguments]   ${login}  ${password}
+  Input Text    username  ${login}
+  Input Text    password    ${password}
+  Click Button  login
+
+Login REST with 
+  [Arguments]   ${login}    ${cookie_session}
+  Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
+  ${resp} =             Get Request   restapi   /api/users
+  Should Be Equal As Strings    ${resp.status_code}    200
+  Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
+
+
+

@@ -1,0 +1,101 @@
+check_root() {
+	if ! id -u | grep -q '^0$'
+	then
+		echo "Please launch the script on root"
+		exit 1
+	fi
+}
+
+check_noroot() {
+	if id -u | grep -q '^0$'
+	then
+		echo "Please don't launch the script on root"
+		exit 1
+	fi
+}
+
+check_docker() {
+	if ! which docker > /dev/null
+	then
+		echo "Please install docker, see https://docs.docker.com/install/#server"
+		exit 1
+	fi
+}
+
+check_docker_compose() {
+	if ! which docker-compose > /dev/null
+	then
+		curl -L --fail https://github.com/docker/compose/releases/download/1.19.0/run.sh -o /usr/local/bin/docker-compose
+		chmod a+x /usr/local/bin/docker-compose
+	fi
+}
+
+check_rank_lo() {
+	if [[ -d $LO_DIR/$rank ]]
+	then
+		echo "Please use another rank, it already exist, for example: $0 install preprod 8086"
+		exit 1
+	fi
+}
+
+check_rm_rank_lo() {
+	if [[ ! -d $LO_DIR/$rank ]]
+	then
+		ranks="$(ls $LO_DIR)"
+		echo "The rank doesn't exist, possible ranks:"
+		echo "$ranks"
+		exit 1
+	fi
+}
+
+check_port_lo() {
+	if wget localhost:$port -o /dev/null
+	then
+		echo "Please use another port, for example: $0 install $rank 8086"
+		exit 1
+	fi
+}
+
+check_tar() {
+	file_tmp=$(mktemp)
+	tar -tf $1 > $file_tmp 2> /dev/null
+        #cat $file_tmp
+	if cat $file_tmp | grep '/sql/' | wc -l | grep -q '^0$'
+	then
+		echo "$1 not valid"
+		rm $file_tmp
+		exit 1
+	fi
+	if cat $file_tmp | grep '/media/' | wc -l | grep -q '^0$'
+	then
+		echo "$1 not valid"
+		rm $file_tmp
+		exit 1
+	fi
+	rm $file_tmp
+}
+
+check_install_all() {
+	check_root
+	check_docker
+	check_docker_compose
+	check_rank_lo
+	check_port_lo
+}
+
+check_remove_all() {
+	check_root
+	check_docker
+	check_docker_compose
+	check_rm_rank_lo
+}
+
+check_restore_all() {
+	check_remove_all
+	check_tar $1
+}
+
+check_launch_all(){
+	check_noroot
+	check_rm_rank_lo
+}

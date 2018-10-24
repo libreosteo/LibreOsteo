@@ -4,11 +4,12 @@
 ############################################################
 
 FROM ubuntu:16.04
-MAINTAINER Joseph Ligier
+LABEL maintainer "Joseph Ligier"
 
 # Install dependancies
 RUN apt-get update && apt-get install -y \
     curl \
+    tzdata \
     gettext \
     git \
     npm \

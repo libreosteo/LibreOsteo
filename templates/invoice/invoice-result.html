@@ -70,7 +70,7 @@
 			{% endif %}
 
 			<table class="fees">
-				<tr><td>HONORAIRES</td><td>{{invoice.amount}} {{invoice.currency}}</td></tr>
+				<tr><td>HONORAIRES</td><td>{{invoice.amount|floatformat:2 }} {{invoice.currency}}</td></tr>
 			</table>
 		</div>
 

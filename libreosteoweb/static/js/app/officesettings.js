@@ -120,6 +120,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
 			}, paiment_mean);
 		});
+    return $scope.paiment_means;
 	};
 
 	$scope.updateSettings = function(settings) {
@@ -127,25 +128,24 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 		var updatePromises = [ update1.$promise ];
 		angular.forEach($scope.paiment_means, function(paimentmean, key) {
 			var updatePaimentMean = OfficePaimentMeansServ.save({paimentMeanId : paimentmean.id}, paimentmean);
-
 			this.push(updatePaimentMean.$promise);
 		}
 		, updatePromises);
 		$q.all(updatePromises).then(function(settings) {
-			$scope.officesettings = settings[0];
+      $scope.officesettings = settings[0];
 			$scope.paiment_means = $scope.resetPaimentMeans(settings.slice(0));
 			// Display info that it is updated
-              		var e = document.getElementById('update-info');
-              		var text = angular.element(e).text();
-              		growl.addSuccessMessage(text);
-              	},
-                function(reason) {
-                  // Should display the error
-                  if(reason.data.detail) {
-                    growl.addErrorMessage(reason.data.detail);
-                  } else {
-                    growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
-                  }
+      var e = document.getElementById('update-info');
+      var text = angular.element(e).text();
+      growl.addSuccessMessage(text);
+    },
+    function(reason) {
+      // Should display the error
+      if(reason.data.detail) {
+        growl.addErrorMessage(reason.data.detail);
+      } else {
+        growl.addErrorMessage(formatGrowlError(reason.data), {enableHtml:true});
+      }
 		});
 	};
 

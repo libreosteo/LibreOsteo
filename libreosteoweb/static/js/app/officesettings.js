@@ -86,8 +86,8 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
           enableSorting: true,
           columnDefs: [
               { name: 'username', field: 'username', enableSorting: true, enableCellEdit : false},
-              { name: 'first_name', field: 'first_name', enableSorting : true, displayName : 'Prénom', enableCellEdit : false},
-              { name: 'last_name', field: 'last_name', enableSorting : true , displayName : 'Nom',enableCellEdit : false},
+              { name: 'first_name', field: 'first_name', enableSorting : true, displayName : 'Prénom', enableCellEdit : true},
+              { name: 'last_name', field: 'last_name', enableSorting : true , displayName : 'Nom',enableCellEdit : true},
               { name: 'is_staff', field: 'is_staff', displayName : 'Administrateur', cellTemplate : '<div class="ui-grid-cell-contents">{$ row.entity.is_staff|true_false$}</div>'},
               { name: 'is_active', field: 'is_active', displayName : 'Actif', cellTemplate: '<div class="ui-grid-cell-contents">{$ row.entity.is_active|true_false$}</div>'},
               { name: 'set_password', type : 'object', displayName : 'Mot de passe', allowCellFocus : false, cellTemplate : '<div class="ui-grid-cell-contents"><button ng-click="grid.appScope.setPassword(row.entity)">modifier</button></div>' }
@@ -103,6 +103,8 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
                 var data = {
                   'id' : rowEntity.id,
                   'username' : rowEntity.username,
+                  'first_name': rowEntity.first_name,
+                  'last_name' : rowEntity.last_name,
                   'is_staff' : rowEntity.is_staff,
                   'is_active' : rowEntity.is_active,
                 }

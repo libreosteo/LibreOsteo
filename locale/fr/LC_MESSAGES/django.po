@@ -106,7 +106,7 @@ msgid "City"
 msgstr "Ville"
 
 msgid "Original name"
-msgstr "Nom de jeune fille"
+msgstr "Nom de naissance"
 
 msgid "Street"
 msgstr "Rue"

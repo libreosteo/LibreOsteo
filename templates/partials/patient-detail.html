@@ -1,7 +1,7 @@
 {% load i18n %}
 <h1 class="page-header">
     <span editable-text="patient.family_name" onaftersave="savePatient()">{$ patient.family_name $}</span>
-    <span ng-show="patient.original_name || form.patientForm.$visible">(<span blur="submit" e-placeholder="{{ patient.original_name }}" e-form="originalNameInput" buttons="no" editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
+    <span ng-show="patient.original_name || form.patientForm.$visible">(<span blur="submit" e-name="original_name" e-placeholder="{{ patient.original_name }}" e-form="originalNameInput" buttons="no" editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
     </span>
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
 </h1>

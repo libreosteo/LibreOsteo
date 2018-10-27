@@ -10,7 +10,7 @@
 
 <uib-tab id="general" heading="{% trans 'General infos' %}" ui-sref="patient" index="1">
     <div class="row">
-        <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()" save-on-lost-focus="true">
+        <form editable-form name="form.patientForm" edit-form-control edit="editPatient" save="saveEditPatient" delete="delete" trigger="triggerEditFormPatient" onaftersave="savePatient()" save-on-lost-focus="true" disable-enter >
         <div class="col-md-8">
             <div class="panel panel-info">
                 <div class="panel-heading">

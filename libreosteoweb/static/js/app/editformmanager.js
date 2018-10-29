@@ -217,7 +217,7 @@ editFormManager.directive('disableEnter', ['$compile', function($compile) {
     },
     controller: ["$scope", function($scope, $element) {
       $scope.disableEnter = function(event) {
-        if (event.target.contentEditable != "true" && event.charCode == 13) {
+        if (event.target.contentEditable != "true" && (event.charCode || event.keyCode) == 13) {
           event.preventDefault();
         };
       };

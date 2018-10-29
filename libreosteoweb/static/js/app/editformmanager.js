@@ -199,6 +199,35 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
   }
 }]);
 
+editFormManager.directive('disableEnter', ['$compile', function($compile) {
+  return {
+    restrict: 'A',
+    replace : false,
+    terminal : true,
+    priority: 1001,
+    compile: function compile(element, attrs) {
+      console.log("directive disableEnter");
+      element.removeAttr('disable-enter');
+      element.attr('ng-keypress', 'disableEnter($event)');
+      return {
+        pre : function preLink(scope, iElement, iAttrs, controller) { },
+        post : function postLink(scope, iElement, iAttrs, controller) {
+          console.log(scope);
+          console.log(iElement);
+          console.log(iAttrs);
+          $compile(iElement)(scope);
+        }
+      };
+    },
+    controller: ["$scope", function($scope, $element) {
+      $scope.disableEnter = function(event) {
+        if (event.target.contentEditable != "true" && event.charCode == 13) {
+          event.preventDefault();
+        };
+      };
+    }],
+  }
+}]);
 
 
 var getStackTrace = function() {

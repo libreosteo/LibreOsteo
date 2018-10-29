@@ -38,6 +38,7 @@ Edit The New Patient
   Check That Form Has             Supprimer 
   Check That Form Has             Fin d'édition
   Check That Form Does Not Have   Éditer
+  Input Text                      original_name           dupont
   Select From List By Label       sex                     Masculin  
   Input Text                      street                  4 rue de l'Angle
   Input Text                      address_complement      Appt A
@@ -146,7 +147,7 @@ Check Rest Patient
   Should Be Equal As Numbers      ${resp.json()['id']}                    1
   Should Be Equal As Strings      ${resp.json()['birth_date']}            1935-07-13 
   Should Be Equal As Strings      ${resp.json()['family_name']}           ${LAST_NAME} 
-  Should Be Empty                 ${resp.json()['original_name']}         ""
+  Should Be Equal As Strings      ${resp.json()['original_name']}         Dupont
   Should Be Equal As Strings      ${resp.json()['first_name']}            ${FIRST_NAME} 
   Should Be Equal As Strings      ${resp.json()['address_street']}        4 rue de l'Angle 
   Should Be Equal As Strings      ${resp.json()['address_complement']}    Appt A 

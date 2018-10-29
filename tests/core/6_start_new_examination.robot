@@ -17,7 +17,7 @@ Search For Patient
   Wait Until Page Contains Element      jquery:div[class~="search-entry"]>h4>a     
   Click Link                            jquery:div[class~="search-entry"]>h4>a
   Location Should Be                    ${ROOT_URL}/${PATIENT_URL}
-  Wait Until Element Contains           jquery:h1.page-header         ${LAST_NAME} ${FIRST_NAME}
+  Wait Until Element Contains           jquery:h1.page-header         ${LAST_NAME} (Dupont) ${FIRST_NAME}
   Click Element                         examinations
   Click Button                          new-examination-btn
   Wait Until Element Is Visible         current-examination

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 22:35+0200\n"
+"POT-Creation-Date: 2018-10-29 22:23+0100\n"
 "PO-Revision-Date: 2018-10-24 19:28+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -22,21 +22,6 @@ msgstr "Français"
 
 msgid "English"
 msgstr "Anglais"
-
-msgid "Query"
-msgstr ""
-
-msgid "Backend Alias"
-msgstr ""
-
-msgid "Timeline"
-msgstr ""
-
-msgid "Time"
-msgstr ""
-
-msgid "Kwargs"
-msgstr ""
 
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
@@ -450,6 +435,9 @@ msgstr "Site vitrine"
 
 msgid "Community support (forum)"
 msgstr "Support communautaire (forum)"
+
+msgid "Development and code project"
+msgstr "Code et développement"
 
 msgid "Version"
 msgstr "Version"
@@ -927,4 +915,3 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
-

@@ -20,7 +20,6 @@ from mock import mock_open
 from mock import patch
 from mock import MagicMock
 from mock import Mock
-import pdb
 
 class TestFileIntegrator(TestCase):
 	def setUp(self):

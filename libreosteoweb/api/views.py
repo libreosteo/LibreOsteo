@@ -175,7 +175,7 @@ class PatientViewSet(viewsets.ModelViewSet):
         return super(PatientViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, instance):
-        is_gdpr_request = 'gdpr' in self.request.data and self.request.data['gdpr']
+        is_gdpr_request = 'gdpr' in self.request.query_params and self.request.query_params['gdpr']
         examination_list = models.Examination.objects.filter(patient=instance.id)
         if not len(examination_list) == 0 and not is_gdpr_request:
             raise Forbidden()

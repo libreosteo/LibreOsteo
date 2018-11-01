@@ -27,6 +27,7 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
             save : {method : 'PUT', params : {patientId : 'patientId'}},
             add : {method : 'POST'},
             delete : { method : 'DELETE', params : {patientId : 'patientId'}},
+            delete_gdpr : { method : 'DELETE', url : 'api/patients/:patientId?gdpr=True', params : {patientId : 'patientId'}}
         });
 
         serv.prototype.doctor_detail = function (callback) {
@@ -293,14 +294,15 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
                 if($scope.patient.id != null)
                 {
-                    var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data)
+                    /*var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data)
                     {
                         if( data.length != 0){
                             $scope.triggerEditFormPatient.delete = false;
                         } else {
                             $scope.triggerEditFormPatient.delete = true;
                         }
-                    });
+                    });*/
+                  $scope.triggerEditFormPatient.delete = true;
                 } else {
                     $scope.triggerEditFormPatient.delete = false;
                 }
@@ -515,19 +517,43 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         $scope.delete = function()
         {
-            if($scope.patient.id)
-                {
-                    PatientServ.delete({patientId : $scope.patient.id}, function(resultOk)
-                        {
-                            $state.go('dashboard');
-                        }, function(resultNok)
-                        {
-                            console.log(resultNok);
-                            growl.addErrorMessage("This operation is not available");
-                        });
-                }
-        }
+          var deleteFunction = function(isGdpr) {
+            var delete_impl = PatientServ.delete;
+            if (isGdpr) {
+              delete_impl = PatientServ.delete_gdpr;
+            }
+            delete_impl({patientId : $scope.patient.id}, function(resultOk)
+            {
+              $state.go('dashboard');
+            }, function(resultNok)
+            {
+              console.log(resultNok);
+              growl.addErrorMessage("This operation is not available");
+            });
+          };
 
+          if ($scope.patient.id) {
+            var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data) {
+              if (data.length != 0) {
+                 var modalInstance = $uibModal.open({
+                  templateUrl: 'web-view/partials/confirmation-modal',
+                  controller : ConfirmationCtrl,
+                  resolve : {
+                    message : function() {
+                    return gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?");
+                    },
+                  }
+                });
+                modalInstance.result.then(function (){
+                  deleteFunction(true); 
+                });
+              } else {
+                deleteFunction();
+              }
+            });
+          }
+        }
+          
         $scope.triggerEditFormHistory = {
             save: false,
             edit: true,
@@ -650,7 +676,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
               });
            });
         };
-
 }]);
 
 

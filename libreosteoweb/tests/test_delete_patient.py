@@ -60,7 +60,7 @@ class TestDeletePatient(APITestCase):
     def test_delete_patient_with_invoiced_examination_gdpr(self):
         current_invoice = Examination.objects.filter(id=self.e1.pk)[0].invoice
         assert current_invoice is not None
-        response = self.client.delete(reverse('patient-detail', kwargs={'pk' : self.p1.pk}), data={'gdpr': True})
+        response = self.client.delete(reverse('patient-detail', kwargs={'pk' : self.p1.pk})+'?gdpr=True')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         assert len(Patient.objects.filter(id=self.p1.pk)) == 0
         assert len(Examination.objects.filter(id=self.e1.pk)) == 0

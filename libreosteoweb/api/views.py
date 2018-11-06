@@ -181,6 +181,8 @@ class PatientViewSet(viewsets.ModelViewSet):
             raise Forbidden()
 
         models.OfficeEvent.objects.filter(reference=instance.id, clazz=models.Patient.__name__).delete()
+        for e in examination_list:
+            models.OfficeEvent.objects.filter(reference=e.id, clazz=models.Examination.__name__).delete()
         models.Examination.objects.filter(patient=instance.id).delete()
         return super(PatientViewSet, self).perform_destroy(instance)
 
@@ -213,9 +215,13 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.invoice = self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.invoice.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current.examination.invoice.save()
                     current_examination.save()
                 if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
                     current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.invoice.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.invoice.save()
                     current_examination.save()
             return Response({'invoiced': current_examination.invoice.id})
         else :

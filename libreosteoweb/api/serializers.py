@@ -202,7 +202,7 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         return addresses
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
-    status = serializers.IntegerField(source='examination.status')
+    #status = serializers.IntegerField(source='examination.status')
     paiment_mode_text = serializers.SerializerMethodField()
 
     class Meta:

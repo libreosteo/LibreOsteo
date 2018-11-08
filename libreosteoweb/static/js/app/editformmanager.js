@@ -67,15 +67,19 @@ editFormManager.factory('loEditFormManager', function() {
         triggers_form[idx_form] = trigger;
     },
 
-    /** Should we show the modal-related buttons
+    /** Should we show the modal-related button group
      */
     isAvailable: function() {
       this.available = this._visibleCtrls().length > 0;
       return this.available;
     },
     available: false,
+
+    action_has_callbacks: function(name_action) {
+      return this.action_callbacks(name_action).length > 0;
+    },
     action_available: function(name_action) {
-      return this.action_callbacks(name_action).length > 0 && this.action_trigger(name_action);
+      return this.action_has_callbacks(name_action) && this.action_is_enabled(name_action);
     },
 
     /** Returns a list of callbacks for a given action name
@@ -87,6 +91,14 @@ editFormManager.factory('loEditFormManager', function() {
      * @return{CallBack[]}
      */
     action_callbacks: function(name_action) {
+      this._visibleCtrls().forEach(function(form_element) {
+        var form_idx = forms.indexOf(form_element);
+        return callback_form.find(function(callback) {
+          return callback.name == name_action;
+        });
+
+      });
+
       var form_idx_list = this._visibleCtrls().map(function(el) {
         return forms.indexOf(el);
       });
@@ -96,29 +108,25 @@ editFormManager.factory('loEditFormManager', function() {
       });
 
       return visible_forms.map(function(form) {
-        return form.callbacks.find(function(callback) {return callback.name == name_action});
+        return form.callbacks.find(function(callback) {
+          return callback.name == name_action;
+        });
       }).filter(function(i) {return i !== undefined});
     },
 
-    /** Run the named action for all visible forms
+    /** Is that action currently enabled at controller-level ?
+     *
+     * Based on controller scope attributes.
      */
-    action_trigger: function(name_action) {
-      var idx_form = forms.indexOf(this._visibleCtrls());
-      var triggers = null;
-      var trigger = true;
-      angular.forEach(triggers_form, function(value, key) {
-        if (key == idx_form) {
-          triggers = value;
-        }
+    action_is_enabled: function(name_action) {
+      var trigger = false;  // by default, dont show
+
+      this._visibleCtrls().forEach(function(form_element){
+        var form_idx = forms.indexOf(form_element);
+        var form_triggers = triggers_form[form_idx];
+        trigger = trigger || form_triggers[name_action];
       });
-      if (triggers != null) {
-        angular.forEach(triggers, function(value, key) {
-          if (key == name_action) {
-            if (value != null)
-              trigger = value;
-          }
-        });
-      }
+
       return trigger;
     },
     call_action: function(name) {

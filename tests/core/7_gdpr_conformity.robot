@@ -57,7 +57,8 @@ Check That All Is Deleted
   Should Be Equal As Strings     ${resp.status_code}         200
   Should Be Empty     ${resp.json()}
   ${resp} =           Get Request   restapi     /api/invoices
-
+  ${length} =         Get Length           ${resp.json()}
+  Should Be Equal As Integers       ${length}     1
  
 
 

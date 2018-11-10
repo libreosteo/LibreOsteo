@@ -215,6 +215,7 @@ class Invoice(models.Model):
     office_address_city = models.CharField(_('City'), max_length=200, blank=True, default='')
     office_phone = models.CharField(_('Phone'), max_length=200, blank=True, default='')
     status = models.IntegerField(_('status'), default=0)
+    therapeut_id = models.IntegerField(_('therapeut_id'), default=0)
 
     def clean(self):
         if self.date is None:

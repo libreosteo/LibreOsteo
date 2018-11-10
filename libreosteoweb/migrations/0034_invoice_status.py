@@ -9,6 +9,7 @@ def update_invoice_status(apps, schema_editor):
     for invoice in Invoice.objects.all():
         try :
             invoice.status = invoice.examination.status 
+            invoice.therapeut_id = invoice.examination.therapeut.id
             invoice.save()
         except:
             pass
@@ -26,6 +27,11 @@ class Migration(migrations.Migration):
             name='status',
             field=models.IntegerField(default=0, verbose_name='status'),
         ),
+        migrations.AddField(
+            model_name='invoice',
+            name='therapeut_id',
+            field=models.IntegerField(default=0, verbose_name='therapeut_id')
+            ),
     	migrations.RunPython(update_invoice_status),
 
     ]

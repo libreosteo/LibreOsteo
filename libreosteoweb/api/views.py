@@ -250,6 +250,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.paiment_mode = invoicingSerializerData['paiment_mode']
         invoice.therapeut_name = self.request.user.last_name
         invoice.therapeut_first_name = self.request.user.first_name
+        invoice.therapeut_id = self.request.user.id
         invoice.quality = therapeutsettings.quality
         invoice.adeli = therapeutsettings.adeli
         invoice.location = officesettings.office_address_city
@@ -358,7 +359,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = models.Invoice.objects.select_related('examination').all()
         therapeut_id = self.request.query_params.get('therapeut_id', None)
         if therapeut_id is not None:
-            queryset = queryset.filter(examination__therapeut__id=therapeut_id)
+            queryset = queryset.filter(therapeut_id=therapeut_id)
         return queryset
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):

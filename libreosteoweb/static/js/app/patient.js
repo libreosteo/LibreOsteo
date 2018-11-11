@@ -413,6 +413,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         {
             if (examination.id)
             {
+                growl.addSuccessMessage(gettext("Examination deleted"));
                 $scope.examinations = $scope.examinations.filter(function(el)
                 {
                     return el.id !== examination.id;

@@ -353,3 +353,7 @@ ul li.documenttile  {
 .checkbox.paimentmean {
 	width : 12%;
 }
+
+input.ng-invalid-email {
+  color: #a94442; 
+}

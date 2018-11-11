@@ -197,14 +197,11 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 }
             });
 
-	    $scope.$watch('model.id', function(newValue, oldValue)
-	    {
-		console.log("change on model.id = "+oldValue+" to "+newValue);
-	        if (oldValue != null && newValue == null)
-		{
-	    		$scope.edit();
-		}
-	    });
+	    $scope.$watch('model.id', function(newValue, oldValue) {
+	      if (oldValue != null && newValue == null) {
+          $scope.edit();
+        }
+      });
 
             $scope.edit = function() {
                 $scope.editableForm.$show();

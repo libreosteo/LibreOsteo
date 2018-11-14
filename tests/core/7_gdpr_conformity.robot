@@ -36,6 +36,9 @@ Delete Patient
   Check That Form Has             Supprimer 
   Click Button                    jquery:button:contains("Supprimer")
   Wait Until Element Contains     jquery:div[class~="modal-content"]>div>h3       Confirmer
+  Element Should Be Disabled      modal-btn-ok
+  Click Element                   agreeGdpr
+  Element Should Be Enabled       modal-btn-ok
   Click Button                    modal-btn-ok
   Wait For Condition              return document.location == "${ROOT_URL}/#/"
  

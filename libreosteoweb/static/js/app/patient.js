@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'angular-bind-html-compile']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
@@ -110,9 +110,9 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http','$sce', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
     'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ','OfficePaimentMeansServ',
-    function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+    function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
         loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
         "use strict";
 
@@ -541,8 +541,16 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                   controller : ConfirmationCtrl,
                   resolve : {
                     message : function() {
-                    return gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?");
+                    return $sce.trustAsHtml("<p>"
+                      + gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?")
+                      + "</p>"
+                      + "<div><input type=\"checkbox\" id=\"agreeGdpr\" name=\"agreeGdpr\" ng-model=\"isOk\" ng-change=\"manageChange()\" ><label for=\"agreeGdpr\">"
+                      + gettext("I understand that it means")
+                      +"</label></div>");
                     },
+                    defaultIsOk : function() {
+                      return false;
+                    }
                   }
                 });
                 modalInstance.result.then(function (){
@@ -665,8 +673,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 controller : ConfirmationCtrl,
                 resolve : {
                     message : function() {
-                        return gettext("Are you sure to delete this document ?");
+                        return "<p>"+gettext("Are you sure to delete this document ?")+"</p>";
                     },
+                    defaultIsOk : function() {
+                      return true;
+                    }
                 }
             });
            modalInstance.result.then(function (){
@@ -698,14 +709,19 @@ var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
     };
 };
 
-var ConfirmationCtrl = function($scope, $uibModalInstance, message) {
+var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
     $scope.message = message;
     $scope.ok = function () {
       $uibModalInstance.close();
     };
 
+    $scope.isOk = defaultIsOk;
+  
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
+    };
+    $scope.manageChange = function() {
+      console.log("On change on checkbox = "+$scope.isOk);
     };
 }
 

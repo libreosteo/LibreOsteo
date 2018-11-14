@@ -544,7 +544,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     return $sce.trustAsHtml("<p>"
                       + gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?")
                       + "</p>"
-                      + "<div><input type=\"checkbox\" id=\"agreeGdpr\" name=\"agreeGdpr\" ng-model=\"isOk\" ng-change=\"manageChange()\" ><label for=\"agreeGdpr\">"
+                      + "<div><input type=\"checkbox\" id=\"agreeGdpr\" name=\"agreeGdpr\" ng-model=\"isOk\"><label for=\"agreeGdpr\">"
                       + gettext("I understand that it means")
                       +"</label></div>");
                     },
@@ -719,9 +719,6 @@ var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk)
   
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
-    };
-    $scope.manageChange = function() {
-      console.log("On change on checkbox = "+$scope.isOk);
     };
 }
 

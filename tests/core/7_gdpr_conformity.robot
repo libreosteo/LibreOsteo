@@ -62,7 +62,4 @@ Check That All Is Deleted
   ${resp} =           Get Request   restapi     /api/invoices
   ${length} =         Get Length           ${resp.json()}
   Should Be Equal As Integers       ${length}     1
- 
 
-
-  

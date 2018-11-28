@@ -294,17 +294,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
                 if($scope.patient.id != null)
                 {
-                    /*var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data)
-                    {
-                        if( data.length != 0){
-                            $scope.triggerEditFormPatient.delete = false;
-                        } else {
-                            $scope.triggerEditFormPatient.delete = true;
-                        }
-                    });*/
                   $scope.triggerEditFormPatient.delete = true;
                 } else {
-                    $scope.triggerEditFormPatient.delete = false;
+                  $scope.triggerEditFormPatient.delete = false;
                 }
             };
 

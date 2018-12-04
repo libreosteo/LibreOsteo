@@ -40,6 +40,7 @@ Write New Examination Invoiced
   Input Text                            jquery:div[class~="inPlaceholderMode"]:contains(Examen)         Examen normal
   Click Button                          close-examination
   Click Element                         jquery:input[value="invoiced"]
+  Wait Until Element Is Visible         jquery:input[value="check"] 
   Click Element                         jquery:input[value="check"]
   Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
   Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')

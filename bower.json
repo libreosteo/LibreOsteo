@@ -35,7 +35,8 @@
     "hallo": "latest",
     "jquery-ui-bootstrap": "latest",
     "ng-file-upload": "latest",
-    "angular-daterangepicker": "^0.2.2"
+    "angular-daterangepicker": "^0.2.2",
+    "angular-bind-html-compile" : "1.1.0"  
   },
   "resolutions": {
     "angular": "1.5.x"

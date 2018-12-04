@@ -175,10 +175,15 @@ class PatientViewSet(viewsets.ModelViewSet):
         return super(PatientViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, instance):
+        is_gdpr_request = 'gdpr' in self.request.query_params and self.request.query_params['gdpr']
         examination_list = models.Examination.objects.filter(patient=instance.id)
-        if not len(examination_list) == 0:
+        if not len(examination_list) == 0 and not is_gdpr_request:
             raise Forbidden()
+
         models.OfficeEvent.objects.filter(reference=instance.id, clazz=models.Patient.__name__).delete()
+        for e in examination_list:
+            models.OfficeEvent.objects.filter(reference=e.id, clazz=models.Examination.__name__).delete()
+        models.Examination.objects.filter(patient=instance.id).delete()
         return super(PatientViewSet, self).perform_destroy(instance)
 
 
@@ -186,8 +191,6 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
     model = models.RegularDoctor
     queryset = models.RegularDoctor.objects.all()
     serializer_class = apiserializers.RegularDoctorSerializer
-
-
 
 
 
@@ -212,9 +215,13 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.invoice = self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.invoice.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current.examination.invoice.save()
                     current_examination.save()
                 if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
                     current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.invoice.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.invoice.save()
                     current_examination.save()
             return Response({'invoiced': current_examination.invoice.id})
         else :
@@ -243,6 +250,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.paiment_mode = invoicingSerializerData['paiment_mode']
         invoice.therapeut_name = self.request.user.last_name
         invoice.therapeut_first_name = self.request.user.first_name
+        invoice.therapeut_id = self.request.user.id
         invoice.quality = therapeutsettings.quality
         invoice.adeli = therapeutsettings.adeli
         invoice.location = officesettings.office_address_city
@@ -351,7 +359,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = models.Invoice.objects.select_related('examination').all()
         therapeut_id = self.request.query_params.get('therapeut_id', None)
         if therapeut_id is not None:
-            queryset = queryset.filter(examination__therapeut__id=therapeut_id)
+            queryset = queryset.filter(therapeut_id=therapeut_id)
         return queryset
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):

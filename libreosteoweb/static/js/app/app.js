@@ -44,6 +44,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loRebuildIndex',
     'ngFileUpload',
     'loFileManager',
+    'angular-bind-html-compile'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {

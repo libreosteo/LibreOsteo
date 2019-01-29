@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'angular-bind-html-compile']);
 
 
 patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
@@ -27,6 +27,7 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
             save : {method : 'PUT', params : {patientId : 'patientId'}},
             add : {method : 'POST'},
             delete : { method : 'DELETE', params : {patientId : 'patientId'}},
+            delete_gdpr : { method : 'DELETE', url : 'api/patients/:patientId?gdpr=True', params : {patientId : 'patientId'}}
         });
 
         serv.prototype.doctor_detail = function (callback) {
@@ -109,9 +110,9 @@ patient.filter('format_age', function () {
     };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http','$sce', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
     'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ','OfficePaimentMeansServ',
-    function($scope, $state, $stateParams, $filter, $uibModal, $http, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+    function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
         loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
         "use strict";
 
@@ -293,16 +294,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
                 if($scope.patient.id != null)
                 {
-                    var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data)
-                    {
-                        if( data.length != 0){
-                            $scope.triggerEditFormPatient.delete = false;
-                        } else {
-                            $scope.triggerEditFormPatient.delete = true;
-                        }
-                    });
+                  $scope.triggerEditFormPatient.delete = true;
                 } else {
-                    $scope.triggerEditFormPatient.delete = false;
+                  $scope.triggerEditFormPatient.delete = false;
                 }
             };
 
@@ -516,19 +510,51 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
         $scope.delete = function()
         {
-            if($scope.patient.id)
-                {
-                    PatientServ.delete({patientId : $scope.patient.id}, function(resultOk)
-                        {
-                            $state.go('dashboard');
-                        }, function(resultNok)
-                        {
-                            console.log(resultNok);
-                            growl.addErrorMessage("This operation is not available");
-                        });
-                }
-        }
+          var deleteFunction = function(isGdpr) {
+            var delete_impl = PatientServ.delete;
+            if (isGdpr) {
+              delete_impl = PatientServ.delete_gdpr;
+            }
+            delete_impl({patientId : $scope.patient.id}, function(resultOk)
+            {
+              $state.go('dashboard');
+            }, function(resultNok)
+            {
+              console.log(resultNok);
+              growl.addErrorMessage("This operation is not available");
+            });
+          };
 
+          if ($scope.patient.id) {
+            var examinationsList = PatientExaminationsServ.get( { patient : $scope.patient.id }, function(data) {
+              if (data.length != 0) {
+                 var modalInstance = $uibModal.open({
+                  templateUrl: 'web-view/partials/confirmation-modal',
+                  controller : ConfirmationCtrl,
+                  resolve : {
+                    message : function() {
+                    return $sce.trustAsHtml("<p>"
+                      + gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?")
+                      + "</p>"
+                      + "<div><input type=\"checkbox\" id=\"agreeGdpr\" name=\"agreeGdpr\" ng-model=\"isOk\"><label for=\"agreeGdpr\">"
+                      + gettext("I understand that it means")
+                      +"</label></div>");
+                    },
+                    defaultIsOk : function() {
+                      return false;
+                    }
+                  }
+                });
+                modalInstance.result.then(function (){
+                  deleteFunction(true); 
+                });
+              } else {
+                deleteFunction();
+              }
+            });
+          }
+        }
+          
         $scope.triggerEditFormHistory = {
             save: false,
             edit: true,
@@ -639,8 +665,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                 controller : ConfirmationCtrl,
                 resolve : {
                     message : function() {
-                        return gettext("Are you sure to delete this document ?");
+                        return "<p>"+gettext("Are you sure to delete this document ?")+"</p>";
                     },
+                    defaultIsOk : function() {
+                      return true;
+                    }
                 }
             });
            modalInstance.result.then(function (){
@@ -651,7 +680,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
               });
            });
         };
-
 }]);
 
 
@@ -673,12 +701,14 @@ var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
     };
 };
 
-var ConfirmationCtrl = function($scope, $uibModalInstance, message) {
+var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
     $scope.message = message;
     $scope.ok = function () {
       $uibModalInstance.close();
     };
 
+    $scope.isOk = defaultIsOk;
+  
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };

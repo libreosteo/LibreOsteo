@@ -56,3 +56,9 @@ class NetworkHelper():
         result = sock.connect_ex((addr, int(port))) == 0
         sock.close()
         return result
+
+def convert_to_long(value):
+    try:
+        return long(value)
+    except:
+        return int(value)

@@ -354,6 +354,18 @@ ul li.documenttile  {
 	width : 12%;
 }
 
-input.ng-invalid-email {
+input.ng-invalid-email,
+input.ng-invalid,
+input.ng-invalid-email:focus,
+input.ng-invalid:focus {
   color: #a94442; 
+  border-color: #a94442;
 }
+
+input.ng-invalid-email:focus,
+input.ng-invalid:focus {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
+
+}
+

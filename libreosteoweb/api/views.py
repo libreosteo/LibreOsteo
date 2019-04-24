@@ -272,7 +272,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             invoice.footer = therapeutsettings.invoice_footer
         if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) > 0:
             invoice.number = _unicode(convert_to_long(officesettings.invoice_start_sequence))
-            officesettings.invoice_start_sequence = invoice.number + 1
+            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
             officesettings.save()
         else :
             invoice.number = _unicode(10000)
@@ -400,7 +400,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
         else:
             max_value = 1
         try:
-            asked_value = serializer.context['request'].data['invoice_start_sequence']
+            asked_value = serializer.validated_data['invoice_start_sequence']
             if asked_value is not None and asked_value.isnumeric():
                 if convert_to_long(asked_value) > 0 and convert_to_long(asked_value) > max_value :
                     serializer.save()

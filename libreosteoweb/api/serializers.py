@@ -194,6 +194,19 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     network_list = serializers.SerializerMethodField()
     invoice_min_sequence = serializers.SerializerMethodField()
 
+    def validate(self, data):
+        try :
+            input_invoice_start_seq = data['invoice_start_sequence']
+        except KeyError:
+            input_invoice_start_seq = None
+        if input_invoice_start_seq is None or len(input_invoice_start_seq) <= 0:
+            last_invoice_number = Invoice.objects.aggregate(Max('number'))['number__max']
+            if last_invoice_number is not None:
+                data['invoice_start_sequence'] = _unicode(last_invoice_number)
+            else :
+                data['invoice_start_sequence'] = _unicode(10000)
+        return data
+
     def get_network_list(self, obj):
         addresses = []
         if settings.DISPLAY_SERVICE_NET_HELPER is False:

@@ -276,7 +276,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             officesettings.save()
         else :
             invoice.number = _unicode(10000)
-            officesettings.invoice_start_sequence = invoice.number + 1
+            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
             officesettings.save()
         invoice.date = datetime.today()
         invoice.save()

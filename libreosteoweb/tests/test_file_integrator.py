@@ -16,10 +16,17 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from libreosteoweb.api import file_integrator
-from mock import mock_open
-from mock import patch
-from mock import MagicMock
-from mock import Mock
+try:
+    from unittest.mock import mock_open
+    from unittest.mock import patch
+    from unittest.mock import MagicMock
+    from unittest.mock import Mock
+except ImportError:
+    from mock import mock_open
+    from mock import patch
+    from mock import MagicMock
+    from mock import Mock
+
 
 class TestFileIntegrator(TestCase):
 	def setUp(self):

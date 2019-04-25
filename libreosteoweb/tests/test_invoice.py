@@ -80,7 +80,7 @@ class TestChangeIdInvoice(APITestCase):
         response = self.client.post(reverse('examination-close', kwargs={'pk': self.e1.pk}), data={'status':'invoiced', 'amount':55, 'paiment_mode' : 'cash', 'check': {}}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK) 
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoice.number, u'101')
+        self.assertEqual(examination.invoice.number, u'100')
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'101')        

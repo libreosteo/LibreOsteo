@@ -1,6 +1,6 @@
 # -*- coding: robot -*-
 *** Settings ***
-Test Setup        Open session 
+Test Setup        Open session        test      test
 Test Teardown     Close session
 Resource   resources.txt
 
@@ -25,13 +25,6 @@ Search For Patient
   Check That All Is Deleted       ${COOKIE.value}
   
 *** Keywords ***  
-Open session 
-  Open Browser To Login Page 
-  Login With      test  test
-
-Close session 
-  Close Browser
-
 Delete Patient
   Check That Form Has             Supprimer 
   Click Button                    jquery:button:contains("Supprimer")

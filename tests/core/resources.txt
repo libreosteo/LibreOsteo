@@ -26,5 +26,28 @@ Login REST with
   Should Be Equal As Strings    ${resp.status_code}    200
   Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
 
+Open session
+  [Arguments]   ${login}    ${password}
+  Open Browser To Login Page
+  Login With      ${login}  ${password}
+
+Close session
+  Close Browser
+
+Check That Url Is
+  [Arguments]                     ${url}
+  ${current_url}=                 Get Location
+  Should Be Equal                 ${current_url}      ${url}
+
+Check That Form Has
+  [Arguments]                     ${action_name}
+  Page Should Contain Button      jquery:button:contains(${action_name})
+
+Check That Form Does Not Have
+  [Arguments]                     ${action_name}
+  Page Should Not Contain        jquery:button:contains(${action_name})
+
+Wait That Page Is Ready
+  Wait Until Element Is Not Visible     loading-bar
 
 

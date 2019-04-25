@@ -1,6 +1,7 @@
 # -*- coding: robot -*-
 *** Settings ***
 Resource   resources.txt
+Resource   keywords/create_patient.robot
 
 *** Variables ***
 ${LAST_NAME}        Picard 
@@ -9,6 +10,9 @@ ${EMAIL}            jean-luc.picard@starfleet.com
 ${BIRTH_DAY}        13
 ${BIRTH_MONTH}      07 
 ${BIRTH_YEAR}       1935 
+${ID_PATIENT}       1
+${ORIGINAL_NAME}    Dupont
+${ORIGINA_NAME_HEADER}    (${ORIGINAL_NAME})
 &{COOKIE}
 
 *** Test Cases ***
@@ -32,7 +36,7 @@ Edit The New Patient
   Click Element                   jquery:div[class~="chat-body"]>div[class~="header"]:contains("${LAST_NAME} ${FIRST_NAME}")
   Wait Until Element Contains     jquery:h1.page-header         ${LAST_NAME}
   Wait That Page Is Ready 
-  Check That Url Is               ${ROOT_URL}/#/patient/1
+  Check That Url Is               ${ROOT_URL}/#/patient/${ID_PATIENT}
   [Documentation]                 Edit the general information
   Click Button                    jquery:button:contains("Éditer")
   Check That Form Has             Supprimer 
@@ -89,28 +93,6 @@ Edit The New Patient
   Check Rest Patient Documents    ${COOKIE.value}
 
 *** Keywords ***
-Create Patient
-  Click Element                   jquery:a:contains("Nouveau patient")
-  Check That Url Is               ${ROOT_URL}/#/addPatient
-  Wait That Page Is Ready
-  Wait Until Element Contains     jquery:h1.page-header         Nouveau patient 
-  Input Text                      family_name                   ${LAST_NAME}
-  Input Text                      first_name                    ${FIRST_NAME}
-  Input Text                      jquery:input.dd               ${BIRTH_DAY}
-  Input Text                      jquery:input.mm               ${BIRTH_MONTH}
-  Input Text                      jquery:input.yy               ${BIRTH_YEAR}
-  Wait Until Element Is Enabled   jquery:button.btn.btn-primary 
-  Click Button                    jquery:button.btn.btn-primary 
-  Wait Until Element Contains     jquery:h1.page-header         ${LAST_NAME}
-  Wait That Page Is Ready 
-  Check That Form Has             Éditer
-  Check That Form Has             Supprimer
-  Check That Form Does Not Have   Fin d'édition
-  Check That Url Is               ${ROOT_URL}/#/patient/1
-
-Wait That Page Is Ready
-  Wait Until Element Is Not Visible     loading-bar
-
 Create Patient Duplicate
   Click Element                   jquery:a:contains("Nouveau patient")
   Wait Until Element Contains     jquery:h1.page-header         Nouveau patient 
@@ -125,19 +107,6 @@ Create Patient Duplicate
   Element Should Be Visible       jquery:div.growl-item.alert.alert-danger
   ${error}=                       Get Text                      jquery:div.growl-item.alert.alert-danger 
   Should Contain                  ${error}                      Ce patient existe déjà
-
-Check That Url Is 
-  [Arguments]                     ${url}
-  ${current_url}=                 Get Location
-  Should Be Equal                 ${current_url}      ${url}
-
-Check That Form Has
-  [Arguments]                     ${action_name}
-  Page Should Contain Button      jquery:button:contains(${action_name})
-
-Check That Form Does Not Have
-  [Arguments]                     ${action_name}
-  Page Should Not Contain        jquery:button:contains(${action_name}) 
 
 Check Rest Patient 
   [Arguments]     ${session_token}

@@ -13,3 +13,4 @@ django_compressor
 setuptools-bower
 sqlparse
 netifaces
+decorator

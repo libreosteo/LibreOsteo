@@ -258,22 +258,22 @@ if __name__ == '__main__':
 	    },
 	    'loggers': {
 	        '': {
-	            'handlers': ['console', 'default'],
+	            'handlers': ['console'],
 	            'level': 'INFO'
 	        },
 	        'db': {
-	            'handlers': ['default', 'console'],
+	            'handlers': ['console'],
 	            'level': 'INFO' ,
 	            'propagate':True 
 	        },
                 'django': {
-                    'handlers': ['default', 'console'],
-                    'level': 'DEBUG',
+                    'handlers': ['console'],
+                    'level': 'INFO',
                     'propagate' : True
                     },
                 'rest_framework': {
-                    'handlers': ['default', 'console'],
-                    'level': 'DEBUG',
+                    'handlers': ['console'],
+                    'level': 'INFO',
                     'propagate' : True
                     },
 	        'cherrypy.access': {

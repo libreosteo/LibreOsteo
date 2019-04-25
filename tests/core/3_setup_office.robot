@@ -66,7 +66,8 @@ Check Rest Settings
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/settings
-  ${settings}=        Evaluate    ${resp.json()}[0]
+  RequestsLogger.Write log        ${resp}
+  ${settings}=    Set variable   ${resp.json()[0]}
   Should Be Equal As Strings     ${settings['office_address_street']}    ${OFFICE_ADDRESS_STREET}
   Should Be Equal As Strings     ${settings['office_address_complement']}    ${OFFICE_ADDRESS_COMPLEMENT}
   Should Be Equal As Strings     ${settings['office_address_zipcode']}       ${OFFICE_ADDRESS_ZIPCODE}
@@ -78,13 +79,6 @@ Check Rest Settings
   Should Be Equal As Strings     ${settings['invoice_office_header']}              ${INVOICE_OFFICE_HEADER}
   Should Be Equal As Strings     ${settings['invoice_content']}                    ${INVOICE_CONTENT}
   Should Be Equal As Strings     ${settings['invoice_footer']}                     ${INVOICE_FOOTER}
-
-Login REST with 
-  [Arguments]   ${login}    ${cookie_session}
-  Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
-  ${resp} =             Get Request   restapi   /api/users
-  Should Be Equal As Strings    ${resp.status_code}    200
-  Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
 
 Logout
   Go To   ${ROOT_URL}/logout

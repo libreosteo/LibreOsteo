@@ -52,14 +52,18 @@ Check That All Is Deleted
   ${session_cookie}   Create Dictionary   sessionid=${session_id}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/patients/1
+  RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.status_code}         404
   ${resp} =           Get Request   restapi     /api/examinations
+  RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.status_code}         200
   Should Be Empty     ${resp.json()} 
   ${resp} =           Get Request   restapi     /api/events 
+  RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.status_code}         200
   Should Be Empty     ${resp.json()}
   ${resp} =           Get Request   restapi     /api/invoices
+  RequestsLogger.Write log       ${resp}
   ${length} =         Get Length           ${resp.json()}
   Should Be Equal As Integers       ${length}     1
 

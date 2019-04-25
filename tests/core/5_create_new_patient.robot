@@ -144,6 +144,7 @@ Check Rest Patient
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/patients/1
+  RequestsLogger.Write log        ${resp}
   Should Be Equal As Numbers      ${resp.json()['id']}                    1
   Should Be Equal As Strings      ${resp.json()['birth_date']}            1935-07-13 
   Should Be Equal As Strings      ${resp.json()['family_name']}           ${LAST_NAME} 
@@ -166,6 +167,7 @@ Check Rest Patient Documents
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request     restapi     /api/patient-documents/1
+  RequestsLogger.Write log        ${resp}
   Should Be Equal As Numbers      ${resp.json()['patient']}               1 
   Should Be Equal As Numbers      ${resp.json()['attachment_type']}       5 
   Should Be Equal As Strings      ${resp.json()['document']['title']}     Licence Libreosteo 

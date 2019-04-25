@@ -27,6 +27,7 @@ from django.conf import settings
 from .utils import NetworkHelper
 from django.db.models import Max
 from .utils import convert_to_long
+from libreosteoweb.api.utils import _unicode
 
 logger = logging.getLogger(__name__)
 

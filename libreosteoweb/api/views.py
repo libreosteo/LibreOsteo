@@ -215,13 +215,13 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             if serializer.data['status'] == 'invoiced':
                 current_examination.invoice = self.generate_invoice(serializer.data, )
                 if serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
-                    current_examination.invoice.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
+                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
+                    current_examination.invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
                     current.examination.invoice.save()
                     current_examination.save()
                 if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
-                    current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
-                    current_examination.invoice.status = models.Examination.EXAMINATION_INVOICED_PAID
+                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
+                    current_examination.invoice.status = models.InvoiceStatus.INVOICED_PAID
                     current_examination.invoice.save()
                     current_examination.save()
             return Response({'invoiced': current_examination.invoice.id})
@@ -308,7 +308,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['GET'])
     def unpaid(self, request, pk=None):
-        unpaid_examinations = models.Examination.objects.filter(status=models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT).order_by('-date')
+        unpaid_examinations = models.Examination.objects.filter(status=models.ExaminationStatus.WAITING_FOR_PAIEMENT).order_by('-date')
         return Response(apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data)
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -367,6 +367,18 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         if therapeut_id is not None:
             queryset = queryset.filter(therapeut_id=therapeut_id)
         return queryset
+
+    @detail_route(methods=["post"])
+    def cancel(self, request, pk=None):
+        # Ensure that invoice was not canceled before
+        if self.get_object().status != InvoiceStatus.CANCELED :
+            cancelation = models.Invoice()
+            self.get_object().canceled_by = cancelation
+            self.get_object().status = InvoiceStatus.CANCELED
+            self.get_object().save()
+            cancelation.save()
+        else :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent

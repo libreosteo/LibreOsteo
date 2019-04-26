@@ -246,17 +246,36 @@ if __name__ == '__main__':
 	            'backupCount': 20,
 	            'encoding': 'utf8'
 	        },
+                'console' : {
+                    'level':'INFO',
+                    'class':'logging.handlers.RotatingFileHandler',
+                    'formatter': 'standard',
+                    'filename':os.path.join(DATA_FOLDER, 'console.log'),
+                    'maxBytes':10485760,
+                    'backupCount':20,
+                    'encoding':'utf8'
+                    },
 	    },
 	    'loggers': {
 	        '': {
-	            'handlers': ['default'],
+	            'handlers': ['console'],
 	            'level': 'INFO'
 	        },
 	        'db': {
-	            'handlers': ['default'],
+	            'handlers': ['console'],
 	            'level': 'INFO' ,
-	            'propagate': False
+	            'propagate':True 
 	        },
+                'django': {
+                    'handlers': ['console'],
+                    'level': 'INFO',
+                    'propagate' : True
+                    },
+                'rest_framework': {
+                    'handlers': ['console'],
+                    'level': 'INFO',
+                    'propagate' : True
+                    },
 	        'cherrypy.access': {
 	            'handlers': ['cherrypy_access'],
 	            'level': 'INFO',

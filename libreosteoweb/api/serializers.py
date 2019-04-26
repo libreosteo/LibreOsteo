@@ -25,6 +25,9 @@ from .file_integrator import Extractor
 import logging
 from django.conf import settings
 from .utils import NetworkHelper
+from django.db.models import Max
+from .utils import convert_to_long
+from libreosteoweb.api.utils import _unicode
 
 logger = logging.getLogger(__name__)
 
@@ -190,6 +193,20 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         fields = '__all__'
 
     network_list = serializers.SerializerMethodField()
+    invoice_min_sequence = serializers.SerializerMethodField()
+
+    def validate(self, data):
+        try :
+            input_invoice_start_seq = data['invoice_start_sequence']
+        except KeyError:
+            input_invoice_start_seq = None
+        if input_invoice_start_seq is None or len(input_invoice_start_seq) <= 0:
+            last_invoice_number = Invoice.objects.aggregate(Max('number'))['number__max']
+            if last_invoice_number is not None:
+                data['invoice_start_sequence'] = _unicode(last_invoice_number)
+            else :
+                data['invoice_start_sequence'] = _unicode(10000)
+        return data
 
     def get_network_list(self, obj):
         addresses = []
@@ -200,6 +217,12 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         addresses = net_helper.get_bound_addresses(net_helper.get_all_addresses(), port) 
         addresses = [ 'http://%s:%s' % (a,port) for a in addresses if a != '127.0.0.1' ]
         return addresses
+
+    def get_invoice_min_sequence(self, obj):
+        result_query = Invoice.objects.aggregate(Max('number'))['number__max']
+        if result_query is not None:
+            return convert_to_long(result_query) + 1
+        return 1
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
     paiment_mode_text = serializers.SerializerMethodField()

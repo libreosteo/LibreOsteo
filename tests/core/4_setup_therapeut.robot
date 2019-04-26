@@ -55,6 +55,7 @@ Check Rest User
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/users/1
+  RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.json()['username']}      test 
   Should Be Equal As Strings     ${resp.json()['first_name']}    ${FIRST_NAME}
   Should Be Equal As Strings     ${resp.json()['last_name']}     ${LAST_NAME}
@@ -65,16 +66,10 @@ Check Rest User Profile
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
   ${resp} =           Get Request   restapi     /api/profiles/get_by_user
+  RequestsLogger.Write log        ${resp}
   Should Be Equal As Numbers      ${resp.json()['id']}            1
   Should Be Equal As Strings      ${resp.json()['adeli']}         ${ADELI}
   Should Be Equal As Strings      ${resp.json()['quality']}       ${QUALITY}
-
-Login REST with 
-  [Arguments]   ${login}    ${cookie_session}
-  Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
-  ${resp} =             Get Request   restapi   /api/users
-  Should Be Equal As Strings    ${resp.status_code}    200
-  Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
 
 Logout
   Go To   ${ROOT_URL}/logout

@@ -80,10 +80,18 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="amount">{{officesettings.amount}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.amount" required name="amount" id="amount" placeholder="{{ officesettings.amount }}"
-                                tooltip="{{ officesettings.amount }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                                <input type="text" 
+                                       class="form-control input-lg"
+                                       ng-model="officesettings.amount"
+                                       required 
+                                       name="amount" 
+                                       id="amount" 
+                                       placeholder="{{ officesettings.amount }}"
+                                      tooltip="{{ officesettings.amount }}"
+                                      tooltip-trigger="mouseenter"
+                                      ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                      pattern="[1-9][0-9,.]*"
+                                />
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -110,6 +118,25 @@
 					</div>
 					</div>
 				</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                          <div class="form-group">
+                            <label for"invoice_start_sequence">{{officesettings.invoice_start_sequence}}</label>
+                            <input type="text" class="form-control input-lg" 
+                                               ng-model="officesettings.invoice_start_sequence" 
+                                               name="invoice_start_sequence" 
+                                               id="invoice_start_sequence" 
+                                               placeholder="{{ officesettings.invoice_start_sequence}}"
+                                               tooltip={{ officesettings.invoice_start_sequence }}
+                                               tooltip-trigger="mouseenter"
+                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                               ng-pattern='/^\d+$/'
+                                               validate-invoice-start
+                                               required="true"
+                                               title="{% trans 'The start sequence must have composed only with numbers' %}"
+                                               />
+ 
+                          </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">

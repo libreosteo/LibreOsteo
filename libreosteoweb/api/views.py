@@ -23,7 +23,7 @@ import zipfile
 
 from rest_framework import pagination, viewsets, status
 from rest_framework.decorators import detail_route, list_route
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError,PermissionDenied,ParseError 
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
@@ -48,6 +48,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
+from django.db.models import Max
 
 from libreosteoweb.api import serializers as apiserializers
 from libreosteoweb.api.utils import _unicode
@@ -64,7 +65,7 @@ from .renderers import (
     PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
-
+from .utils import convert_to_long
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -269,9 +270,15 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         # Override the footer on the invoice with the therapeut settings if defined
         if therapeutsettings.invoice_footer is not None :
             invoice.footer = therapeutsettings.invoice_footer
+        if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) > 0:
+            invoice.number = _unicode(convert_to_long(officesettings.invoice_start_sequence))
+            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
+            officesettings.save()
+        else :
+            invoice.number = _unicode(10000)
+            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
+            officesettings.save()
         invoice.date = datetime.today()
-        invoice.save()
-        invoice.number += _unicode(10000+invoice.id)
         invoice.save()
         return invoice
 
@@ -303,7 +310,6 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     def unpaid(self, request, pk=None):
         unpaid_examinations = models.Examination.objects.filter(status=models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT).order_by('-date')
         return Response(apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data)
-
 
 class UserViewSet(viewsets.ModelViewSet):
     model = User
@@ -385,6 +391,27 @@ class OfficeSettingsView(viewsets.ModelViewSet):
     serializer_class = apiserializers.OfficeSettingsSerializer
     permission_classes = [IsStaffOrReadOnlyTargetUser]
     queryset = models.OfficeSettings.objects.all()
+
+    def perform_update(self, serializer):
+        # Check that the invoice_start_sequence is valid
+        result_query = models.Invoice.objects.aggregate(Max('number'))['number__max']
+        if result_query is not None :
+            max_value = convert_to_long(result_query)
+        else:
+            max_value = 1
+        try:
+            asked_value = serializer.validated_data['invoice_start_sequence']
+            if asked_value is not None and asked_value.isnumeric():
+                if convert_to_long(asked_value) > 0 and convert_to_long(asked_value) > max_value :
+                    serializer.save()
+                else :
+                    raise PermissionDenied(detail="invoice start sequence could not be applied") 
+            else :
+                serializer.validated_data['invoice_start_sequence'] = serializer.instance.invoice_start_sequence
+                serializer.save()
+        except KeyError as e:
+            raise ParseError(detail=e)
+
 
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings

@@ -61,6 +61,19 @@ officesettings.filter('true_false', function() {
               }
           });
 
+officesettings.directive("validateInvoiceStart", function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$validators.validateInvoiceStart = function(modelValue, viewValue) {
+        if (!isNaN(modelValue) && modelValue >= scope.officesettings.invoice_min_sequence) {
+          return true;
+        }
+        return false;
+      }
+    }
+  }
+});
 
 officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
   'OfficeSettingsServ', 'OfficeUsersServ', 'OfficePaimentMeansServ', 'i18nService', '$uibModal', '$q',
@@ -150,6 +163,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
       }
 		});
 	};
+
 
         $scope.setPassword = function(entity)
         {

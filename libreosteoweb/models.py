@@ -223,7 +223,7 @@ class Invoice(models.Model):
     office_phone = models.CharField(_('Phone'), max_length=200, blank=True, default='')
     status = models.IntegerField(_('status'), default=0)
     therapeut_id = models.IntegerField(_('therapeut_id'), default=0)
-    canceled_by = models.ForeignKey(Invoice, verbose_name=_("Canceled by"), blank=True, null=True)
+    canceled_by = models.ForeignKey('self', verbose_name=_("Canceled by"), blank=True, null=True)
 
     def clean(self):
         if self.date is None:

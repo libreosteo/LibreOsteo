@@ -27,3 +27,7 @@ whoosh_index/
 .venv
 env/
 venv/
+
+# log files
+*.log
+Libreosteo/settings/local.py*

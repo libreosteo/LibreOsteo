@@ -51,7 +51,6 @@ from django.views.generic.base import TemplateView
 from django.db.models import Max
 
 from libreosteoweb.api import serializers as apiserializers
-from libreosteoweb.api.utils import _unicode
 from libreosteoweb import models
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
@@ -66,6 +65,7 @@ from .renderers import (
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long
+from libreosteoweb.api.invoicing import generator as invoicing_generator
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -233,54 +233,11 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         officesettings = models.OfficeSettings.objects.all()[0]
         therapeutsettings = models.TherapeutSettings.objects.filter(user=self.request.user)[0]
 
-        invoice = models.Invoice()
-        invoice.amount = invoicingSerializerData['amount']
-        invoice.currency = officesettings.currency
-        invoice.header = officesettings.invoice_office_header
-        invoice.office_address_street = officesettings.office_address_street
-        invoice.office_address_complement = officesettings.office_address_complement
-        invoice.office_address_zipcode = officesettings.office_address_zipcode
-        invoice.office_address_city = officesettings.office_address_city
-        invoice.office_phone = officesettings.office_phone
-        invoice.office_siret = officesettings.office_siret
-
-        # Override the siret on the invoice with the therapeut siret if defined
-        if therapeutsettings.siret is not None :
-            invoice.office_siret = therapeutsettings.siret
-
-        invoice.paiment_mode = invoicingSerializerData['paiment_mode']
-        invoice.therapeut_name = self.request.user.last_name
-        invoice.therapeut_first_name = self.request.user.first_name
-        invoice.therapeut_id = self.request.user.id
-        invoice.quality = therapeutsettings.quality
-        invoice.adeli = therapeutsettings.adeli
-        invoice.location = officesettings.office_address_city
-        invoice.number = ""
-
-        invoice.patient_family_name = self.get_object().patient.family_name
-        invoice.patient_original_name = self.get_object().patient.original_name
-        invoice.patient_first_name = self.get_object().patient.first_name
-        invoice.patient_address_street = self.get_object().patient.address_street
-        invoice.patient_address_complement = self.get_object().patient.address_complement
-        invoice.patient_address_zipcode = self.get_object().patient.address_zipcode
-        invoice.patient_address_city = self.get_object().patient.address_city
-        invoice.content_invoice = officesettings.invoice_content
-        invoice.footer = officesettings.invoice_footer
-
-        # Override the footer on the invoice with the therapeut settings if defined
-        if therapeutsettings.invoice_footer is not None :
-            invoice.footer = therapeutsettings.invoice_footer
-        if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) > 0:
-            invoice.number = _unicode(convert_to_long(officesettings.invoice_start_sequence))
-            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
-            officesettings.save()
-        else :
-            invoice.number = _unicode(10000)
-            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
-            officesettings.save()
-        invoice.date = datetime.today()
+        invoice = invoicing_generator.Generator(officesettings, therapeutsettings).generate_invoice(self.get_object(), invoicingSerializerData, self.request)
+        officesettings.save()
         invoice.save()
         return invoice
+
 
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():

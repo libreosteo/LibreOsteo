@@ -224,6 +224,7 @@ class Invoice(models.Model):
     status = models.IntegerField(_('status'), default=0)
     therapeut_id = models.IntegerField(_('therapeut_id'), default=0)
     canceled_by = models.ForeignKey('self', verbose_name=_("Canceled by"), blank=True, null=True)
+    type = models.CharField(_('Invoice type'), max_length=10, blank=True, default='invoice')
 
     def clean(self):
         if self.date is None:
@@ -282,6 +283,7 @@ class OfficeSettings(models.Model):
         self.id = 1
         super(OfficeSettings, self).save()
 
+    UPDATE_INVOICE_SEQUENCE = 1
 
 
 class TherapeutSettings(models.Model):

@@ -44,7 +44,6 @@ class Generator(object):
         invoice.quality = self.therapeut_settings.quality
         invoice.adeli = self.therapeut_settings.adeli
         invoice.location = self.office_settings.office_address_city
-        invoice.number = ""
 
         invoice.patient_family_name = examination.patient.family_name
         invoice.patient_original_name = examination.patient.original_name
@@ -59,14 +58,48 @@ class Generator(object):
         # Override the footer on the invoice with the therapeut settings if defined
         if self.therapeut_settings.invoice_footer is not None :
             invoice.footer = self.therapeut_settings.invoice_footer
-        if self.office_settings.invoice_start_sequence is not None and len(self.office_settings.invoice_start_sequence) > 0:
-            invoice.number = _unicode(convert_to_long(self.office_settings.invoice_start_sequence))
-            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
-        else :
-            invoice.number = _unicode(10000)
-            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
+        invoice.number = self.get_invoice_number()
         invoice.date = datetime.today()
         return invoice
 
-       
-   
+    def get_invoice_number(self):
+        if self.office_settings.invoice_start_sequence is not None and len(self.office_settings.invoice_start_sequence) > 0:
+            invoice_number = _unicode(convert_to_long(self.office_settings.invoice_start_sequence))
+            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
+        else :
+            invoice_number = _unicode(10000)
+            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
+        return invoice_number
+    
+    def cancel_invoice(self, invoice) :
+        credit_note = models.Invoice()
+        credit_note.amount = -1 * invoice.amount
+        credit_note.currency = invoice.currency
+        credit_note.header = invoice.header
+        credit_note.office_address_street = invoice.office_address_street
+        credit_note.office_address_complement = invoice.office_address_complement
+        credit_note.office_address_zipcode = invoice.office_address_zipcode
+        credit_note.office_address_city = invoice.office_address_city
+        credit_note.office_phone = invoice.office_phone
+        credit_note.office_siret = invoice.office_siret
+        credit_note.paiment_mode = invoice.paiment_mode
+        credit_note.therapeut_name = invoice.therapeut_name
+        credit_note.therapeut_first_name = invoice.therapeut_first_name
+        credit_note.therapeut_id = invoice.therapeut_id
+        credit_note.quality = invoice.quality
+        credit_note.adeli = invoice.adeli
+        credit_note.location = invoice.location
+        credit_note.patient_family_name = invoice.patient_family_name
+        credit_note.patient_original_name = invoice.patient_original_name
+        credit_note.patient_first_name = invoice.patient_first_name
+        credit_note.patient_address_street = invoice.patient_address_street
+        credit_note.patient_address_complement = invoice.patient_address_complement
+        credit_note.patient_address_zipcode = invoice.patient_address_zipcode
+        credit_note.patient_address_city = invoice.patient_address_city
+        credit_note.content_invoice = invoice.content_invoice
+        credit_note.footer = invoice.footer
+        credit_note.date = datetime.today()
+        credit_note.type = 'creditnote'
+        credit_note.number = self.get_invoice_number() 
+        credit_note.status = models.InvoiceStatus.INVOICED_PAID
+        return credit_note

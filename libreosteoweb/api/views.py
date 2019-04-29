@@ -21,7 +21,7 @@ import os
 import tempfile
 import zipfile
 
-from rest_framework import pagination, viewsets, status
+from rest_framework import pagination, viewsets, status, mixins
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import ValidationError,PermissionDenied,ParseError 
 from rest_framework.permissions import AllowAny
@@ -66,6 +66,7 @@ from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long
 from libreosteoweb.api.invoicing import generator as invoicing_generator
+from libreosteoweb.api.events.settings import settings_event_tracer
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -328,12 +329,16 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     @detail_route(methods=["post"])
     def cancel(self, request, pk=None):
         # Ensure that invoice was not canceled before
-        if self.get_object().status != InvoiceStatus.CANCELED :
-            cancelation = models.Invoice()
+        if self.get_object().status != models.InvoiceStatus.CANCELED :
+            officesettings = models.OfficeSettings.objects.all()[0]
+            cancelation =  invoicing_generator.Generator(officesettings, None).cancel_invoice(self.get_object())
             self.get_object().canceled_by = cancelation
-            self.get_object().status = InvoiceStatus.CANCELED
+            self.get_object().status = models.InvoiceStatus.CANCELED
             self.get_object().save()
             cancelation.save()
+            officesettings.save()
+            response = {'canceled ' : self.serializer_class(self.get_object()).data, 'credit_note' : self.serializer_class(cancelation).data}
+            return Response(response, status=status.HTTP_200_OK)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -372,6 +377,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
             asked_value = serializer.validated_data['invoice_start_sequence']
             if asked_value is not None and asked_value.isnumeric():
                 if convert_to_long(asked_value) > 0 and convert_to_long(asked_value) > max_value :
+                    settings_event_tracer(serializer.instance, self.request.user, asked_value)
                     serializer.save()
                 else :
                     raise PermissionDenied(detail="invoice start sequence could not be applied") 

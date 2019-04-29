@@ -220,7 +220,7 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
     def get_invoice_min_sequence(self, obj):
         result_query = Invoice.objects.aggregate(Max('number'))['number__max']
-        if result_query is not None:
+        if result_query is not None and len(result_query) > 0:
             return convert_to_long(result_query) + 1
         return 1
 

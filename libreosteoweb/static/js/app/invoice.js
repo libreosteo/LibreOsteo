@@ -18,9 +18,14 @@ var invoices = angular.module('loInvoice', ['ngResource', 'daterangepicker', 'lo
 
 invoices.factory('InvoiceService', ['$resource', function ($resource) {
     "use strict";
-    return $resource('api/invoices/:InvoiceId', null, {
+    return $resource('api/invoices/:invoiceId', null, {
         query: {method: 'GET' , isArray: true},
-        get : {method: 'GET', params: {InvoiceId: 'invoiceId'}},
+        get : {method: 'GET', params: {invoiceId: 'invoiceId'}},
+        cancel : {
+          method: 'POST',
+          params:{invoiceId: 'invoiceId'},
+          url : 'api/invoices/:invoiceId/cancel'
+        }
     });
 }]);
 
@@ -147,11 +152,18 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
             }
             return url.slice(0, -1)
         }
+      $scope.changeTherapeut = function(user) {
+        $scope.user = user;
+        $scope.filters.therapeut_id = user.id;
+        getInvoices();
+      };
 
-	$scope.changeTherapeut = function(user) {
-		$scope.user = user;
-		$scope.filters.therapeut_id = user.id;
-		getInvoices();
-	};
+      $scope.cancelInvoice = function(invoice) {
+        console.log("invoice = "+angular.toJson(invoice));
+        InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
+            cancelation = result.cancelation;
+        });
+        getInvoices();
+      }
     }
 ]);

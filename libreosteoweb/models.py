@@ -157,6 +157,17 @@ class Examination(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.patient, self.date)
 
+    def get_invoice_number(self):
+        if self.invoice.canceled_by is not None:
+            return self._resolve_invoice(self.invoice).number
+        else:
+            return self.invoice.number
+
+    def _resolve_invoice(self, invoice):
+        if invoice.canceled_by is not None:
+            return self._resolve_invoice(invoice.canceled_by)
+        return invoice
+
 ExaminationType = enum(
     'ExaminationType',
     'EMPTY',
@@ -232,7 +243,6 @@ class Invoice(models.Model):
 
     class Meta:
         ordering = ['-date']
-
 
 class PaimentMean(models.Model):
     """

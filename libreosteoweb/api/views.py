@@ -332,12 +332,13 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         if self.get_object().status != models.InvoiceStatus.CANCELED :
             officesettings = models.OfficeSettings.objects.all()[0]
             cancelation =  invoicing_generator.Generator(officesettings, None).cancel_invoice(self.get_object())
-            self.get_object().canceled_by = cancelation
-            self.get_object().status = models.InvoiceStatus.CANCELED
-            self.get_object().save()
+            canceled = self.get_object()
+            canceled.status = models.InvoiceStatus.CANCELED
             cancelation.save()
+            canceled.canceled_by = cancelation
+            canceled.save()
             officesettings.save()
-            response = {'canceled ' : self.serializer_class(self.get_object()).data, 'credit_note' : self.serializer_class(cancelation).data}
+            response = {'canceled' : self.serializer_class(self.get_object()).data, 'credit_note' : self.serializer_class(cancelation).data}
             return Response(response, status=status.HTTP_200_OK)
         else :
             return Response(status=status.HTTP_400_BAD_REQUEST)

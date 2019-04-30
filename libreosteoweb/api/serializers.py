@@ -105,7 +105,7 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()
 
 class ExaminationSerializer(serializers.ModelSerializer):
-    invoice_number = serializers.CharField(source="invoice.number", required=False, allow_null=True, read_only=True)
+    invoice_number = serializers.CharField(source="get_invoice_number", required=False, allow_null=True, read_only=True)
     therapeut_detail = UserInfoSerializer(source="therapeut", required=False, allow_null=True, read_only=True)
     patient_detail = PatientExportSerializer(source="patient", required=False, allow_null=True, read_only=True)
     class Meta:
@@ -230,6 +230,7 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = Invoice
         fields = '__all__'
+        depth = 1
 
     def get_paiment_mode_text(self, obj):
         paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode).first()

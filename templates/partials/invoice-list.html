@@ -38,6 +38,7 @@
 		<th>{% trans 'Amount' %}</th>
 		<th>{% trans 'Paiment mean' %}</th>
 		<th>{% trans 'Status' %}</th>
+    <th>{% trans 'By' %}</th>
 		<th>{% trans 'Actions' %}</th>
         </tr>
     </thead>
@@ -58,11 +59,14 @@
                 <span class="label label-warning" ng-if="invoice.status === 3">{% trans 'Cancelled' %}</span>
             </td>
             <td>
+              <span>{$ invoice.canceled_by.number $}</span>
+            </td>
+            <td>
                 <div class="btn-group">
                     <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                       <li><a href="/invoice/{$ invoice.id $}" target="_blank">{% trans 'Print' %}</a></li>
-                      <li><a ng-click="cancelInvoice(invoice)">{% trans 'Cancel' %}</a></li>
+                      <li ng-if="invoice.status != 3"><a ng-click="cancelInvoice(invoice)">{% trans 'Cancel' %}</a></li>
                     </ul>
                 </div>
             </td>

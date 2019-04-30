@@ -62,8 +62,8 @@ function localizeDaterangePicker() {
     };
 }
 
-invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ',
-    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ) {
+invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ','$uibModal',
+    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ, $uibModal) {
         "use strict";
 
         function buildAPIFilter() {
@@ -159,11 +159,37 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
       };
 
       $scope.cancelInvoice = function(invoice) {
-        console.log("invoice = "+angular.toJson(invoice));
-        InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
-            cancelation = result.cancelation;
+        var modalInstance = $uibModal.open({
+          templateUrl: 'web-view/partials/confirmation-modal',
+          controller : ConfirmationCtrl,
+          resolve : {
+            message : function() {
+              return "<p>"+gettext("Are you sure to cancel this invoice ?")+"</p>";
+            },
+            defaultIsOk : function() {
+              return true;
+            }
+          }
         });
-        getInvoices();
+        modalInstance.result.then(function (){
+          InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
+            getInvoices();
+          });
+        });
       }
     }
 ]);
+
+var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
+    $scope.message = message;
+    $scope.ok = function () {
+      $uibModalInstance.close();
+    };
+
+    $scope.isOk = defaultIsOk;
+  
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 15:21+0100\n"
-"PO-Revision-Date: 2018-11-14 15:21+0100\n"
+"POT-Creation-Date: 2019-05-03 15:47+0200\n"
+"PO-Revision-Date: 2019-05-03 15:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -93,6 +93,9 @@ msgstr "Novembre"
 msgid "December"
 msgstr "Décembre"
 
+msgid "Are you sure to cancel this invoice ?"
+msgstr "Êtes-vous sûr(e) d'annuler cette facture ?"
+
 msgid "Examination deleted"
 msgstr "Consultation supprimée"
 
@@ -127,7 +130,79 @@ msgstr "Mise à jour effectuée"
 msgid "Are you sure to delete this document ?"
 msgstr "Êtes-vous sûr(e) de supprimer ce document ?"
 
+msgid " "
+msgstr ""
+
+msgid "."
+msgstr ""
+
+msgid "*"
+msgstr ""
+
+msgid "import"
+msgstr ""
+
+msgid "{}"
+msgstr ""
+
+msgid ", "
+msgstr ""
+
+msgid "this"
+msgstr ""
+
+msgid "super"
+msgstr ""
+
+msgid "null"
+msgstr ""
+
+msgid ",\n"
+msgstr ""
+
+msgid " = "
+msgstr ""
+
+msgid "\n"
+msgstr ""
+
+msgid "debugger;"
+msgstr ""
+
+msgid ":"
+msgstr ""
+
+msgid "empty"
+msgstr ""
+
 #, fuzzy
-#~| msgid "May"
-#~ msgid "any"
-#~ msgstr "Mai"
+#| msgid "May"
+msgid "any"
+msgstr "Mai"
+
+msgid "mixed"
+msgstr ""
+
+msgid "boolean"
+msgstr ""
+
+msgid "interface "
+msgstr ""
+
+msgid " & "
+msgstr ""
+
+msgid "number"
+msgstr ""
+
+msgid "string"
+msgstr ""
+
+msgid "typeof "
+msgstr ""
+
+msgid " | "
+msgstr ""
+
+msgid "void"
+msgstr ""

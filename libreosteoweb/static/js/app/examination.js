@@ -156,9 +156,9 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 }
             };
 
-            $scope.printInvoice = function(examination)
+            $scope.printInvoice = function(invoice)
             {
-                var invoiceTab = $window.open('invoice/' + examination.invoice , '_blank');
+                var invoiceTab = $window.open('invoice/' + invoice.id , '_blank');
 
                 setTimeout(function() {
                     invoiceTab.print();

@@ -104,14 +104,29 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     def get_nb_comments(self, obj):
         return ExaminationComment.objects.filter(examination__exact=obj.id).count()
 
+class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
+    paiment_mode_text = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Invoice
+        fields = '__all__'
+        depth = 1
+
+    def get_paiment_mode_text(self, obj):
+        paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode).first()
+        if paiment_mean is not None :
+            return paiment_mean.text
+        return 'n/a'
+
 class ExaminationSerializer(serializers.ModelSerializer):
     invoice_number = serializers.CharField(source="get_invoice_number", required=False, allow_null=True, read_only=True)
+    invoices_list = InvoiceSerializer(many=True,read_only=True, allow_null=True, required=False)
+    last_invoice = InvoiceSerializer(read_only=True, allow_null=True, required=False)
     therapeut_detail = UserInfoSerializer(source="therapeut", required=False, allow_null=True, read_only=True)
     patient_detail = PatientExportSerializer(source="patient", required=False, allow_null=True, read_only=True)
     class Meta:
         model = Examination
         fields= '__all__'
-
 
 class CheckSerializer(serializers.Serializer):
     bank = serializers.CharField(required=False, allow_null=True)
@@ -181,7 +196,6 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
     def get_translated_comment(self, obj):
         return _(obj.comment)
 
-
 class TherapeutSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = TherapeutSettings
@@ -223,20 +237,6 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         if result_query is not None and len(result_query) > 0:
             return convert_to_long(result_query) + 1
         return 1
-
-class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer):
-    paiment_mode_text = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Invoice
-        fields = '__all__'
-        depth = 1
-
-    def get_paiment_mode_text(self, obj):
-        paiment_mean = PaimentMean.objects.filter(code=obj.paiment_mode).first()
-        if paiment_mean is not None :
-            return paiment_mean.text
-        return 'n/a'
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):

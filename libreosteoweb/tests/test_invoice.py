@@ -127,4 +127,4 @@ class TestCancelInvoice(APITestCase):
         # Retrieve the examination
         response = self.client.get(reverse('examination-detail', kwargs={'pk':self.e1.pk}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['invoice_number'], u'10001')
+        self.assertIsNone(response.data['invoice_number'])

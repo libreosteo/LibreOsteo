@@ -158,15 +158,32 @@ class Examination(models.Model):
         return "%s %s" % (self.patient, self.date)
 
     def get_invoice_number(self):
-        if self.invoice.canceled_by is not None:
-            return self._resolve_invoice(self.invoice).number
-        else:
-            return self.invoice.number
+        invoice = self._get_last_invoice()
+        return invoice.number if invoice is not None else None
 
     def _resolve_invoice(self, invoice):
         if invoice.canceled_by is not None:
             return self._resolve_invoice(invoice.canceled_by)
-        return invoice
+        return invoice if invoice.type == 'invoice' else None
+
+    def _get_invoices_list(self) :
+        invoices_list = []
+        if self.invoice is not None and self.invoice.canceled_by is not None :
+            current_invoice = self.invoice
+            while current_invoice.canceled_by is not None:
+                invoices_list.append(current_invoice)
+                current_invoice = current_invoice.canceled_by
+        return invoices_list
+    invoices_list = property(_get_invoices_list)
+
+    def _get_last_invoice(self) : 
+        if not self.invoice :
+            return None
+        if self.invoice.canceled_by is not None:
+            return self._resolve_invoice(self.invoice)
+        return self.invoice
+
+    last_invoice = property(_get_last_invoice) 
 
 ExaminationType = enum(
     'ExaminationType',

@@ -202,34 +202,44 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.ExaminationSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [ExaminationCSVRenderer, ]
 
+    @detail_route(methods=['POST'])
+    def invoice(self, request, pk=None):
+        current_examination = self.get_object()
+        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
+        return self._invoice_examination(current_examination, serializer)
+
+    def _invoice_examination(self, current_examination, invoicing_serializer):
+        if invoicing_serializer.is_valid():
+            if invoicing_serializer.data['status'] == 'notinvoiced':
+                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
+                current_examination.status_reason = invoicing_serializer.data['reason']
+                current_examination.save()
+                return Response({'invoiced' : None})
+            if invoicing_serializer.data['status'] == 'invoiced':
+                current_invoice = self.generate_invoice(invoicing_serializer.data, )
+                current_examination.invoices.add(current_invoice)
+                if invoicing_serializer.data['paiment_mode'] == 'notpaid':
+                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
+                    current_examination.invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
+                    current_invoice.save()
+                    current_examination.save()
+                if invoicing_serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
+                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
+                    current_invoice.status = models.InvoiceStatus.INVOICED_PAID
+                    current_invoice.save()
+                    current_examination.save()
+            return Response({'invoiced': current_invoice.id})
+        else :
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
     @detail_route(methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
-        if serializer.is_valid():
-            if serializer.data['status'] == 'notinvoiced':
-                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
-                current_examination.status_reason = serializer.data['reason']
-                current_examination.save()
-                return Response({'invoiced' : None})
-            if serializer.data['status'] == 'invoiced':
-                current_examination.invoice = self.generate_invoice(serializer.data, )
-                if serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
-                    current_examination.invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
-                    current.examination.invoice.save()
-                    current_examination.save()
-                if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
-                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
-                    current_examination.invoice.status = models.InvoiceStatus.INVOICED_PAID
-                    current_examination.invoice.save()
-                    current_examination.save()
-            return Response({'invoiced': current_examination.invoice.id})
-        else :
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
+        return self._invoice_examination(current_examination, serializer)
+        
     def generate_invoice(self, invoicingSerializerData):
         officesettings = models.OfficeSettings.objects.all()[0]
         therapeutsettings = models.TherapeutSettings.objects.filter(user=self.request.user)[0]
@@ -305,7 +315,7 @@ class StatisticsView(APIView):
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
-    queryset = models.Invoice.objects.select_related('examination').all()
+    queryset = models.Invoice.objects.all()
     serializer_class = apiserializers.InvoiceSerializer
     filter_fields = {'date': ['lte', 'gte']}
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [InvoiceCSVRenderer]
@@ -320,7 +330,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return context
 
     def get_queryset(self):
-        queryset = models.Invoice.objects.select_related('examination').all()
+        queryset = models.Invoice.objects.all()
         therapeut_id = self.request.query_params.get('therapeut_id', None)
         if therapeut_id is not None:
             queryset = queryset.filter(therapeut_id=therapeut_id)

@@ -139,7 +139,7 @@ class Examination(models.Model):
     # Type : 3 -> return of a previous examination
     # Type : 4 -> emergency examination
     type = models.SmallIntegerField(_('Type'))
-    invoice = models.OneToOneField('Invoice', verbose_name=_('Invoice'), blank=True, null=True)
+    invoices = models.ManyToManyField('Invoice', verbose_name=_('Invoice'), blank=True)
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'), blank=True,null=True)
 
@@ -168,20 +168,28 @@ class Examination(models.Model):
 
     def _get_invoices_list(self) :
         invoices_list = []
-        if self.invoice is not None and self.invoice.canceled_by is not None :
-            current_invoice = self.invoice
-            while current_invoice.canceled_by is not None:
+        if self.invoices is not None and self.invoices.all().count() > 0 :
+            invoices = self.invoices.all().order_by('-date')
+            for invoice in invoices:
+                current_invoice = invoice
                 invoices_list.append(current_invoice)
-                current_invoice = current_invoice.canceled_by
+                while current_invoice.canceled_by is not None:
+                    current_invoice = current_invoice.canceled_by
+                    invoices_list.append(current_invoice)
+        invoices_list.reverse()
+        last_invoice = self._get_last_invoice()
+        if last_invoice is not None :
+            invoices_list.remove(self._get_last_invoice())
         return invoices_list
     invoices_list = property(_get_invoices_list)
 
     def _get_last_invoice(self) : 
-        if not self.invoice :
+        if self.invoices.all().count() == 0:
             return None
-        if self.invoice.canceled_by is not None:
-            return self._resolve_invoice(self.invoice)
-        return self.invoice
+        invoices = self.invoices.all().order_by('-date')
+        if invoices.first().canceled_by is not None:
+            return self._resolve_invoice(invoices.first())
+        return self.invoices.latest('date')
 
     last_invoice = property(_get_last_invoice) 
 

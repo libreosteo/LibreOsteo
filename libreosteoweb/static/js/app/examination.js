@@ -15,7 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var examination = angular.module('loExamination', ['ngResource']);
+var examination = angular.module('loExamination', ['ngResource', 'loInvoice']);
 
 
 examination.factory('ExaminationServ', ['$resource',
@@ -76,7 +76,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
           if (!attrs.newExamination) {attrs.newExamination = false};
 
         },
-        controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', function($scope, $filter, $window, growl, $q, $timeout)
+        controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal)
         {
             $scope.types = [
                 { value : 1, text : gettext('Normal examination') },
@@ -164,6 +164,26 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                     invoiceTab.print();
                 }, 750);
             };
+
+            $scope.cancelInvoice = function(invoice) {
+              var modalInstance = $uibModal.open({
+                templateUrl: 'web-view/partials/confirmation-modal',
+                controller : ConfirmationCtrl,
+                resolve : {
+                  message : function() {
+                      return "<p>"+gettext("Are you sure to cancel this invoice ?")+"</p>";
+                    },
+                    defaultIsOk : function() {
+                      return true;
+                    }
+                  }
+                });
+              modalInstance.result.then(function (){
+                InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
+                  getInvoices();
+                });
+              });
+            }
 
             $scope.delete = function()
             {

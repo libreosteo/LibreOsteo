@@ -80,7 +80,7 @@ class TestChangeIdInvoice(APITestCase):
         response = self.client.post(reverse('examination-close', kwargs={'pk': self.e1.pk}), data={'status':'invoiced', 'amount':55, 'paiment_mode' : 'cash', 'check': {}}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK) 
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoice.number, u'100')
+        self.assertEqual(examination.invoices.latest('date').number, u'100')
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'101')        
@@ -113,9 +113,9 @@ class TestCancelInvoice(APITestCase):
         response = self.client.post(reverse('examination-close', kwargs={'pk': self.e1.pk}), data={'status':'invoiced', 'amount':55, 'paiment_mode' : 'cash', 'check': {}}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK) 
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoice.number, u'10000')
+        self.assertEqual(examination.invoices.latest('date').number, u'10000')
         # When
-        response = self.client.post(reverse('invoice-cancel', kwargs={'pk': examination.invoice.id}))
+        response = self.client.post(reverse('invoice-cancel', kwargs={'pk': examination.invoices.latest('date').id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Then
         self.assertEqual(response.data['credit_note']['number'], u'10001')
@@ -129,4 +129,4 @@ class TestCancelInvoice(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data['invoice_number'])
         self.assertEqual(len(response.data['invoices_list']), 1)
-        self.assertEqual(response.data['invoices_list'][0]['id'], examination.invoice.id)
+        self.assertEqual(response.data['invoices_list'][0]['id'], examination.invoices.latest('date').id)

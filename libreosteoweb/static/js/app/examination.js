@@ -31,6 +31,11 @@ examination.factory('ExaminationServ', ['$resource',
                 params : {examinationId : 'examinationId'},
                 url : 'api/examinations/:examinationId/close'
             },
+          invoice : {
+                method : 'POST',
+                params : {examinationId : 'examinationId'},
+                url : 'api/examinations/:examinationId/invoice'
+          },
             delete : { method : 'DELETE', params : {examinationId : 'examinationId'}},
         });
     }
@@ -180,10 +185,17 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                 });
               modalInstance.result.then(function (){
                 InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
-                  getInvoices();
+                  $scope.model.last_invoice = null;
+                  $scope.model.invoice_number = null;
+                  $scope.model.invoices_list.unshift(result.canceled);
+                  $scope.model.invoices_list.unshift(result.credit_note);
                 });
               });
-            }
+            };
+
+            $scope.invoiceExamination = function(examination) {
+              $scope.close(examination);
+            };
 
             $scope.delete = function()
             {
@@ -204,6 +216,12 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
 
             };
 
+          $scope.$watch('newExamination', function(newValue, oldValue) {
+            console.log("newExamination watch oldValue = "+oldValue+", newValue = "+newValue);
+            if(newValue) {
+              $scope.edit();
+            }
+          });
             $scope.$watch('editableForm.$visible', function(newValue, oldValue)
             {
                 if(oldValue === false && newValue === true)
@@ -216,12 +234,6 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
                     $scope.triggerEditForm.save = false;
                 }
             });
-
-	    $scope.$watch('model.id', function(newValue, oldValue) {
-	      if (oldValue != null && newValue == null) {
-          $scope.edit();
-        }
-      });
 
             $scope.edit = function() {
                 $scope.editableForm.$show();

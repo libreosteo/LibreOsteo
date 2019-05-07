@@ -123,10 +123,11 @@ class TestCancelInvoice(APITestCase):
         self.assertEqual(response.data['canceled']['canceled_by']['id'], response.data['credit_note']['id'])
         self.assertEqual(response.data['canceled']['type'], 'invoice')
         self.assertEqual(response.data['credit_note']['type'], 'creditnote')
+        credit_note = response.data['credit_note']
        
         # Retrieve the examination
         response = self.client.get(reverse('examination-detail', kwargs={'pk':self.e1.pk}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNone(response.data['invoice_number'])
-        self.assertEqual(len(response.data['invoices_list']), 1)
-        self.assertEqual(response.data['invoices_list'][0]['id'], examination.invoices.latest('date').id)
+        self.assertEqual(len(response.data['invoices_list']), 2)
+        self.assertEqual(response.data['invoices_list'][0]['id'], credit_note['id'])

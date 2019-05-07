@@ -169,15 +169,15 @@ class Examination(models.Model):
     def _get_invoices_list(self) :
         invoices_list = []
         if self.invoices is not None and self.invoices.all().count() > 0 :
-            invoices = self.invoices.all().order_by('-date')
+            invoices = self.invoices.all().order_by('date')
             for invoice in invoices:
                 current_invoice = invoice
                 invoices_list.append(current_invoice)
                 while current_invoice.canceled_by is not None:
                     current_invoice = current_invoice.canceled_by
                     invoices_list.append(current_invoice)
-        invoices_list.reverse()
         last_invoice = self._get_last_invoice()
+        invoices_list.reverse()
         if last_invoice is not None :
             invoices_list.remove(self._get_last_invoice())
         return invoices_list

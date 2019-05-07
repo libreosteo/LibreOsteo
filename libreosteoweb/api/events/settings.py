@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 
 
 def settings_event_tracer(officesettings, user, new_value):
-    if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) != 0 :
+    if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) != 0 \
+            and officesettings.invoice_start_sequence != new_value :
         event = OfficeEvent()
         event.clazz = OfficeSettings.__name__
         event.type = OfficeSettings.UPDATE_INVOICE_SEQUENCE

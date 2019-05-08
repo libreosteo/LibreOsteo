@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-03 15:47+0200\n"
-"PO-Revision-Date: 2019-05-03 15:50+0200\n"
+"POT-Creation-Date: 2019-05-07 18:35+0200\n"
+"PO-Revision-Date: 2019-05-07 18:36+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -565,6 +565,12 @@ msgstr "Séance du"
 msgid "by"
 msgstr "par"
 
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "To invoice"
+msgstr "Facturer"
+
 msgid "Unfold"
 msgstr "Déplier"
 
@@ -579,6 +585,9 @@ msgstr "Réglée"
 
 msgid "Cancelled"
 msgstr "Annulée"
+
+msgid "Credit note"
+msgstr "Avoir"
 
 msgid "Close"
 msgstr "Clôturer"
@@ -774,9 +783,6 @@ msgstr "Actions"
 
 msgid "n/a"
 msgstr "n/a"
-
-msgid "Print"
-msgstr "Imprimer"
 
 msgid "Invoicing"
 msgstr "Facturation"

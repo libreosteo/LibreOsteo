@@ -30,3 +30,11 @@ Write New Examination Invoiced
   Element Should Contain                patient                 ${FIRST_NAME} ${LAST_NAME}
   Element Should Contain                main                    Template with 55 EUR
   Element Should Contain                invoice-number          ${INVOICE_NUMBER}
+
+Invoice Again Examination
+  Click Button                          invoiceExaminationBtn
+  Click Element                         jquery:input[value="invoiced"]
+  Wait Until Element Is Visible         jquery:input[value="check"]
+  Click Element                         jquery:input[value="check"]
+  Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
+  Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')

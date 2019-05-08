@@ -18,6 +18,7 @@ ${ORIGINAL_NAME_HEADER}
 ${INVOICE_ID}       2
 ${PATIENT_URL}      \#/patient/2
 ${INVOICE_NUMBER}   25000
+${EXAMINATION_ID}   3
 
 *** Test Cases ***
 Change Invoice Start Number
@@ -68,6 +69,25 @@ Change Invoice Start Number With Text
   Should Be Invalid               invoice_start_sequence
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-danger
+
+
+Cancel Invoice
+  [Documentation]                 Open already invoiced examination and cancel an invoice
+  Go To                           ${ROOT_URL}/${PATIENT_URL}/examination/${EXAMINATION_ID}
+  Wait Until Element Is Visible   cancelInvoiceBtn
+  Click Button                    cancelInvoiceBtn
+  Wait Until Element Is Visible   modal-btn-ok
+  Click Button                    modal-btn-ok
+  Wait Until Element Is Visible   invoiceExaminationBtn
+  Wait Until Element Is Visible   unfold_invoices
+  Click Button                    unfold_invoices
+  Wait Until Element Is Visible   jquery:span[class~="label-warning"]:contains('Annulée')
+  Wait Until Element Is Visible   jquery:a[href="invoice/2"]:contains('25000')
+  Wait Until Element Is Visible   jquery:a[href="invoice/3"]:contains('25001')
+  Invoice Again Examination
+  Wait Until Element Is Visible   jquery:a[href="invoice/4"]:contains('25002')
+  Go To                           ${ROOT_URL}/#/invoices
+  Wait Until Element Is Visible   jquery:tbody>tr:eq(3)
 
 
 *** Keywords ***

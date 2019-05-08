@@ -217,7 +217,6 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             };
 
           $scope.$watch('newExamination', function(newValue, oldValue) {
-            console.log("newExamination watch oldValue = "+oldValue+", newValue = "+newValue);
             if(newValue) {
               $scope.edit();
             }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-03 15:47+0200\n"
+"POT-Creation-Date: 2019-05-07 18:35+0200\n"
 "PO-Revision-Date: 2019-05-03 15:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -32,6 +32,9 @@ msgstr "Urgence"
 
 msgid "not documented"
 msgstr "non renseigné"
+
+msgid "Are you sure to cancel this invoice ?"
+msgstr "Êtes-vous sûr(e) d'annuler cette facture ?"
 
 msgid "Custom range"
 msgstr "Intervalle personalisé"
@@ -92,9 +95,6 @@ msgstr "Novembre"
 
 msgid "December"
 msgstr "Décembre"
-
-msgid "Are you sure to cancel this invoice ?"
-msgstr "Êtes-vous sûr(e) d'annuler cette facture ?"
 
 msgid "Examination deleted"
 msgstr "Consultation supprimée"

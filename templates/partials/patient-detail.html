@@ -306,6 +306,6 @@
 </uib-tab>
 
 <uib-tab id="current-examination" heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
-    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="true" on-delete='examinationDeleted(newExamination)'/>
+    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="newExamination.id == null" on-delete='examinationDeleted(newExamination)'/>
 </uib-tab>
 </uib-tabset>

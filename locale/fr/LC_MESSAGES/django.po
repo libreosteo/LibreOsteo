@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-24 18:24+0200\n"
-"PO-Revision-Date: 2019-04-24 18:24+0200\n"
+"POT-Creation-Date: 2019-05-07 18:35+0200\n"
+"PO-Revision-Date: 2019-05-07 18:36+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -22,6 +22,10 @@ msgstr "Français"
 
 msgid "English"
 msgstr "Anglais"
+
+#, python-format
+msgid "Invoice sequence updated from %(previous)s to %(actual)s"
+msgstr "Séquence de facturation modifiée de %(previous)s à %(actual)s"
 
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
@@ -287,6 +291,12 @@ msgstr "État"
 
 msgid "therapeut_id"
 msgstr "Thérapeute id"
+
+msgid "Canceled by"
+msgstr "Annulée par"
+
+msgid "Invoice type"
+msgstr "Type de facture"
 
 msgid "Code"
 msgstr "Code"
@@ -555,6 +565,30 @@ msgstr "Séance du"
 msgid "by"
 msgstr "par"
 
+msgid "Print"
+msgstr "Imprimer"
+
+msgid "To invoice"
+msgstr "Facturer"
+
+msgid "Unfold"
+msgstr "Déplier"
+
+msgid "Draft"
+msgstr "Brouillon"
+
+msgid "Not paid"
+msgstr "Non réglée"
+
+msgid "Paid"
+msgstr "Réglée"
+
+msgid "Cancelled"
+msgstr "Annulée"
+
+msgid "Credit note"
+msgstr "Avoir"
+
 msgid "Close"
 msgstr "Clôturer"
 
@@ -741,29 +775,20 @@ msgstr "N° de facture"
 msgid "Paiment mean"
 msgstr "Moyen de paiement"
 
+msgid "By"
+msgstr "Par"
+
 msgid "Actions"
 msgstr "Actions"
 
 msgid "n/a"
 msgstr "n/a"
 
-msgid "Draft"
-msgstr "Brouillon"
-
-msgid "Not paid"
-msgstr "Non réglée"
-
-msgid "Paid"
-msgstr "Réglée"
+msgid "Invoicing"
+msgstr "Facturation"
 
 msgid "Not invoiced"
 msgstr "Non facturée"
-
-msgid "Print"
-msgstr "Imprimer"
-
-msgid "Invoicing"
-msgstr "Facturation"
 
 msgid "Invoiced"
 msgstr "Facturée"

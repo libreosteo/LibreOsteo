@@ -139,7 +139,7 @@ class Examination(models.Model):
     # Type : 3 -> return of a previous examination
     # Type : 4 -> emergency examination
     type = models.SmallIntegerField(_('Type'))
-    invoice = models.OneToOneField('Invoice', verbose_name=_('Invoice'), blank=True, null=True)
+    invoices = models.ManyToManyField('Invoice', verbose_name=_('Invoice'), blank=True)
     patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
     therapeut = models.ForeignKey(User, verbose_name=_('Therapeut'), blank=True,null=True)
 
@@ -157,6 +157,42 @@ class Examination(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.patient, self.date)
 
+    def get_invoice_number(self):
+        invoice = self._get_last_invoice()
+        return invoice.number if invoice is not None else None
+
+    def _resolve_invoice(self, invoice):
+        if invoice.canceled_by is not None:
+            return self._resolve_invoice(invoice.canceled_by)
+        return invoice if invoice.type == 'invoice' else None
+
+    def _get_invoices_list(self) :
+        invoices_list = []
+        if self.invoices is not None and self.invoices.all().count() > 0 :
+            invoices = self.invoices.all().order_by('date')
+            for invoice in invoices:
+                current_invoice = invoice
+                invoices_list.append(current_invoice)
+                while current_invoice.canceled_by is not None:
+                    current_invoice = current_invoice.canceled_by
+                    invoices_list.append(current_invoice)
+        last_invoice = self._get_last_invoice()
+        invoices_list.reverse()
+        if last_invoice is not None :
+            invoices_list.remove(self._get_last_invoice())
+        return invoices_list
+    invoices_list = property(_get_invoices_list)
+
+    def _get_last_invoice(self) : 
+        if self.invoices.all().count() == 0:
+            return None
+        invoices = self.invoices.all().order_by('-date')
+        if invoices.first().canceled_by is not None:
+            return self._resolve_invoice(invoices.first())
+        return self.invoices.latest('date')
+
+    last_invoice = property(_get_last_invoice) 
+
 ExaminationType = enum(
     'ExaminationType',
     'EMPTY',
@@ -172,6 +208,13 @@ ExaminationStatus = enum(
     'WAITING_FOR_PAIEMENT',
     'INVOICED_PAID',
     'NOT_INVOICED',)
+
+InvoiceStatus = enum(
+        'InvoiceStatus',
+        'DRAFT',
+        'WAITING_FOR_PAIEMENT',
+        'INVOICED_PAID',
+        'CANCELED')
 
 class ExaminationComment(models.Model):
     """This class represents a comment on examination
@@ -216,6 +259,8 @@ class Invoice(models.Model):
     office_phone = models.CharField(_('Phone'), max_length=200, blank=True, default='')
     status = models.IntegerField(_('status'), default=0)
     therapeut_id = models.IntegerField(_('therapeut_id'), default=0)
+    canceled_by = models.ForeignKey('self', verbose_name=_("Canceled by"), blank=True, null=True)
+    type = models.CharField(_('Invoice type'), max_length=10, blank=True, default='invoice')
 
     def clean(self):
         if self.date is None:
@@ -223,7 +268,6 @@ class Invoice(models.Model):
 
     class Meta:
         ordering = ['-date']
-
 
 class PaimentMean(models.Model):
     """
@@ -274,6 +318,7 @@ class OfficeSettings(models.Model):
         self.id = 1
         super(OfficeSettings, self).save()
 
+    UPDATE_INVOICE_SEQUENCE = 1
 
 
 class TherapeutSettings(models.Model):

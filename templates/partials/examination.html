@@ -26,18 +26,49 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" ng-show="model.status > 0 && model.status < 3">
+        <div class="col-md-4" ng-show="model.status > 0 && model.invoices.length > 0">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{% trans 'Invoice' %}</span>
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model)"><i class="fa fa-print"></i> </button>
-                    <span><a ng-href="invoice/{$ model.invoice $}" target="_blank">n° {$ model.invoice_number $}</a></span>
+                    <span ng-if="model.invoice_number">
+                      <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model.last_invoice)" title={% trans 'Print'%}><i class="fa fa-print"></i> </button>
+                      <button type="button" id="cancelInvoiceBtn" class="btn btn-danger btn-xs" ng-click="cancelInvoice(model.last_invoice)" title="{% trans 'Cancel'%}"><i class="fa fa-ban"></i> </button>
+                      <span><a ng-href="invoice/{$ model.last_invoice.id $}" target="_blank">n° {$ model.invoice_number $}</a></span>
+                    </span>
+                    <span ng-if="model.invoice_number == null && model.status < 3">
+                      <button type="button" id="invoiceExaminationBtn" class="btn btn-success btn-xs" ng-click="invoiceExamination(model)" title="{% trans 'To invoice' %}"><i class="fa fa-euro"></i> {% trans 'To invoice' %}</button>
+                    </span>
+                    <span ng-if="model.invoices_list.length > 0">
+                      <button type="button" id="unfold_invoices" class="pull-right btn btn-xs" 
+                        data-toggle="collapse" href="#collapseInvoices" role="button" 
+                        aria-expanded="false" aria-controls="collapseInvoices">
+                        <i class="fa fa-angle-double-down"></i>
+                      </button>
+                      <span aria-hidden="true"></span><span class="sr-only">{% trans 'Unfold' %}</span>
+                    </span>
+                    <div class="collapse" style="margin-top:10px;" id="collapseInvoices">
+                      <ul ng-repeat="invoice in model.invoices_list" class="list-unstyled">
+                        <li>
+                          <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(invoice)"><i class="fa fa-print"></i> </button>
+                          <span><a ng-href="invoice/{$ invoice.id $}" target="_blank">n° {$ invoice.number $}</a></span>
+                          <span ng-if="invoice.type == 'invoice'">
+                            <span class="label label-default" ng-if="invoice.status === null || invoice.status === 0">{% trans  'Draft' %}</span>
+                            <span class="label label-danger" ng-if="invoice.status === 1">{% trans 'Not paid' %}</span>
+                            <span class="label label-success" ng-if="invoice.status === 2">{% trans 'Paid' %}</span>
+                            <span class="label label-warning" ng-if="invoice.status === 3">{% trans 'Cancelled' %}</span>
+                          </span>
+                          <span ng-if="invoice.type == 'creditnote'">
+                            <span class="label label-success" ng-if="invoice.status === 2">{% trans 'Credit note' %}</span>
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
 
         </div>
         <div class="col-md-12">

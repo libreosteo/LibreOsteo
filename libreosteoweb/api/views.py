@@ -51,7 +51,6 @@ from django.views.generic.base import TemplateView
 from django.db.models import Max
 
 from libreosteoweb.api import serializers as apiserializers
-from libreosteoweb.api.utils import _unicode
 from libreosteoweb import models
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
@@ -66,6 +65,8 @@ from .renderers import (
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long
+from libreosteoweb.api.invoicing import generator as invoicing_generator
+from libreosteoweb.api.events.settings import settings_event_tracer
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -201,86 +202,53 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.ExaminationSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [ExaminationCSVRenderer, ]
 
+    @detail_route(methods=['POST'])
+    def invoice(self, request, pk=None):
+        current_examination = self.get_object()
+        serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
+        return self._invoice_examination(current_examination, serializer)
+
+    def _invoice_examination(self, current_examination, invoicing_serializer):
+        if invoicing_serializer.is_valid():
+            if invoicing_serializer.data['status'] == 'notinvoiced':
+                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
+                current_examination.status_reason = invoicing_serializer.data['reason']
+                current_examination.save()
+                return Response({'invoiced' : None})
+            if invoicing_serializer.data['status'] == 'invoiced':
+                current_invoice = self.generate_invoice(invoicing_serializer.data, )
+                current_examination.invoices.add(current_invoice)
+                if invoicing_serializer.data['paiment_mode'] == 'notpaid':
+                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
+                    current_examination.invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
+                    current_invoice.save()
+                    current_examination.save()
+                if invoicing_serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
+                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
+                    current_invoice.status = models.InvoiceStatus.INVOICED_PAID
+                    current_invoice.save()
+                    current_examination.save()
+            return Response({'invoiced': current_invoice.id})
+        else :
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
     @detail_route(methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
-        if serializer.is_valid():
-            if serializer.data['status'] == 'notinvoiced':
-                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
-                current_examination.status_reason = serializer.data['reason']
-                current_examination.save()
-                return Response({'invoiced' : None})
-            if serializer.data['status'] == 'invoiced':
-                current_examination.invoice = self.generate_invoice(serializer.data, )
-                if serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
-                    current_examination.invoice.status = models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT
-                    current.examination.invoice.save()
-                    current_examination.save()
-                if serializer.data['paiment_mode'] in [ p.code for p in models.PaimentMean.objects.filter(enable=True) ]:
-                    current_examination.status = models.Examination.EXAMINATION_INVOICED_PAID
-                    current_examination.invoice.status = models.Examination.EXAMINATION_INVOICED_PAID
-                    current_examination.invoice.save()
-                    current_examination.save()
-            return Response({'invoiced': current_examination.invoice.id})
-        else :
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
-
+        return self._invoice_examination(current_examination, serializer)
+        
     def generate_invoice(self, invoicingSerializerData):
         officesettings = models.OfficeSettings.objects.all()[0]
         therapeutsettings = models.TherapeutSettings.objects.filter(user=self.request.user)[0]
 
-        invoice = models.Invoice()
-        invoice.amount = invoicingSerializerData['amount']
-        invoice.currency = officesettings.currency
-        invoice.header = officesettings.invoice_office_header
-        invoice.office_address_street = officesettings.office_address_street
-        invoice.office_address_complement = officesettings.office_address_complement
-        invoice.office_address_zipcode = officesettings.office_address_zipcode
-        invoice.office_address_city = officesettings.office_address_city
-        invoice.office_phone = officesettings.office_phone
-        invoice.office_siret = officesettings.office_siret
-
-        # Override the siret on the invoice with the therapeut siret if defined
-        if therapeutsettings.siret is not None :
-            invoice.office_siret = therapeutsettings.siret
-
-        invoice.paiment_mode = invoicingSerializerData['paiment_mode']
-        invoice.therapeut_name = self.request.user.last_name
-        invoice.therapeut_first_name = self.request.user.first_name
-        invoice.therapeut_id = self.request.user.id
-        invoice.quality = therapeutsettings.quality
-        invoice.adeli = therapeutsettings.adeli
-        invoice.location = officesettings.office_address_city
-        invoice.number = ""
-
-        invoice.patient_family_name = self.get_object().patient.family_name
-        invoice.patient_original_name = self.get_object().patient.original_name
-        invoice.patient_first_name = self.get_object().patient.first_name
-        invoice.patient_address_street = self.get_object().patient.address_street
-        invoice.patient_address_complement = self.get_object().patient.address_complement
-        invoice.patient_address_zipcode = self.get_object().patient.address_zipcode
-        invoice.patient_address_city = self.get_object().patient.address_city
-        invoice.content_invoice = officesettings.invoice_content
-        invoice.footer = officesettings.invoice_footer
-
-        # Override the footer on the invoice with the therapeut settings if defined
-        if therapeutsettings.invoice_footer is not None :
-            invoice.footer = therapeutsettings.invoice_footer
-        if officesettings.invoice_start_sequence is not None and len(officesettings.invoice_start_sequence) > 0:
-            invoice.number = _unicode(convert_to_long(officesettings.invoice_start_sequence))
-            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
-            officesettings.save()
-        else :
-            invoice.number = _unicode(10000)
-            officesettings.invoice_start_sequence = _unicode(convert_to_long(invoice.number) + 1)
-            officesettings.save()
-        invoice.date = datetime.today()
+        invoice = invoicing_generator.Generator(officesettings, therapeutsettings).generate_invoice(self.get_object(), invoicingSerializerData, self.request)
+        officesettings.save()
         invoice.save()
         return invoice
+
 
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
@@ -308,7 +276,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['GET'])
     def unpaid(self, request, pk=None):
-        unpaid_examinations = models.Examination.objects.filter(status=models.Examination.EXAMINATION_WAITING_FOR_PAIEMENT).order_by('-date')
+        unpaid_examinations = models.Examination.objects.filter(status=models.ExaminationStatus.WAITING_FOR_PAIEMENT).order_by('-date')
         return Response(apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data)
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -347,7 +315,7 @@ class StatisticsView(APIView):
 
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
-    queryset = models.Invoice.objects.select_related('examination').all()
+    queryset = models.Invoice.objects.all()
     serializer_class = apiserializers.InvoiceSerializer
     filter_fields = {'date': ['lte', 'gte']}
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [InvoiceCSVRenderer]
@@ -362,11 +330,28 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return context
 
     def get_queryset(self):
-        queryset = models.Invoice.objects.select_related('examination').all()
+        queryset = models.Invoice.objects.all()
         therapeut_id = self.request.query_params.get('therapeut_id', None)
         if therapeut_id is not None:
             queryset = queryset.filter(therapeut_id=therapeut_id)
         return queryset
+
+    @detail_route(methods=["post"])
+    def cancel(self, request, pk=None):
+        # Ensure that invoice was not canceled before
+        if self.get_object().status != models.InvoiceStatus.CANCELED :
+            officesettings = models.OfficeSettings.objects.all()[0]
+            cancelation =  invoicing_generator.Generator(officesettings, None).cancel_invoice(self.get_object())
+            canceled = self.get_object()
+            canceled.status = models.InvoiceStatus.CANCELED
+            cancelation.save()
+            canceled.canceled_by = cancelation
+            canceled.save()
+            officesettings.save()
+            response = {'canceled' : self.serializer_class(self.get_object()).data, 'credit_note' : self.serializer_class(cancelation).data}
+            return Response(response, status=status.HTTP_200_OK)
+        else :
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.OfficeEvent
@@ -403,6 +388,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
             asked_value = serializer.validated_data['invoice_start_sequence']
             if asked_value is not None and asked_value.isnumeric():
                 if convert_to_long(asked_value) > 0 and convert_to_long(asked_value) > max_value :
+                    settings_event_tracer(serializer.instance, self.request.user, asked_value)
                     serializer.save()
                 else :
                     raise PermissionDenied(detail="invoice start sequence could not be applied") 

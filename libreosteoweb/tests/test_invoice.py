@@ -22,6 +22,7 @@ from django.contrib.auth.models import User
 from libreosteoweb.models import TherapeutSettings, OfficeSettings, Invoice, Patient, Examination, InvoiceStatus
 from libreosteoweb.api.views import InvoiceViewSet
 from datetime import datetime
+from django.utils import timezone
 from django.db.models import signals
 from libreosteoweb.api.receivers import (
     block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
@@ -39,7 +40,7 @@ class TestChangeIdInvoice(APITestCase):
             OfficeSettings.objects.create(office_siret="12345", currency='EUR', amount=50)
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard", first_name="Jean-Luc", birth_date=datetime(1935,7,13))
-            self.e1 = Examination.objects.create(date=datetime.now(), status=0, type=1, patient=self.p1)
+            self.e1 = Examination.objects.create(date=timezone.now(), status=0, type=1, patient=self.p1)
 
     def test_set_start_invoice_sequence_empty_value_no_invoice(self):
         response = self.client.get(reverse('officesettings-list'))
@@ -67,7 +68,7 @@ class TestChangeIdInvoice(APITestCase):
         response = self.client.put(reverse('officesettings-detail', kwargs={'pk':1}), data=settings)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
-        Invoice.objects.create(date=datetime.now(), amount=50,number=u'101')
+        Invoice.objects.create(date=timezone.now(), amount=50,number=u'101')
         response = self.client.put(reverse('officesettings-detail', kwargs={'pk':1}), data=settings)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -106,7 +107,7 @@ class TestCancelInvoice(APITestCase):
             OfficeSettings.objects.create(office_siret="12345", currency='EUR', amount=50)
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard", first_name="Jean-Luc", birth_date=datetime(1935,7,13))
-            self.e1 = Examination.objects.create(date=datetime.now(), status=0, type=1, patient=self.p1)
+            self.e1 = Examination.objects.create(date=timezone.now(), status=0, type=1, patient=self.p1)
 
     def test_cancel_invoice(self):
         # Given

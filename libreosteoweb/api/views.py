@@ -15,7 +15,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
 from io import BytesIO
-from datetime import datetime
+from django.utils import timezone
 import logging
 import os
 import tempfile
@@ -426,7 +426,7 @@ class ExaminationCommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
-        serializer.save(user=self.request.user,date=datetime.today())
+        serializer.save(user=self.request.user,date=timezone.now())
 
 
 class FileImportViewSet(viewsets.ModelViewSet):
@@ -507,7 +507,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
-        serializer.save(user=self.request.user, internal_date=datetime.today())
+        serializer.save(user=self.request.user, internal_date=timezone.now())
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -558,7 +558,7 @@ class DbDump(StaffRequiredMixin, View):
         zf.close()
 
         response = HttpResponse(zip_content.getvalue(), content_type = "application/binary")
-        response['Content-Disposition'] = 'attachment; filename=%s-%s' % (datetime.now().isoformat(), DUMP_FILE)
+        response['Content-Disposition'] = 'attachment; filename=%s-%s' % (timezone.now().isoformat(), DUMP_FILE)
 
         return response
 

@@ -22,6 +22,7 @@ from django.contrib.auth.models import User
 from libreosteoweb.models import Patient,Examination,TherapeutSettings,OfficeSettings,Invoice
 from libreosteoweb.api.views import ExaminationViewSet,PatientViewSet
 from datetime import datetime
+from django.utils import timezone
 from libreosteoweb.api.receivers import (
     block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
     receiver_newpatient)
@@ -39,7 +40,7 @@ class TestDeletePatient(APITestCase):
             OfficeSettings.objects.create(office_siret="12345")
             self.p1 = Patient.objects.create(family_name="Picard", first_name="Jean-Luc", birth_date=datetime(1935,7,13))
             self.p2 = Patient.objects.create(family_name="Bond", first_name="James", birth_date=datetime(1924, 1, 1))
-            self.e1 = Examination.objects.create(date=datetime.now(), status=0, type=1, patient=self.p1)
+            self.e1 = Examination.objects.create(date=timezone.now(), status=0, type=1, patient=self.p1)
             # Invoice the examination
             self.client.login(username='test', password='testpw')
             response = self.client.post(reverse('examination-close', kwargs={'pk': self.e1.pk}), data={'status':'invoiced', 'amount':55, 'paiment_mode' : 'cash', 'check': {}}, format='json')

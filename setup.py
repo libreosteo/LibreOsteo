@@ -230,7 +230,7 @@ if sys.platform in ['darwin']:
 
     compress()
 
-    APP = ['application.py']
+    APP = ['server.py']
 
     DATA_FILES = ['static', 'locale','templates', 'media']
 
@@ -243,14 +243,15 @@ if sys.platform in ['darwin']:
         ],
         'plist' : {
             'LSBackgroundOnly' : True,
-            'CFBundleIdentifier' : 'org.libreosteo.macos.libreosteo',
-            'CFBundleGetInfoString' : 'Libreosteo',
-            'CFBundleDisplayName' : 'Libreosteo',
-            'CFBundleName' : 'Libreosteo',
+	    'LSUIElement' : False,
+            'CFBundleIdentifier' : 'org.libreosteo.macos.libreosteo.service',
+            'CFBundleGetInfoString' : 'LibreosteoService',
+            'CFBundleDisplayName' : 'LibreosteoService',
+            'CFBundleName' : 'LibreosteoService',
             'CFBundleShortVersionString' : version,
             'CFBundleVersion' : version,
         },
-        'extra_scripts': ['server.py','manage.py'],
+        'extra_scripts': ['application.py','manage.py'],
         'optimize' : True,
         'iconfile' : 'libreosteoweb/static/images/favicon.icns',
     }

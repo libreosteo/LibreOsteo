@@ -75,17 +75,26 @@ if sys.platform in ['win32']:
     # GUI applications require a different base on Windows (the default is for a
     # console application).
     base='Console'
+    import os.path
+    PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
+    os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
+    os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
+    import compressor
     def get_djangolocale():
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Libreosteo.settings.standalone")
         import django
         directory = os.path.join(django.__path__[0], 'conf', 'locale')
         return [(directory, 'django/conf/locale')]
 
+    def compressor_path(t) :
+        print(t)
+        (c, c1) = t
+        return (c, c1.replace(compressor.__path__[0] + os.sep, ''))
+
     def get_compressor_templates():
-        import compressor
         directory = os.path.join(compressor.__path__[0], 'templates')
         list_files = get_filepaths(directory)
-        return map(lambda (c, c1): (c,c1.replace(compressor.__path__[0]+os.sep, '')), list_files)
+        return list(map(compressor_path, list_files))
 
     
 
@@ -160,9 +169,11 @@ if sys.platform in ['win32']:
     packages = [
         "os",
         "django",
-        "htmlentitydefs",
-        "HTMLParser",
-        "Cookie",
+        #"htmlentitydefs",
+        #"HTMLParser",
+        #"Cookie",
+        'http',
+        'html',
         "rest_framework",
         "haystack",
         "sqlite3",
@@ -170,7 +181,8 @@ if sys.platform in ['win32']:
         "email",
         "Libreosteo",
         "compressor",
-        "libreosteoweb"
+        "libreosteoweb",
+        "pkg_resources._vendor"
         
     ]
     namespace_packages = [ "jaraco" ]
@@ -206,20 +218,22 @@ if sys.platform in ['win32']:
 
 
     # Create a web shorcut link
-    shortlink = open("build/exe.win32-2.7/Libreosteo.url","w")
-    shortlink.write("[InternetShortcut]\n")
-    shortlink.write("URL=http://localhost:8085/\n")
-    shortlink.write("\n")
-    shortlink.write("\n")
-
-    ##Remove useless locales
-    remove_useless_files("build/exe.win32-2.7/django/conf/locale", [], ["fr","en"])
-    remove_useless_files("build/exe.win32-2.7/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
+    build_dir = glob.glob('build/exe.win*')
+    if len(build_dir) > 0 :
+        shortlink = open(build_dir[0] + "/Libreosteo.url","w")
+        shortlink.write("[InternetShortcut]\n")
+        shortlink.write("URL=http://localhost:8085/\n")
+        shortlink.write("\n")
+        shortlink.write("\n")
+        
+        ##Remove useless locales
+        remove_useless_files(build_dir[0] + "/django/conf/locale", [], ["fr","en"])
+        remove_useless_files(build_dir[0] + "/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
 
     ## Patch django migration loader
     from patch import patch_django_loader_pyc
 
-    patch_django_loader_pyc()
+    patch_django_loader_pyc('build/exe.*/')
 
 
 

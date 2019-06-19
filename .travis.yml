@@ -7,8 +7,7 @@ before_install:
 install:
   - if [[ ${TRAVIS_PYTHON_VERSION} == 2.7 ]] ; then pip install -r requirements/requ-py2.txt; else pip install -r requirements/requirements.txt ; fi 
   - pip install -r requirements/requ-testing.txt
-  - yarn global add bower
-  - bower install 
+  - yarn 
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
   - tar -xvf /tmp/geckodriver.tar.gz
   - export PATH=$PATH:$PWD

@@ -33,6 +33,8 @@ HOW-TO try it ?
 Requirements :
   - Python 2.7+ or Python 3.3+ (if you have no opinion, 2.7+ is the recommended choice for now)
   - pip 
+  - nodejs
+  - ~bower~ yarn
   - virtualenv
   - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
   - bower
@@ -83,13 +85,9 @@ Python 3 ::
 
     pip install -r requirements/requirements.txt
 
-Install bower ::
+Install Javascript dependencies ::
 
-    sudo npm install -g bower
-
-Install Javascript dependencies with bower ::
-
-    bower install
+    yarn
 
 Initialize the database ::
 

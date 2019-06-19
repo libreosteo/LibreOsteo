@@ -175,9 +175,12 @@ class HTTPLogger(_cplogging.LogManager):
                  'a': environ.get('HTTP_USER_AGENT', ''),
                  }
         for k, v in atoms.items():
-            if isinstance(v, unicode):
-                v = v.encode('utf8')
-            elif not isinstance(v, str):
+            try :
+                if isinstance(v, unicode):
+                    v = v.encode('utf8')
+                elif not isinstance(v, str):
+                    v = str(v)
+            except NameError:
                 v = str(v)
             # Fortunately, repr(str) escapes unprintable chars, \n, \t, etc
             # and backslash for us. All we have to do is strip the quotes.
@@ -215,7 +218,7 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
                 'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
                 'tools.log_tracebacks.on' : True,
                 'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
-                'server.socket_port': 8085,
+                'server.socket_port': SERVER_PORT,
                 'server.socket_host': '0.0.0.0',
                 }
             })
@@ -310,6 +313,16 @@ if __name__ == '__main__':
 	            'level': 'INFO',
 	            'propagate': False
 	        },
+                'libreosteoweb.api' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
+                'Libreosteo' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
 	    }
 	}
 	        
@@ -317,8 +330,11 @@ if __name__ == '__main__':
     logging.config.dictConfig(LOG_CONF)
     os.chdir(DATA_FOLDER)
     logging.info(os.getcwd())
+    logger = logging.getLogger(__name__)
+    logger.info("Frozen with attribute value %s" % (getattr(sys, 'frozen', False)))
     if len(sys.argv) == 1:
         logging.info("Start service")
+        logging.info("Handle starting of the service")
         try:
             servicemanager.Initialize()
             servicemanager.PrepareToHostSingle(LibreosteoService)
@@ -327,6 +343,7 @@ if __name__ == '__main__':
             logging.exception("Exception when starting service")
     else:
         logging.info("Start Controller")
+        logging.info("Handle command line on service manager")
         try:
             win32serviceutil.HandleCommandLine(LibreosteoService)
         except Exception as e:

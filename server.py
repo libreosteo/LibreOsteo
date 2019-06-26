@@ -26,7 +26,7 @@ from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 try:
-    import ConfigParser    
+    import ConfigParser
 except ModuleNotFoundError:
     import configparser as ConfigParser
 
@@ -267,7 +267,7 @@ if __name__ == '__main__':
 	        'db': {
 	            'handlers': ['console'],
 	            'level': 'INFO' ,
-	            'propagate':True 
+	            'propagate':True
 	        },
                 'django': {
                     'handlers': ['console'],

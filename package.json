@@ -32,6 +32,7 @@
   "dependencies": {
     "@bower_components/angular": "angular/bower-angular#1.5.11",
     "@bower_components/angular-animate": "angular/bower-angular-animate#1.5.x",
+    "@bower_components/angular-bind-html-compile" : "git://github.com/incuna/angular-bind-html-compile.git#1.1.0",
     "@bower_components/angular-bootstrap": "angular-ui/bootstrap-bower#2.5.x",
     "@bower_components/angular-cookies": "angular/bower-angular-cookies#1.5.x",
     "@bower_components/angular-daterangepicker": "fragaria/angular-daterangepicker#^0.2.2",

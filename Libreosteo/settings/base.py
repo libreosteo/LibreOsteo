@@ -37,7 +37,7 @@ if getattr(sys, 'frozen', False):
     DATA_FOLDER = SITE_ROOT
     if (getattr(sys, 'frozen', False) == 'macosx_app'):
     	DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
-    	SITE_ROOT = os.path.split(SITE_ROOT)[0]
+    	SITE_ROOT = os.path.join( os.path.split(SITE_ROOT)[0], 'Resources')
     	if not os.path.exists(DATA_FOLDER):
     	    os.makedirs(DATA_FOLDER)
 else:
@@ -207,7 +207,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated'
     ],
 
-    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 

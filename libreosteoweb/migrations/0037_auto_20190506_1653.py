@@ -4,6 +4,12 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 
+def migrate_invoice_examination(apps, schema_editor):
+    Examination = apps.get_model('libreosteoweb', 'Examination')
+    for examination in Examination.objects.all():
+        if examination.invoice is not None :
+            examination.invoices.add(examination.invoice)
+            examination.save()
 
 class Migration(migrations.Migration):
 
@@ -12,13 +18,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='examination',
-            name='invoice',
-        ),
         migrations.AddField(
             model_name='examination',
             name='invoices',
             field=models.ManyToManyField(blank=True, to='libreosteoweb.Invoice', verbose_name='Invoice'),
+        ),
+        migrations.RunPython(migrate_invoice_examination),
+        migrations.RemoveField(
+            model_name='examination',
+            name='invoice',
         ),
     ]

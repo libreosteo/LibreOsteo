@@ -1,10 +1,24 @@
 import logging
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 import csv
 from django.utils.translation import ugettext_lazy as _
 import random
 from libreosteoweb.models import Patient, Examination, ExaminationType, ExaminationStatus
 from datetime import date, datetime
-from .utils import enum, Singleton
+from .utils import enum, Singleton,_unicode
 
 logger = logging.getLogger(__name__)
 
@@ -87,6 +101,8 @@ class Extractor(object):
 
 
 def filter( line):
+    if not hasattr('', 'decode'):
+        return line
     result_line = None
     try:
         result_line = line.decode('utf-8')
@@ -143,7 +159,8 @@ class Analyzer(object):
                 return False
         return False
     def _parse_header(self, header):
-        unicode(header[:]).lower().index(self.__class__.identifier)
+        print(header)
+        _unicode(header[:]).lower().index(self.__class__.identifier)
 
     def get_report(self):
         is_empty = self.content.nb_row <= 1
@@ -200,7 +217,7 @@ class FileContentAdapter(dict):
             return None
         self.file.open(mode='rb')
         logger.info("* Try to guess the dialect on csv")
-        dialect = csv.Sniffer().sniff(self.file.read(4096))
+        dialect = csv.Sniffer().sniff(self.file.read(1024 * 1024 * 10))
         self.file.seek(0)
         reader = csv.reader(self.file, dialect)
         return reader
@@ -253,6 +270,7 @@ class AnalyzerHandler(object):
             instance = analyzer(content)
             if instance.is_instance() :
                 return instance.get_report()
+        print("No Analyzer found")
         return AnalyzeReport(False,False, None)
     def get_content(self, ourfile):
         return FileContentProxy().get_content(ourfile, line_filter=filter)
@@ -439,7 +457,7 @@ class IntegratorExamination(AbstractIntegrator):
                     'therapeut': user.id,
                     'type' : ExaminationType.NORMAL,
                     'status' : ExaminationStatus.NOT_INVOICED,
-                    'status_reason': _('Imported examination'),
+                    'status_reason': u'%s' % _('Imported examination'),
                 }
                 serializer = self.serializer_class(data=data)
                 if serializer.is_valid():
@@ -449,10 +467,10 @@ class IntegratorExamination(AbstractIntegrator):
                     # idx + 2 because : we have header and the index start from 0
                     # To have the line number we have to add 2 to the index....
                     errors.append((idx+2, serializer.errors))
-                    logger.info("errors detected, data is = %s "% data)
+                    logger.info("errors detected, data is = %s, errors = %s "% (data,serializer.errors))
             except ValueError as e:
                 logger.exception("Exception when creating examination.")
-                errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line :') + unicode(e) } ))
+                errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line :') + _unicode(e) } ))
             except :
                 logger.exception("Exception when creating examination.")
                 errors.append((idx+2, { 'general_problem' : _('There is a problem when reading this line.') } ) )

@@ -1,0 +1,131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-07 18:35+0200\n"
+"PO-Revision-Date: 2019-05-03 15:48+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+msgid "Normal examination"
+msgstr "Consultation normale"
+
+msgid "Continuing examination"
+msgstr "Poursuite de consultation"
+
+msgid "Return"
+msgstr "Retour"
+
+msgid "Emergency"
+msgstr "Urgence"
+
+msgid "not documented"
+msgstr "non renseigné"
+
+msgid "Are you sure to cancel this invoice ?"
+msgstr "Êtes-vous sûr(e) d'annuler cette facture ?"
+
+msgid "Custom range"
+msgstr "Intervalle personalisé"
+
+msgid "Su"
+msgstr "Dim"
+
+msgid "Mo"
+msgstr "Lun"
+
+msgid "Tu"
+msgstr "Mar"
+
+msgid "We"
+msgstr "Mer"
+
+msgid "Th"
+msgstr "Jeu"
+
+msgid "Fr"
+msgstr "Ven"
+
+msgid "Sa"
+msgstr "Sam"
+
+msgid "January"
+msgstr "Janvier"
+
+msgid "February"
+msgstr "Février"
+
+msgid "March"
+msgstr "Mars"
+
+msgid "April"
+msgstr "Avril"
+
+msgid "May"
+msgstr "Mai"
+
+msgid "June"
+msgstr "Juin"
+
+msgid "July"
+msgstr "Juin"
+
+msgid "August"
+msgstr "Août"
+
+msgid "September"
+msgstr "Septembre"
+
+msgid "October"
+msgstr "Octobre"
+
+msgid "November"
+msgstr "Novembre"
+
+msgid "December"
+msgstr "Décembre"
+
+msgid "Examination deleted"
+msgstr "Consultation supprimée"
+
+msgid "Male"
+msgstr "Masculin"
+
+msgid "Female"
+msgstr "Féminin"
+
+msgid "Left-handed"
+msgstr "Gaucher"
+
+msgid "Right-handed"
+msgstr "Droitier"
+
+msgid ""
+"For GDPR conformity, patient can ask to delete all information. This "
+"function delete all information without trace except invoices. You can find "
+"invoices into Accounting function. Are you agree with that ?"
+msgstr ""
+"Pour la conformité RGPD, un patient peut demander à supprimer toutes ses "
+"informations. Cette fonction supprime toutes les infos ne laissant aucune "
+"trace excepté les factures. Vous pouvez retrouver les factures dans la "
+"fonction Comptabilité. Êtes-vous d'accord avec cette opération ?"
+
+msgid "I understand that it means"
+msgstr "Je comprends ce que cela signifie"
+
+msgid "Update success"
+msgstr "Mise à jour effectuée"
+
+msgid "Are you sure to delete this document ?"
+msgstr "Êtes-vous sûr(e) de supprimer ce document ?"

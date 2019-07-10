@@ -1,11 +1,25 @@
-from django.shortcuts import render_to_response
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+from django.shortcuts import render
 from django.forms.models import ModelForm
-from libreosteoweb import models 
+from libreosteoweb import models
 from django.contrib.auth.models import User
 from django.conf import settings
 import libreosteoweb
 from .permissions import maintenance_available
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.decorators.cache import never_cache
 
 # import the logging library
@@ -19,10 +33,10 @@ def filter_fields(f):
 
 class GenericDisplay(ModelForm):
     class Meta:
-        model = User 
+        model = User
         fields = [ f.name for f in model._meta.fields if f.editable ]
 
-    def display_fields(self): 
+    def display_fields(self):
         return dict([ (f.name, f.formfield().label) for f in filter( filter_fields, self.Meta.model._meta.fields)])
 
 
@@ -56,77 +70,88 @@ class OfficeSettingsDisplay(GenericDisplay):
         model = models.OfficeSettings
         fields = [ f.name for f in model._meta.fields if f.editable ]
 
+
+def display_invoices(request):
+    return render(request, "partials/invoice-list.html", {})
+
 def display_index(request):
-    return render_to_response('index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
+    return render(request, 'index.html', {'version' : libreosteoweb.__version__ , 'request' : request })
 
 def display_patient(request):
     display = PatientDisplay()
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/patient-detail.html', {'patient' : display.display_fields(),
+    return render(request, 'partials/patient-detail.html', {'patient' : display.display_fields(),
                                                                'examination' : displayExamination.display_fields()})
 
 def display_newpatient(request):
     display = PatientDisplay()
-    return render_to_response('partials/add-patient.html', {'patient' : display.display_fields()})
+    return render(request, 'partials/add-patient.html', {'patient' : display.display_fields()})
 
 def display_doctor(request):
     display = RegularDoctorDisplay()
-    return render_to_response('partials/doctor-modal-add.html', {'doctor':display.display_fields()})
+    return render(request, 'partials/doctor-modal-add.html', {'doctor':display.display_fields()})
 
 def display_examination_timeline(request):
     display = ExaminationDisplay()
-    return render_to_response('partials/timeline.html', {'examination' : display.display_fields()})
+    return render(request, 'partials/timeline.html', {'examination' : display.display_fields()})
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
-    return render_to_response('partials/examination.html', {'examination' : displayExamination.display_fields()})
+    return render(request, 'partials/examination.html', {'examination' : displayExamination.display_fields()})
 
 def display_search_result(request):
-    return render_to_response('partials/search-result.html', {})
+    return render(request, 'partials/search-result.html', {})
 
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
-    return render_to_response('partials/user-profile.html', {'user' : displayUser.display_fields(), 
+    return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(),
         'therapeutsettings': displayTherapeutSettings.display_fields(),
+        'dashboard_modules': models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
         'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):
-    return render_to_response('partials/dashboard.html', {})
+    therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+        user=request.user)
+    return render(request, 'partials/dashboard.html', {
+        'therapeutsettings': therapeut_settings,
+    })
 
 def display_officeevent(request):
-    return render_to_response('partials/officeevent.html', {})
+    return render(request, 'partials/officeevent.html', {})
 
 def display_invoicing(request):
-    return render_to_response('partials/invoice-modal.html', {})
+    return render(request, 'partials/invoice-modal.html', {})
 
 def display_officesettings(request):
     displayOfficeSettings = OfficeSettingsDisplay()
-    return render_to_response('partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
+    return render(request, 'partials/office-settings.html', {'officesettings' : displayOfficeSettings.display_fields, 'user':request.user})
 
 def display_adduser(request):
-    return render_to_response('partials/add-user-modal.html', {})
+    return render(request, 'partials/add-user-modal.html', {})
 
 def display_setpassword(request):
-    return render_to_response('partials/set-password-user-modal.html', {})
+    return render(request, 'partials/set-password-user-modal.html', {})
 
 def display_import_files(request):
-    return render_to_response('partials/import-file.html', {'request' : request})
+    return render(request, 'partials/import-file.html', {'request' : request})
 
 def display_rebuild_index(request):
-    return render_to_response('partials/rebuild-index.html', {'request' : request})
+    return render(request, 'partials/rebuild-index.html', {'request' : request})
 
-@csrf_protect
+def display_file_manager(request):
+    return render(request, 'partials/filemanager.html', {'request' : request})
+
+def display_confirmation(request):
+    return render(request, 'partials/confirmation.html')
+
 @never_cache
-@ensure_csrf_cookie
 @maintenance_available()
 def display_restore(request):
-    return render_to_response('partials/restore.html', {'request' : request})
+    return render(request, 'partials/restore.html', {'request' : request})
 
 
-@csrf_protect
 @never_cache
-@ensure_csrf_cookie
 @maintenance_available()
 def display_register(request):
-    return render_to_response('partials/register.html', {'csrf_token' : request.COOKIES['csrftoken']})
+    return render(request, 'partials/register.html', {'request' : request })

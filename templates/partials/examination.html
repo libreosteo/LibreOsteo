@@ -11,7 +11,7 @@
             </button>
         </div>
     </div>
-    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()">
+    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()" disable-enter >
     <div class="row">
         <div class="col-md-5">
             <div class="panel panel-default">
@@ -26,19 +26,50 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3" ng-show="model.status > 0 && model.status < 3">
+        <div class="col-md-4" ng-show="model.status > 0 && model.invoices.length > 0">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <span>{% trans 'Invoice' %}</span>
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model)"><i class="fa fa-print"></i> </button>
-                    <span><a href="invoice/{$ model.invoice $}"target="_blank">n° {$ model.invoice_number $}</a></span>
+                    <span ng-if="model.invoice_number">
+                      <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(model.last_invoice)" title={% trans 'Print'%}><i class="fa fa-print"></i> </button>
+                      <button type="button" id="cancelInvoiceBtn" class="btn btn-danger btn-xs" ng-click="cancelInvoice(model.last_invoice)" title="{% trans 'Cancel'%}"><i class="fa fa-ban"></i> </button>
+                      <span><a ng-href="invoice/{$ model.last_invoice.id $}" target="_blank">n° {$ model.invoice_number $}</a></span>
+                    </span>
+                    <span ng-if="model.invoice_number == null && model.status < 3">
+                      <button type="button" id="invoiceExaminationBtn" class="btn btn-success btn-xs" ng-click="invoiceExamination(model)" title="{% trans 'To invoice' %}"><i class="fa fa-euro"></i> {% trans 'To invoice' %}</button>
+                    </span>
+                    <span ng-if="model.invoices_list.length > 0">
+                      <button type="button" id="unfold_invoices" class="pull-right btn btn-xs" 
+                        data-toggle="collapse" href="#collapseInvoices" role="button" 
+                        aria-expanded="false" aria-controls="collapseInvoices">
+                        <i class="fa fa-angle-double-down"></i>
+                      </button>
+                      <span aria-hidden="true"></span><span class="sr-only">{% trans 'Unfold' %}</span>
+                    </span>
+                    <div class="collapse" style="margin-top:10px;" id="collapseInvoices">
+                      <ul ng-repeat="invoice in model.invoices_list" class="list-unstyled">
+                        <li>
+                          <button type="button" id="printInvoiceBtn" class="btn btn-success btn-xs" autocomplete="off" ng-click="printInvoice(invoice)"><i class="fa fa-print"></i> </button>
+                          <span><a ng-href="invoice/{$ invoice.id $}" target="_blank">n° {$ invoice.number $}</a></span>
+                          <span ng-if="invoice.type == 'invoice'">
+                            <span class="label label-default" ng-if="invoice.status === null || invoice.status === 0">{% trans  'Draft' %}</span>
+                            <span class="label label-danger" ng-if="invoice.status === 1">{% trans 'Not paid' %}</span>
+                            <span class="label label-success" ng-if="invoice.status === 2">{% trans 'Paid' %}</span>
+                            <span class="label label-warning" ng-if="invoice.status === 3">{% trans 'Cancelled' %}</span>
+                          </span>
+                          <span ng-if="invoice.type == 'creditnote'">
+                            <span class="label label-success" ng-if="invoice.status === 2">{% trans 'Credit note' %}</span>
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
                 </div>
-            </div>            
+            </div>
         </div>
-        <div class="col-md-3">
-            
+        <div class="col-md-2">
+
         </div>
         <div class="col-md-12">
             <div class="panel panel-danger">
@@ -57,16 +88,16 @@
                             </div>
                             <div class="col-md-12">&nbsp;</div>
                             <div class="col-md-12">
-                                <div hallo-editor ng-model="model.reason_description" 
+                                <div hallo-editor ng-model="model.reason_description"
                                     placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
                                 ></div>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-12 subtitle">{{ examination.medical_examination }}</div>
-                                
+
                                 <div class="col-md-12">
                                     <div hallo-editor ng-model="model.medical_examination"
                                     placeholder="'{{ examination.medical_examination }}'" is-editable="editableForm.$visible"></div>
@@ -104,38 +135,38 @@
         </div>
         <div class="col-md-9">
             <!-- The accordion -->
-            <uib-accordion close-others="false">
-                <uib-accordion-group heading="{{ examination.orl }}" class="panel-primary" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
-                    <div hallo-editor ng-model="model.orl" 
+            <div uib-accordion close-others="false">
+                <div uib-accordion-group heading="{{ examination.orl }}" class="panel-primary panel-sphere" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
+                    <div hallo-editor ng-model="model.orl"
                             placeholder="'{{ examination.orl }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
-                    <div hallo-editor ng-model="model.visceral" 
+                <div uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary panel-sphere" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
+                    <div hallo-editor ng-model="model.visceral"
                             placeholder="'{{ examination.visceral }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary" ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
+                <div uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary panel-sphere " ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
                     <div hallo-editor ng-model="model.pulmo" placeholder="'{{ examination.pulmo }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
+                <div uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary panel-sphere" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
                     <div hallo-editor ng-model="model.uro_gyneco"
                             placeholder="'{{ examination.uro_gyneco }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
-                    <div  hallo-editor ng-model="model.periphery" 
+                <div uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary panel-sphere" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
+                    <div  hallo-editor ng-model="model.periphery"
                             placeholder="'{{ examination.periphery }}'" is-editable="editableForm.$visible"
                     ></div>
-                </uib-accordion-group>
+                </div>
 
-                <uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
-                    <div hallo-editor ng-model="model.general_state" 
+                <div uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary panel-sphere" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
+                    <div hallo-editor ng-model="model.general_state"
                             placeholder="'{{ examination.general_state }}'" is-editable="editableForm.$visible"></div>
-                </uib-accordion-group>
+                </div>
 
-            </uib-accordion>
+            </div>
         </div>
      </div>
 
@@ -147,7 +178,7 @@
                     {{ examination.diagnosis }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="model.diagnosis" 
+                    <div hallo-editor ng-model="model.diagnosis"
                             placeholder="'{{ examination.diagnosis }}'" is-editable="editableForm.$visible"></div>
                 </div>
             </div>
@@ -182,7 +213,7 @@
     <div class="row">
         <div class="col-md-8"></div>
         <div class="col-md-4">
-            <button class="btn btn-success pull-right" ng-show="model.status < 1"
+            <button id="close-examination" class="btn btn-success pull-right" ng-show="model.status < 1"
                     ng-click="saveAndClose()">{% trans 'Close' %}</button>
         </div>
 

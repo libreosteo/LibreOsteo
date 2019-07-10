@@ -1,3 +1,18 @@
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 """
 Django settings for Libreosteo project.
 
@@ -12,7 +27,13 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os,sys,logging
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 if getattr(sys, 'frozen', False):
+    logger = logging.getLogger(__name__)
+    logger.info("Frozen with attribute value %s" % (getattr(sys, 'frozen', False)))
+    logger.info("Real path of the start : %s " % (os.path.realpath(__file__)))
     SITE_ROOT = os.path.split(os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0])[0]
+    logger.info("SITE_ROOT = %s" % SITE_ROOT)
+    if (getattr(sys, 'frozen', False)) :
+        SITE_ROOT = os.path.split(SITE_ROOT)[0]
     DATA_FOLDER = SITE_ROOT
     if (getattr(sys, 'frozen', False) == 'macosx_app'):
     	DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
@@ -33,8 +54,6 @@ SECRET_KEY = '8xmh#fjyiamw^-_ro9m29^6^81^kc!aiczp)gvb#7with$dzb6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -105,9 +124,9 @@ TEMPLATES = [
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
-                'Libreosteo.zip_loader.Loader',
+                #'Libreosteo.zip_loader.Loader',
             ]
-        },
+        },       
     },
 ]
 
@@ -194,8 +213,8 @@ REST_FRAMEWORK = {
 
 
 LOGIN_URL = 'accounts/login'
-LOGIN_URL_NAME = 'accounts-login'
-LOGOUT_URL_NAME = 'accounts-logout'
+LOGIN_URL_NAME = 'login'
+LOGOUT_URL_NAME = 'logout'
 LOGIN_REDIRECT_URL= '/'
 INITIALIZE_ADMIN_URL_NAME = 'install'
 NO_REROUTE_PATTERN_URL = [ r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n', r'^web-view/partials/restore', r'^web-view/partials/register' ]
@@ -237,6 +256,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': False,
         },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
         'libreosteoweb': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -258,3 +282,5 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter','compressor.filters.cssmin.rCSSMinFilter']
+
+DISPLAY_SERVICE_NET_HELPER=True

@@ -1,0 +1,29 @@
+language: python
+before_install:  
+  - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
+  - wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
+  - tar -xjf /tmp/firefox-latest.tar.bz2 
+  - export PATH=$PWD/firefox:$PATH
+install:
+  - if [[ ${TRAVIS_PYTHON_VERSION} == 2.7 ]] ; then pip install -r requirements/requ-py2.txt; else pip install -r requirements/requirements.txt ; fi 
+  - pip install -r requirements/requ-testing.txt
+  - yarn 
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
+  - tar -xvf /tmp/geckodriver.tar.gz
+  - export PATH=$PATH:$PWD
+  - python ./manage.py collectstatic --no-input
+python:
+  - "2.7"
+  - "3.6"
+branches:
+  - develop
+env:
+  - MOZ_HEADLESS=1
+
+before_script:
+  - python ./server.py &
+  - sleep 3
+script:
+  - python ./manage.py test
+  - xvfb-run --server-args="-screen 0 1024x768x24" robot tests 
+

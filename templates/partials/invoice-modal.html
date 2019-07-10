@@ -30,22 +30,10 @@
                 <div class="input-group-addon">€</div>
             </div>
         </div>
-        <div class="radio">
+        <div class="radio" ng-repeat="paiment_mean in paimentmeans">
             <label>
-                <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="cash" ui-validate=" 'validatePaimentMode($value)' ">
-                {% trans 'Cash' %}
-            </label>
-        </div>
-        <div class="radio">
-            <label>
-                <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode"  value="check">
-                {% trans 'Check' %}
-            </label>
-        </div>
-        <div class="radio">
-            <label>
-                <input type="radio" ng-model="invoicing.paiment_mode" name="paimentmode"  value="notpaid">
-                {% trans 'Not paid' %}
+		    <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="{$ paiment_mean.code $}" ui-validate=" 'validatePaimentMode($value)' ">
+		    {$ paiment_mean.text | translate $} 
             </label>
         </div>
         <!--div ng-if="invoicing.paiment_mode == 'check'">

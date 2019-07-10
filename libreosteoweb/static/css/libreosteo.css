@@ -1,3 +1,24 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/* For fixed navbar */
+body { padding-top: 50px; }
+
 .editable-click {
     !important;
     color : black;
@@ -52,7 +73,8 @@ pre {
 
 .growl
 {
-    z-index : 1000;
+    z-index : 3000;
+    top: 55px;
 }
 
 .timeline-panel
@@ -122,7 +144,7 @@ pre {
 
 .chat-panel .panel-body{
     height: auto;
-    overflow-y : initial; 
+    overflow-y : initial;
 }
 
 .dashboard-sparkline
@@ -155,3 +177,195 @@ div.readyForEditMode {
     width: 250px;
     top:0px;
 }
+ul li.documenttile  {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.documenttile{
+    margin-top: 100%;
+    transition-property: width,height;
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+}
+
+.document_title {
+    text-align: center;
+    border-bottom : 1px #eee solid;
+}
+.document_ico {
+    text-align: center;
+}
+
+.document_notes {
+    font-size: small;
+    color: #999;
+}
+.document_notes_ctn {
+    height:2em;
+}
+
+.doc_thumbnail {
+    height: 10em;
+    margin-left: 10px;
+}
+.doc_expand {
+    margin-left: 10px;
+}
+.doc_date {
+    font-size : smaller;
+    color : #999;
+    position: absolute;
+    bottom: 0.6em;
+    right:0.2em;
+}
+.document-edit {
+    font-size : small;
+}
+.expand {
+    cursor : pointer;
+}
+.document-close {
+    float:left;
+}
+.document-close.ng-enter {
+    transition:0.5s linear all;
+    opacity:0;
+}
+.document-close.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+.document-close.ng-leave {
+    transition:0.5s linear all;
+    opacity:1;
+}
+.document-close.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.document_partialnote.ng-enter {
+    transition : 0.1s, linear all;
+    opacity: 0;
+    transition-delay: 0.4s
+}
+.document_partialnote.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+.document_partialnote.ng-leave {
+    transition : 0.1s, linear all;
+    opacity: 1;
+}
+.document_partialnote.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.document_fullnote.ng-enter {
+    transition : 0.1s, linear all;
+    opacity: 0;
+    transition-delay: 0.4s
+}
+.document_fullnote.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+.document_fullnote.ng-leave {
+    transition : 0.1s, linear all;
+    opacity: 1;
+}
+.document_fullnote.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.document-edit-ok {
+    color : green;
+    opacity: 1
+}
+.document-edit-ok:hover {
+    color : green;
+    opacity: 0.5
+}
+.document-edit-cancel {
+    color : red;
+    opacity: 1
+}
+.document-edit-cancel:hover {
+    color : red;
+    opacity: 0.5;
+}
+.document_create.ng-enter {
+    transition : 0.5s, ease-out all;
+    opacity: 0;
+}
+.document_create.ng-enter.ng-enter-active {
+    opacity : 1;
+}
+.document_create.ng-leave {
+    transition : 0.5s, ease-out all;
+    opacity: 1
+}
+.document_create.ng_leave.active {
+    opacity: 0
+}
+.documenttile.ng-enter {
+    transition:0.5s, ease-out all;
+    opacity: 0;
+}
+.documenttile.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+.documenttile.ng-leave {
+    transition : 0.5s, ease-out all;
+    opacity: 1
+}
+.documenttile.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.document_create.ng-leave {
+    transition : 0.5s, ease-out all;
+    opacity: 1;
+}
+.document_create.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.panel-title {
+    font-size : 14px;
+}
+
+.nav-tabs {
+    margin-bottom: 15px;
+}
+
+.dashboard-catalog-item img {
+    box-shadow: 3px 3px 5px 6px #ccc;
+    max-width: 100%;
+}
+
+/* We want that element:
+ - not to appear or fill space on page,
+ - to remain in CSS flow so that the calendar popup shows up there
+ */
+.hidden-datepicker-host {
+    border: 0px;
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+    height: 42px;
+    opacity: 0;
+    position: relative;
+    right: 16px;
+}
+.checkbox.paimentmean {
+	width : 12%;
+}
+
+input.ng-invalid-email,
+input.ng-invalid,
+input.ng-invalid-email:focus,
+input.ng-invalid:focus {
+  color: #a94442; 
+  border-color: #a94442;
+}
+
+input.ng-invalid-email:focus,
+input.ng-invalid:focus {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
+
+}
+

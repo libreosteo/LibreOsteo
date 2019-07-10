@@ -1,4 +1,6 @@
-recursive-include main_directory *
-recursive-include docs *
-include *
+include LICENSE.md
+include README.rst
+include HISTORY.rst
+recursive-include templates *
+recursive-include libreosteoweb/static *
 global-exclude *.pyc

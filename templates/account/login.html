@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.png">
 
-    <title>{% trans  "Signin on Libreosto" %}</title>
+    <title>{% trans  "Signin on Libreosteo" %}</title>
 
     {% compress css %}
     <!-- Bootstrap core CSS -->
@@ -29,11 +29,8 @@
   <body>
 
     <div class="container">
-    {% if form.errors %}
-        <p>{% trans "Your username and password didn't match. Please try again." %}</p>
-    {% endif %}
 
-      <form class="form-signin" role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+      <form class="form-signin" role="form" method="post" action="{% url 'login' %}">
           {% csrf_token %}
         <h2 class="form-signin-heading">{% trans "Please sign in" %}</h2>
         {% if demonstration %}
@@ -46,8 +43,16 @@
           </ul>
         </div>
         {% endif %}
-        <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus="">
-        <input type="password" name="password" class="form-control" placeholder="{%  trans "Password" %}" required="">
+        {% if form.errors %}
+          <p class="alert alert-danger">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            {% trans "Your username and password didn't match. Please try again." %}
+          </p>
+        {% endif %}
+        <div class="form-group {% if form.errors %}has-error{% endif %}">
+          <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="" autofocus="">
+          <input type="password" name="password" class="form-control" placeholder="{%  trans "Password" %}" required="">
+        </div>
         <!--<label class="checkbox">
           <input type="checkbox" value="remember-me"> {% trans "Remember me" %}
         </label>-->

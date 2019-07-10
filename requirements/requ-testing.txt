@@ -1,0 +1,5 @@
+robotframework
+robotframework-seleniumlibrary
+requests
+robotframework-requests
+robotframework-requestslogger

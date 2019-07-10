@@ -6,7 +6,8 @@ db.sqlite3
 
 # Assets
 libreosteoweb/static/bower_components/
-static/
+/static/
+/media/
 
 # Indexes
 whoosh_index/
@@ -26,3 +27,7 @@ whoosh_index/
 .venv
 env/
 venv/
+
+# log files
+*.log
+Libreosteo/settings/local.py*

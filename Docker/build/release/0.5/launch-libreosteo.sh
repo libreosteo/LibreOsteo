@@ -1,11 +1,5 @@
 #!/bin/bash
 
-sql_type=$1
-sql_host=$2
-sql_port=$3
-sql_name=$4
-sql_user=$5
-
 local_file='Libreosteo/settings/local.py'
 bin_local_file='Libreosteo/settings/local.pyc'
 tmp_constant_file='/tmp/pre_local.py'

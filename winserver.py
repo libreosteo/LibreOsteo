@@ -1,3 +1,17 @@
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 """
 Requires Mark Hammond's pywin32 package.
 """
@@ -161,9 +175,12 @@ class HTTPLogger(_cplogging.LogManager):
                  'a': environ.get('HTTP_USER_AGENT', ''),
                  }
         for k, v in atoms.items():
-            if isinstance(v, unicode):
-                v = v.encode('utf8')
-            elif not isinstance(v, str):
+            try :
+                if isinstance(v, unicode):
+                    v = v.encode('utf8')
+                elif not isinstance(v, str):
+                    v = str(v)
+            except NameError:
                 v = str(v)
             # Fortunately, repr(str) escapes unprintable chars, \n, \t, etc
             # and backslash for us. All we have to do is strip the quotes.
@@ -201,7 +218,7 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
                 'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
                 'tools.log_tracebacks.on' : True,
                 'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
-                'server.socket_port': 8085,
+                'server.socket_port': SERVER_PORT,
                 'server.socket_host': '0.0.0.0',
                 }
             })
@@ -296,6 +313,16 @@ if __name__ == '__main__':
 	            'level': 'INFO',
 	            'propagate': False
 	        },
+                'libreosteoweb.api' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
+                'Libreosteo' : {
+                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+	            'level': 'INFO',
+	            'propagate': False
+                },
 	    }
 	}
 	        
@@ -303,8 +330,11 @@ if __name__ == '__main__':
     logging.config.dictConfig(LOG_CONF)
     os.chdir(DATA_FOLDER)
     logging.info(os.getcwd())
+    logger = logging.getLogger(__name__)
+    logger.info("Frozen with attribute value %s" % (getattr(sys, 'frozen', False)))
     if len(sys.argv) == 1:
-        logging.info("Start from 1")
+        logging.info("Start service")
+        logging.info("Handle starting of the service")
         try:
             servicemanager.Initialize()
             servicemanager.PrepareToHostSingle(LibreosteoService)
@@ -312,7 +342,8 @@ if __name__ == '__main__':
         except Exception as e:
             logging.exception("Exception when starting service")
     else:
-        logging.info("Start from 2")
+        logging.info("Start Controller")
+        logging.info("Handle command line on service manager")
         try:
             win32serviceutil.HandleCommandLine(LibreosteoService)
         except Exception as e:

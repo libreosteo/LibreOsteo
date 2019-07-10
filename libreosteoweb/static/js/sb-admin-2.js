@@ -26,10 +26,3 @@ $(function() {
         }
     })
 });
-
-
-$('#editorcommand').affix({
-    offset: {
-        top: $('#editorcommand').offset().top
-    }
-});

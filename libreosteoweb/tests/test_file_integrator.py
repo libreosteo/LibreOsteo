@@ -1,12 +1,32 @@
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 from django.test import TestCase
-
 from libreosteoweb.api import file_integrator
-from mock import mock_open
-from mock import patch
-from mock import MagicMock
-from mock import Mock
-import pdb
+try:
+    from unittest.mock import mock_open
+    from unittest.mock import patch
+    from unittest.mock import MagicMock
+    from unittest.mock import Mock
+except ImportError:
+    from mock import mock_open
+    from mock import patch
+    from mock import MagicMock
+    from mock import Mock
+
 
 class TestFileIntegrator(TestCase):
 	def setUp(self):
@@ -64,22 +84,20 @@ class TestFileIntegrator(TestCase):
 		self.assertTrue(a.is_instance())
 
 	def test_analyze_handler(self):
-		handler = file_integrator.AnalyzerHandler()
-
-		header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
-
-		f = MagicMock()
-		f.read.return_value = header
-		f.__iter__.return_value = [header,]
-		report = handler.analyze(f)
-		self.assertTrue(report.is_empty)
-		self.assertTrue(report.is_valid)
-		self.assertEquals(file_integrator.FileCsvType.PATIENT, report.type)
+                handler = file_integrator.AnalyzerHandler()
+                header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
+                f = MagicMock()
+                f.read.return_value = header
+                f.__iter__.return_value = [header,]
+                report = handler.analyze(f)
+                self.assertTrue(report.is_empty)
+                self.assertTrue(report.is_valid)
+                self.assertEquals(file_integrator.FileCsvType.PATIENT, report.type)
 
 	def test_analyze_handler_not_empty(self):
 		handler = file_integrator.AnalyzerHandler()
 
-		header = u'Numero;Nom de Famille;Nom de jeune fille/ou jeune homme;Prenom;Date de naissance (JJ/MM/AAAA);Sex (M/F);Rue;Complement dadresse;code postal;ville;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
+		header = u'Numero;Nom de Famille;Nom de jeune fille/ou jeune homme;Prenom;Date de naissance (JJ/MM/AAAA);Sex (M/F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
 		value = u'Test;Test;Test'
 
 		f = MagicMock()

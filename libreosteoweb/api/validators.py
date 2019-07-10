@@ -1,3 +1,18 @@
+
+# This file is part of Libreosteo.
+#
+# Libreosteo is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Libreosteo is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.exceptions import ValidationError
 import logging
@@ -24,12 +39,12 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
         # Determine the filter keyword arguments and filter the queryset.
         filter_kwargs = {}
         for field_name in self.fields :
-            if type(attrs[field_name]) is str or type(attrs[field_name]) is unicode:
+            if self.__is_str(attrs[field_name]):
                 filter_kwargs[field_name+'__iexact']=attrs[field_name].lower()
             else:
                 filter_kwargs[field_name]=attrs[field_name]
         return queryset.filter(**filter_kwargs)
-    
+
     def __call__(self, attrs):
         self.enforce_required_fields(attrs)
         queryset = self.queryset
@@ -38,10 +53,18 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
 
         # Ignore validation if any field is None
         checked_values = [
-            value.lower() if (type(value) is str or type(value) is unicode) else value for field, value in attrs.items() if field in self.fields
+            value.lower() if (self.__is_str(value)) else value for field, value in attrs.items() if field in self.fields
         ]
 
 
         if None not in checked_values and queryset.exists():
             field_names = ', '.join(self.fields)
             raise ValidationError(self.message.format(field_names=field_names))
+
+    def __is_str(self, value):
+        is_str = type(value) is str
+        try :
+            is_str = is_str or type(value) is unicode
+        except NameError:
+            pass
+        return is_str

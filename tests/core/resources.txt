@@ -1,0 +1,53 @@
+*** Settings ***
+Library     SeleniumLibrary   timeout=5    implicit_wait=2
+Library     Collections
+Library     RequestsLibrary
+Library     RequestsLogger
+
+*** Variables ***
+${ROOT_URL}  http://localhost:8085
+${BROWSER}    Firefox 
+
+*** Keywords ***
+Open Browser To Login Page
+  Open Browser  ${ROOT_URL}  ${BROWSER}
+
+Login With
+  [Arguments]   ${login}  ${password}
+  Input Text    username  ${login}
+  Input Text    password    ${password}
+  Click Button  login
+
+Login REST with 
+  [Arguments]   ${login}    ${cookie_session}
+  Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
+  ${resp} =             Get Request   restapi   /api/users
+  RequestsLogger.Write Log      ${resp}
+  Should Be Equal As Strings    ${resp.status_code}    200
+  Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}
+
+Open session
+  [Arguments]   ${login}    ${password}
+  Open Browser To Login Page
+  Login With      ${login}  ${password}
+
+Close session
+  Close Browser
+
+Check That Url Is
+  [Arguments]                     ${url}
+  ${current_url}=                 Get Location
+  Should Be Equal                 ${current_url}      ${url}
+
+Check That Form Has
+  [Arguments]                     ${action_name}
+  Page Should Contain Button      jquery:button:contains(${action_name})
+
+Check That Form Does Not Have
+  [Arguments]                     ${action_name}
+  Page Should Not Contain        jquery:button:contains(${action_name})
+
+Wait That Page Is Ready
+  Wait Until Element Is Not Visible     loading-bar
+
+

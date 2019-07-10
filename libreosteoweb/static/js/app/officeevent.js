@@ -1,3 +1,20 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 var officeEvent = angular.module('loOfficeEvent', ['loPatient']);
 
 officeEvent.factory('OfficeEventServ', ['$http', '$filter', function ($http, $filter){
@@ -6,6 +23,7 @@ officeEvent.factory('OfficeEventServ', ['$http', '$filter', function ($http, $fi
         this.busy = false;
         this.after = '';
         this.itemsByDay = [];
+        this.hasFinish = false;
     };
     OfficeEventLoader.prototype.loadEvents = function() {
         if (this.busy) return;
@@ -18,6 +36,11 @@ officeEvent.factory('OfficeEventServ', ['$http', '$filter', function ($http, $fi
                 this.items.push(items[i]);
             }
             this.after = "" + this.items.length;
+            if (items.length == 0){
+                this.hasFinish = true;
+                this.busy = false;
+                return;
+            }
 
             // Build the list ordonned by Day to prepare the list to display.
             angular.forEach(this.items, function(officeevent, index){
@@ -70,6 +93,7 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
         officeevents : '=',
         officeeventsByDay : '=',
         busy : '=',
+        officeEventLoader : '='
     },
     controller: function($scope, $location)
     {
@@ -89,7 +113,8 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
         };
         $scope.show = function(selector) {
             $scope.selector = selector;
-        }
+        };
+        console.log($scope.officeEventLoader);
     },
 
     templateUrl: 'web-view/partials/officeevent'

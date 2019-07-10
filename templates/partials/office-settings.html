@@ -8,6 +8,12 @@
 <uib-tab heading="{% trans 'General' %}">
 <div class="container-fluid">
     <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12" ng-if="officesettings.network_list.length > 0">
+              <p>{% trans 'This instance of libreosteo could be accessed on the following addresses of the network : '%}
+              <span ng-repeat="addr in officesettings.network_list"><a ng-href="{$ addr $}">{$ addr $}</a><span ng-if="!$last">, </span></span>
+              </p>
+            </div>
+            <div class="clearfix">
             <form novalidate name="form">
                 <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
                     <h2>{% trans 'Office' %}</h2>
@@ -74,10 +80,18 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <label for="amount">{{officesettings.amount}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.amount" required name="amount" id="amount" placeholder="{{ officesettings.amount }}"
-                                tooltip="{{ officesettings.amount }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                                <input type="text" 
+                                       class="form-control input-lg"
+                                       ng-model="officesettings.amount"
+                                       required 
+                                       name="amount" 
+                                       id="amount" 
+                                       placeholder="{{ officesettings.amount }}"
+                                      tooltip="{{ officesettings.amount }}"
+                                      tooltip-trigger="mouseenter"
+                                      ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                      pattern="[1-9][0-9,.]*"
+                                />
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -88,6 +102,41 @@
                                 tooltip-trigger="mouseenter"
                                 ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+				<div class="form-group">
+					<label for="paiement-means">{% trans 'Paiment means' %}</label>
+					<div class="form-inline">
+					<div class="form-group checkbox paimentmean" ng-repeat="paiment_mean in paiment_means">
+						<label>
+						<input type="checkbox" ng-model="paiment_mean.enable"
+							tooltip="{% trans 'Paiment means' %}"
+                                			tooltip-trigger="mouseenter"
+                                			ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+						{$ paiment_mean.text $}
+						</label>
+					</div>
+					</div>
+				</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                          <div class="form-group">
+                            <label for"invoice_start_sequence">{{officesettings.invoice_start_sequence}}</label>
+                            <input type="text" class="form-control input-lg" 
+                                               ng-model="officesettings.invoice_start_sequence" 
+                                               name="invoice_start_sequence" 
+                                               id="invoice_start_sequence" 
+                                               placeholder="{{ officesettings.invoice_start_sequence}}"
+                                               tooltip={{ officesettings.invoice_start_sequence }}
+                                               tooltip-trigger="mouseenter"
+                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                               ng-pattern='/^\d+$/'
+                                               validate-invoice-start
+                                               required="true"
+                                               title="{% trans 'The start sequence must have composed only with numbers' %}"
+                                               />
+ 
+                          </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">

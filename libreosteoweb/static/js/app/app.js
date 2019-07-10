@@ -1,3 +1,20 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 var libreosteoApp = angular.module('libreosteo', [
     'ngRoute',
     'ngCookies',
@@ -7,6 +24,7 @@ var libreosteoApp = angular.module('libreosteo', [
     'loTimeline',
     'loDashboard',
     'loOfficeEvent',
+    'loInvoice',
     'yaru22.angular-timeago',
     'ngAnimate',
     'duScroll',
@@ -24,7 +42,9 @@ var libreosteoApp = angular.module('libreosteo', [
     'loHalloEditor',
     'loFileImport',
     'loRebuildIndex',
-    'ngFileUpload'
+    'ngFileUpload',
+    'loFileManager',
+    'angular-bind-html-compile'
 ]);
 
 libreosteoApp.config(function ($interpolateProvider) {
@@ -117,6 +137,12 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                     templateUrl : 'web-view/partials/rebuild-index',
                     controller : 'RebuildIndexCtrl'
                 }).
+            state('invoice-list',
+            {
+                url : '/invoices',
+                templateUrl : 'web-view/partials/invoice-list',
+                controller : 'InvoiceListCtrl'
+            }).
             state('dashboard',
             {
                 url : '/',
@@ -146,3 +172,23 @@ libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', funct
     $scope.editFormManager = loEditFormManager;
 
 }]);
+
+libreosteoApp.filter('htmlToPlaintext', function() {
+    return function(text) {
+      return  text ? String(text).replace(/<br[^>]*>/gm, ' ').replace(/<[^>]+>/gm, '') : '';
+    };
+  }
+);
+
+libreosteoApp.filter('mimeTypeToClass', function() {
+    return function(text) {
+        if (text) {
+            if (text.includes('application/pdf')){
+                return 'fa-file-pdf-o';
+            } else if (text.includes('image/')) {
+                return 'fa-file-image-o';
+            }
+        } 
+        return 'fa-file-text-o';
+    }
+});

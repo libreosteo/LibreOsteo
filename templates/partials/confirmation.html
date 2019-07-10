@@ -1,0 +1,13 @@
+{% load i18n %}
+<div class="modal-header">
+    <h3 class="modal-title">{% trans 'Confirm' %}</h3>
+</div>
+<form novalidate name="form">
+<div class="modal-body">
+  <div bind-html-compile="message"></div> 
+</div>
+<div class="modal-footer">
+    <button id="modal-btn-ok" class="btn btn-primary" ng-click="ok()" ng-disabled="form.$invalid || !isOk">{% trans 'Ok' %}</button>
+    <button id="modal-btn-cancel" class="btn btn-danger" ng-click="cancel()">{% trans 'Cancel' %}</button>
+</div>
+</form>

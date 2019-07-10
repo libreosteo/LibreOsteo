@@ -1,0 +1,29 @@
+function help {
+cat << EndOfMessage
+Il faut installer Docker pour que cela fonctionne : https://docs.docker.com/install/
+
+Pour l'installation de libreosteo :
+$ sudo libreosteo install
+
+Pour lancer libreosteo :
+$ libreosteo launch
+
+Pour le mettre a jour :
+$ sudo libreosteo update
+
+Pour changer le mot de passe :
+$ sudo libreosteo passwd user #user est l'utilisateur de libreosteo
+
+Pour le dÃ©sinstaller :
+$ sudo libreosteo remove
+
+Pour le backupper :
+$ sudo libreosteo backup
+
+=> Backup dans le repertoire /var/backups/libreosteo/
+
+La configuration est ici : etc/libreosteo/settings.sh
+EndOfMessage
+
+}
+

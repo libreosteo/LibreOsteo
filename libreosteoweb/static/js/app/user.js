@@ -1,3 +1,20 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 var user = angular.module('loUser', ['ngResource']);
 
 user.factory('UserServ', ['$resource',
@@ -6,18 +23,29 @@ user.factory('UserServ', ['$resource',
         return $resource('api/users/:userId', null, {
             get : {method: 'GET', params: {userId: 'user'}},
             'update' : {method : 'PUT' , params : {userId : 'userId'}},
-            setpassword : {method : 'POST', params: {userId : 'userId'}, 
+            setpassword : {method : 'POST', params: {userId : 'userId'},
                     url : 'api/office-users/:userId/set_password'},
+	    query : {method: 'GET', isArray : true }
         });
     }
 ]);
 
-user.factory('TherapeutSettingsServ', ['$resource', 
+user.factory('MyUserIdServ', ['$http', 'UserServ',
+		function($http, UserServ) {
+      return $http.get('myuserid').then(
+        function(result){
+          return UserServ.get({userId : result.data }).$promise.then(function(data) {
+            data.id = result.data;
+            return data;
+            });
+          });
+		}]);
+
+user.factory('TherapeutSettingsServ', ['$resource',
   function($resource) {
     "use strict";
     return $resource('api/profiles/:settingsId', null, {
         get : {method : 'GET', params: {settingsId : 'settings'}},
-        add : {method : 'POST'},
         save : {method : 'PUT'},
         'get_by_user' : {method : 'GET', url: 'api/profiles/get_by_user'},
       });
@@ -38,14 +66,9 @@ user.controller('UserProfileCtrl', ['$scope', '$http', 'UserServ', 'TherapeutSet
 
 
         $scope.updateUser = function(user, therapeutsettings){
-          
+
           var manageTherapeutSettings = function (callback) {
-            if ($scope.therapeutsettings.id)
-            {
               TherapeutSettingsServ.save({settingsId : $scope.therapeutsettings.id}, $scope.therapeutsettings).$promise.then(callback);
-            } else {
-              TherapeutSettingsServ.add($scope.therapeutsettings).$promise.then(callback);
-            }
           }
 
           UserServ.update({userId : $scope.userid }, user).

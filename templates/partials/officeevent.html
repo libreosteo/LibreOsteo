@@ -1,5 +1,6 @@
 {% load i18n %}
-                    <div class="chat-panel panel panel-default">
+                    <div class="chat-panel panel panel-default" infinite-scroll="officeEventLoader.loadEvents()" infinite-scroll-disabled='officeEventLoader.busy || officeEventLoader.hasFinish' infinite-scroll-immediate-check='true' infinite-scroll-use-document-bottom="true"
+                    infinite-scroll-distance="5">
                         <div class="panel-heading">
                             <i class="fa fa-comments fa-fw"></i>
                             {% trans 'Events' %}

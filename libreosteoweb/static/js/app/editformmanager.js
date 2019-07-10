@@ -1,3 +1,20 @@
+
+/**
+    This file is part of Libreosteo.
+
+    Libreosteo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Libreosteo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+*/
 var editFormManager = angular.module('loEditFormManager', []);
 
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -182,6 +199,31 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
   }
 }]);
 
+editFormManager.directive('disableEnter', ['$compile', function($compile) {
+  return {
+    restrict: 'A',
+    replace : false,
+    terminal : true,
+    priority: 1001,
+    compile: function compile(element, attrs) {
+      element.removeAttr('disable-enter');
+      element.attr('ng-keypress', 'disableEnter($event)');
+      return {
+        pre : function preLink(scope, iElement, iAttrs, controller) { },
+        post : function postLink(scope, iElement, iAttrs, controller) {
+          $compile(iElement)(scope);
+        }
+      };
+    },
+    controller: ["$scope", function($scope, $element) {
+      $scope.disableEnter = function(event) {
+        if (event.target.contentEditable != "true" && (event.charCode || event.keyCode) == 13) {
+          event.preventDefault();
+        };
+      };
+    }],
+  }
+}]);
 
 
 var getStackTrace = function() {

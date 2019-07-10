@@ -7,9 +7,10 @@ from django.db import migrations
 def initialize_invoicing_sequence(apps, schema_editor):
     Invoice = apps.get_model('libreosteoweb', 'Invoice')
     OfficeSettings = apps.get_model('libreosteoweb', 'OfficeSettings')
-    settings = OfficeSettings.objects.first()
-    settings.invoice_start_sequence = u'%d' % (int(Invoice.objects.latest('date').number) + 1)
-    settings.save()
+    if Invoice.objects.all().count() > 0 :
+        settings = OfficeSettings.objects.first()
+        settings.invoice_start_sequence = u'%d' % (int(Invoice.objects.latest('date').number) + 1)
+        settings.save()
 
 class Migration(migrations.Migration):
 

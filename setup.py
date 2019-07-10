@@ -42,7 +42,7 @@ def purge_static():
     purge_dir = ['bower_components']
     keep_path = ['bower_components/webshim']
     to_remove_list = []
-    # For each dir in purge dir from static : 
+    # For each dir in purge dir from static :
     # delete each files
     for root, directories, files in os.walk('static'):
         for p in purge_dir:
@@ -54,13 +54,13 @@ def purge_static():
 
 
 
-                
+
 
 
 # Build on Windows.
 #
 # usage :
-#     python setup.py build_exe 
+#     python setup.py build_exe
 #
 if sys.platform in ['win32']:
 
@@ -96,13 +96,13 @@ if sys.platform in ['win32']:
         list_files = get_filepaths(directory)
         return list(map(compressor_path, list_files))
 
-    
+
 
     def get_filepaths(directory, pyc_only=False):
         """
-        This function will generate the file names in a directory 
-        tree by walking the tree either top-down or bottom-up. For each 
-        directory in the tree rooted at directory top (including top itself), 
+        This function will generate the file names in a directory
+        tree by walking the tree either top-down or bottom-up. For each
+        directory in the tree rooted at directory top (including top itself),
         it yields a 3-tuple (dirpath, dirnames, filenames).
         """
         file_paths = []  # List which will store all of the full filepaths.
@@ -120,19 +120,19 @@ if sys.platform in ['win32']:
                 file_paths + get_filepaths(rec_d)
 
         return file_paths  # Self-explanatory.
-        
+
     def include_migration_files(directory):
         """
         This function will generate the include from the list of python
         migration files in the directory
         """
-        migration_files = [] 
+        migration_files = []
         for root, directories, files in os.walk(directory):
             for filename in files :
                 if (filename.endswith('.py'))  and not (filename.startswith('__')):
                     migration_files.append(directory.replace('/', '.') + '.' + filename[0:len(filename)-3])
         return migration_files
-            
+
 
     from cx_Freeze import setup, Executable
     copyDependentFiles = True
@@ -163,7 +163,7 @@ if sys.platform in ['win32']:
         "django.contrib.contenttypes.migrations",
         "django.contrib.sessions.migrations"
         ]
-    
+
     include_files =  get_filepaths('media') + get_filepaths('locale')  + get_djangolocale()
     extra_includes = get_filepaths('templates')  + get_compressor_templates() + get_filepaths('static')
     packages = [
@@ -183,7 +183,7 @@ if sys.platform in ['win32']:
         "compressor",
         "libreosteoweb",
         "pkg_resources._vendor"
-        
+
     ]
     namespace_packages = [ "jaraco" ]
     in_zip_packages = includes + ['_markerlib', 'appconf','backports' ,
@@ -225,7 +225,7 @@ if sys.platform in ['win32']:
         shortlink.write("URL=http://localhost:8085/\n")
         shortlink.write("\n")
         shortlink.write("\n")
-        
+
         ##Remove useless locales
         remove_useless_files(build_dir[0] + "/django/conf/locale", [], ["fr","en"])
         remove_useless_files(build_dir[0] + "/static/bower_components/angular-i18n", ["angular-locale_en.js", "angular-locale_en-us.js", "angular-locale_fr.js", "angular-locale_fr-fr.js"], [])
@@ -262,10 +262,10 @@ if sys.platform in ['darwin']:
 
     OPTIONS = {'argv_emulation': True,
         'includes' : [
-            'HTMLParser',
+        #    'HTMLParser',
         ],
         'packages' : ["django","Libreosteo", "libreosteoweb","rest_framework",
-            "haystack","sqlite3","statici18n", "email", "compressor", 
+            "haystack","sqlite3","statici18n", "email", "compressor",
         ],
         'plist' : {
             'LSBackgroundOnly' : True,
@@ -313,13 +313,13 @@ elif sys.platform not in ['win32'] :
         list_files = get_filepaths(directory)
         return map(lambda c: (c,c.replace(compressor.__path__[0]+os.sep, '')), list_files)
 
-    
+
 
     def get_filepaths(directory):
         """
-        This function will generate the file names in a directory 
-        tree by walking the tree either top-down or bottom-up. For each 
-        directory in the tree rooted at directory top (including top itself), 
+        This function will generate the file names in a directory
+        tree by walking the tree either top-down or bottom-up. For each
+        directory in the tree rooted at directory top (including top itself),
         it yields a 3-tuple (dirpath, dirnames, filenames).
         """
         file_paths = []  # List which will store all of the full filepaths.
@@ -332,18 +332,18 @@ elif sys.platform not in ['win32'] :
                 file_paths.append(filepath)  # Add it to the list.
 
         return file_paths  # Self-explanatory.
-        
+
     def include_migration_files(directory):
         """
         This function will generate the include from the list of python
         migration files in the directory
         """
-        migration_files = [] 
+        migration_files = []
         for root, directories, files in os.walk(directory):
             for filename in files :
                 if (filename.endswith('.py'))  and not (filename.startswith('__')):
                     migration_files.append(directory.replace('/', '.') + '.' + filename[0:len(filename)-3])
-        return migration_files                
+        return migration_files
 
     from cx_Freeze import setup, Executable
     copyDependentFiles = True
@@ -378,7 +378,7 @@ elif sys.platform not in ['win32'] :
         "rcssmin",
         "rjsmin",
     ] + include_migration_files('libreosteoweb/migrations')
-    
+
     include_files = get_filepaths('static') + get_filepaths('locale') + get_djangolocale() + get_filepaths('media')
     zip_includes = get_filepaths('templates')  + get_compressor_templates()
     packages = [
@@ -394,8 +394,8 @@ elif sys.platform not in ['win32'] :
         "email",
         "Libreosteo",
         "compressor",
-        
-    
+
+
         ]
     namespace_packages = [ "jaraco" ]
     build_exe_options = {
@@ -470,6 +470,6 @@ else :
             'Programming Language :: Python',
             'Topic :: Internet :: WWW/HTTP',
             'Topic :: Internet :: WwW/HTTP :: Dynamic Content',
-        ], 
+        ],
         )
 

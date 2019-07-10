@@ -4,6 +4,9 @@ body {
   background-color: #eee;
 }
 
+.form-wrapper {padding-bottom: 20px;}
+.form-wrapper:empty {display: none;} // Because empty panel still have a shadow
+
 .form-signin {
   max-width: 330px;
   padding: 15px;

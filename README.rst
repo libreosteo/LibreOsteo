@@ -2,7 +2,10 @@
  LibreOsteo
 ============
 
-&copy; Jean-Baptiste Gury (garthylou) 2014-2016
+.. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
+    :target: https://travis-ci.com/libreosteo/Libreosteo
+
+© Jean-Baptiste Gury 2014-2018
 
 *LibreOsteo*
 
@@ -33,7 +36,9 @@ Requirements :
   - nodejs
   - bower
 
-Retrieve the content of the project from Git repository.
+Retrieve the content of the project from Git repository ::
+
+    git clone https://github.com/libreosteo/Libreosteo.git
 
 Then retrieve the python 2 requirements with ::
 
@@ -55,7 +60,7 @@ It should ask for the administrator user.
 
 Now you can start the server with ::
 
-python manage.py runserver
+    python manage.py runserver
 
 Point your browser on : http://localhost:8000/
 

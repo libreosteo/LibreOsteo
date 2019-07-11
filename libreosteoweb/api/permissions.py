@@ -37,10 +37,28 @@ class IsStaffOrReadOnlyTargetUser(permissions.BasePermission):
         except AttributeError:
             return obj == request.user
 
+
+class IsStaffOrTargetUserFactory(object):
+    @staticmethod
+    def additional_methods(methods_list):
+        return type('IsStaffOrTargetUser', (IsStaffOrTargetUser,), {'extra_actions': methods_list})
+
 class IsStaffOrTargetUser(permissions.BasePermission):
+    all_user_actions = [
+        'create',
+        'retrieve',
+        'partial_update',
+        'update'
+    ]
+
+    extra_actions = []
+
+    def permitted_actions(self):
+        return self.all_user_actions + self.extra_actions
+
     def has_permission(self, request, view):
         # allow user to list all users if logged in user is staff
-        return (view.action in ['create', 'retrieve', 'partial_update', 'update']) or request.user.is_staff
+        return (view.action in self.permitted_actions()) or request.user.is_staff
 
     def has_object_permission(self, request, view, obj):
         # allow logged in user to view own details, allows staff to view all records

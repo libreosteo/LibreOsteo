@@ -230,7 +230,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                     current_examination.save()
             return Response({'invoiced': current_invoice.id})
         else :
-            return Response(serializer.errors,
+            return Response(invoicing_serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
 

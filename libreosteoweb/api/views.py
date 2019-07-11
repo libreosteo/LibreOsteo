@@ -55,7 +55,8 @@ from libreosteoweb import models
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
 from .permissions import (
-    IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available)
+    IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available,
+    IsStaffOrTargetUserFactory)
 from .receivers import (
     block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
     receiver_newpatient)
@@ -402,7 +403,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
 class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     model = models.TherapeutSettings
     serializer_class = apiserializers.TherapeutSettingsSerializer
-    permission_classes = [IsStaffOrTargetUser]
+    permission_classes = [IsStaffOrTargetUserFactory.additional_methods(['get_by_user'])]
     queryset = models.TherapeutSettings.objects.all()
 
     @list_route()

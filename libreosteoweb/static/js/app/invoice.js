@@ -106,6 +106,7 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
           if ($scope.filters)
           {
             $scope.filters.therapeut_id = $scope.user.id;
+            getInvoices();
           }
         });
 	      $scope.users = OfficeUsersServ.query();
@@ -129,8 +130,6 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
 		        therapeut_id : $scope.user.id
         };
 
-        // Initial API call
-        getInvoices();
         // Refresh & filter from API on new date selection
         $scope.$watch('filters.dateRange', getInvoices);
 

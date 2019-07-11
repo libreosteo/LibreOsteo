@@ -182,7 +182,8 @@ if sys.platform in ['win32']:
         "Libreosteo",
         "compressor",
         "libreosteoweb",
-        "pkg_resources._vendor"
+        "pkg_resources._vendor",
+        "django_filters"
 
     ]
     namespace_packages = [ "jaraco" ]

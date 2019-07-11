@@ -266,7 +266,7 @@ if sys.platform in ['darwin']:
         #    'HTMLParser',
         ],
         'packages' : ["django","Libreosteo", "libreosteoweb","rest_framework",
-            "haystack","sqlite3","statici18n", "email", "compressor",
+            "haystack","sqlite3","statici18n", "email", "compressor","django_filters",
         ],
         'plist' : {
             'LSBackgroundOnly' : True,

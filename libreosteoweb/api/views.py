@@ -187,6 +187,7 @@ class PatientViewSet(viewsets.ModelViewSet):
         for e in examination_list:
             models.OfficeEvent.objects.filter(reference=e.id, clazz=models.Examination.__name__).delete()
         models.Examination.objects.filter(patient=instance.id).delete()
+        models.PatientDocument.objects.filter(patient=instance.id).delete()
         return super(PatientViewSet, self).perform_destroy(instance)
 
 

@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,post_delete
 from django.utils.translation import ugettext_lazy as _
-from ..models import OfficeEvent, Patient, Examination
+from ..models import OfficeEvent, Patient, Examination, PatientDocument
 import logging
 
 # Get an instance of a logger
@@ -96,3 +96,8 @@ def receiver_examination(sender, **kwargs):
 		event.user = kwargs['instance'].therapeut
 		event.clean()
 		event.save()
+
+@receiver(post_delete, sender=PatientDocument)
+def delete_document(sender, **kwargs):
+    doc_instance = kwargs['instance']
+    doc_instance.document.delete()

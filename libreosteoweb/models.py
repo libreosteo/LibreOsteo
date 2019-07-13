@@ -421,6 +421,7 @@ class PatientDocument(models.Model):
         'TRAUMA',
         'MEDICAL_REPORTS'
         )
-    
 
-
+    def delete(self, *args, **kwargs):
+        super(PatientDocument, self).delete(*args, **kwargs)
+        self.document.delete()

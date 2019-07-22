@@ -73,10 +73,6 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
             patient: '=?',
             externalPatientSave: '&',
         },
-      compile: function(element, attrs){
-          if (!attrs.newExamination) {attrs.newExamination = false};
-
-        },
         controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal)
         {
             $scope.types = [
@@ -204,12 +200,6 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
                 }
 
             };
-
-          $scope.$watch('newExamination', function(newValue, oldValue) {
-            if(newValue) {
-              $scope.edit();
-            }
-          });
             // $visible means this form is in edit mode
             $scope.$watch('examinationForm.$visible', function(newValue, oldValue)
             {
@@ -224,17 +214,11 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
                 }
             });
 
-	    $scope.$watch('model.id', function(newValue, oldValue)
-	    {
-	        if (oldValue != null && newValue == null)
-		{
-	    		$scope.edit();
-		}
-	    });
-
             $scope.edit = function() {
                 $scope.form.partialPatientForm.$show();
-                $scope.examinationForm.$show();
+                $timeout(function() {
+                    $scope.examinationForm.$show();
+                });
             };
 
             $scope.save = function()
@@ -254,8 +238,10 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
                 cancel: null,
                 delete: false,
             };
-            $timeout(function () {
-                //DOM has finished rendering
+            $scope.$on('uiTabChange', function(event) {
+                // Hackish : we have to wait that the tab has finished rendering
+                // to trigger edit, otherwise, the form is considered inactive
+                // by edit-form-manager, and « save » button is not shown.
                 if($scope.newExamination){
                     $scope.edit();
                 }

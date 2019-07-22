@@ -11,7 +11,7 @@
             </button>
         </div>
     </div>
-    <form editable-form name="editableForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()" save-on-lost-focus="true" class="col-md-7" disable-enter >
+    <form editable-form name="examinationForm" edit-form-control edit="edit" save="save" delete="delete" trigger="triggerEditForm" onaftersave="saveModel()"  save-on-lost-focus="true" class="col-md-7" disable-enter">
         <div class="row" style="margin-bottom: 15px">
         <div class="col-md-12">
 
@@ -86,7 +86,7 @@
                             <div class="col-md-12">&nbsp;</div>
                             <div class="col-md-12">
                                 <div hallo-editor ng-model="model.reason_description"
-                                     placeholder="'{{ examination.reason_description }}'" is-editable="editableForm.$visible"
+                                     placeholder="'{{ examination.reason_description }}'" is-editable="examinationForm.$visible"
                                 ></div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
 
                                 <div class="col-md-12">
                                     <div hallo-editor ng-model="model.medical_examination"
-                                    placeholder="'{{ examination.medical_examination }}'" is-editable="editableForm.$visible"></div>
+                                    placeholder="'{{ examination.medical_examination }}'" is-editable="examinationForm.$visible"></div>
                                 </div>
                             </div>
                         </div>
@@ -138,32 +138,32 @@
             <div uib-accordion close-others="false">
                 <div uib-accordion-group heading="{{ examination.orl }}" class="panel-primary panel-sphere" ng-show="examinationSettings.orl" is-open="accordionOpenState.orl">
                     <div hallo-editor ng-model="model.orl"
-                            placeholder="'{{ examination.orl }}'" is-editable="editableForm.$visible"></div>
+                            placeholder="'{{ examination.orl }}'" is-editable="examinationForm.$visible"></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.visceral }}" class="panel-primary panel-sphere" ng-show="examinationSettings.visceral" is-open="accordionOpenState.visceral">
                     <div hallo-editor ng-model="model.visceral"
-                            placeholder="'{{ examination.visceral }}'" is-editable="editableForm.$visible"></div>
+                            placeholder="'{{ examination.visceral }}'" is-editable="examinationForm.$visible"></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.pulmo }}" class="panel-primary panel-sphere " ng-show="examinationSettings.pulmo" is-open="accordionOpenState.pulmo">
-                    <div hallo-editor ng-model="model.pulmo" placeholder="'{{ examination.pulmo }}'" is-editable="editableForm.$visible"></div>
+                    <div hallo-editor ng-model="model.pulmo" placeholder="'{{ examination.pulmo }}'" is-editable="examinationForm.$visible"></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.uro_gyneco }}" class="panel-primary panel-sphere" ng-show="examinationSettings.uro_gyneco" is-open="accordionOpenState.uro_gyneco">
                     <div hallo-editor ng-model="model.uro_gyneco"
-                            placeholder="'{{ examination.uro_gyneco }}'" is-editable="editableForm.$visible"></div>
+                            placeholder="'{{ examination.uro_gyneco }}'" is-editable="examinationForm.$visible"></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.periphery }}" class="panel-primary panel-sphere" ng-show="examinationSettings.periphery" is-open="accordionOpenState.periphery">
                     <div  hallo-editor ng-model="model.periphery"
-                            placeholder="'{{ examination.periphery }}'" is-editable="editableForm.$visible"
+                            placeholder="'{{ examination.periphery }}'" is-editable="examinationForm.$visible"
                     ></div>
                 </div>
 
                 <div uib-accordion-group heading="{{ examination.general_state }}" class="panel-primary panel-sphere" ng-show="examinationSettings.general_state" is-open="accordionOpenState.general_state">
                     <div hallo-editor ng-model="model.general_state"
-                            placeholder="'{{ examination.general_state }}'" is-editable="editableForm.$visible"></div>
+                            placeholder="'{{ examination.general_state }}'" is-editable="examinationForm.$visible"></div>
                 </div>
 
             </div>
@@ -179,7 +179,7 @@
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <div hallo-editor ng-model="model.diagnosis"
-                            placeholder="'{{ examination.diagnosis }}'" is-editable="editableForm.$visible"></div>
+                            placeholder="'{{ examination.diagnosis }}'" is-editable="examinationForm.$visible"></div>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
                     {{ examination.treatments }}
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
-                    <div hallo-editor ng-model="model.treatments" placeholder="'{{ examination.treatments }}'" is-editable="editableForm.$visible"></div>
+                    <div hallo-editor ng-model="model.treatments" placeholder="'{{ examination.treatments }}'" is-editable="examinationForm.$visible"></div>
                 </div>
             </div>
         </div>
@@ -205,7 +205,7 @@
                     {{ examination.conclusion }}
                 </div>
                 <div class="panel-body row">
-                    <div hallo-editor ng-model="model.conclusion" placeholder="'{{ examination.conclusion }}'" is-editable="editableForm.$visible"></div>
+                    <div hallo-editor ng-model="model.conclusion" placeholder="'{{ examination.conclusion }}'" is-editable="examinationForm.$visible"></div>
                 </div>
             </div>
         </div>

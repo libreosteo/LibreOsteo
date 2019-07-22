@@ -210,7 +210,8 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
               $scope.edit();
             }
           });
-            $scope.$watch('editableForm.$visible', function(newValue, oldValue)
+            // $visible means this form is in edit mode
+            $scope.$watch('examinationForm.$visible', function(newValue, oldValue)
             {
                 if(oldValue === false && newValue === true)
                 {
@@ -232,12 +233,14 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
 	    });
 
             $scope.edit = function() {
-                $scope.editableForm.$show();
+                $scope.form.partialPatientForm.$show();
+                $scope.examinationForm.$show();
             };
 
             $scope.save = function()
             {
-                $scope.editableForm.$save();
+                $scope.examinationForm.$save();
+                $scope.form.partialPatientForm.$save();
             };
 
             $scope.saveAndClose = function()
@@ -254,28 +257,18 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
             $timeout(function () {
                 //DOM has finished rendering
                 if($scope.newExamination){
-                    $scope.editableForm.$show();
-                    $scope.form.partialPatientForm.$show();
+                    $scope.edit();
                 }
             });
-
             // Patient
             $scope.lateralities = PatientServ.lateralities;
 
-            // No need to handle buttons with partialPatientForm ; editableForm
+            // No need to handle buttons with partialPatientForm ; examinationForm
             // controls it.
             $scope.triggerEditFormPatient = initWithKeys(
                 ['save', 'edit', 'cancel', 'delete'],
                 false
             );
-
-            $scope.editPatient = function() {
-                $scope.form.partialPatientForm.$show();
-            };
-
-            $scope.saveEditPatient = function() {
-                $scope.form.partialPatientForm.$save();
-            };
         }],
 
         templateUrl: 'web-view/partials/examination'

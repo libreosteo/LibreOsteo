@@ -59,7 +59,7 @@ Check That All Is Deleted
   RequestsLogger.Write log       ${resp}
   ${length} =         Get Length           ${resp.json()}
   Should Be Equal As Integers       ${length}     1
-  ${resp} =           Get Request   restapi     /api/patient-document?patient=1
+  ${resp} =           Get Request   restapi     /api/patient-documents?patient=1
   RequestsLogger.Write log       ${resp}
   ${length} =         Get Length    ${resp.json()}
   Should Be Equal As Integers       ${length}     0

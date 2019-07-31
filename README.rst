@@ -37,7 +37,6 @@ Requirements :
   - yarn
   - virtualenv
   - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
-  - bower
   - if on linux system, you need linux-headers package. On debian and derivated uses ::
 
     sudo apt install linux-headers-$(uname -r)

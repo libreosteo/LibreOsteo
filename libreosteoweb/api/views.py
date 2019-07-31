@@ -22,7 +22,7 @@ import tempfile
 import zipfile
 
 from rest_framework import pagination, viewsets, status
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError,PermissionDenied,ParseError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -160,7 +160,7 @@ class PatientViewSet(viewsets.ModelViewSet):
     queryset = models.Patient.objects.all()
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [PatientCSVRenderer, ]
 
-    @detail_route(methods=['GET'])
+    @action(detail=True, methods=['get'])
     def examinations(self, request, pk=None):
         current_patient = self.get_object()
         examinations = models.Examination.objects.filter(patient=current_patient).order_by('-date')
@@ -204,7 +204,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.ExaminationSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [ExaminationCSVRenderer, ]
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['post'])
     def invoice(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
@@ -236,7 +236,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-    @detail_route(methods=['POST'])
+    @action(detail=True, methods=['post'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(data=request.data)
@@ -270,13 +270,13 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         models.OfficeEvent.objects.filter(reference=instance.id, clazz=models.Examination.__name__).delete()
         return super(ExaminationViewSet, self).perform_destroy(instance)
 
-    @detail_route(methods=['GET'])
+    @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
         current_examination = self.get_object()
         comments = models.ExaminationComment.objects.filter(examination=current_examination).order_by('-date')
         return Response(apiserializers.ExaminationCommentSerializer(comments, many=True).data)
 
-    @list_route(methods=['GET'])
+    @action(detail=False, methods=['get'])
     def unpaid(self, request, pk=None):
         unpaid_examinations = models.Examination.objects.filter(status=models.ExaminationStatus.WAITING_FOR_PAIEMENT).order_by('-date')
         return Response(apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data)
@@ -293,7 +293,7 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.UserOfficeSerializer
     permission_classes = [IsStaffOrReadOnlyTargetUser]
 
-    @detail_route(methods=['post'])
+    @action(detail=True, methods=['post'])
     def set_password(self, request, pk=None):
         user = self.get_object()
         serializer = apiserializers.PasswordSerializer(data=request.data)
@@ -338,7 +338,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(therapeut_id=therapeut_id)
         return queryset
 
-    @detail_route(methods=["post"])
+    @action(detail=True, methods=["post"])
     def cancel(self, request, pk=None):
         # Ensure that invoice was not canceled before
         if self.get_object().status != models.InvoiceStatus.CANCELED :
@@ -407,7 +407,7 @@ class TherapeutSettingsViewSet(viewsets.ModelViewSet):
     permission_classes = [IsStaffOrTargetUserFactory.additional_methods(['get_by_user'])]
     queryset = models.TherapeutSettings.objects.all()
 
-    @list_route()
+    @action(detail=False)
     def get_by_user(self, request):
         therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
             user=self.request.user)
@@ -470,7 +470,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
         instance.save()
 
 
-    @detail_route(methods=['POST','GET'])
+    @action(detail=True, methods=['post','get'])
     def integrate(self, request, pk=None):
         file_import_couple = self.get_object()
         integrator = IntegratorHandler()
@@ -520,6 +520,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
 class PatientDocumentViewSet(viewsets.ModelViewSet):
     model = models.PatientDocument
     serializer_class = apiserializers.PatientDocumentSerializer
+    filter_fields = ['patient']
 
     def get_queryset(self):
         try :

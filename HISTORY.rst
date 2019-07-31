@@ -2,10 +2,18 @@ Changelog for Libreosteo
 ========================
 
 
-0.5.8 (unreleased)
+0.6.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Reorganize the home page to be more smart
+- Add support for managing documents on patient folder
+- Add support to enable/disable some paiment means
+- Add support to cancel invoices
+- Add support to display all invoices for accountability purpose
+- Add support to delete a patient in accordance with GDPR conformity
+- Remove the bower dependency and use yarn
+- Add support to continuous integration with travis, and some testing from UI with robot framework
+- Add support for python 3.X and python 2.X for the software
 
 
 0.5.7 (2017-06-04)

@@ -91,7 +91,7 @@ def maintenance_available():
                     return func
             else :
                 return HttpResponseForbidden
-        except OperationalError :
+        except :
             return HttpResponseForbidden
     return _decorator
 

@@ -27,7 +27,7 @@ from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 try:
     import ConfigParser
-except ModuleNotFoundError:
+except:
     import configparser as ConfigParser
 
 # For modulegraph import auto detect

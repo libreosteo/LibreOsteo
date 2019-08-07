@@ -57,7 +57,7 @@ editFormManager.factory('loEditFormManager', function() {
         }
       });
       var idx_form = forms.indexOf(form);
-      if (trigger) 
+      if (trigger)
         triggers_form[idx_form] = trigger;
     },
     isavailable: function() {
@@ -185,7 +185,7 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
 
       $scope.lostFocusMgr = function()
       {
-        // When the component changes from isavailable true to isavailable false, and 
+        // When the component changes from isavailable true to isavailable false, and
         // in edit mode, then call save action if flag is saveOnLostFocus is true
         if ($scope.saveOnLostFocus)
         {

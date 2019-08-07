@@ -282,7 +282,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
        $scope.$watch('patient.id', function(newValue, oldValue)
             {
                 $scope.updateDeleteTrigger();
-
+              loEditFormManager.available = true;
             });
 
        $scope.updateDeleteTrigger = function() {
@@ -546,7 +546,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                   }
                 });
                 modalInstance.result.then(function (){
-                  deleteFunction(true); 
+                  deleteFunction(true);
                 });
               } else {
                 deleteFunction();
@@ -554,7 +554,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             });
           }
         }
-          
+
         $scope.triggerEditFormHistory = {
             save: false,
             edit: true,
@@ -708,7 +708,7 @@ var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk)
     };
 
     $scope.isOk = defaultIsOk;
-  
+
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };

@@ -14,7 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-from io import BytesIO,StringIO
+import sys
+if sys.version_info.major == 2:
+    from io import BytesIO
+    from io import BytesIO as StringIO
+else :
+    from io import BytesIO,StringIO
 from datetime import datetime
 import logging
 import os

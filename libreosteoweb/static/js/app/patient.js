@@ -260,7 +260,7 @@ patient.filter('format_age', function () {
 
        $scope.examinationsTab = {
         //Is the tab for new examination is displayed ?
-        newExaminationDisplayTab : false,
+        newExaminationDisplay : false,
        };
 
        $scope.$watch('patient.id', function(newValue, oldValue)

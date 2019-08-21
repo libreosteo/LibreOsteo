@@ -23,6 +23,30 @@ function Callback(name, callback) {
   this.callback = callback;
 }
 
+/** Describes an action on one form
+ *
+ * includes triggers, element (form) and callbacks.
+ *
+ * @param form: the DOM element (with edit-form-control attr)
+ * @param name: the action name (among: edit, save, delete, cancel)
+ * @param callbackFunction: the function to be called when the coresponding
+ * button is clicked.
+ *
+ */
+function FormAction(form, name, callbackFunction, trigger) {
+  this.form = form;
+  this.name = name;
+  this.callbackFunction = callbackFunction;
+  this.trigger = trigger;
+}
+FormAction.prototype.isAvailable = function() {
+  return this.form.is(':visible') && this.trigger[this.name];
+};
+
+FormAction.prototype.run = function() {
+  this.callbackFunction();
+}
+
 /** A generic modal form controller
  *
  * Modal because two modes : read/write, togglable with a button.
@@ -32,116 +56,38 @@ function Callback(name, callback) {
  * controlled forms models: reset and delete.
  */
 editFormManager.factory('loEditFormManager', function() {
-  var forms = [];
-  var actions = ['edit', 'cancel', 'save', 'delete'];
-  var callback_form = [];
-  var triggers_form = [];
+  // This var is global to all loEditFormManager instances
+  let formActions =  [];
+
   return {
-    add: function(form, action_list, trigger) {
-      if (forms.indexOf(form) === -1) {
-        forms.push(form);
-      }
-      angular.forEach(action_list, function(action, key) {
-        if (action && actions.indexOf(action.name) != -1) {
-          var idx_form = forms.indexOf(form);
-          var should_add = true;
-          var callbacks = null;
-          angular.forEach(callback_form, function(value, key) {
-            if (value.id == idx_form) {
-              should_add = false;
-              callbacks = value.callbacks;
-            }
-          });
-          if (should_add) {
-            callback_form.push({
-              id: forms.indexOf(form),
-              callbacks: [action]
-            });
-          } else {
-            callbacks.push(action);
-          }
-        }
-      });
-      var idx_form = forms.indexOf(form);
-      if (trigger)
-        triggers_form[idx_form] = trigger;
-    },
-
-    /** Should we show the modal-related button group
+    /**
+        @param form the DOM element (with edit-form-control attr)
+        @param action_list Callback[]
+        @param trigger trigger object (ex: {save: true, edit: false, delete: false, cancel: false})
      */
-    isAvailable: function() {
-      this.available = this._visibleCtrls().length > 0;
-      return this.available;
-    },
-    available: false,
-
-    action_has_callbacks: function(name_action) {
-      return this.action_callbacks(name_action).length > 0;
+    add: function(form, action_list, trigger) {
+      if (formActions.find(x => x.form == form)) {
+        console.error('Trying to register already registered form, that is not normal');
+        return;
+      }
+      action_list.forEach(
+        x => formActions.push(new FormAction(form, x.name, x.callback, trigger))
+      );
+      console.warn(`FIXME: Memory leak ; now storing ${formActions.length} actions`);
     },
     action_available: function(name_action) {
-      return this.action_has_callbacks(name_action) && this.action_is_enabled(name_action);
-    },
-
-    /** Returns a list of callbacks for a given action name
-
-     Each form may or may not expose a callback; callback will be returned if
-     the form is currently visible.
-
-     * @param{string} name_action - edit/save/delete/cancel
-     * @return{CallBack[]}
-     */
-    action_callbacks: function(name_action) {
-      this._visibleCtrls().forEach(function(form_element) {
-        var form_idx = forms.indexOf(form_element);
-        return callback_form.find(function(callback) {
-          return callback.name == name_action;
-        });
-
-      });
-
-      var form_idx_list = this._visibleCtrls().map(function(el) {
-        return forms.indexOf(el);
-      });
-
-      var visible_forms = callback_form.filter(function(form) {
-        return form_idx_list.includes(form.id);
-      });
-
-      return visible_forms.map(function(form) {
-        return form.callbacks.find(function(callback) {
-          return callback.name == name_action;
-        });
-      }).filter(function(i) {return i !== undefined});
-    },
-
-    /** Is that action currently enabled at controller-level ?
-     *
-     * Based on controller scope attributes.
-     */
-    action_is_enabled: function(name_action) {
-      var trigger = false;  // by default, dont show
-
-      this._visibleCtrls().forEach(function(form_element){
-        var form_idx = forms.indexOf(form_element);
-        var form_triggers = triggers_form[form_idx];
-        trigger = trigger || form_triggers[name_action];
-      });
-
-      return trigger;
+      let matchingAction = formActions.find(
+        x => x.name === name_action && x.isAvailable()
+      );
+      return matchingAction != undefined;
     },
     call_action: function(name) {
-      angular.forEach(this.action_callbacks(name), function(callback) {
-        callback.callback();
-      });
-    },
-    _visibleCtrls: function() {
-      /** Return the visible forms
-       */
-      return forms.filter(function(el) {
-        return $(el).is(':visible');
-      });
+      let actionsToRun = formActions.filter(
+        x => x.name == name && x.isAvailable()
+      );
+      actionsToRun.forEach(x => x.run());
     }
-  };
+  }
 });
 
 editFormManager.directive('editFormControl', ['$timeout', function($timeout) {

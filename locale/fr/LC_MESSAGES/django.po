@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-07 18:35+0200\n"
-"PO-Revision-Date: 2019-05-07 18:36+0200\n"
+"POT-Creation-Date: 2019-10-09 21:46+0200\n"
+"PO-Revision-Date: 2019-10-09 21:47+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -78,6 +78,9 @@ msgstr ""
 
 msgid "Check information is missing"
 msgstr "Les informations de chèque sont manquantes"
+
+msgid "Not paid"
+msgstr "Non réglée"
 
 msgid "This archive file seems to be incorrect. Impossible to load it."
 msgstr "Ce fichier d'archive semble être incorrect. Impossible de le charger."
@@ -306,6 +309,9 @@ msgstr "Texte"
 
 msgid "Enabled"
 msgstr "Activé"
+
+msgid "Invoices"
+msgstr "Factures"
 
 msgid "Class"
 msgstr "Classe"
@@ -571,14 +577,14 @@ msgstr "Imprimer"
 msgid "To invoice"
 msgstr "Facturer"
 
+msgid "Regularize"
+msgstr "Régulariser"
+
 msgid "Unfold"
 msgstr "Déplier"
 
 msgid "Draft"
 msgstr "Brouillon"
-
-msgid "Not paid"
-msgstr "Non réglée"
 
 msgid "Paid"
 msgstr "Réglée"
@@ -781,8 +787,8 @@ msgstr "Par"
 msgid "Actions"
 msgstr "Actions"
 
-msgid "n/a"
-msgstr "n/a"
+msgid "multiple"
+msgstr "multiple"
 
 msgid "Invoicing"
 msgstr "Facturation"
@@ -949,3 +955,6 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+#~ msgid "n/a"
+#~ msgstr "n/a"

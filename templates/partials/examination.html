@@ -40,9 +40,12 @@
                     <span ng-if="model.invoice_number == null && model.status < 3">
                       <button type="button" id="invoiceExaminationBtn" class="btn btn-success btn-xs" ng-click="invoiceExamination(model)" title="{% trans 'To invoice' %}"><i class="fa fa-euro"></i> {% trans 'To invoice' %}</button>
                     </span>
+                    <span ng-if="model.invoice_number != null && model.status < 2">
+                      <button type="button" id="finishPaimentBtn" class="btn btn-success btn-xs" ng-click="finishPaiement(model)" title="{% trans 'Regularize'%}"><i class="fa fa-euro"></i> {% trans 'Regularize' %}</button>
+                    </span>
                     <span ng-if="model.invoices_list.length > 0">
-                      <button type="button" id="unfold_invoices" class="pull-right btn btn-xs" 
-                        data-toggle="collapse" href="#collapseInvoices" role="button" 
+                      <button type="button" id="unfold_invoices" class="pull-right btn btn-xs"
+                        data-toggle="collapse" href="#collapseInvoices" role="button"
                         aria-expanded="false" aria-controls="collapseInvoices">
                         <i class="fa fa-angle-double-down"></i>
                       </button>

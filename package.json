@@ -14,14 +14,11 @@
   "scripts": {
     "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@components'), 'libreosteoweb/static/components', 'junction') } catch (e) { }\"",
     "prestart": "npm install",
-
     "pretest": "npm install",
     "test": "karma start test/karma.conf.js",
     "test-single-run": "karma start test/karma.conf.js  --single-run",
-
     "preupdate-webdriver": "npm install",
     "update-webdriver": "webdriver-manager update",
-
     "preprotractor": "npm run update-webdriver",
     "protractor": "protractor test/protractor-conf.js",
 

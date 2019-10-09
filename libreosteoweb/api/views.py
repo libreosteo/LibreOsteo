@@ -15,6 +15,7 @@
 from __future__ import unicode_literals
 from io import BytesIO, StringIO
 from datetime import datetime
+from django.utils import timezone
 import logging
 import os
 import tempfile
@@ -153,9 +154,17 @@ class InvoiceViewHtml(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
         context['invoice'] = models.Invoice.objects.get(pk=kwargs['invoiceid'])
-        context['paiment_mean'] = _(
-            models.PaimentMean.objects.get(
-                code=context['invoice'].paiment_mode).text).lower()
+        if context['invoice'].paiment_mode != 'notpaid':
+            context['paiment_mean'] = _(
+                models.PaimentMean.objects.get(
+                    code=context['invoice'].paiment_mode).text).lower()
+        else:
+            context['paiment_mean'] = _('Not paid')
+        context['paiments'] = [p for p in context['invoice'].paiment_set.all()]
+        for p in context['paiments']:
+            p.paiment_mode = _(
+                models.PaimentMean.objects.get(
+                    code=p.paiment_mode).text).lower()
         return context
 
 
@@ -240,7 +249,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 current_examination.invoices.add(current_invoice)
                 if invoicing_serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
-                    current_examination.invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
+                    current_invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
                     current_invoice.save()
                     current_examination.save()
                 if invoicing_serializer.data['paiment_mode'] in [
@@ -257,6 +266,36 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['post'])
+    def update_paiement(self, request, pk=None):
+        current_examination = self.get_object()
+        serializer = apiserializers.ExaminationInvoicingSerializer(
+            data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if serializer.data[
+                'status'] != 'invoiced' or current_examination.last_invoice is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if serializer.data['paiment_mode'] == 'notpaid':
+            return Response({'not modified' : current_examination.last_invoice.id})
+        if current_examination.last_invoice.status != models.InvoiceStatus.WAITING_FOR_PAIEMENT:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        current_examination.status = models.ExaminationStatus.INVOICED_PAID
+        invoice_to_update = models.Invoice.objects.get(
+            id=current_examination.last_invoice.id)
+        invoice_to_update.status = models.InvoiceStatus.INVOICED_PAID
+        officesettings = models.OfficeSettings.objects.all()[0]
+        p = models.Paiment(amount=serializer.data['amount'],
+                           currency=officesettings.currency,
+                           date=timezone.now(),
+                           paiment_mode=serializer.data['paiment_mode'])
+        p.save()
+        p.invoice.add(current_examination.last_invoice)
+        p.save()
+        invoice_to_update.save()
+        current_examination.save()
+        return Response({'invoiced': current_examination.last_invoice.id})
+
+    @action(detail=True, methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(

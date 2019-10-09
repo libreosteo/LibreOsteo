@@ -63,15 +63,22 @@
 			{% localize on %}
 			<p>{{ invoice.content_invoice | templatize:invoice | linebreaksbr }}</p>
 			{% endlocalize %}
-			{% if invoice.paiment_mode != 'not_paid'  %}
+			{% if invoice.paiment_mode != 'notpaid'  %}
 			<p>Règlement par {{paiment_mean}}</p>
 			{% else %}
-			<p>Non réglé en date de facture</p>
+			<p>Non réglée en date de facture</p>
 			{% endif %}
 
 			<table class="fees">
 				<tr><td>HONORAIRES</td><td>{{invoice.amount|floatformat:2 }} {{invoice.currency}}</td></tr>
 			</table>
+      {% if paiments|length > 0 %}
+      <table class="paiments">
+        {% for p in paiments %}
+          <tr><td>{{p.amount|floatformat:2}} {{p.currency}} Réglé(s) le {{p.date | date:"d F Y"}} par {{p.paiment_mode}}</td></tr>
+        {% endfor %}
+      </table>
+      {% endif %}
 		</div>
 
 		<div id="footer">

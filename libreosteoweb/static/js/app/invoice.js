@@ -175,7 +175,7 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
             getInvoices();
           });
         });
-      }
+      };
     }
 ]);
 
@@ -186,7 +186,7 @@ var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk)
     };
 
     $scope.isOk = defaultIsOk;
-  
+
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };

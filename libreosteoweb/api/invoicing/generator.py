@@ -70,7 +70,7 @@ class Generator(object):
             invoice_number = _unicode(10000)
             self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
         return invoice_number
-    
+
     def cancel_invoice(self, invoice) :
         credit_note = models.Invoice()
         credit_note.amount = -1 * invoice.amount
@@ -100,6 +100,6 @@ class Generator(object):
         credit_note.footer = invoice.footer
         credit_note.date = datetime.today()
         credit_note.type = 'creditnote' if credit_note.amount < 0 else 'invoice'
-        credit_note.number = self.get_invoice_number() 
+        credit_note.number = self.get_invoice_number()
         credit_note.status = models.InvoiceStatus.INVOICED_PAID
         return credit_note

@@ -26,14 +26,14 @@
         <div class="form-group">
             <label class="sr-only" for="amount">{% trans 'Amount' %}</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="amount" readonly="invoicing.status == 'notpaid'" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
+                <input type="text" class="form-control" id="amount" ng-readonly="examinationToInvoice.invoice_number != null && invoicing.status == 'invoiced'" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
                 <div class="input-group-addon">€</div>
             </div>
         </div>
         <div class="radio" ng-repeat="paiment_mean in paimentmeans">
             <label>
 		    <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="{$ paiment_mean.code $}" ui-validate=" 'validatePaimentMode($value)' ">
-		    {$ paiment_mean.text | translate $} 
+		    {$ paiment_mean.text | translate $}
             </label>
         </div>
         <div class="radio">

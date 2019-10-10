@@ -163,7 +163,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }, medicalReportsDoc);
       $scope.patient.medicalReportsDoc = medicalReportsDoc;
     };
-});
 
     $scope.patient = PatientServ.get({
       patientId: $stateParams.patientId
@@ -343,15 +342,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     };
 
-                if($scope.patient.id != null)
-                {
-                  $scope.triggerEditFormPatient.delete = true;
-                } else {
-                  $scope.triggerEditFormPatient.delete = false;
-                }
-            };
-
-
     $scope.startExamination = function() {
       $scope.currentExaminationManager();
 
@@ -440,10 +430,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           $scope.previousExamination.data = data;
         });
     };
-
-              $scope.close(examination, invoicing);
-           });
-        };
 
     $scope.close = function(examination, invoicing) {
 
@@ -630,26 +616,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           } else {
             deleteFunction();
           }
-        }
-          
-        $scope.triggerEditFormHistory = {
-            save: false,
-            edit: true,
-            cancel: null,
-            delete: false,
-        };
-
-        $scope.$watch('form.historyForm.$visible', function(newValue, oldValue)
-        {
-            if(oldValue === false && newValue === true)
-            {
-                $scope.triggerEditFormHistory.edit = false;
-                $scope.triggerEditFormHistory.save = true;
-            } else if(oldValue === true && newValue === false )
-            {
-                $scope.triggerEditFormHistory.edit = true;
-                $scope.triggerEditFormHistory.save = false;
-            }
         });
       }
     }
@@ -819,14 +785,15 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     },
   };
   $scope.examinationToInvoice = examination;
-  OfficeSettingsServ.get(function(settings) {
-    $scope.officesettings = settings[0];
-    $scope.invoicing.amount = $scope.officesettings.amount;
-  });
 
   if ($scope.examinationToInvoice != null && $scope.examinationToInvoice.last_invoice != null) {
     $scope.invoicing.status = 'invoiced';
     $scope.invoicing.amount = $scope.examinationToInvoice.last_invoice.amount;
+  } else {
+    OfficeSettingsServ.get(function(settings) {
+      $scope.officesettings = settings[0];
+      $scope.invoicing.amount = $scope.officesettings.amount;
+    });
   }
 
   OfficePaimentMeansServ.query(function(paimentmeans) {

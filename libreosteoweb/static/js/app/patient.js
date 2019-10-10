@@ -787,14 +787,14 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     },
   };
   $scope.examinationToInvoice = examination;
-  OfficeSettingsServ.get(function(settings) {
-    $scope.officesettings = settings[0];
-    $scope.invoicing.amount = $scope.officesettings.amount;
-  });
-
   if ($scope.examinationToInvoice != null && $scope.examinationToInvoice.last_invoice != null) {
     $scope.invoicing.status = 'invoiced';
     $scope.invoicing.amount = $scope.examinationToInvoice.last_invoice.amount;
+  } else {
+    OfficeSettingsServ.get(function(settings) {
+      $scope.officesettings = settings[0];
+      $scope.invoicing.amount = $scope.officesettings.amount;
+    });
   }
 
   OfficePaimentMeansServ.query(function(paimentmeans) {

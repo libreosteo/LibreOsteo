@@ -26,7 +26,7 @@
         <div class="form-group">
             <label class="sr-only" for="amount">{% trans 'Amount' %}</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="amount" readonly="invoicing.status == 'notpaid'" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
+                <input type="text" class="form-control" id="amount" ng-readonly="examinationToInvoice.invoice_number != null && invoicing.status == 'invoiced'" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
                 <div class="input-group-addon">€</div>
             </div>
         </div>

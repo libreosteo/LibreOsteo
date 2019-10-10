@@ -14,7 +14,7 @@ It manages patients, folder and runs as a work portal on a folder patient.
 
 Browser supported :
   - Google Chrome or Chromium
-  - Firefox 
+  - Firefox
 
 Please use the last version of these browsers.
 
@@ -31,26 +31,21 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 2.7+ or Python 3.3+ (if you have no opinion, 2.7+ is the recommended choice for now)
-  - pip 
+  - Python 3.5+ (if you have no opinion, 3.6+ is the recommended choice for now)
+  - pip
   - nodejs
-  - ~bower~ yarn
+  - yarn
   - virtualenv
   - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
-  - bower
   - if on linux system, you need linux-headers package. On debian and derivated uses ::
-  
+
     sudo apt install linux-headers-$(uname -r)
 
 .. _nodesource packages: https://github.com/nodesource/distributions#debinstall
 
 Install system dependencies, for example, on Debian-like sytem, that would **one of** those two lines:
 
-Python 2.x ::
-
-    sudo apt install python-pip python-virtualenv nodejs
-
-Python 3.x ::
+Python 3.5+ ::
 
     sudo apt install python3-pip virtualenv nodejs
 
@@ -64,22 +59,13 @@ Enter the cloned folder ::
 
 Create a virtualenv with **one of those** two commands.
 
-Python 2 ::
-
-    virtualenv venv
-    
-
 Python 3 ::
-    
+
     virtualenv --python /usr/bin/python3 venv
 
 (at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
 
 Then retrieve the python requirements with **one of those**.
-
-Python 2 ::
-
-    pip install -r requirements/requ-py2.txt
 
 Python 3 ::
 
@@ -92,7 +78,7 @@ Install Javascript dependencies ::
 Initialize the database ::
 
     python manage.py migrate
-    
+
 Now you can start the server with ::
 
     python manage.py runserver
@@ -102,7 +88,7 @@ Point your browser on : http://localhost:8000/ it will guide you towards creatin
 Have fun !
 
 
-Use it in production 
+Use it in production
 ====================
 You can use the software in production by changing some settings.
 
@@ -113,7 +99,7 @@ Settings are in the folder
 
 There are some settings in this folder, the base_ settings is the main settings. All settings should
 use this base settings as reference.
-You can define your own base settings, but advice is to use standalone_ setting, and add a local.py file in this 
+You can define your own base settings, but advice is to use standalone_ setting, and add a local.py file in this
 folder to define your own customization.
 
 Setting to avoid debug trace
@@ -125,7 +111,7 @@ Setting to avoid debug trace
 
 Setting for Database
 --------------------
-   
+
 For example, to define postgresql as database backend instead of sqlite3 (the default), you can use this definition.
 ::
 
@@ -143,7 +129,7 @@ For example, to define postgresql as database backend instead of sqlite3 (the de
 You have to adapt your value with your installation, and configuration of the database used.
 But you can use other database backend, there is no specificity used in the software linked to the implementation of the database.
 
-Setting for Cryptograhic key for CSRF_ 
+Setting for Cryptograhic key for CSRF_
 --------------------------------------
 In order to have protection against CSRF_, you have to override and change the value of SECRET_KEY, with a value computed by `this script for example`_
 like this :
@@ -161,7 +147,7 @@ In order to have a compliant solution to serve libreosteo, you can use Apache HT
 are not provided at this step, but you can inspire you with this `article <https://www.thecodeship.com/deployment/deploy-django-apache-virtualenv-and-mod_wsgi/>`_ or
 this other `one <https://docs.nginx.com/nginx/admin-guide/web-server/app-gateway-uwsgi-django/>`_
 
-With the software, a basic solution is provided with CherryPy_ which provides the ability to have Http server and WSGI implementation. 
+With the software, a basic solution is provided with CherryPy_ which provides the ability to have Http server and WSGI implementation.
 Use the following script to start the server already configured to start as is.
 You can encapsulate the call to this script into your boot manager. This script listen on all interfaces of the host to provide the web application.
 The default configured port to provide the application is 8085.
@@ -198,6 +184,6 @@ The libreosteo team consist of:
 .. _github : https://github.com/jbgury
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
-.. _jocelynDelalande: https://github.com/JocelynDelalande 
+.. _jocelynDelalande: https://github.com/JocelynDelalande
 .. _pull requests: https://github.com/libreosteo/Libreosteo/pulls
 .. _CONTRIBUTING.md: CONTRIBUTING.md

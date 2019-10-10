@@ -19,18 +19,18 @@ Django side
 -----------
 
 We are using
-[standard Django gettext-based stuff](https://docs.djangoproject.com/en/2.0/topics/i18n/translation/). 
+[standard Django gettext-based stuff](https://docs.djangoproject.com/en/2.0/topics/i18n/translation/).
 In a nutshell:
 
 1. Wrap your string with gettext markers:
   - `_('my string')` in *.py* files
   - `{% trans 'my string' %}` in *.html* files
-  
+
 2. Collect new marked strings for translations into *django.po*:
 ```
 ./manage.py makemessages --no-location
 ```
-3. Translate new strings by editing *django.po* 
+3. Translate new strings by editing *django.po*
 4. Compile them to `.mo files`. with:
 ```
 ./manage.py compilemessages
@@ -52,7 +52,7 @@ Django
 ```
 ./manage.py makemessages --no-location -d djangojs
 ```
-3. Translate new strings by editing *djangojs.po* 
+3. Translate new strings by editing *djangojs.po*
 4. Compile them to `.mo files`. with:
 ```
 ./manage.py compilemessages
@@ -64,7 +64,7 @@ Please **do commit** your updated `.mo`.
 Testing
 =======
 
-Testing is a full subject. There is lot of lack into the project to covert all the code. But some actions are in progress to raise the coverage. 
+Testing is a full subject. There is lot of lack into the project to covert all the code. But some actions are in progress to raise the coverage.
 When developing a new functionality, the requirement is to add some tests (unit tests is mandatory), but also Functional Tests to demonstrate the functionality.
 Even if first functionalities were not developed with a lack of tests, nothing is to late to change it !
 
@@ -89,7 +89,7 @@ pip install -r requirements/requ-testing.txt
 
 1. Ensure you have Firefox with French support language. You can download it with an url like https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64
 
-2. Download and install geckodriver into your PATH: 
+2. Download and install geckodriver into your PATH:
 ```
 wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
 tar -xvf /tmp/geckodriver.tar.gz

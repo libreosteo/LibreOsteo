@@ -8,6 +8,7 @@ db.sqlite3
 libreosteoweb/static/bower_components/
 /static/
 /media/
+/node_modules/
 
 # Indexes
 whoosh_index/
@@ -31,3 +32,10 @@ venv/
 # log files
 *.log
 Libreosteo/settings/local.py*
+
+# Tests / tooling artefacts
+selenium-screenshot-*.png
+yarn.lock
+output.xml
+/log.html
+/report.html

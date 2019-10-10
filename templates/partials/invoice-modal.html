@@ -4,13 +4,13 @@
 </div>
 <form novalidate name="form">
 <div class="modal-body">
-    <div class="radio">
+    <div class="radio" ng-if="examinationToInvoice.invoice_number == null">
         <label>
             <input type="radio" ng-model="invoicing.status" name="status" value="notinvoiced" ui-validate=" 'validateStatus($value)' ">
             {% trans 'Not invoiced' %}
         </label>
     </div>
-    <div class="radio">
+    <div class="radio" ng-if="examinationToInvoice.invoice_number == null">
         <label>
             <input type="radio" ng-model="invoicing.status" name="status" value="invoiced">
             {% trans 'Invoiced' %}
@@ -26,7 +26,7 @@
         <div class="form-group">
             <label class="sr-only" for="amount">{% trans 'Amount' %}</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="amount" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
+                <input type="text" class="form-control" id="amount" readonly="invoicing.status == 'notpaid'" ng-model="invoicing.amount" placeholder="{%trans 'Amount' %}" ui-validate=" 'validateAmount($value)' ">
                 <div class="input-group-addon">€</div>
             </div>
         </div>
@@ -35,6 +35,11 @@
 		    <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="{$ paiment_mean.code $}" ui-validate=" 'validatePaimentMode($value)' ">
 		    {$ paiment_mean.text | translate $} 
             </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="notpaid">{% trans 'Not paid' %}
+          </label>
         </div>
         <!--div ng-if="invoicing.paiment_mode == 'check'">
             <div class="form-group">

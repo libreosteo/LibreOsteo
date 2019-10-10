@@ -49,8 +49,10 @@
             <td>{$ invoice.patient_first_name $} {$ invoice.patient_family_name $}</td>
             <td>{$ invoice.amount $} €</td>
 
-            <td ng-if="invoice.paiment_mode == null">{% trans 'n/a' %}</td>
-	    <td ng-if="invoice.paiment_mode != null">{$ invoice.paiment_mode_text | translate $}</td>
+            <td ng-if="invoice.paiment_mode == null || (invoice.paiment_mode == 'notpaid' && invoice.paiments_list.length === 0)"></td>
+      	    <td ng-if="invoice.paiment_mode != 'notpaid'">{$ invoice.paiment_mode_text | translate $}</td>
+            <td ng-if="invoice.paiments_list.length === 1">{$ invoice.paiments_list[0].paiment_mode_text | translate $}</td>
+            <td ng-if="invoice.paiments_list.length > 1">{% trans 'multiple' %}</td>
 
             <td>
                 <span class="label label-default" ng-if="invoice.status === null || invoice.status === 0">{% trans  'Draft' %}</span>
@@ -68,6 +70,7 @@
                     <ul class="dropdown-menu">
                       <li><a href="/invoice/{$ invoice.id $}" target="_blank">{% trans 'Print' %}</a></li>
                       <li ng-if="invoice.status != 3"><a ng-click="cancelInvoice(invoice)">{% trans 'Cancel' %}</a></li>
+                      <!--li ng-if="invoice.status === 1"><a ng-click="updatePaiment(invoice)">{% trans 'Regularize' %}</a></li-->
                     </ul>
                 </div>
             </td>

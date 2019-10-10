@@ -299,13 +299,13 @@
     <examination model="previousExamination.data" ng-if="previousExamination.data != null" ng-animate="displayExamination"
     save-model="saveExamination(previousExamination.data)"
     new-examination="false"
-    close="invoiceExamination(previousExamination.data)" on-delete='examinationDeleted(previousExamination.data)'/>
+    close="invoiceExamination(previousExamination.data, close)" on-delete='examinationDeleted(previousExamination.data)' close-handle="invoiceExamination" reload-examinations="reloadExaminations"/>
     <timeline archive-examination="previousExamination" examinations="examinations" start-examination="startExamination()" examination-is-active="examinationsTab.newExaminationDisplay" ng-if="previousExamination.data == null"
     current-examination="newExamination"
     current-examination-manager="currentExaminationManager()"/>
 </uib-tab>
 
 <uib-tab id="current-examination" heading="{% trans 'Current Examination' %}" ng-show="examinationsTab.newExaminationDisplay" active="examinationsTab.newExaminationActive" index="6">
-    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination)" new-examination="newExamination.id == null" on-delete='examinationDeleted(newExamination)'/>
+    <examination model="newExamination" save-model="saveExamination()" close="invoiceExamination(newExamination, close)" new-examination="newExamination.id == null" on-delete='examinationDeleted(newExamination)' close-handle="invoiceExamination" reload-examinations="reloadExaminations"/>
 </uib-tab>
 </uib-tabset>

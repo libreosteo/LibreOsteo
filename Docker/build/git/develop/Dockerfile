@@ -29,14 +29,14 @@ RUN git clone -b $BRANCH https://github.com/$USER/$REPO.git
 WORKDIR /Libreosteo
 
 USER root
-RUN pip install -r requirements/requ-py2.txt
+RUN pip3 install -r requirements/requirements.txt
 ADD django-secret-key /usr/local/bin/
 
 COPY launch-libreosteo.sh .
 RUN chmod a+x launch-libreosteo.sh
 
 USER libreosteo
-RUN bower install
+RUN yarn
 RUN python manage.py collectstatic --noinput
 COPY local.py.pg Libreosteo/settings/
 COPY local.py.sqlite Libreosteo/settings/

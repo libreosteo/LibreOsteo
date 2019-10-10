@@ -276,7 +276,8 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 'status'] != 'invoiced' or current_examination.last_invoice is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         if serializer.data['paiment_mode'] == 'notpaid':
-            return Response({'not modified' : current_examination.last_invoice.id})
+            return Response(
+                {'not modified': current_examination.last_invoice.id})
         if current_examination.last_invoice.status != models.InvoiceStatus.WAITING_FOR_PAIEMENT:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         current_examination.status = models.ExaminationStatus.INVOICED_PAID
@@ -284,7 +285,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             id=current_examination.last_invoice.id)
         invoice_to_update.status = models.InvoiceStatus.INVOICED_PAID
         officesettings = models.OfficeSettings.objects.all()[0]
-        p = models.Paiment(amount=serializer.data['amount'],
+        p = models.Paiment(amount=invoice_to_update.amount,
                            currency=officesettings.currency,
                            date=timezone.now(),
                            paiment_mode=serializer.data['paiment_mode'])

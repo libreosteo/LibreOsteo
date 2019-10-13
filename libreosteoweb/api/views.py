@@ -1,3 +1,4 @@
+
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -13,7 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-from io import BytesIO, StringIO
+import sys
+if sys.version_info.major == 2:
+    from io import BytesIO
+    from io import BytesIO as StringIO
+else :
+    from io import BytesIO,StringIO
 from datetime import datetime
 from django.utils import timezone
 import logging
@@ -23,7 +29,8 @@ import zipfile
 
 from rest_framework import pagination, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError, PermissionDenied, ParseError
+from rest_framework.exceptions import ValidationError,PermissionDenied,ParseError
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
@@ -38,8 +45,9 @@ from django.core.files.base import ContentFile
 from django.core.files import File
 from django.core.management import call_command
 from django.db.models import signals
-from django.http import (HttpResponse, HttpResponseForbidden,
-                         HttpResponseRedirect, Http404)
+from django.http import (
+    HttpResponse, HttpResponseForbidden,
+    HttpResponseRedirect, Http404)
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
@@ -52,12 +60,15 @@ from libreosteoweb.api import serializers as apiserializers
 from libreosteoweb import models
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
-from .permissions import (IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser,
-                          maintenance_available, IsStaffOrTargetUserFactory)
-from .receivers import (block_disconnect_all_signal, receiver_examination,
-                        temp_disconnect_signal, receiver_newpatient)
-from .renderers import (ExaminationCSVRenderer, InvoiceCSVRenderer,
-                        PatientCSVRenderer)
+from .permissions import (
+    IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available,
+    IsStaffOrTargetUserFactory)
+from .receivers import (
+    block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
+    receiver_newpatient)
+from .renderers import (
+    ExaminationCSVRenderer, InvoiceCSVRenderer,
+    PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long
@@ -220,6 +231,7 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.RegularDoctorSerializer
 
 
+
 class ExaminationViewSet(viewsets.ModelViewSet):
     model = models.Examination
     queryset = models.Examination.objects.all()
@@ -317,6 +329,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice.save()
         return invoice
 
+
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():
             raise Http404()
@@ -380,7 +393,9 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
+
 class StatisticsView(APIView):
+
     def get(self, request, *args, **kwargs):
         myStats = Statistics(*args, **kwargs)
         result = myStats.compute()
@@ -523,6 +538,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
     model = models.FileImport
     serializer_class = apiserializers.FileImportSerializer
     queryset = models.FileImport.objects.all()
+
 
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated():

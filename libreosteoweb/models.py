@@ -1,3 +1,4 @@
+
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -15,6 +16,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
 from libreosteoweb.api.utils import enum
 import mimetypes
@@ -260,6 +263,7 @@ class ExaminationComment(models.Model):
     examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
 
 
+
 class Invoice(models.Model):
     """
     This class implements bean object to represent
@@ -496,6 +500,7 @@ class FileImport(models.Model):
         if bool(self.file_examination):
             storage_examination.delete(path_examination)
 
+import mimetypes
 
 class Document(models.Model):
     """

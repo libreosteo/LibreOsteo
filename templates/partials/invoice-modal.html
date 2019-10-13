@@ -33,7 +33,7 @@
         <div class="radio" ng-repeat="paiment_mean in paimentmeans">
             <label>
 		    <input type="radio" ng-model="invoicing.paiment_mode" name="paiment_mode" value="{$ paiment_mean.code $}" ui-validate=" 'validatePaimentMode($value)' ">
-		    {$ paiment_mean.text | translate $} 
+		    {$ paiment_mean.text | translate $}
             </label>
         </div>
         <div class="radio">

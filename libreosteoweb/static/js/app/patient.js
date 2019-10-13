@@ -1,3 +1,4 @@
+
 /**
     This file is part of Libreosteo.
 
@@ -341,8 +342,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     };
 
-
-
     $scope.startExamination = function() {
       $scope.currentExaminationManager();
 
@@ -431,7 +430,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           $scope.previousExamination.data = data;
         });
     };
-
 
     $scope.close = function(examination, invoicing) {
 
@@ -787,6 +785,7 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     },
   };
   $scope.examinationToInvoice = examination;
+
   if ($scope.examinationToInvoice != null && $scope.examinationToInvoice.last_invoice != null) {
     $scope.invoicing.status = 'invoiced';
     $scope.invoicing.amount = $scope.examinationToInvoice.last_invoice.amount;

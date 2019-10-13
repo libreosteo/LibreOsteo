@@ -11,6 +11,8 @@ Changelog for Libreosteo
 - Add support to cancel invoices
 - Add support to display all invoices for accountability purpose
 - Add support to delete a patient in accordance with GDPR conformity
+- Add support to regularize unpaid examinations
+- Add helper to detect network address on which the application is available
 - Remove the bower dependency and use yarn
 - Add support to continuous integration with travis, and some testing from UI with robot framework
 - Add support for python 3.X and python 2.X for the software

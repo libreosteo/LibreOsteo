@@ -85,7 +85,10 @@
 </li>
 <li class="dropdown">
     <a href="#" target="_self" class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
-        <i class="fa fa-question-circle fa-fw"></i><i class="fa fa-caret-down"></i><span class="sr-only">{% trans "Help" %}</span>
+      <i class="fa fa-question-circle fa-fw"></i><i class="fa fa-caret-down"></i><span class="sr-only">{% trans "Help" %}</span>
+      {% if new_version_available %}
+        <span class="badge badge-info">1<span>
+      {% endif %}
     </a>
     <ul class="dropdown-menu">
         <li><a href="http://libreosteo.github.io/" target="_blank"><i class="fa fa-globe fa-fw"></i> {% trans 'Project web page' %}</a></li>
@@ -93,6 +96,10 @@
         <li><a href="https://github.com/libreosteo/Libreosteo/" target="_blank"><i class="fa fa-comment fa-github"></i> {% trans "Development and code project" %}</a></li>
         <li class="divider"></li>
         <li class="disabled"><a href="#"><i class="fa fa-info-circle fa-fw"></i> {% trans 'Version' %} {{ version }}</a></li>
+        {% if new_version_available %}
+        <li class="bg-success"><a href="http://libreosteo.github.io/" target="_blank"><i class="fa fa-star fa-fw"></i> {% trans 'New version available' %} {{ new_version }}</a></li>
+        {% endif %}
+        </li>
     </ul>
 </li>
 <!-- /.dropdown -->

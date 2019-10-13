@@ -38,3 +38,23 @@ Invoice Again Examination
   Click Element                         jquery:input[value="check"]
   Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
   Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')
+
+Write New Examination Invoiced Non Paid
+  Go To                                 ${ROOT_URL}
+  Go To                                 ${ROOT_URL}/${PATIENT_URL}/examinations
+  Click Button                          new-examination-btn
+  Wait Until Element Is Visible         current-examination
+  Input Text                            jquery:input[placeholder~="Motif"]      Motif de consultation
+  Input Text                            jquery:div[class~="inPlaceholderMode"]:contains(Examen)         Examen normal
+  Click Button                          close-examination
+  Click Element                         jquery:input[value="invoiced"]
+  Wait Until Element Is Visible         jquery:input[value="notpaid"]
+  Click Element                         jquery:input[value="notpaid"]
+  Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
+  Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')
+  Go To                                 ${ROOT_URL}/invoice/${INVOICE_ID}
+  Element Should Contain                patient                 ${FIRST_NAME} ${LAST_NAME}
+  Element Should Contain                main                    Template with 55 EUR
+  Element Should Contain                invoice-number          ${INVOICE_NUMBER}
+  Element Should Contain                main                    Non réglée en date de facture
+

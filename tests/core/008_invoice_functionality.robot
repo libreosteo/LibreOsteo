@@ -58,7 +58,7 @@ Change Invoice Start Number Before
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                25001
- 
+
 
 Change Invoice Start Number With Text
   [Documentation]   Edit the office settings to change the invoice start number on a number before an existing invoice
@@ -119,7 +119,7 @@ Ensure That Event Is Created
    [Arguments]                     ${session_id}    ${value}
   ${session_cookie}               Create Dictionary   sessionid=${session_id}
   Login REST with                 test        ${session_cookie}
-  ${resp} =                       Get Request   restapi     /api/events 
+  ${resp} =                       Get Request   restapi     /api/events
   RequestsLogger.Write log        ${resp}
   Should Be Equal As Strings      ${resp.status_code}         200
   ${last_event}=                  Set Variable  ${resp.json()[0]}

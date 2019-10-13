@@ -14,3 +14,4 @@ setuptools-bower
 sqlparse
 netifaces
 decorator
+packaging

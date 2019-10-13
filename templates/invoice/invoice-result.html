@@ -73,7 +73,7 @@
 				<tr><td>HONORAIRES</td><td>{{invoice.amount|floatformat:2 }} {{invoice.currency}}</td></tr>
 			</table>
       {% if paiments|length > 0 %}
-      <table class="paiments">
+      <table id="paiments" class="paiments">
         {% for p in paiments %}
           <tr><td>{{p.amount|floatformat:2}} {{p.currency}} Réglé(s) le {{p.date | date:"d F Y"}} par {{p.paiment_mode}}</td></tr>
         {% endfor %}

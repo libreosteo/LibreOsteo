@@ -189,33 +189,36 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
         """
         Check that the invoicing is consistent
         """
-        if attrs['status'] == 'notinvoiced':
-            if attrs['reason'] is None or len(attrs['reason'].strip()) == 0:
-                raise serializers.ValidationError(
-                    _("Reason is mandatory when the examination is not invoiced"
-                      ))
-        if attrs['status'] == 'invoiced':
-            if attrs['amount'] is None or attrs['amount'] <= 0:
-                raise serializers.ValidationError(_("Amount is invalid"))
-            if attrs['paiment_mode'] is None or len(
-                    attrs['paiment_mode'].strip(
-                    )) == 0 or attrs['paiment_mode'] not in [
-                        p.code for p in PaimentMean.objects.filter(enable=True)
-                    ] + ['notpaid']:
-                raise serializers.ValidationError(
-                    _("Paiment mode is mandatory when the examination is invoiced"
-                      ))
-            if attrs['paiment_mode'] == 'check':
-                if attrs['check'] is None:
+        try:
+            if attrs['status'] == 'notinvoiced':
+                if attrs['reason'] is None or len(attrs['reason'].strip()) == 0:
                     raise serializers.ValidationError(
-                        _("Check information is missing"))
+                        _("Reason is mandatory when the examination is not invoiced"
+                        ))
+            if attrs['status'] == 'invoiced':
+                if attrs['amount'] is None or attrs['amount'] <= 0:
+                    raise serializers.ValidationError(_("Amount is invalid"))
+                if attrs['paiment_mode'] is None or len(
+                        attrs['paiment_mode'].strip(
+                        )) == 0 or attrs['paiment_mode'] not in [
+                            p.code for p in PaimentMean.objects.filter(enable=True)
+                        ] + ['notpaid']:
+                    raise serializers.ValidationError(
+                        _("Paiment mode is mandatory when the examination is invoiced"
+                          ))
+                if attrs['paiment_mode'] == 'check':
+                    if attrs['check'] is None:
+                        raise serializers.ValidationError(
+                            _("Check information is missing"))
                 #if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Bank information is missing about the check paiment"))
                 #if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Payer information is missing about the check paiment"))
                 #if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Number information is missing about the check paiment"))
-        return attrs
+            return attrs
+        except KeyError:
+            raise serializers.ValidationError(_('Missing data to continue'))
 
 
 class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):

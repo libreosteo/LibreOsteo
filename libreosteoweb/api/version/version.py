@@ -13,6 +13,7 @@ def ask_for_new_version():
         contents = urllib.request.urlopen(
             "http://libreosteo.github.io/api/version")
         version = json.load(contents)
+        logger.info("version read = %s " % version['version'])
         if parse(version['version']) > parse(libreosteoweb.__version__):
             return (True, version['version'])
     except Exception as ex:

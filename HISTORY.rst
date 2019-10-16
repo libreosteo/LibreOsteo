@@ -2,7 +2,7 @@ Changelog for Libreosteo
 ========================
 
 
-0.6.0 (unreleased)
+0.6.0 (2019-10-16)
 ------------------
 
 - Reorganize the home page to be more smart

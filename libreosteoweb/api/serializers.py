@@ -27,6 +27,7 @@ from .utils import NetworkHelper
 from django.db.models import Max
 from .utils import convert_to_long
 from libreosteoweb.api.utils import _unicode
+from libreosteoweb.api.demonstration import get_demonstration_file
 
 logger = logging.getLogger(__name__)
 
@@ -191,18 +192,19 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
         """
         try:
             if attrs['status'] == 'notinvoiced':
-                if attrs['reason'] is None or len(attrs['reason'].strip()) == 0:
+                if attrs['reason'] is None or len(
+                        attrs['reason'].strip()) == 0:
                     raise serializers.ValidationError(
                         _("Reason is mandatory when the examination is not invoiced"
-                        ))
+                          ))
             if attrs['status'] == 'invoiced':
                 if attrs['amount'] is None or attrs['amount'] <= 0:
                     raise serializers.ValidationError(_("Amount is invalid"))
                 if attrs['paiment_mode'] is None or len(
-                        attrs['paiment_mode'].strip(
-                        )) == 0 or attrs['paiment_mode'] not in [
-                            p.code for p in PaimentMean.objects.filter(enable=True)
-                        ] + ['notpaid']:
+                        attrs['paiment_mode'].strip()
+                ) == 0 or attrs['paiment_mode'] not in [
+                        p.code for p in PaimentMean.objects.filter(enable=True)
+                ] + ['notpaid']:
                     raise serializers.ValidationError(
                         _("Paiment mode is mandatory when the examination is invoiced"
                           ))
@@ -366,6 +368,22 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
     def create(self, validated_data):
         document_data = validated_data.pop('document')
         document_data['user'] = validated_data.pop('user')
+        patient = validated_data.pop("patient")
+        document = Document.objects.create(internal_date=datetime.today(),
+                                           **document_data)
+        document.clean()
+        document.save()
+        patient_doc = PatientDocument.objects.create(patient=patient,
+                                                     document=document,
+                                                     **validated_data)
+        return patient_doc
+
+
+class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
+    def create(self, validated_data):
+        document_data = validated_data.pop('document')
+        document_data['user'] = validated_data.pop('user')
+        document_data['document_file'] = get_demonstration_file()
         patient = validated_data.pop("patient")
         document = Document.objects.create(internal_date=datetime.today(),
                                            **document_data)

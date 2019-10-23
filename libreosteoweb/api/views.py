@@ -653,6 +653,11 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
             raise Http404()
         serializer.save(user=self.request.user)
 
+    def get_serializer_class(self):
+        if settings.DEMONSTRATION :
+            return apiserializers.PatientDocumentDemonstrationSerializer
+        return apiserializers.PatientDocumentSerializer
+
 
 class PaimentMeanViewSet(viewsets.ModelViewSet):
     model = models.PaimentMean

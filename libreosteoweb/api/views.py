@@ -699,7 +699,7 @@ class DbDump(StaffRequiredMixin, View):
 
 class RebuildIndex(StaffRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        call_command('rebuild_index', interactive=False)
+        call_command('rebuild_index', interactive=False, stdout=LoggerWriter(logger.info)
         return HttpResponse(u'index rebuilt')
 
 
@@ -752,13 +752,12 @@ class LoadDump(View):
                     )
                     call_command('flush',
                                  interactive=False,
-                                 load_initial_data=False)
+                                 load_initial_data=False, stdout=LoggerWriter(logger.info))
                     # It means that the settings.FIXTURE_DIRS should be set in settings
                     previous = settings.FIXTURE_DIRS
                     settings.FIXTURE_DIRS = [tempfile.gettempdir()]
                     # And when loading dumps, write the file into this directory with the name : load_dump.json
                     logger.info("Load the fixture from path : %s " % (fixture))
-                    logger.info("sys.stdout is %s" % (sys.stdout))
                     call_command('loaddata', fixture, stdout=LoggerWriter(logger.info))
                     # Delete the fixture
                     logger.info("Clearing the fixture")

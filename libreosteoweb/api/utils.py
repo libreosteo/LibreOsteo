@@ -62,3 +62,13 @@ def convert_to_long(value):
         return long(value)
     except:
         return int(value)
+
+class LoggerWriter:
+    def __init__(self, logger_func):
+        self._logger = logger_func
+
+    def write(self, message):
+        self._logger(message)
+
+    def flush(self):
+        pass

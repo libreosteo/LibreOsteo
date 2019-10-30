@@ -18,6 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
+msgid "There are unsaved changes. Do you really want to leave this page ?"
+msgstr ""
+"Il y a des modifications non sauvegardées. Voulez-vous vraiment quitter "
+"cette page ?"
+
 msgid "Normal examination"
 msgstr "Consultation normale"
 

@@ -75,12 +75,13 @@
         <div class="container-fluid tab-content">
             <div class="row">
                 <form novalidate name="form">
+                    {% for view in optional_modules %}
                     <div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-1">
-                        <h2>{% trans 'Dashboard' %}</h2>
+                        <h2>{% trans view.name %}</h2>
                         <em>modules activés</em>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-9">
-                        {% for module in dashboard_modules %}
+                        {% for module in view.modules %}
                         <div class="row dashboard-catalog-item">
                             <div class="col-xs-12 col-sm-4 col-md-4 checkbox">
                                 <label>
@@ -94,10 +95,13 @@
                         </div>
                         <hr />
                         {% endfor %}
-                        <div class="row">
-                            <button class="btn btn-primary "
-                                    ng-click="updateUser(user)">{% trans 'Save' %}</button>
-                        </div>
+
+
+                    </div>
+                    {% endfor %}
+                    <div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-3">
+                        <button class="btn btn-primary "
+                                ng-click="updateUser(user)">{% trans 'Save' %}</button>
                     </div>
                 </form>
             </div>

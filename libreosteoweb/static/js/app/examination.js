@@ -1,3 +1,4 @@
+
 /**
     This file is part of Libreosteo.
 
@@ -63,6 +64,10 @@ examination.factory('ExaminationServ', ['$resource',
 
       }
     });
+    serv.SPHERES_LIST = [
+        'orl', 'visceral', 'pulmo', 'uro_gyneco', 'periphery', 'generalState'
+    ];
+    return serv;
   }
 ]);
 
@@ -78,107 +83,76 @@ examination.factory('ExaminationCommentServ', ['$resource',
 ]);
 
 examination.factory('CommentServ', ['$resource',
-  function($resource) {
-    return $resource('api/comments', null)
-  }
-]);
+    function($resource) {
+        return $resource('api/comments', null)
+    }
+    ]);
 
-examination.controller('ExaminationCtrl', ['$scope', '$routeParams', 'ExaminationServ', function($scope, $routeParams, ExaminationServ) {
-  "use strict";
-  $scope.examination = ExaminationServ.get({
-    examinationId: $routeParams.examinationId
-  });
-}]);
 
 function isEmpty(str) {
   return (!str || 0 === str.length);
 }
 
 
-examination.directive('examination', ['ExaminationServ', function(ExaminationServ) {
-  "use strict";
-  return {
-    restrict: 'E',
-    scope: {
-      model: '=',
-      saveModel: '&',
-      close: '&',
-      closeHandle: '&',
-      newExamination: '=',
-      onDelete: '&',
-      reloadExaminations : '&'
-    },
-    compile: function(element, attrs) {
-      if (!attrs.newExamination) {
-        attrs.newExamination = false
-      }
-
-    },
-    controller: ['$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal) {
-      $scope.types = [{
-          value: 1,
-          text: gettext('Normal examination')
+examination.directive('examination', ['ExaminationServ', function(ExaminationServ){
+    "use strict";
+    return {
+        restrict: 'E',
+        scope: {
+            model: '=',
+            saveModel : '&',
+            close : '&',
+            newExamination: '=',
+            onDelete : '&',
+	    patient: '=?',
+            externalPatientSave: '&',
         },
+        controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal)
         {
-          value: 2,
-          text: gettext('Continuing examination')
-        },
-        {
-          value: 3,
-          text: gettext('Return')
-        },
-        {
-          value: 4,
-          text: gettext('Emergency')
-        },
-      ];
-      $scope.showTypes = function() {
-        if ($scope.model) {
-          var selected = $filter('filter')($scope.types, {
-            value: $scope.model.type
-          });
-          return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : gettext('not documented');
-        } else {
-          return gettext('not documented');
-        }
-      };
+            $scope.types = [
+                { value : 1, text : gettext('Normal examination') },
+                { value : 2, text : gettext('Continuing examination') },
+                { value : 3, text : gettext('Return') },
+                { value : 4, text : gettext('Emergency') },
+            ];
+            $scope.showTypes = function() {
+                if($scope.model) {
+                    var selected = $filter('filter')($scope.types, {value: $scope.model.type});
+                    return ($scope.model && $scope.model.type && selected.length) ? selected[0].text : gettext('not documented');
+                } else {
+                    return gettext('not documented');
+                }
+            };
 
-      $scope.examinationSettings = {
-        orl: false,
-        visceral: false,
-        pulmo: false,
-        uro_gyneco: false,
-        periphery: false,
-        general_state: false,
-      }
+            TherapeutSettingsServ.get_by_user().$promise.then(function(therapeutSettings) {
+                /* Display spheres if the examination has notes about spheres,
+                 *  even if spheres display is disabled in settings (to avoid
+                 *  hiding information).
+                 */
+                var filled = ExaminationServ.SPHERES_LIST.map(function(sphere) {
+                    return !isEmpty($scope.model[sphere]);
+                }).reduce(function(enabled, atLeastOne) {
+                    return atLeastOne || enabled;
+                });
 
-      $scope.accordionOpenState = {
-        orl: true,
-        visceral: true,
-        pulmo: true,
-        uro_gyneco: true,
-        periphery: true,
-        general_state: true
-      }
+                if (therapeutSettings.spheres_enabled || filled) {
+                    // Initialize UI
+                    $scope.examinationSettings = initWithKeys(
+                        ExaminationServ.SPHERES_LIST,
+                        false
+                    );
+                    $scope.accordionOpenState = initWithKeys(
+                        ExaminationServ.SPHERES_LIST,
+                        true
+                    );
 
-      $scope.$watch('model.orl', function(newValue, oldValue) {
-        $scope.examinationSettings.orl = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.visceral', function(newValue, oldValue) {
-        $scope.examinationSettings.visceral = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.pulmo', function(newValue, oldValue) {
-        $scope.examinationSettings.pulmo = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.uro_gyneco', function(newValue, oldValue) {
-        $scope.examinationSettings.uro_gyneco = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.periphery', function(newValue, oldValue) {
-        $scope.examinationSettings.periphery = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.general_state', function(newValue, oldValue) {
-        $scope.examinationSettings.general_state = !isEmpty(newValue) || $scope.newExamination;
-      });
+                    angular.forEach(ExaminationServ.SPHERES_LIST, function(sphere, _) {
+                        $scope.$watch('model.' + sphere, function(newValue, oldValue){
+                            $scope.examinationSettings[sphere] = !isEmpty(newValue) || $scope.newExamination;
+                        });
+                    });
+                }
+            });
 
       $scope.$watch('model.status', function(newValue, oldValue) {
         $scope.updateDeleteTrigger();
@@ -271,46 +245,62 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
 
       };
 
-      $scope.$watch('newExamination', function(newValue, oldValue) {
-        if (newValue) {
-          $scope.edit();
+    // $visible means this form is in edit mode
+    $scope.$watch('examinationForm.$visible', function(newValue, oldValue)
+    {
+        if(oldValue === false && newValue === true)
+        {
+            $scope.triggerEditForm.edit = false;
+            $scope.triggerEditForm.save = true;
+        } else if(oldValue === true && newValue === false )
+        {
+            $scope.triggerEditForm.edit = true;
+            $scope.triggerEditForm.save = false;
         }
-      });
-      $scope.$watch('editableForm.$visible', function(newValue, oldValue) {
-        if (oldValue === false && newValue === true) {
-          $scope.triggerEditForm.edit = false;
-          $scope.triggerEditForm.save = true;
-        } else if (oldValue === true && newValue === false) {
-          $scope.triggerEditForm.edit = true;
-          $scope.triggerEditForm.save = false;
-        }
-      });
+    });
 
-      $scope.edit = function() {
-        $scope.editableForm.$show();
-      };
+            $scope.edit = function() {
+                $scope.form.partialPatientForm.$show();
+                $timeout(function() {
+                    $scope.examinationForm.$show();
+                });
+            };
 
-      $scope.save = function() {
-        $scope.editableForm.$save();
-      };
+            $scope.save = function()
+            {
+                $scope.editableForm.$save();
+            };
 
-      $scope.saveAndClose = function() {
-        $scope.close($scope.model);
-      };
+            $scope.saveAndClose = function()
+            {
+                $scope.close($scope.model);
+            };
 
-      $scope.triggerEditForm = {
-        save: false,
-        edit: true,
-        cancel: null,
-        delete: false,
-      };
-      $timeout(function() {
-        //DOM has finished rendering
-        if ($scope.newExamination) {
-          $scope.editableForm.$show();
-        }
-      });
-    }],
-    templateUrl: 'web-view/partials/examination'
-  }
+            $scope.triggerEditForm = {
+                save: false,
+                edit: true,
+                cancel: null,
+                delete: false,
+            };
+            $scope.$on('uiTabChange', function(event) {
+                // Hackish : we have to wait that the tab has finished rendering
+                // to trigger edit, otherwise, the form is considered inactive
+                // by edit-form-manager, and « save » button is not shown.
+                if($scope.newExamination){
+                    $scope.edit();
+                }
+            });
+            // Patient
+            $scope.lateralities = PatientServ.lateralities;
+
+            // No need to handle buttons with partialPatientForm ; examinationForm
+            // controls it.
+            $scope.triggerEditFormPatient = initWithKeys(
+                ['save', 'edit', 'cancel', 'delete'],
+                false
+            );
+        }],
+
+        templateUrl: 'web-view/partials/examination'
+    };
 }]);

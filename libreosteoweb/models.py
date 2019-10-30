@@ -451,14 +451,25 @@ class TherapeutSettings(models.Model):
     last_events_enabled = models.BooleanField(_('Events history'),
                                               default=True)
 
-    DASHBOARD_MODULES_FIELDS = [
+    # Examination view modules
+    spheres_enabled = models.BooleanField(_('Spheres'), default=True)
+
+    MODULES_FIELDS = [
         {
-            'field': stats_enabled,
-            'image': 'images/dashboard-stats.png'
+            'name': _('Dashboard'),
+            'modules': [
+                {'field': stats_enabled,
+                 'image': 'images/dashboard-stats.png'},
+                {'field': last_events_enabled,
+                 'image': 'images/dashboard-events.png'},
+            ]
         },
         {
-            'field': last_events_enabled,
-            'image': 'images/dashboard-events.png'
+            'name': _('Examination'),
+            'modules': [
+                {'field': spheres_enabled,
+                 'image': 'images/examination-spheres.png'},
+            ]
         },
     ]
 

@@ -71,7 +71,7 @@ from .renderers import (
     PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
-from .utils import convert_to_long
+from .utils import convert_to_long, LoggerWriter
 from libreosteoweb.api.invoicing import generator as invoicing_generator
 from libreosteoweb.api.events.settings import settings_event_tracer
 
@@ -758,7 +758,8 @@ class LoadDump(View):
                     settings.FIXTURE_DIRS = [tempfile.gettempdir()]
                     # And when loading dumps, write the file into this directory with the name : load_dump.json
                     logger.info("Load the fixture from path : %s " % (fixture))
-                    call_command('loaddata', fixture)
+                    logger.info("sys.stdout is %s" % (sys.stdout))
+                    call_command('loaddata', fixture, stdout=LoggerWriter(logger.info))
                     # Delete the fixture
                     logger.info("Clearing the fixture")
                     os.remove(fixture)

@@ -263,7 +263,6 @@ class ExaminationComment(models.Model):
     date = models.DateTimeField(_('Date'), null=True, blank=True)
     examination = models.ForeignKey(Examination, verbose_name=_('Examination'), on_delete=models.PROTECT)
 
-
 class Invoice(models.Model):
     """
     This class implements bean object to represent

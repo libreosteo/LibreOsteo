@@ -73,7 +73,6 @@ editFormManager.factory('loEditFormManager', function() {
       action_list.forEach(
         x => formActions.push(new FormAction(form, x.name, x.callback, trigger))
       );
-      console.warn(`FIXME: Memory leak ; now storing ${formActions.length} actions`);
     },
     action_available: function(name_action) {
       let matchingAction = formActions.find(
@@ -86,7 +85,13 @@ editFormManager.factory('loEditFormManager', function() {
         x => x.name == name && x.isAvailable()
       );
       actionsToRun.forEach(x => x.run());
+    },
+    remove : function(form) {
+      formActions = formActions.filter(
+        form_action => form_action.form != form
+      );
     }
+
   }
 });
 
@@ -134,6 +139,9 @@ editFormManager.directive('editFormControl', ['$timeout', function($timeout) {
       }
       $timeout(function() {
         loEditFormManager.add($element, actions, $scope.trigger);
+      });
+      $element.on('$destroy', function() {
+        loEditFormManager.remove($element);
       });
 
       /**

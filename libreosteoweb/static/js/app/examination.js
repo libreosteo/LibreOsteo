@@ -21,7 +21,7 @@ var examination = angular.module('loExamination', ['ngResource', 'loInvoice']);
 examination.factory('ExaminationServ', ['$resource',
   function($resource) {
     "use strict";
-    return $resource('api/examinations/:examinationId', null, {
+    var serv = $resource('api/examinations/:examinationId', null, {
       query: {
         method: 'GET',
         isArray: true
@@ -94,7 +94,7 @@ function isEmpty(str) {
 }
 
 
-examination.directive('examination', ['ExaminationServ', function(ExaminationServ){
+examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ){
     "use strict";
     return {
         restrict: 'E',
@@ -104,7 +104,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
             close : '&',
             newExamination: '=',
             onDelete : '&',
-	    patient: '=?',
+            patient: '=?',
             externalPatientSave: '&',
         },
         controller : [ '$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal)
@@ -268,7 +268,8 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
 
             $scope.save = function()
             {
-                $scope.editableForm.$save();
+              $scope.examinationForm.$save();
+              $scope.form.partialPatientForm.$save();
             };
 
             $scope.saveAndClose = function()

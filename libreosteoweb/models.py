@@ -1,4 +1,3 @@
-
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -16,8 +15,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
-from django.core.exceptions import NON_FIELD_ERRORS
 from datetime import date, datetime
 from libreosteoweb.api.utils import enum
 import mimetypes
@@ -263,7 +260,6 @@ class ExaminationComment(models.Model):
     examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
 
 
-
 class Invoice(models.Model):
     """
     This class implements bean object to represent
@@ -456,19 +452,27 @@ class TherapeutSettings(models.Model):
 
     MODULES_FIELDS = [
         {
-            'name': _('Dashboard'),
+            'name':
+            _('Dashboard'),
             'modules': [
-                {'field': stats_enabled,
-                 'image': 'images/dashboard-stats.png'},
-                {'field': last_events_enabled,
-                 'image': 'images/dashboard-events.png'},
+                {
+                    'field': stats_enabled,
+                    'image': 'images/dashboard-stats.png'
+                },
+                {
+                    'field': last_events_enabled,
+                    'image': 'images/dashboard-events.png'
+                },
             ]
         },
         {
-            'name': _('Examination'),
+            'name':
+            _('Examination'),
             'modules': [
-                {'field': spheres_enabled,
-                 'image': 'images/examination-spheres.png'},
+                {
+                    'field': spheres_enabled,
+                    'image': 'images/examination-spheres.png'
+                },
             ]
         },
     ]
@@ -511,7 +515,7 @@ class FileImport(models.Model):
         if bool(self.file_examination):
             storage_examination.delete(path_examination)
 
-import mimetypes
+
 
 class Document(models.Model):
     """

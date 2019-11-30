@@ -1,3 +1,4 @@
+
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -117,6 +118,9 @@ def display_doctor(request):
     return render(request, 'partials/doctor-modal-add.html',
                   {'doctor': display.display_fields()})
 
+def select_doctor(request):
+    display = RegularDoctorDisplay()
+    return render(request, 'partials/doctor-selector.html',   {'doctor': display.display_fields()})
 
 def display_examination_timeline(request):
     display = ExaminationDisplay()
@@ -126,9 +130,14 @@ def display_examination_timeline(request):
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
-    return render(request, 'partials/examination.html',
-                  {'examination': displayExamination.display_fields()})
-
+    displayPatient = PatientDisplay()
+    therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+        user=request.user)
+    return render(request, 'partials/examination.html', {
+        'examination': displayExamination.display_fields(),
+        'patient': displayPatient.display_fields(),
+        'therapeutsettings': therapeut_settings,
+    })
 
 def display_search_result(request):
     return render(request, 'partials/search-result.html', {})
@@ -137,15 +146,10 @@ def display_search_result(request):
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
-    return render(
-        request, 'partials/user-profile.html', {
-            'user': displayUser.display_fields(),
-            'therapeutsettings': displayTherapeutSettings.display_fields(),
-            'dashboard_modules':
-            models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
-            'DEMONSTRATION': settings.DEMONSTRATION
-        })
-
+    return render(request, 'partials/user-profile.html', {'user' : displayUser.display_fields(),
+        'therapeutsettings': displayTherapeutSettings.display_fields(),
+        'optional_modules': models.TherapeutSettings.MODULES_FIELDS,
+        'DEMONSTRATION' : settings.DEMONSTRATION })
 
 def display_dashboard(request):
     therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(

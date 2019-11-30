@@ -343,6 +343,9 @@ msgstr "Statistiques"
 msgid "Events history"
 msgstr "Historique des évènements"
 
+msgid "Spheres"
+msgstr "Sphères"
+
 msgid "Patient file"
 msgstr "Fichier patient"
 

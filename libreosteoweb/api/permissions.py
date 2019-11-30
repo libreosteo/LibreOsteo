@@ -49,6 +49,7 @@ class IsStaffOrTargetUser(permissions.BasePermission):
         'retrieve',
         'partial_update',
         'update'
+        'get_by_user',
     ]
 
     extra_actions = []

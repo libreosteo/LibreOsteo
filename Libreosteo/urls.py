@@ -66,6 +66,7 @@ urlpatterns = [
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),
+    url(r'^web-view/partials/doctor-selector', displays.select_doctor),
     url(r'^web-view/partials/doctor-modal', displays.display_doctor),
     url(r'^web-view/partials/add-patient', displays.display_newpatient),
     url(r'^web-view/partials/examinations-timeline', displays.display_examination_timeline),

@@ -1,4 +1,3 @@
-
 /**
     This file is part of Libreosteo.
 
@@ -18,8 +17,8 @@
 var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'angular-bind-html-compile']);
 
 
-patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ',
-  function($resource, DoctorServ, PatientDocumentServ) {
+patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
+  function($resource, PatientDocumentServ) {
     "use strict";
     var serv = $resource('api/patients/:patientId', null, {
       query: {
@@ -55,20 +54,38 @@ patient.factory('PatientServ', ['$resource', 'DoctorServ', 'PatientDocumentServ'
       }
     });
 
-    serv.prototype.doctor_detail = function(callback) {
-      if (this.doctor) {
-        return DoctorServ.get({
-          doctorId: this.doctor
-        }, callback);
-      }
-      return;
-    };
-
     serv.prototype.medical_reports_doc = function(callback) {
       return PatientDocumentServ.get({
         patient: this.id
       }, callback);
-    }
+    };
+
+    serv.lateralitiesMap = {
+      L: gettext('Left-handed'),
+      R: gettext('Right-handed'),
+    };
+
+    serv.lateralities = [];
+    angular.forEach(serv.lateralitiesMap, function(v, k) {
+      serv.lateralities.push({
+        value: k,
+        text: v
+      });
+    });
+
+    serv.sexMap = {
+      M: gettext('Male'),
+      F: gettext('Female'),
+    };
+
+    serv.sexes = [];
+    angular.forEach(serv.sexMap, function(v, k) {
+      serv.sexes.push({
+        value: k,
+        text: v
+      });
+    });
+
     return serv;
   }
 ]);
@@ -132,16 +149,16 @@ patient.filter('format_age', function() {
       if (ans == '') {
         out += ' ' + jour || '';
       }
-      return out;
+      return out.trim();
     } else {
       return '';
     }
   };
 });
 
-patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', '$sce', 'growl', 'PatientServ', 'DoctorServ', '$timeout',
+patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', '$sce', 'growl', 'PatientServ',
   'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ', 'OfficePaimentMeansServ',
-  function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, DoctorServ, $timeout, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+  function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
     loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ) {
     "use strict";
 
@@ -167,9 +184,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     $scope.patient = PatientServ.get({
       patientId: $stateParams.patientId
     }, function(p) {
-      p.doctor_detail(function(detail) {
-        $scope.doctor = detail;
-      });
       p.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
       p.medical_reports_doc(updateMedicalDocumentReports);
     });
@@ -234,15 +248,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       });
     }
 
-    // Handle the doctor of the patient.
-    $scope.$watch('patient.doctor', function(newValue, oldValue) {
-      if (newValue) {
-        $scope.doctor = DoctorServ.get({
-          doctorId: newValue
-        });
-      }
-    });
-
     // Handle the patient object to be saved.
     $scope.savePatient = function() {
       // Be sure that the birth_date has a correct format to be registered.
@@ -254,9 +259,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         // Should reload the patient
         $scope.patient = data;
         $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(data.birth_date));
-        $scope.patient.doctor_detail(function(detail) {
-          $scope.doctor = detail;
-        });
         $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
       }, function(data) {
         // Should display the error
@@ -270,31 +272,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.patient = PatientServ.get({
           patientId: $stateParams.patientId
         }, function(p) {
-          p.doctor_detail(function(detail) {
-            $scope.doctor = detail;
-          });
           $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
           $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
         });
-      });
-    };
-
-    // Prepare the doctors function to be selected.
-    $scope.doctors = null;
-    $scope.loadDoctors = function() {
-      return DoctorServ.query(function(result) {
-        $scope.doctors = result;
-      });
-    };
-
-    // Prepare and define the modal function to add doctor.
-    $scope.formAddDoctor = function() {
-      var modalInstance = $uibModal.open({
-        templateUrl: 'web-view/partials/doctor-modal',
-        controller: DoctorAddFormCtrl
-      });
-      modalInstance.result.then(function(newDoctor) {
-        DoctorServ.add(newDoctor);
       });
     };
 
@@ -341,6 +321,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.triggerEditFormPatient.delete = false;
       }
     };
+    $scope.onTabChange = function(tabChangeEvent) {
+      var viewChangeEvent = $scope.$broadcast('uiTabChange');
+      if (viewChangeEvent.defaultPrevented) {
+        tabChangeEvent.preventDefault();
+      }
+    };
+
 
     $scope.startExamination = function() {
       $scope.currentExaminationManager();
@@ -414,6 +401,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           }
         }
       });
+
 
       modalInstance.result.then(function(invoicing) {
         handleClose(examination, invoicing);
@@ -509,40 +497,9 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       },
     ];
 
-    // display the translated value for the sex
-    $scope.showSex = function() {
-      if ($scope.patient) {
-        var selected = $filter('filter')($scope.sexes, {
-          value: $scope.patient.sex
-        });
-        return ($scope.patient && $scope.patient.sex && selected.length) ? selected[0].text : gettext('not documented');
-      } else {
-        return gettext('not documented');
-      }
-    };
 
     // Load the values for the sex
-    $scope.laterality = [{
-        value: 'L',
-        text: gettext('Left-handed')
-      },
-      {
-        value: 'R',
-        text: gettext('Right-handed')
-      },
-    ];
-
-    // display the translated value for the sex
-    $scope.showLaterality = function() {
-      if ($scope.patient) {
-        var selected = $filter('filter')($scope.laterality, {
-          value: $scope.patient.laterality
-        });
-        return ($scope.patient && $scope.patient.laterality && selected.length) ? selected[0].text : '';
-      } else {
-        return gettext('not documented');
-      }
-    };
+    $scope.lateralities = PatientServ.lateralities;
 
     $scope.triggerEditFormPatient = {
       save: false,
@@ -682,7 +639,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     $scope.fileContext = loFileManager.createFileContext();
 
     $scope.fileContext.setDocumentAddedCb(function() {
-      console.log("Call callback");
       $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
     });
 
@@ -739,24 +695,6 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
   }
 ]);
 
-
-var DoctorAddFormCtrl = function($scope, $uibModalInstance) {
-  "use strict";
-  $scope.doctor = {
-    family_name: null,
-    first_name: null,
-    phone: null,
-    city: null
-
-  };
-  $scope.ok = function() {
-    $uibModalInstance.close($scope.doctor);
-  };
-
-  $scope.cancel = function() {
-    $uibModalInstance.dismiss('cancel');
-  };
-};
 
 var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
   $scope.message = message;
@@ -862,8 +800,8 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
 };
 
 
-patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', 'DoctorServ', '$filter',
-  function($scope, $location, growl, $sce, PatientServ, DoctorServ, $filter) {
+patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', '$filter',
+  function($scope, $location, growl, $sce, PatientServ, $filter) {
     "use strict";
 
     $scope.initPatient = function(patient) {
@@ -898,3 +836,20 @@ patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
     };
   }
 ]);
+
+/** Given a laterality code, provides the translated verbose name
+ */
+patient.filter('verboseLaterality', function(PatientServ) {
+  return function(value) {
+    var t = PatientServ.lateralitiesMap[value];
+    return t || gettext('not documented');
+  };
+});
+
+
+patient.filter('verboseSex', function(PatientServ) {
+  return function(value) {
+    var t = PatientServ.sexMap[value];
+    return t || gettext('not documented');
+  };
+});

@@ -289,9 +289,6 @@ msgstr "Numéro"
 msgid "Content"
 msgstr "Contenu"
 
-msgid "Footer"
-msgstr "Pied de page"
-
 msgid "Siret"
 msgstr "Siret"
 

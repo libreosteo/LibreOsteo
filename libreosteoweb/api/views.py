@@ -305,7 +305,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination.save()
         return Response({'invoiced': current_examination.last_invoice.id})
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['POST'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(

@@ -20,8 +20,10 @@
           <p>{% trans 'In order to use Libreosteo, you have to register a login and password on the application. Please select it before to use the application.' %}</p>
 
           <p>{% trans 'Then you will be redirected to be identified with this login and password.' %}</p>
+          <p>{% trans 'Your login must not contain space' %}</p>
         </div>
         <input type="text" name="username" class="form-control" placeholder="{% trans "Your login" %}" required="required" autofocus=""/>
+        <span class="helptext">{%trans '150 characters maximum. Only letters, numbers or characters "@",".","+","-","_"' %}</span>
         <input type="password" name="password1" class="form-control form-registration-password1" placeholder="{%  trans "Password" %}" required="required"/>
         <input type="password" name="password2" class="form-control form-registration-password2" placeholder="{%  trans "Confirm password" %}" required="required"/>
         <!--<label class="checkbox">

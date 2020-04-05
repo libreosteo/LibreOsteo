@@ -96,15 +96,16 @@ class CreateAdminAccountView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = UserCreationForm(request.POST)
-        redirect_to = request.POST.get(
+        self.redirect_to = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
-        if form.is_valid():
+        username = request.POST['username']
+        if form.is_valid() and ' ' not in username:
             # Ensure the user-originating redirection url is safe.
-            if not is_safe_url(url=redirect_to, host=request.get_host()):
-                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+            if not is_safe_url(url=self.redirect_to, host=request.get_host()):
+                self.redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
             # Okay, security check complete. Log the user in.
             create_superuser(request, form.data)
-            return HttpResponseRedirect(redirect_to)
+            return HttpResponseRedirect(self.redirect_to)
         else:
             self.form = form
         return super(TemplateView,

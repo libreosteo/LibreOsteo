@@ -38,7 +38,7 @@ SERVER_PORT = 8085
 
 logger = logging.getLogger(__name__)
 
-config = ConfigParser.SafeConfigParser({'server.port' : '%s' % SERVER_PORT})
+config = ConfigParser.SafeConfigParser({'server.port': '%s' % SERVER_PORT})
 config.read('server.cfg')
 
 if config.has_option('server', 'server.port'):
@@ -89,6 +89,9 @@ class Server(object):
         engine = cherrypy.engine
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
+        cherrypy.config.update({'server.socket_timeout': 600})
+        cherrypy.config.update({'response.timeout': 3600})
+        cherrypy.config.update({'server.max_request_body_size' : 500 * 1024 * 1024})
 
         engine.signal_handler.subscribe()
 

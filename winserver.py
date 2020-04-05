@@ -92,6 +92,11 @@ class Server(object):
         engine = cherrypy.engine
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
+        cherrypy.config.update({'server.socket_timeout': 600})
+        cherrypy.config.update({'response.timeout': 3600})
+        cherrypy.config.update({'server.max_request_body_size' : 500 * 1024 * 1024})
+
+
 
         engine.signal_handler.subscribe()
 

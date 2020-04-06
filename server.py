@@ -35,14 +35,20 @@ import rcssmin
 import rjsmin
 
 SERVER_PORT = 8085
+MAX_SIZE = 500
 
 logger = logging.getLogger(__name__)
 
-config = ConfigParser.SafeConfigParser({'server.port': '%s' % SERVER_PORT})
-config.read('server.cfg')
+config = ConfigParser.SafeConfigParser(
+    {'server.port': '%s' % SERVER_PORT,
+     'server.max_size': '%s' % MAX_SIZE}
+    )
+config.read(os.path.join(settings.DATA_FOLDER, 'server.cfg'))
 
 if config.has_option('server', 'server.port'):
     SERVER_PORT = config.getint('server', 'server.port')
+if config.has_option('server', 'server.max_size'):
+    MAX_SIZE = config.getint('server', 'server.max_size')
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""
@@ -91,7 +97,7 @@ class Server(object):
         cherrypy.config.update({'server.socket_port': SERVER_PORT})
         cherrypy.config.update({'server.socket_timeout': 600})
         cherrypy.config.update({'response.timeout': 3600})
-        cherrypy.config.update({'server.max_request_body_size' : 500 * 1024 * 1024})
+        cherrypy.config.update({'server.max_request_body_size' : MAX_SIZE * 1024 * 1024})
 
         engine.signal_handler.subscribe()
 

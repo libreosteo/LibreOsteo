@@ -37,167 +37,10 @@ import cherrypy
 from cherrypy.process import wspbus, plugins
 from cherrypy import _cplogging, _cperror
 from django.conf import settings
-from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
 import webbrowser
 import patch
-
-
-SERVER_PORT = 8085
-
-
-
-def _exit(self):
-    """Stop all services and prepare to exit the process."""
-    exitstate = self.state
-    try:
-        self.stop()
-
-        self.state = states.EXITING
-        self.log('Bus EXITING')
-        self.publish('exit')
-        # This isn't strictly necessary, but it's better than seeing
-        # "Waiting for child threads to terminate..." and then nothing.
-        self.log('Bus EXITED')
-    except:
-        # This method is often called asynchronously (whether thread,
-        # signal handler, console handler, or atexit handler), so we
-        # can't just let exceptions propagate out unhandled.
-        # Assume it's been logged and just die.
-        return  # EX_SOFTWARE
-
-    if exitstate == states.STARTING:
-        # exit() was called before start() finished, possibly due to
-        # Ctrl-C because a start listener got stuck. In this case,
-        # we could get stuck in a loop where Ctrl-C never exits the
-        # process, so we just call os.exit here.
-        return
-
-original_exit = cherrypy.process.wspbus.Bus.exit
-cherrypy.process.wspbus.Bus.exit = _exit
-
-class Server(object):
-    def __init__(self):
-        self.base_dir = os.path.abspath(os.getcwd())
-
-        #conf_path = os.path.join(self.base_dir, ".", "server.cfg")
-        #cherrypy.config.update(conf_path)
-
-        # This registers a plugin to handle the Django app
-        # with the CherryPy engine, meaning the app will
-        # play nicely with the process bus that is the engine.
-        DjangoAppPlugin(cherrypy.engine, self.base_dir).subscribe()
-
-    def run(self, callback=None):
-        engine = cherrypy.engine
-        cherrypy.config.update({'server.socket_host': '0.0.0.0'})
-        cherrypy.config.update({'server.socket_port': SERVER_PORT})
-        cherrypy.config.update({'server.socket_timeout': 600})
-        cherrypy.config.update({'response.timeout': 3600})
-        cherrypy.config.update({'server.max_request_body_size' : 500 * 1024 * 1024})
-
-
-
-        engine.signal_handler.subscribe()
-
-        if hasattr(engine, "console_control_handler"):
-            engine.console_control_handler.subscribe()
-
-        try :
-            engine.start()
-        except :
-            pass
-
-
-        if callback :
-            callback()
-        logging.info("From service : %s" , os.getcwd())
-        if engine.state == cherrypy.engine.states.STARTED:
-            engine.block()
-
-class DjangoAppPlugin(plugins.SimplePlugin):
-    def __init__(self, bus, base_dir):
-        """
-        CherryPy engine plugin to configure and mount
-        the Django application onto the CherryPy server.
-        """
-        plugins.SimplePlugin.__init__(self, bus)
-        self.base_dir = base_dir
-
-    def start(self):
-        self.bus.log("Configuring the Django application")
-
-        # Well this isn't quite as clean as I'd like so
-        # feel free to suggest something more appropriate
-        #from Libreosteo.settings import *
-        #app_settings = locals().copy()
-        #del app_settings['self']
-        #settings.configure(**app_settings)
-
-        self.bus.log("Mounting the Django application")
-        cherrypy.tree.graft(HTTPLogger(application), "/")
-
-        self.bus.log("Setting up the static directory to be served")
-        # We server static files through CherryPy directly
-        # bypassing entirely Django
-        static_handler = cherrypy.tools.staticdir.handler(section="/", dir="static",
-                                                          root=self.base_dir)
-        cherrypy.tree.mount(static_handler, '/static')
-
-class HTTPLogger(_cplogging.LogManager):
-    def __init__(self, app):
-        _cplogging.LogManager.__init__(self, id(self), cherrypy.log.logger_root)
-        self.app = app
-
-    def __call__(self, environ, start_response):
-        """
-        Called as part of the WSGI stack to log the incoming request
-        and its response using the common log format. If an error bubbles up
-        to this middleware, we log it as such.
-        """
-        try:
-            response = self.app(environ, start_response)
-            self.access(environ, response)
-            return response
-        except:
-            self.error(traceback=True)
-            return HttpResponseServerError(_cperror.format_exc())
-
-    def access(self, environ, response):
-        """
-        Special method that logs a request following the common
-        log format. This is mostly taken from CherryPy and adapted
-        to the WSGI's style of passing information.
-        """
-        atoms = {'h': environ.get('REMOTE_ADDR', ''),
-                 'l': '-',
-                 'u': "-",
-                 't': self.time(),
-                 'r': "%s %s %s" % (environ['REQUEST_METHOD'], environ['REQUEST_URI'], environ['SERVER_PROTOCOL']),
-                 's': response.status_code,
-                 'b': str(len(response.content)),
-                 'f': environ.get('HTTP_REFERER', ''),
-                 'a': environ.get('HTTP_USER_AGENT', ''),
-                 }
-        for k, v in atoms.items():
-            try :
-                if isinstance(v, unicode):
-                    v = v.encode('utf8')
-                elif not isinstance(v, str):
-                    v = str(v)
-            except NameError:
-                v = str(v)
-            # Fortunately, repr(str) escapes unprintable chars, \n, \t, etc
-            # and backslash for us. All we have to do is strip the quotes.
-            v = repr(v)[1:-1]
-            # Escape double-quote.
-            atoms[k] = v.replace('"', '\\"')
-
-        try:
-            self.access_log.log(logging.INFO, self.access_log_format % atoms)
-        except:
-            self.error(traceback=True)
-
+import server
 
 class LibreosteoService(win32serviceutil.ServiceFramework):
     """Libreosteo NT Service."""
@@ -206,7 +49,7 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
     _svc_display_name_ = "Libreosteo Service"
 
     def SvcDoRun(self):
-        server = Server()
+        _srvr = Server()
 
 
         # in practice, you will want to specify a value for
@@ -220,10 +63,10 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
                 'engine.autoreload.on': False,
                 'engine.SIGHUP': None,
                 'engine.SIGTERM': None,
-                'log.error_file' : os.path.join(server.base_dir, 'libreosteo_error.log'),
+                'log.error_file' : os.path.join(_srvr_.base_dir, 'libreosteo_error.log'),
                 'tools.log_tracebacks.on' : True,
-                'log.access_file' : os.path.join(server.base_dir, 'libreosteo_access.log'),
-                'server.socket_port': SERVER_PORT,
+                'log.access_file' : os.path.join(_srvr.base_dir, 'libreosteo_access.log'),
+                'server.socket_port': server.SERVER_PORT,
                 'server.socket_host': '0.0.0.0',
                 }
             })
@@ -233,7 +76,7 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
             servicemanager.PYS_SERVICE_STARTED,
             (self._svc_name_,'')
         )
-        server.run()
+        _srvr.run()
 
 
     def SvcStop(self):

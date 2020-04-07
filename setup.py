@@ -205,7 +205,8 @@ if sys.platform in ['win32']:
         "optimize" : 2,
         "namespace_packages" : namespace_packages,
         "zip_include_packages" : in_zip_packages,
-        "zip_exclude_packages" : ['libreosteoweb']
+        "zip_exclude_packages" : ['libreosteoweb'],
+        "include_msvcr" : True
     }
 
 

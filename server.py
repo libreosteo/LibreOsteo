@@ -25,30 +25,32 @@ from cherrypy import _cplogging, _cperror
 from django.conf import settings
 from Libreosteo.standalone import application
 from django.http import HttpResponseServerError
-try:
-    import ConfigParser
-except:
-    import configparser as ConfigParser
+import configparser
 
 # For modulegraph import auto detect
 import rcssmin
 import rjsmin
 
-SERVER_PORT = 8085
-MAX_SIZE = 500
-
 logger = logging.getLogger(__name__)
 
-config = ConfigParser.SafeConfigParser(
-    {'server.port': '%s' % SERVER_PORT,
-     'server.max_size': '%s' % MAX_SIZE}
-    )
-config.read(os.path.join(settings.DATA_FOLDER, 'server.cfg'))
-
-if config.has_option('server', 'server.port'):
-    SERVER_PORT = config.getint('server', 'server.port')
-if config.has_option('server', 'server.max_size'):
-    MAX_SIZE = config.getint('server', 'server.max_size')
+def configure():
+    server_config = {
+        "server_port" : 8085,
+        "max_size" : 500
+    }
+    config = configparser.ConfigParser()
+    config_file = os.path.join(settings.DATA_FOLDER, 'server.cfg')
+    logging.info("Read configuration from %s" % config_file)
+    config.read(config_file)
+    logging.info("config sections = %s" % config.sections())
+    if 'server' in config and 'port' in config['server']:
+        logging.info("port option was found")
+        server_config["server_port"] = int(config['server']['port'])
+    if 'server' in config and 'max_size' in config['server']:
+        logging.info("max_size option was found")
+        server_config["max_size"] = int(config['server']['max_size'])
+    logging.info("SERVER_PORT = %s, MAX_SIZE = %s" % (server_config["server_port"], server_config["max_size"]))
+    return server_config
 
 def _exit(self):
     """Stop all services and prepare to exit the process."""
@@ -80,7 +82,8 @@ original_exit = cherrypy.process.wspbus.Bus.exit
 cherrypy.process.wspbus.Bus.exit = _exit
 
 class Server(object):
-    def __init__(self):
+    def __init__(self, server_config):
+        self.server_config = server_config
         self.base_dir = os.path.abspath(os.getcwd())
 
         #conf_path = os.path.join(self.base_dir, ".", "server.cfg")
@@ -94,10 +97,10 @@ class Server(object):
     def run(self, callback=None):
         engine = cherrypy.engine
         cherrypy.config.update({'server.socket_host': '0.0.0.0'})
-        cherrypy.config.update({'server.socket_port': SERVER_PORT})
+        cherrypy.config.update({'server.socket_port': self.server_config["server_port"]})
         cherrypy.config.update({'server.socket_timeout': 600})
         cherrypy.config.update({'response.timeout': 3600})
-        cherrypy.config.update({'server.max_request_body_size' : MAX_SIZE * 1024 * 1024})
+        cherrypy.config.update({'server.max_request_body_size' : self.server_config["max_size"] * 1024 * 1024})
 
         engine.signal_handler.subscribe()
 
@@ -301,11 +304,10 @@ if __name__ == '__main__':
 	    }
 	}
 
-
     logging.config.dictConfig(LOG_CONF)
-
+    server_config = configure()
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(('127.0.0.1', SERVER_PORT))
+    result = sock.connect_ex(('127.0.0.1', server_config["server_port"]))
     if result != 0:
-        Server().run()
+        Server(server_config).run()

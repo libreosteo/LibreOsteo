@@ -29,16 +29,11 @@ if getattr(sys, 'frozen', False):
 
 # Win32 service imports
 import win32serviceutil
-import win32service
+import win32service, win32api
 import servicemanager
 
 # Third-party imports
 import cherrypy
-from cherrypy.process import wspbus, plugins
-from cherrypy import _cplogging, _cperror
-from django.conf import settings
-from django.http import HttpResponseServerError
-import webbrowser
 import patch
 import server
 
@@ -48,44 +43,59 @@ class LibreosteoService(win32serviceutil.ServiceFramework):
     _svc_name_ = "LibreosteoService"
     _svc_display_name_ = "Libreosteo Service"
 
+    def log(self, msg):
+        servicemanager.LogInfoMsg(str(msg))
+
     def SvcDoRun(self):
-        _srvr = Server()
+        self.ReportServiceStatus(win32service.SERVICE_START_PENDING)
+        try:
+            self.log("Create the Libreosteo server")
+            config = server.configure()
+            _srvr = server.Server(config)
 
 
-        # in practice, you will want to specify a value for
-        # log.error_file below or in your config file.  If you
-        # use a config file, be sure to use an absolute path to
-        # it, as you can't be assured what path your service
-        # will run in.
-        cherrypy.config.update({
-            'global':{
-                'log.screen': False,
-                'engine.autoreload.on': False,
-                'engine.SIGHUP': None,
-                'engine.SIGTERM': None,
-                'log.error_file' : os.path.join(_srvr_.base_dir, 'libreosteo_error.log'),
-                'tools.log_tracebacks.on' : True,
-                'log.access_file' : os.path.join(_srvr.base_dir, 'libreosteo_access.log'),
-                'server.socket_port': server.SERVER_PORT,
-                'server.socket_host': '0.0.0.0',
-                }
-            })
-        self.ReportServiceStatus(win32service.SERVICE_RUNNING)
-        servicemanager.LogMsg(
-            servicemanager.EVENTLOG_INFORMATION_TYPE,
-            servicemanager.PYS_SERVICE_STARTED,
-            (self._svc_name_,'')
-        )
-        _srvr.run()
+            # in practice, you will want to specify a value for
+            # log.error_file below or in your config file.  If you
+            # use a config file, be sure to use an absolute path to
+            # it, as you can't be assured what path your service
+            # will run in.
+            self.log("Configure the server")
+            cherrypy.config.update({
+                'global':{
+                    'log.screen': False,
+                    'engine.autoreload.on': False,
+                    'engine.SIGHUP': None,
+                    'engine.SIGTERM': None,
+                    'log.error_file' : os.path.join(_srvr.base_dir, 'libreosteo_error.log'),
+                    'tools.log_tracebacks.on' : True,
+                    'log.access_file' : os.path.join(_srvr.base_dir, 'libreosteo_access.log'),
+                    'server.socket_port': config["server_port"],
+                    'server.socket_host': '0.0.0.0',
+                    }
+                })
+            self.ReportServiceStatus(win32service.SERVICE_RUNNING)
+            servicemanager.LogMsg(
+                servicemanager.EVENTLOG_INFORMATION_TYPE,
+                servicemanager.PYS_SERVICE_STARTED,
+                (self._svc_name_,'')
+            )
+            self.log("Run the service Libreosteo")
+            _srvr.run()
+        except Exception as e:
+            s = str(e);
+            self.log('Exception : %s' % s)
+            self.SvcStop()
 
 
     def SvcStop(self):
+        self.log("Stopping service")
         self.ReportServiceStatus(win32service.SERVICE_STOP_PENDING)
         cherrypy.engine.exit()
 
         self.ReportServiceStatus(win32service.SERVICE_STOPPED)
         # very important for use with py2exe
         # otherwise the Service Controller never knows that it is stopped !
+        self.log("Service stopped")
 
 if __name__ == '__main__':
     if getattr(sys, 'frozen', False):
@@ -108,20 +118,26 @@ if __name__ == '__main__':
             'handlers': {
                 'default': {
                     'level':'INFO',
-                    'class':'logging.StreamHandler',
+                    'class':'logging.handlers.RotatingFileHandler',
                     'formatter': 'standard',
-                    'stream': 'ext://sys.stdout'
+                    'filename': os.path.join(DATA_FOLDER, 'default.log'),
+                    'maxBytes': 10485760,
+                    'backupCount': 20,
+                    'encoding': 'utf8'
                 },
                 'cherrypy_console': {
                     'level':'INFO',
-                    'class':'logging.StreamHandler',
-                    'formatter': 'void',
-                    'stream': 'ext://sys.stdout'
+                    'class':'logging.handlers.RotatingFileHandler',
+                    'formatter': 'standard',
+                    'filename': os.path.join(DATA_FOLDER, 'console.log'),
+                    'maxBytes': 10485760,
+                    'backupCount': 20,
+                    'encoding': 'utf8'
                 },
                 'cherrypy_access': {
                     'level':'INFO',
                     'class': 'logging.handlers.RotatingFileHandler',
-                    'formatter': 'void',
+                    'formatter': 'standard',
                     'filename': os.path.join(DATA_FOLDER, 'access.log'),
                     'maxBytes': 10485760,
                     'backupCount': 20,
@@ -130,7 +146,7 @@ if __name__ == '__main__':
                 'cherrypy_error': {
                     'level':'INFO',
                     'class': 'logging.handlers.RotatingFileHandler',
-                    'formatter': 'void',
+                    'formatter': 'standard',
                     'filename': os.path.join(DATA_FOLDER, 'errors.log'),
                     'maxBytes': 10485760,
                     'backupCount': 20,
@@ -138,38 +154,47 @@ if __name__ == '__main__':
                 },
             },
             'loggers': {
-            'django.utils.translation': {
-                    'handlers': ['default', 'cherrypy_error'],
+                'django.utils.translation': {
+                    'handlers': ['default'],
                     'level': 'INFO'
                 },
                 '': {
-                    'handlers': ['default', 'cherrypy_error'],
+                    'handlers': ['default'],
+                    'level': 'INFO'
+                },
+                'root': {
+                    'handlers': ['default'],
                     'level': 'INFO'
                 },
                 'db': {
                     'handlers': ['default'],
                     'level': 'INFO' ,
-                    'propagate': False
+                    'propagate': True
                 },
                 'cherrypy.access': {
                     'handlers': ['cherrypy_access'],
                     'level': 'INFO',
-                    'propagate': False
+                    'propagate': True
                 },
                 'cherrypy.error': {
                     'handlers': ['cherrypy_console', 'cherrypy_error'],
                     'level': 'INFO',
-                    'propagate': False
+                    'propagate': True
                 },
                 'libreosteoweb.api' : {
-                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+                    'handlers': ['cherrypy_console', 'default'],
                     'level': 'INFO',
-                    'propagate': False
+                    'propagate': True
+                },
+                'libreosteo' : {
+                    'handlers': ['cherrypy_console', 'default'],
+                    'level': 'INFO',
+                    'propagate': True
                 },
                 'Libreosteo' : {
-                    'handlers': ['cherrypy_console', 'cherrypy_error'],
+                    'handlers': ['cherrypy_console', 'default'],
                     'level': 'INFO',
-                    'propagate': False
+                    'propagate': True
                 },
             }
         }

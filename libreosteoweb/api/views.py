@@ -21,6 +21,7 @@ else:
     from io import BytesIO, StringIO
 from datetime import datetime
 from django.utils import timezone
+import libreosteoweb
 import logging
 import os
 import tempfile
@@ -49,6 +50,7 @@ from django.http import (HttpResponse, HttpResponseForbidden,
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import format_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
@@ -678,6 +680,7 @@ class DbDump(StaffRequiredMixin, View):
         for document in documents:
             zf.write(document.document_file.path, document.document_file.name)
 
+        zf.writestr("meta", libreosteoweb.__version__)
         zf.close()
 
         response = HttpResponse(zip_content.getvalue(),
@@ -712,13 +715,25 @@ class LoadDump(View):
                 # Check if zip file
                 if zipfile.is_zipfile(file_content):
                     # uncompress the files
-                    # uncompress the dump file
                     zf = zipfile.ZipFile(file_content)
+                    # Check that a meta is present
+                    if 'meta' in zf.namelist():
+                        zf.extract('meta', tmpdir)
+                        with open(os.path.join(tmpdir, 'meta')) as metafile:
+                            v = metafile.read().strip()
+                        if v != libreosteoweb.__version__:
+                            return HttpResponse(content=
+                                                format_lazy(
+                                                    'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
+                                                otherversion=v,
+                                                currentversion=libreosteoweb.__version__)
+                                                , status=412)
+                    # uncompress the dump file
                     if filename in zf.namelist():
                         zf.extract(filename, tmpdir)
                         # uncompress all document
                         for d in [
-                                f for f in zf.namelist() if f != 'dump.json'
+                                f for f in zf.namelist() if f != 'dump.json' and f != 'meta'
                         ]:
                             zf.extract(d, settings.MEDIA_ROOT)
                     else:

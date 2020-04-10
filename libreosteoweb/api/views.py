@@ -637,7 +637,7 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         try:
             patient = self.kwargs['patient']
-            return models.PatientDocument.objects.filter(patient__id=patient)
+            return models.PatientDocument.objects.filter(patient__id=patient).order_by('document__document_date')
         except KeyError:
             return models.PatientDocument.objects.all()
 

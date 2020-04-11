@@ -45,7 +45,7 @@ Requirements :
 
 Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-    sudo apt install python3-pip virtualenv nodejs yarnpkg
+    sudo apt install python3-pip python3-venv nodejs yarnpkg
 
 Retrieve the content of the project from Git repository ::
 
@@ -57,13 +57,11 @@ Enter the cloned folder ::
 
 Create a virtualenv ::
 
-    virtualenv --python /usr/bin/python3 venv
-
-(at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
+  python3 -m venv venv
 
 Then retrieve the python requirements ::
 
-    pip install -r requirements/requirements.txt
+    ./venv/bin/pip install -r requirements/requirements.txt
 
 Install Javascript dependencies ::
 
@@ -71,11 +69,11 @@ Install Javascript dependencies ::
 
 Initialize the database ::
 
-    python manage.py migrate
+    ./venv/bin/python manage.py migrate
 
 Now you can start the server with ::
 
-    python manage.py runserver
+    ./venv/bin/python manage.py runserver
 
 Point your browser on : http://localhost:8000/ it will guide you towards creating the first admin user.
 

@@ -43,9 +43,7 @@ Requirements :
 
 .. _nodesource packages: https://github.com/nodesource/distributions#debinstall
 
-Install system dependencies, for example, on Debian-like sytem, that would **one of** those two lines:
-
-Python 3.5+ ::
+Install system dependencies, for example, on Debian-like sytem, that would be ::
 
     sudo apt install python3-pip virtualenv nodejs
 
@@ -57,17 +55,13 @@ Enter the cloned folder ::
 
     cd Libreosteo
 
-Create a virtualenv with **one of those** two commands.
-
-Python 3 ::
+Create a virtualenv ::
 
     virtualenv --python /usr/bin/python3 venv
 
 (at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
 
-Then retrieve the python requirements with **one of those**.
-
-Python 3 ::
+Then retrieve the python requirements ::
 
     pip install -r requirements/requirements.txt
 

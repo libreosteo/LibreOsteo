@@ -37,15 +37,13 @@ Requirements :
   - yarn
   - virtualenv
   - nodejs (if on Debian, you will need `nodesource packages`_, official ones will not work)
-  - if on linux system, you need linux-headers package. On debian and derivated uses ::
-
-    sudo apt install linux-headers-$(uname -r)
+  - if on linux system, you need linux-headers package.
 
 .. _nodesource packages: https://github.com/nodesource/distributions#debinstall
 
 Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-    sudo apt install python3-pip python3-venv nodejs yarnpkg
+    sudo apt install python3-pip python3-venv nodejs yarnpkg linux-headers-$(uname -r)
 
 Retrieve the content of the project from Git repository ::
 

@@ -36,18 +36,12 @@ Requirements :
   - nodejs
   - yarn
   - virtualenv
-  - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
-  - if on linux system, you need linux-headers package. On debian and derivated uses ::
+  - nodejs
+  - if on linux system, you need linux-headers package.
 
-    sudo apt install linux-headers-$(uname -r)
+Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-.. _nodesource packages: https://github.com/nodesource/distributions#debinstall
-
-Install system dependencies, for example, on Debian-like sytem, that would **one of** those two lines:
-
-Python 3.5+ ::
-
-    sudo apt install python3-pip virtualenv nodejs
+    sudo apt install python3-pip python3-venv nodejs yarnpkg linux-headers-$(uname -r)
 
 Retrieve the content of the project from Git repository ::
 
@@ -57,19 +51,13 @@ Enter the cloned folder ::
 
     cd Libreosteo
 
-Create a virtualenv with **one of those** two commands.
+Create a virtualenv ::
 
-Python 3 ::
+  python3 -m venv venv
 
-    virtualenv --python /usr/bin/python3 venv
+Then retrieve the python requirements ::
 
-(at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
-
-Then retrieve the python requirements with **one of those**.
-
-Python 3 ::
-
-    pip install -r requirements/requirements.txt
+    ./venv/bin/pip install -r requirements/requirements.txt
 
 Install Javascript dependencies ::
 
@@ -77,11 +65,11 @@ Install Javascript dependencies ::
 
 Initialize the database ::
 
-    python manage.py migrate
+    ./venv/bin/python manage.py migrate
 
 Now you can start the server with ::
 
-    python manage.py runserver
+    ./venv/bin/python manage.py runserver
 
 Point your browser on : http://localhost:8000/ it will guide you towards creating the first admin user.
 

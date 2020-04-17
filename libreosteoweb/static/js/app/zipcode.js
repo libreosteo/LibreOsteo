@@ -20,6 +20,23 @@ function extractZipCodePart(val) {
     }
 }
 
+/** For a given row, tels if it fuzzy-matches the query
+ *
+ * Matches if all the terms of the words of the query can be found in the
+ * row.
+ * @rtype bool
+ */
+function fuzzyMatch(query, row) {
+    words = query.split(' ');
+    let hasNonMatchingWord = words.some(function(word) {
+        return ! (
+            row.zipcode.startsWith(word)
+            ||
+            row.city.toLowerCase().includes(word.toLowerCase())
+        );
+    });
+    return ! hasNonMatchingWord;
+}
 
 zipcode.factory('ZipCodeServ', ['$http',
     function($http) {
@@ -36,8 +53,12 @@ zipcode.factory('ZipCodeServ', ['$http',
                     console.log('Looking up…', zipCodePart);
                     return $http.get('/zipcode_lookup/zipcode_lookup/'+zipCodePart).then(
                         function(response){
-                            console.debug('received', response.data)
-                            return response.data;
+                            console.debug('received', response.data);
+                            let filtered = response.data.filter(
+                                x => fuzzyMatch(val, x)
+                            );
+                            console.debug('after filtering', response.data)
+                            return filtered;
                         });
                 } else {
                     console.log('Nothing looking like a zipcode in', val)

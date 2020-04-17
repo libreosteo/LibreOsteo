@@ -60,6 +60,7 @@
                                           e-width="66px"
                                           e-placeholder="{{ patient.address_zipcode }}"
                                           e-uib-typeahead="i.zipcode as (i.zipcode + ' ' + i.city) for i in zipcodeLookup($viewValue)"
+                                          e-typeahead-on-select="onZipcodeSelect($item)"
                                     >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
 
                                     <span editable-text="patient.address_city"

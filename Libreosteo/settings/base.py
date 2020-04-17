@@ -79,7 +79,8 @@ INSTALLED_APPS = (
     'django_filters',
     'statici18n',
     'rest_framework',
-    'compressor'
+    'compressor',
+    'zipcode_lookup',
 )
 
 MIDDLEWARE_CLASSES = (

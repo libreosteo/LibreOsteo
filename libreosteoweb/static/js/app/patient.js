@@ -241,6 +241,10 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       return ZipCodeServ.lookup(val)
     }
 
+    $scope.onZipcodeSelect = function(item) {
+      $scope.patient.address_city = item.city;
+    }
+
     $scope.updateComponentPolyfill = function() {
       // To be compliant with all browser.
       var els = angular.element(".polyfill-updatable");

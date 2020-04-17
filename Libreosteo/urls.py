@@ -88,6 +88,8 @@ urlpatterns = [
 
     url(r'^invoice/(?P<invoiceid>\d+)$', views.InvoiceViewHtml.as_view(), name="invoice_view"),
     url(r'^web-view/partials/confirmation', displays.display_confirmation),
+    url(r'^zipcode_lookup/', include('zipcode_lookup.urls', namespace='zipcode-lookup')),
+
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 

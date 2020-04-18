@@ -62,6 +62,8 @@
                                           e-uib-typeahead="i.zipcode as (i.zipcode + ' ' + i.city) for i in zipcodeLookup($viewValue)"
                                           e-typeahead-on-select="onZipcodeSelect($item) | filter:$viewValue | limitTo:15"
                                           e-typeahead-min-length="2"
+                                          e-typeahead-select-on-blur="true"
+                                          e-typeahead-select-on-exact="true"
                                     >{$ patient.address_zipcode || '&nbsp;&nbsp;' $}</span>
 
                                     <span editable-text="patient.address_city"

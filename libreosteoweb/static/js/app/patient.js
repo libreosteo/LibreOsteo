@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 */
-var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'loZipCode', 'angular-bind-html-compile']);
+var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExamination', 'ngSanitize', 'loOfficeSettings', 'loFileManager', 'loUtils', 'loUser', 'loZipCode', 'angular-bind-html-compile']);
 
 
 patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
@@ -157,10 +157,15 @@ patient.filter('format_age', function() {
 });
 
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', '$sce', 'growl', 'PatientServ',
-  'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ', 'OfficePaimentMeansServ', 'ZipCodeServ',
+  'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ', 'OfficePaimentMeansServ', 'TherapeutSettingsServ', 'ZipCodeServ',
   function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
-    loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ, ZipCodeServ) {
+    loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ, TherapeutSettingsServ, ZipCodeServ) {
     "use strict";
+
+    $scope.zipcode_completion_enabled = {};
+    TherapeutSettingsServ.get_by_user().$promise.then(function(data) {
+      $scope.therapeutSettings = data;
+    });
 
     var updateMedicalDocumentReports = function(docs) {
       var medicalReportsDoc = [];
@@ -238,7 +243,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     });
 
     $scope.zipcodeLookup = function(val) {
-      return ZipCodeServ.lookup(val)
+      if ($scope.therapeutSettings.zipcode_completion_enabled) {
+        return ZipCodeServ.lookup(val)
+      } else {
+        return [];
+      }
     }
 
     $scope.onZipcodeSelect = function(item) {

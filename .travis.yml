@@ -24,7 +24,11 @@ before_script:
   - python ./server.py &
   - sleep 3
 script:
+  # Unit tests
   - python ./manage.py test
+  # Functional tests
   - xvfb-run --server-args="-screen 0 1024x768x24" robot tests
+  # Are translations in clean state, with no string forgotten ?
   - python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+  # Did you forgot some migration ?
   - python ./manage.py makemigrations --check

@@ -26,4 +26,4 @@ before_script:
 script:
   - python ./manage.py test
   - xvfb-run --server-args="-screen 0 1024x768x24" robot tests
-
+  - python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'

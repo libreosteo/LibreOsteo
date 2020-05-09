@@ -11,4 +11,23 @@ export DJANGO_SETTINGS_MODULE='Libreosteo.settings.appimage'
 
 cd ${APPDIR}/src
 ${APPDIR}/usr/bin/python3 ${APPDIR}/src/manage.py migrate
-${APPDIR}/usr/bin/python3 ${APPDIR}/src/server.py
+
+# If available, xdg-open is providing better desktop integration than python
+# relying on $BROWSER as python module does.
+which xdg-open && export BROWSER=xdg-open
+
+# Cannot be ran more than once (only one port available)
+if [ -e "$PIDFILE" ] && [ -f /proc/$(cat $PIDFILE)/status ] ; then
+    echo "Already running (PID $(cat $PIDFILE)), only opening browser."
+    python3 -m webbrowser -t http://localhost:8085
+    # weird workaround
+    # firefox crashes if this process closes too early after opening webpage
+    sleep 10
+else
+    ${APPDIR}/usr/bin/python3 ${APPDIR}/src/server.py&
+    PID=$!
+    echo $PID > "$PIDFILE"
+    # Kill child on ctrl+C
+    trap "pkill -P $$" SIGINT
+    wait $PID
+fi

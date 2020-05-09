@@ -1,5 +1,5 @@
 # Database
-db.sqlite3
+db.sqlite*
 
 # AppImages
 *.AppImage

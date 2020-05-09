@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LibreOsteo
+GenericName=Gestion de cabinet Ostéo
+Comment=Fichier patient ostéo, notes de consultations et facturation.
+Icon=libreosteo
+Exec=./AppRun
+Terminal=false
+Categories=Office;ContactManagement;
+Keywords=Ostéo;Osteo;Cabinet;Patients

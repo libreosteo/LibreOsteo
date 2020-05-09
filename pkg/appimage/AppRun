@@ -1,0 +1,14 @@
+#!/bin/bash
+set -x
+set -e
+
+SCRIPT=`readlink -f -- $0`
+SCRIPTPATH=`dirname $SCRIPT`
+APPDIR="${APPDIR:-$SCRIPTPATH}"
+PIDFILE=${HOME}/.local/share/libreosteo/libreosteo.pid
+
+export DJANGO_SETTINGS_MODULE='Libreosteo.settings.appimage'
+
+cd ${APPDIR}/src
+${APPDIR}/usr/bin/python3 ${APPDIR}/src/manage.py migrate
+${APPDIR}/usr/bin/python3 ${APPDIR}/src/server.py

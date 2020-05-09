@@ -219,6 +219,9 @@ if __name__ == '__main__':
     	    SITE_ROOT = os.path.split(SITE_ROOT)[0]
     	    if not os.path.exists(DATA_FOLDER):
     	        os.makedirs(DATA_FOLDER)
+    elif os.environ['APPIMAGE']:
+        DATA_FOLDER = settings.LIBREOSTEO_DATA_DIR
+
     LOG_CONF = {
 	    'version': 1,
 

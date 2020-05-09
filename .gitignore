@@ -1,6 +1,9 @@
 # Database
 db.sqlite3
 
+# AppImages
+*.AppImage
+
 # Python compiled files
 *.pyc
 

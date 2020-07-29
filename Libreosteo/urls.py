@@ -13,7 +13,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
-from django.conf.urls import include, url
+from django.urls import include, path
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView,LogoutView
@@ -51,7 +52,7 @@ urlpatterns = [
     # Examples:
     url(r'^$', displays.display_index ),
     url(r'^api/', include(format_suffix_patterns(router.urls))),
-    url(r'^admin/', include(admin.site.urls)),
+    path('admin/', admin.site.urls),
     url(r'^accounts/login/$', LoginView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name='login'),
     url(r'^accounts/logout', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
     url(r'^accounts/create-admin/$', views.CreateAdminAccountView.as_view(), name='accounts-create-admin'),

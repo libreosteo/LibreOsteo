@@ -70,11 +70,12 @@ class TestChangeIdInvoice(APITestCase):
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'1000')
-        settings['invoice_start_sequence'] = None
+        settings['invoice_start_sequence'] = ''
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
                                    data=settings)
-        self.assertEqual(response.data['invoice_start_sequence'], u'1000')
+        # Reset to the default value
+        self.assertEqual(response.data['invoice_start_sequence'], u'10000')
 
     def test_set_start_invoice_sequence_invoice_set_limit(self):
         response = self.client.get(reverse('officesettings-list'))
@@ -106,8 +107,7 @@ class TestChangeIdInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    },
-                                    format='json')
+                                    })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'100')

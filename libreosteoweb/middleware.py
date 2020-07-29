@@ -17,9 +17,9 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from re import compile
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import logging
-
+from django.utils.deprecation import MiddlewareMixin
 logger = logging.getLogger(__name__)
 
 
@@ -46,7 +46,7 @@ def get_exempts():
         exempts += [compile(expr) for expr in settings.LOGIN_EXEMPT_URLS]
     return exempts
 
-class LoginRequiredMiddleware(object):
+class LoginRequiredMiddleware(MiddlewareMixin):
     """
     Middleware that requires a user to be authenticated to view any page other
     than reverse(LOGIN_URL_NAME). Exemptions to this requirement can optionally
@@ -83,8 +83,7 @@ class LoginRequiredMiddleware(object):
                 logger.info("no redirect required")
                 return
 
-
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             logger.info("user not authenticated")
             path = request.path.lstrip('/')
             if get_logout_url().lstrip('/') == path :

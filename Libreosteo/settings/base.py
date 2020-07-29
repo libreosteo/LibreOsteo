@@ -67,7 +67,7 @@ COMPRESS_ENABLED=True
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -77,12 +77,12 @@ INSTALLED_APPS = (
     'haystack',
     'libreosteoweb',
     'django_filters',
-    'statici18n',
+    # 'statici18n',
     'rest_framework',
     'compressor'
-)
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,7 +91,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'libreosteoweb.middleware.LoginRequiredMiddleware',
-)
+]
 
 ROOT_URLCONF = 'Libreosteo.urls'
 
@@ -126,7 +126,7 @@ TEMPLATES = [
                 'django.template.loaders.app_directories.Loader',
                 #'Libreosteo.zip_loader.Loader',
             ]
-        },       
+        },
     },
 ]
 
@@ -207,7 +207,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated'
     ],
 
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 

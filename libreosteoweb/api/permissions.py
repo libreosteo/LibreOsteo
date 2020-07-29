@@ -20,7 +20,7 @@ from django.contrib.auth.decorators import login_required
 from .exceptions import Forbidden
 from django.conf import settings
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse 
+from django.urls import reverse
 import logging
 
 # Get an instance of a logger

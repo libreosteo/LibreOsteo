@@ -61,6 +61,5 @@ Check That All Is Deleted
   Should Be Equal As Integers       ${length}     1
   ${resp} =           Get Request   restapi     /api/patient-documents?patient=1
   RequestsLogger.Write log       ${resp}
-  ${length} =         Get Length    ${resp.json()}
-  Should Be Equal As Integers       ${length}     0
+  Should Be Equal As Strings     ${resp.status_code}          400
 

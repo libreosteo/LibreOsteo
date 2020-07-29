@@ -502,7 +502,7 @@ class IntegratorExamination(AbstractIntegrator):
                     'diagnosis': r[11],
                     'treatments': r[12],
                     'conclusion': r[13],
-                    'patient': patient,
+                    'patient': patient.id,
                     'therapeut': user.id,
                     'type': ExaminationType.NORMAL,
                     'status': ExaminationStatus.NOT_INVOICED,
@@ -558,6 +558,6 @@ class IntegratorExamination(AbstractIntegrator):
             self.patient_table[int(c[0])] = Patient.objects.filter(
                 family_name=serializer.validated_data['family_name'],
                 first_name=serializer.validated_data['first_name'],
-                birth_date=serializer.validated_data['birth_date'])
+                birth_date=serializer.validated_data['birth_date']).first()
 
             logger.info("found patient %s " % self.patient_table[int(c[0])])

@@ -71,7 +71,8 @@ class Patient(models.Model):
     doctor = models.ForeignKey(RegularDoctor,
                                verbose_name=_('Regular doctor'),
                                blank=True,
-                               null=True)
+                               null=True,
+                               on_delete=models.SET_NULL)
     smoker = models.BooleanField(_('Smoker'), default=False)
     laterality = models.CharField(_('Laterality'),
                                   max_length=1,
@@ -129,7 +130,7 @@ class Children(models.Model):
                                    blank=True)
     first_name = models.CharField(_('Firstname'), max_length=200)
     birthday_date = models.DateField(_('Birth date'))
-    parent = models.ForeignKey(Patient, verbose_name=_('Parent'))
+    parent = models.ForeignKey(Patient, verbose_name=_('Parent'), on_delete=models.CASCADE)
 
     def __unicode__(self):
         return "%s %s" % (self.family_name, self.first_name)
@@ -169,11 +170,12 @@ class Examination(models.Model):
     invoices = models.ManyToManyField('Invoice',
                                       verbose_name=_('Invoice'),
                                       blank=True)
-    patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
+    patient = models.ForeignKey(Patient, verbose_name=_('Patient'), on_delete=models.PROTECT)
     therapeut = models.ForeignKey(User,
                                   verbose_name=_('Therapeut'),
                                   blank=True,
-                                  null=True)
+                                  null=True,
+                                  on_delete=models.PROTECT)
 
     EXAMINATION_IN_PROGRESS = 0
     EXAMINATION_WAITING_FOR_PAIEMENT = 1
@@ -254,10 +256,11 @@ class ExaminationComment(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('User'),
                              blank=True,
-                             null=True)
+                             null=True,
+                             on_delete=models.PROTECT)
     comment = models.TextField(_('Comment'))
     date = models.DateTimeField(_('Date'), null=True, blank=True)
-    examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
+    examination = models.ForeignKey(Examination, verbose_name=_('Examination'), on_delete=models.PROTECT)
 
 
 class Invoice(models.Model):
@@ -323,7 +326,8 @@ class Invoice(models.Model):
     canceled_by = models.ForeignKey('self',
                                     verbose_name=_("Canceled by"),
                                     blank=True,
-                                    null=True)
+                                    null=True,
+                                    on_delete=models.PROTECT)
     type = models.CharField(_('Invoice type'),
                             max_length=10,
                             blank=True,
@@ -379,7 +383,8 @@ class OfficeEvent(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('user'),
                              blank=True,
-                             null=False)
+                             null=False,
+                             on_delete=models.PROTECT)
 
     def clean(self):
         if self.date is None:
@@ -436,7 +441,8 @@ class TherapeutSettings(models.Model):
     user = models.OneToOneField(User,
                                 verbose_name=_('User'),
                                 blank=True,
-                                null=True)
+                                null=True,
+                                on_delete=models.PROTECT)
     siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
     invoice_footer = models.TextField(_('Invoice footer'),
                                       blank=True,
@@ -541,7 +547,8 @@ class Document(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('User'),
                              blank=True,
-                             null=True)
+                             null=True,
+                             on_delete=models.PROTECT)
     mime_type = models.TextField(_('Mime-Type'),
                                  blank=False,
                                  null=True,

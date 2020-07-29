@@ -97,7 +97,6 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         logger.info("user [%s] authenticated" % request.user)
 
 
-
 class OfficeSettingsMiddleware(MiddlewareMixin):
     """
     Middleware that sets `officesettings` attribute to request object.

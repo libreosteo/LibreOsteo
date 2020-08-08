@@ -26,6 +26,33 @@ utils.filter('translate', function() {
 	};
 });
 
+utils.directive('updatablePolyfill', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      $timeout(function() {
+        // To be compliant with all browser.
+        var jqEl = $(element);
+        if (jqEl.is(':visible')) {
+          jqEl.updatePolyfill();
+        }
+      });
+    }
+  }
+});
+
+utils.directive('maxToday', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      $timeout(function() {
+        var jqEl = $(element);
+        jqEl.prop('max', function(){
+          return new Date().toJSON().split('T')[0];
+        });
+      });
+    }
+  }
+});
+
 function getFields(obj)
 {
     "use strict";

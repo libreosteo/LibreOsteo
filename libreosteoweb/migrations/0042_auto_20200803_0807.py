@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libreosteoweb', '0041_merge_20191030_1739'),
+        ('libreosteoweb', '0042_auto_20200812_1526'),
     ]
 
     operations = [

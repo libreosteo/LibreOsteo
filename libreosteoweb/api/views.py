@@ -241,9 +241,9 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer)
+        return self._invoice_examination(current_examination, serializer, request.officesettings)
 
-    def _invoice_examination(self, current_examination, invoicing_serializer):
+    def _invoice_examination(self, current_examination, invoicing_serializer, officesettings):
         if invoicing_serializer.is_valid():
             if invoicing_serializer.data['status'] == 'notinvoiced':
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
@@ -253,7 +253,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
                 return Response({'invoiced': None})
             if invoicing_serializer.data['status'] == 'invoiced':
                 current_invoice = self.generate_invoice(
-                    invoicing_serializer.data, )
+                    invoicing_serializer.data, officesettings)
                 current_examination.invoices.add(current_invoice)
                 if invoicing_serializer.data['paiment_mode'] == 'notpaid':
                     current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
@@ -292,7 +292,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice_to_update = models.Invoice.objects.get(
             id=current_examination.last_invoice.id)
         invoice_to_update.status = models.InvoiceStatus.INVOICED_PAID
-        officesettings = models.OfficeSettings.objects.all()[0]
+        officesettings = request.officesettings
         p = models.Paiment(amount=invoice_to_update.amount,
                            currency=officesettings.currency,
                            date=timezone.now(),
@@ -309,10 +309,9 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer)
+        return self._invoice_examination(current_examination, serializer, request.officesettings)
 
-    def generate_invoice(self, invoicingSerializerData):
-        officesettings = models.OfficeSettings.objects.all()[0]
+    def generate_invoice(self, invoicingSerializerData, officesettings):
         therapeutsettings = models.TherapeutSettings.objects.filter(
             user=self.request.user)[0]
 
@@ -328,7 +327,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(therapeut=self.request.user)
+        serializer.save(therapeut=self.request.user, office=self.request.officesettings)
 
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated:
@@ -424,7 +423,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     def cancel(self, request, pk=None):
         # Ensure that invoice was not canceled before
         if self.get_object().status != models.InvoiceStatus.CANCELED:
-            officesettings = models.OfficeSettings.objects.all()[0]
+            officesettings = request.officesettings
             cancelation = invoicing_generator.Generator(
                 officesettings, None).cancel_invoice(self.get_object())
             canceled = self.get_object()
@@ -469,8 +468,9 @@ class OfficeSettingsView(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         # Check that the invoice_start_sequence is valid
-        result_query = models.Invoice.objects.aggregate(
-            Max('number'))['number__max']
+        result_query = models.Invoice.objects.filter(
+            officesettings_id=serializer.instance.id).aggregate(
+                Max('number'))['number__max']
         if result_query is not None:
             max_value = convert_to_long(result_query)
         else:

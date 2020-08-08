@@ -746,7 +746,8 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     $scope.invoicing.amount = $scope.examinationToInvoice.last_invoice.amount;
   } else {
     OfficeSettingsServ.get(function(settings) {
-      $scope.officesettings = settings[0];
+      const selectedArray = settings.find(s => s.selected);
+      $scope.officesettings = Array.isArray(selectedArray)? selectedArray[0]:selectedArray || {amount: null};
       $scope.invoicing.amount = $scope.officesettings.amount;
     });
   }

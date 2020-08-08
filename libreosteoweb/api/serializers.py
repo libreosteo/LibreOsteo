@@ -101,14 +101,21 @@ class RegularDoctorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OfficeDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfficeSettings
+        fields = ['office_name']
+
+
 class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer()
     comments = serializers.SerializerMethodField('get_nb_comments')
+    office_detail = OfficeDetailSerializer(source='office')
 
     class Meta:
         model = Examination
         fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type',
-                  'comments')
+                  'comments', 'office', 'office_detail')
         depth = 1
 
     def get_nb_comments(self, obj):
@@ -146,7 +153,6 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
         fields = '__all__'
         depth = 1
 
-
 class ExaminationSerializer(serializers.ModelSerializer):
     invoice_number = serializers.CharField(source="get_invoice_number",
                                            required=False,
@@ -167,6 +173,10 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                              required=False,
                                              allow_null=True,
                                              read_only=True)
+
+    office_detail = OfficeDetailSerializer(source="office", required=False,
+                                           allow_null=True,
+                                           read_only=True)
 
     class Meta:
         model = Examination
@@ -272,6 +282,7 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
     network_list = serializers.SerializerMethodField()
     invoice_min_sequence = serializers.SerializerMethodField()
+    selected = serializers.SerializerMethodField()
 
     def validate(self, data):
         try:
@@ -302,11 +313,16 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         return addresses
 
     def get_invoice_min_sequence(self, obj):
-        result_query = Invoice.objects.aggregate(Max('number'))['number__max']
+        result_query = Invoice.objects.filter(officesettings_id=
+                                              obj.id
+                                              ).aggregate(Max('number')
+                                                          )['number__max']
         if result_query is not None and len(result_query) > 0:
             return convert_to_long(result_query) + 1
         return 1
 
+    def get_selected(self, obj):
+        return self.context['request'].officesettings.id == obj.id
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):

@@ -60,6 +60,7 @@ class Generator(object):
             invoice.footer = self.therapeut_settings.invoice_footer
         invoice.number = self.get_invoice_number()
         invoice.date = datetime.today()
+        invoice.officesettings_id = self.office_settings.id
         return invoice
 
     def get_invoice_number(self):
@@ -102,4 +103,5 @@ class Generator(object):
         credit_note.type = 'creditnote' if credit_note.amount < 0 else 'invoice'
         credit_note.number = self.get_invoice_number()
         credit_note.status = models.InvoiceStatus.INVOICED_PAID
+        credit_note.officesettings_id = invoice.officesettings_id
         return credit_note

@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('notes', models.TextField(default=None, null=True, verbose_name='Notes', blank=True)),
                 ('internal_date', models.DateTimeField(verbose_name='Adding date', blank=True)),
                 ('document_date', models.DateField(default=None, null=True, verbose_name='Document date', blank=True)),
-                ('user', models.ForeignKey(verbose_name='User', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('user', models.ForeignKey(verbose_name='User', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)),
                 ('mime_type', models.TextField(default=None, null=True, verbose_name='Mime-Type'))
             ],
         ),

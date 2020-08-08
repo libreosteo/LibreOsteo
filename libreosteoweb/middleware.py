@@ -20,6 +20,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 import logging
 from django.utils.deprecation import MiddlewareMixin
+from libreosteoweb.models import OfficeSettings
+from django.utils.deprecation import MiddlewareMixin
 logger = logging.getLogger(__name__)
 
 
@@ -93,3 +95,35 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 return HttpResponseRedirect(
                     get_login_url() + "?next=" + request.path)
         logger.info("user [%s] authenticated" % request.user)
+
+
+
+class OfficeSettingsMiddleware(MiddlewareMixin):
+    """
+    Middleware that sets `officesettings` attribute to request object.
+    If this attribute is not set, it redirects to a form to select the office.
+    """
+
+    def process_request(self, request):
+        assert hasattr(request, 'session'), "The Office Settings middleware\
+ requires session middleware to be installed. Edit your\
+ MIDDLEWARE_CLASSES setting to insert\
+ 'django.contrib.sessions.middleware.SessionMiddleware'."
+
+        if not request.user.is_authenticated:
+            return
+        multiple_office = OfficeSettings.objects.all().count()
+        request.has_multiple_office = multiple_office > 1
+        if request.has_multiple_office:
+            # Search into the session the current officesettings set
+            current_officesettings = OfficeSettings.objects.filter(
+                id=request.session.get('officesettings')
+            ).first()
+            if current_officesettings is None:
+                # Redirect to the Office Settings form if not already
+                # redirected
+                if request.path != reverse('officesettings-set'):
+                    return HttpResponseRedirect(reverse('officesettings-set'))
+        else:
+            current_officesettings = OfficeSettings.objects.first()
+        request.officesettings = current_officesettings

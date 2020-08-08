@@ -82,7 +82,8 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 
         i18nService.setCurrentLang('fr');
         OfficeSettingsServ.get(function(settings){
-            $scope.officesettings = settings[0];
+          $scope.officesettings = settings.find(x => x.selected);
+          $scope.multiple_office = Array.isArray(settings) && settings.length > 1;
         });
 
         $scope.users = OfficeUsersServ.query(function(data)
@@ -94,7 +95,7 @@ officesettings.controller('OfficeSettingsCtrl', ['$scope', '$http', 'growl',
 			{
 				$scope.paiment_means = data;
 			});
-        
+
         $scope.gridOptions = {
           enableSorting: true,
           columnDefs: [

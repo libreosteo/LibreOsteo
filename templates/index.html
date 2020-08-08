@@ -39,199 +39,209 @@
 
 <body>
 
-<div id="wrapper" ng-controller="MainController">
-
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
-<div class="navbar-header">
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".sidebar-collapse" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="/">Libreosteo</a>
-</div>
-<!-- /.navbar-header -->
-
-<ul class="nav navbar-nav navbar-top-links navbar-left">
-    <li>
-        <a href="#/addPatient"><i class="fa fa-pencil-square-o navbar-link"></i> {% trans 'New patient' %}</a>
-    </li>
-    <li>
-        <a href="#/invoices"><i class="fa fa-list-alt"></i> {% trans 'Accounting' %}</a>
-    </li>
-
-</ul>
-<ul class="nav navbar-top-links navbar-right">
-        <!-- /.dropdown -->
-<li class="dropdown">
-    <a target="_self" href="#" class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
-        <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
-    </a>
-    <ul class="dropdown-menu dropdown-user">
-        <li id="user-profile"><a ui-sref="user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
-        </li>
-        <li id="office-settings"><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
-        </li>
-        <li id="import-file" ng-if="{{ request.user.is_staff|yesno:"true,false" }}"><a ui-sref="import-file"><i class="fa fa-upload"></i> {% trans "Import/export" %}</a>
-        </li>
-        <li id="rebuild-index" ng-if="{{ request.user.is_staff|yesno:"true,false" }}"><a ui-sref="rebuild-index"><i class="fa fa-wrench"></i> {% trans "Rebuild index" %}</a>
-        </li>
-        <li class="divider"></li>
-        <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
-        </li>
-    </ul>
-    <!-- /.dropdown-user -->
-</li>
-<li class="dropdown">
-    <a href="#" target="_self" class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
-      <i class="fa fa-question-circle fa-fw"></i><i class="fa fa-caret-down"></i><span class="sr-only">{% trans "Help" %}</span>
-      {% if new_version_available %}
-        <span class="badge badge-info">1<span>
-      {% endif %}
-    </a>
-    <ul class="dropdown-menu">
-        <li><a href="https://www.libreosteo.org/" target="_blank"><i class="fa fa-globe fa-fw"></i> {% trans 'Project web page' %}</a></li>
-        <li><a href="http://libreosteo.forumcrea.com" target="_blank"><i class="fa fa-comment fa-fw"></i> {% trans "Community support (forum)" %}</a></li>
-        <li><a href="https://github.com/libreosteo/Libreosteo/" target="_blank"><i class="fa fa-comment fa-github"></i> {% trans "Development and code project" %}</a></li>
-        <li class="divider"></li>
-        <li class="disabled"><a href="#"><i class="fa fa-info-circle fa-fw"></i> {% trans 'Version' %} {{ version }}</a></li>
-        {% if new_version_available %}
-        <li class="bg-success"><a href="https://www.libreosteo.org/" target="_blank"><i class="fa fa-star fa-fw"></i> {% trans 'New version available' %} {{ new_version }}</a></li>
+ <div id="wrapper" ng-controller="MainController">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+      <div class="d-flex flex-column">
+        {% if request.has_multiple_office %}
+          <a class="navbar-brand" href="/" style="max-width:13%;padding-top:5px">{{request.officesettings.office_name}}</a>
+        {% else %}
+          <a class="navbar-brand" href="/">Libreosteo</a>
         {% endif %}
-        </li>
-    </ul>
-</li>
-<!-- /.dropdown -->
-</ul>
-    <form class="navbar-form navbar-right" ng-controller="SearchCtrl">
-        <div class="search-container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".sidebar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+      {% if request.has_multiple_office %}
+      <span class="navbar-right navbar-text">Libreosteo</span>
+      {% endif %}
+
+      </div>
+
+        <!-- /.navbar-header -->
+
+        <ul class="nav navbar-nav navbar-top-links navbar-left">
+          <li>
+            <a href="#/addPatient"><i class="fa fa-pencil-square-o navbar-link"></i> {% trans 'New patient' %}</a>
+          </li>
+          <li>
+            <a href="#/invoices"><i class="fa fa-list-alt"></i> {% trans 'Accounting' %}</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-top-links navbar-right">
+        <!-- /.dropdown -->
+          <li class="dropdown">
+            <a target="_self" href="#" class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
+              <i class="fa fa-user fa-fw"></i> {{ request.user.username }} <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+              <li id="user-profile"><a ui-sref="user-profile"><i class="fa fa-user fa-fw"></i> {% trans "User Profile" %}</a>
+              </li>
+              <li id="office-settings"><a ui-sref="office-settings"><i class="fa fa-gear fa-fw"></i> {% trans "Settings" %}</a>
+              </li>
+              <li id="import-file" ng-if="{{ request.user.is_staff|yesno:"true,false" }}"><a ui-sref="import-file"><i class="fa fa-upload"></i> {% trans "Import/export" %}</a>
+              </li>
+              <li id="rebuild-index" ng-if="{{ request.user.is_staff|yesno:"true,false" }}"><a ui-sref="rebuild-index"><i class="fa fa-wrench"></i> {% trans "Rebuild index" %}</a>
+              </li>
+              <li id="change-office" ng-if="{{ request.has_multiple_office|yesno:"true,false" }}"><a href="{% url 'officesettings-reset' %}"><i class="fa fa-exchange"></i> {% trans "Change office" %}</a>
+              </li>
+              <li class="divider"></li>
+              <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
+              </li>
+            </ul>
+            <!-- /.dropdown-user -->
+          </li>
+          <li class="dropdown">
+            <a href="#" target="_self" class="dropdown-toggle" data-toggle="dropdown" id="user-toggle" aria-haspopup="true" role="button" aria-expanded="false">
+              <i class="fa fa-question-circle fa-fw"></i><i class="fa fa-caret-down"></i><span class="sr-only">{% trans "Help" %}</span>
+              {% if new_version_available %}
+                <span class="badge badge-info">1<span>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="https://www.libreosteo.org/" target="_blank"><i class="fa fa-globe fa-fw"></i> {% trans 'Project web page' %}</a></li>
+              <li><a href="http://libreosteo.forumcrea.com" target="_blank"><i class="fa fa-comment fa-fw"></i> {% trans "Community support (forum)" %}</a></li>
+              <li><a href="https://github.com/libreosteo/Libreosteo/" target="_blank"><i class="fa fa-comment fa-github"></i> {% trans "Development and code project" %}</a></li>
+              <li class="divider"></li>
+              <li class="disabled"><a href="#"><i class="fa fa-info-circle fa-fw"></i> {% trans 'Version' %} {{ version }}</a></li>
+              {% if new_version_available %}
+                <li class="bg-success"><a href="https://www.libreosteo.org/" target="_blank"><i class="fa fa-star fa-fw"></i> {% trans 'New version available' %} {{ new_version }}</a></li>
+              {% endif %}
+              </li>
+            </ul>
+          </li>
+          <!-- /.dropdown -->
+        </ul>
+        <form class="navbar-form navbar-right" ng-controller="SearchCtrl">
+          <div class="search-container">
             <div class="input-group custom-search-form">
-                <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
-                       ng-model="query" ng-keydown="onEnterKeyDown($event)">
+              <input type="search" class="form-control" placeholder="{% trans "Search..." %}"
+                     ng-model="query" ng-keydown="onEnterKeyDown($event)">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" ng-click="search()">
-                        <i class="fa fa-search"></i>
-                    </button>
+                  <button class="btn btn-default" type="button" ng-click="search()">
+                    <i class="fa fa-search"></i>
+                  </button>
                 </span>
             </div>
-        </div>
+          </div>
         <!-- /input-group -->
-    </form>
+        </form>
 
-    <ul class="nav navbar-top-links navbar-right">
-        <li>
+        <ul class="nav navbar-top-links navbar-right">
+          <li>
             <button ng-show="editFormManager.action_available('edit')" type="button" class="btn btn-default btn-xs navbar-btn" ng-click="editFormManager.call_action('edit')">
-                <i class="fa fa-edit"></i> {% trans 'Edit' %}
+              <i class="fa fa-edit"></i> {% trans 'Edit' %}
             </button>
             <!-- buttons to submit / cancel form -->
             <span ng-show="editFormManager.action_available('save')">
-                <button type="button" class="btn btn-default btn-xs navbar-btn" ng-click="editFormManager.call_action('save')">
-                    <i class="fa fa-thumbs-o-up"></i> {% trans 'End of editing' %}
-                </button>
+              <button type="button" class="btn btn-default btn-xs navbar-btn" ng-click="editFormManager.call_action('save')">
+                <i class="fa fa-thumbs-o-up"></i> {% trans 'End of editing' %}
+              </button>
             </span>
             <button ng-show="editFormManager.action_available('delete')" type="button" class="btn btn-danger btn-xs navbar-btn" ng-click="editFormManager.call_action('delete')"><i class="fa fa-trash"></i> {% trans 'Delete' %}</button>
-
-        </li>
-    </ul>
-</nav>
-<!-- /.navbar-static-side -->
-<div id="page-wrapper">
-    <div growl></div>
-    <div class="row">
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- /.navbar-static-side -->
+    <div id="page-wrapper">
+      <div growl></div>
+      <div class="row">
         <div class="col-lg-12" ui-view>
-            <h1 class="page-header"></h1>
+          <h1 class="page-header"></h1>
         </div>
         <!-- /.col-lg-12 -->
-    </div>
+      </div>
     <!-- /.row -->
-</div>
-<!-- /#page-wrapper -->
+    </div>
+  <!-- /#page-wrapper -->
 
-</div>
-<!-- /#wrapper -->
-<script src="{% static "components/webshim/js-webshim/minified/polyfiller.js" %}"></script>
-{% compress js %}
-<!-- Core Scripts - Include with every page -->
-<script src="{% static "components/jquery-1.11.1/dist/jquery.min.js" %}"></script>
-<script src="{% static "js/plugins/animatescroll.min.js" %}"></script>
-<script src="{% static "js/bootstrap.min.js" %}"></script>
+  </div>
+  <!-- /#wrapper -->
+  <script src="{% static "components/webshim/js-webshim/minified/polyfiller.js" %}"></script>
+  {% compress js %}
+  <!-- Core Scripts - Include with every page -->
+  <script src="{% static "components/jquery-1.11.1/dist/jquery.min.js" %}"></script>
+  <script src="{% static "js/plugins/animatescroll.min.js" %}"></script>
+  <script src="{% static "js/bootstrap.min.js" %}"></script>
 
-<!-- Page-Level Plugin Scripts - Blank -->
+  <!-- Page-Level Plugin Scripts - Blank -->
 
-<!-- SB Admin Scripts - Include with every page -->
-<script src="{% static "js/sb-admin-2.js" %}"></script>
-<!-- Metis Menu Plugin JavaScript -->
-<script src="{% static "js/plugins/metisMenu/metisMenu.min.js" %}"></script>
+  <!-- SB Admin Scripts - Include with every page -->
+  <script src="{% static "js/sb-admin-2.js" %}"></script>
+  <!-- Metis Menu Plugin JavaScript -->
+  <script src="{% static "js/plugins/metisMenu/metisMenu.min.js" %}"></script>
 
-<!-- Angular framework -->
-<script src="{% static "components/angular/angular.min.js" %}"></script>
-<script src="{% static "components/angular-resource/angular-resource.min.js" %}"></script>
-<script src="{% static "components/angular-route/angular-route.min.js" %}"></script>
-<script src="{% static "components/angular-cookies/angular-cookies.min.js" %}"></script>
-<script src="{% static "components/angular-i18n/angular-locale_fr-fr.js" %}"></script>
-<script src="{% static "components/angular-animate/angular-animate.min.js" %}"></script>
-<script src="{% static "components/angular-sanitize/angular-sanitize.min.js" %}"></script>
-<script src="{% static "components/angular-xeditable/dist/js/xeditable.min.js" %}"></script>
-<script src="{% static "components/angular-bootstrap/ui-bootstrap.min.js" %}"></script>
-<script src="{% static "components/angular-bootstrap/ui-bootstrap-tpls.min.js" %}"></script>
-<script src="{% static "components/angular-toArrayFilter/toArrayFilter.js" %}"></script>
-<script src="{% static "js/plugins/timeAgo.js" %}"></script>
-<script src="{% static "components/angular-scroll/angular-scroll.min.js" %}"></script>
-<script src="{% static "components/angular-growl/build/angular-growl.min.js" %}"></script>
-<script src="{% static "components/angular-loading-bar/build/loading-bar.min.js" %}"></script>
-<script src="{% static "components/angular-ui-router/release/angular-ui-router.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/angular-ui-validate/dist/validate.js" %}"></script>
-<script src="{% static "components/bootstrap-tour/build/js/bootstrap-tour.min.js" %}"></script>
-<script src="{% static "components/angular-ui-grid/ui-grid.min.js" %}"></script>
-<script type='text/javascript' src="{% static "components/ng-infinite-scroll/build/ng-infinite-scroll.min.js" %}"></script>
-<script type="text/javascript" src="{% static "js/plugins/jquery.sparkline.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/rangy/rangy-core.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/jquery-ui/ui/minified/jquery-ui.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/hallo/dist/hallo.js" %}"></script>
-<script type="text/javascript" src="{% static "components/ng-file-upload/ng-file-upload-shim.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/ng-file-upload/ng-file-upload.min.js" %}"></script>
-<script type="text/javascript" src="{% static "components/moment/moment.js" %}"></script>
-{% if LANGUAGE_CODE == 'fr' %}
-<script type="text/javascript" src="{% static "components/moment/locale/fr.js" %}"></script>
-<script>moment.locale('fr');</script>
-{% endif %}
-<script type="text/javascript" src="{% static "components/bootstrap-daterangepicker/daterangepicker.js" %}"></script>
-<script type="text/javascript" src="{% static "components/angular-daterangepicker/js/angular-daterangepicker.js" %}"></script>
+  <!-- Angular framework -->
+  <script src="{% static "components/angular/angular.min.js" %}"></script>
+  <script src="{% static "components/angular-resource/angular-resource.min.js" %}"></script>
+  <script src="{% static "components/angular-route/angular-route.min.js" %}"></script>
+  <script src="{% static "components/angular-cookies/angular-cookies.min.js" %}"></script>
+  <script src="{% static "components/angular-i18n/angular-locale_fr-fr.js" %}"></script>
+  <script src="{% static "components/angular-animate/angular-animate.min.js" %}"></script>
+  <script src="{% static "components/angular-sanitize/angular-sanitize.min.js" %}"></script>
+  <script src="{% static "components/angular-xeditable/dist/js/xeditable.min.js" %}"></script>
+  <script src="{% static "components/angular-bootstrap/ui-bootstrap.min.js" %}"></script>
+  <script src="{% static "components/angular-bootstrap/ui-bootstrap-tpls.min.js" %}"></script>
+  <script src="{% static "components/angular-toArrayFilter/toArrayFilter.js" %}"></script>
+  <script src="{% static "js/plugins/timeAgo.js" %}"></script>
+  <script src="{% static "components/angular-scroll/angular-scroll.min.js" %}"></script>
+  <script src="{% static "components/angular-growl/build/angular-growl.min.js" %}"></script>
+  <script src="{% static "components/angular-loading-bar/build/loading-bar.min.js" %}"></script>
+  <script src="{% static "components/angular-ui-router/release/angular-ui-router.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/angular-ui-validate/dist/validate.js" %}"></script>
+  <script src="{% static "components/bootstrap-tour/build/js/bootstrap-tour.min.js" %}"></script>
+  <script src="{% static "components/angular-ui-grid/ui-grid.min.js" %}"></script>
+  <script type='text/javascript' src="{% static "components/ng-infinite-scroll/build/ng-infinite-scroll.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/plugins/jquery.sparkline.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/rangy/rangy-core.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/jquery-ui/ui/minified/jquery-ui.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/hallo/dist/hallo.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/ng-file-upload/ng-file-upload-shim.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/ng-file-upload/ng-file-upload.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/moment/moment.js" %}"></script>
+  {% if LANGUAGE_CODE == 'fr' %}
+  <script type="text/javascript" src="{% static "components/moment/locale/fr.js" %}"></script>
+  <script>moment.locale('fr');</script>
+  {% endif %}
+  <script type="text/javascript" src="{% static "components/bootstrap-daterangepicker/daterangepicker.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/angular-daterangepicker/js/angular-daterangepicker.js" %}"></script>
   <script type="text/javascript" src="{%static "components/angular-bind-html-compile/angular-bind-html-compile.js" %}"></script>
 
-<!-- web Application -->
-<script src="{% static "js/app/app.js" %}"></script>
-<script src="{% static "js/app/utils.js" %}"></script>
-<script src="{% static "js/app/patient.js" %}"></script>
-<script src="{% static "js/app/doctor.js" %}"></script>
-<script src="{% static "js/app/examination.js" %}"></script>
-<!--script src="{% static "js/app/inline-edit.js" %}"></script-->
-<script src="{% static "js/app/timeline.js" %}"></script>
-<script src="{% static "js/app/search.js" %}"></script>
-<script src="{% static "js/app/user.js" %}"></script>
-<script src="{% static "js/app/dashboard.js" %}"></script>
-<script src="{% static "js/app/officeevent.js" %}"></script>
-<script src="{% static "js/app/officesettings.js" %}"></script>
-<script src="{% static "js/app/editformmanager.js" %}"></script>
-<script src="{% static "js/app/tour.js" %}"></script>
-<script src="{% static "js/app/halloeditor.js" %}"></script>
-<script src="{% static "js/app/fileimport.js" %}"></script>
-<script src="{% static "js/app/rebuild_index.js" %}"></script>
-<script src="{% static "js/app/filemanager.js" %}"></script>
-<script src="{% static "js/app/invoice.js" %}"></script>
-{% endcompress %}
-<script src="{% url 'javascript-catalog' %}" type="text/javascript"></script>
+  <!-- web Application -->
+  <script src="{% static "js/app/app.js" %}"></script>
+  <script src="{% static "js/app/utils.js" %}"></script>
+  <script src="{% static "js/app/patient.js" %}"></script>
+  <script src="{% static "js/app/doctor.js" %}"></script>
+  <script src="{% static "js/app/examination.js" %}"></script>
+  <!--script src="{% static "js/app/inline-edit.js" %}"></script-->
+  <script src="{% static "js/app/timeline.js" %}"></script>
+  <script src="{% static "js/app/search.js" %}"></script>
+  <script src="{% static "js/app/user.js" %}"></script>
+  <script src="{% static "js/app/dashboard.js" %}"></script>
+  <script src="{% static "js/app/officeevent.js" %}"></script>
+  <script src="{% static "js/app/officesettings.js" %}"></script>
+  <script src="{% static "js/app/editformmanager.js" %}"></script>
+  <script src="{% static "js/app/tour.js" %}"></script>
+  <script src="{% static "js/app/halloeditor.js" %}"></script>
+  <script src="{% static "js/app/fileimport.js" %}"></script>
+  <script src="{% static "js/app/rebuild_index.js" %}"></script>
+  <script src="{% static "js/app/filemanager.js" %}"></script>
+  <script src="{% static "js/app/invoice.js" %}"></script>
+  {% endcompress %}
+  <script src="{% url 'javascript-catalog' %}" type="text/javascript"></script>
 
-{% compress css %}
-<link href="{% static "components/angular-xeditable/dist/css/xeditable.css" %}" rel="stylesheet">
-<link href="{% static "components/angular-growl/build/angular-growl.min.css" %}" rel="stylesheet">
-<link href="{% static "components/angular-loading-bar/build/loading-bar.min.css" %}" rel="stylesheet">
-<link href="{% static "components/bootstrap-daterangepicker/daterangepicker.css" %}" rel="stylesheet">
-<!--Specific libreosteo CSS -->
-<link href="{% static "css/libreosteo.css" %}" rel="stylesheet"/>
-{% endcompress %}
+  {% compress css %}
+  <link href="{% static "components/angular-xeditable/dist/css/xeditable.css" %}" rel="stylesheet">
+  <link href="{% static "components/angular-growl/build/angular-growl.min.css" %}" rel="stylesheet">
+  <link href="{% static "components/angular-loading-bar/build/loading-bar.min.css" %}" rel="stylesheet">
+  <link href="{% static "components/bootstrap-daterangepicker/daterangepicker.css" %}" rel="stylesheet">
+  <!--Specific libreosteo CSS -->
+  <link href="{% static "css/libreosteo.css" %}" rel="stylesheet"/>
+  {% endcompress %}
 
-</body>
-
+  </body>
 </html>

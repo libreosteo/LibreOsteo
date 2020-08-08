@@ -20,6 +20,14 @@
                 </div>
                 <div class="col-xs-8 col-sm-7 col-md-8">
                     <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12" ng-if="multiple_office">
+                            <div class="form-group">
+                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_name" required name="office_name" placeholder="{{ officesettings.office_name }}"
+                                tooltip="{{ officesettings.office_name }}"
+                                tooltip-trigger="mouseenter"
+                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                            </div>
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_street" required name="office_address_street" placeholder="{{ officesettings.office_address_street }}"
@@ -66,6 +74,7 @@
                                 <input type="text" class="form-control input-lg" ng-model="officesettings.office_siret" name="office_siret" placeholder="{{ officesettings.office_siret }}"
                                 tooltip="{{ officesettings.office_siret }}"
                                 tooltip-trigger="mouseenter"
+                                required
                                 ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
                             </div>
                         </div>

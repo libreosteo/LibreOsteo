@@ -28,8 +28,8 @@
             <div class="form-group">
                     <label for="birthdate">{{patient.birth_date }}</label>
                     <input type="date" id="birthdate" class="form-control  input-lg birthdate"
-                           ng-model="patient.birth_date"  ng-required="true"
-                           placeholder="AAAA-MM-DD" data-date-split-input="true"/>
+                           ng-model="patient.birth_date"  ng-required="true" updatable-polyfill max-today
+                                                          placeholder="AAAA-MM-DD" data-date='{"splitInput": true}'/>
             </div>
             <button class="btn btn-primary"
                     ng-click="initPatient(patient)" ng-disabled="form.$invalid">{% trans 'Init the patient file' %}</button>

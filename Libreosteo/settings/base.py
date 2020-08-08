@@ -90,6 +90,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'libreosteoweb.middleware.LoginRequiredMiddleware',
+    'libreosteoweb.middleware.OfficeSettingsMiddleware',
 ]
 
 ROOT_URLCONF = 'Libreosteo.urls'

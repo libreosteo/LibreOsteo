@@ -114,7 +114,6 @@ officeEvent.directive('officeevent', ['$location', 'PatientServ', 'ExaminationSe
         $scope.show = function(selector) {
             $scope.selector = selector;
         };
-        console.log($scope.officeEventLoader);
     },
 
     templateUrl: 'web-view/partials/officeevent'

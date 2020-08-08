@@ -29,9 +29,9 @@ def settings_event_tracer(officesettings, user, new_value):
         event.comment = _('Invoice sequence updated from %(previous)s to %(actual)s') % {
                 'previous' : _unicode(officesettings.invoice_start_sequence),
                 'actual' : _unicode(new_value)
-                } 
-        event.reference = officesettings.id 
-        event.user = user 
+                }
+        event.reference = officesettings.id
+        event.user = user
         event.clean()
         event.save()
 

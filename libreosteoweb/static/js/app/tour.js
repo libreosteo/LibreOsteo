@@ -58,26 +58,29 @@ function stepUserProfile() {
 
 function stepOfficeSettings() {
   return $.getJSON('/api/settings').done(function(data){
-  if (data.length == 0 || typeof data[0].currency === 'undefined' || data[0].currency == "" ){
-    console.log("passe ici car : "+data.currency);
-    console.log(typeof data.currency === 'undefined' || data.currency == "" );
-    tour.addStep(
-    {
-      element: "#office-settings",
-      title: "Paramétrer le cabinet",
-      content: "Afin de pouvoir générer correctement les factures, il est nécessaire de mettre à jour les informations du cabinet.",
-      backdrop : false,
-      placement: 'left',
-      orphan : true,
-      onShow : function(tour)
+    let setting;
+    if (data.length != 0 ) {
+      setting = data.filter(x => x.selected)[0];
+    }
+    if (setting === 'undefined' || typeof setting.currency === 'undefined' || setting.currency == "" ){
+      tour.addStep(
       {
-        $('#user-toggle').parent().on('hidden.bs.dropdown', open_dropdown);
-        $('#user-toggle').parent().addClass('open');
-      },
-    });
-  }
+        element: "#office-settings",
+        title: "Paramétrer le cabinet",
+        content: "Afin de pouvoir générer correctement les factures, il est nécessaire de mettre à jour les informations du cabinet.",
+        backdrop : false,
+        placement: 'left',
+        orphan : true,
+        onShow : function(tour)
+        {
+          $('#user-toggle').parent().on('hidden.bs.dropdown', open_dropdown);
+          $('#user-toggle').parent().addClass('open');
+        },
+      }
+      );
+    }
   });
-};
+}
 
 function defineSteps() {
   stepUserProfile().then(stepOfficeSettings).then(function () {
@@ -86,6 +89,6 @@ function defineSteps() {
       tour.start(true);
     }
   });
-};
+}
 
 defineSteps();

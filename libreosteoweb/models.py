@@ -176,6 +176,10 @@ class Examination(models.Model):
                                   blank=True,
                                   null=True,
                                   on_delete=models.PROTECT)
+    office = models.ForeignKey('OfficeSettings',
+                               verbose_name=_('Office Settigns'),
+                               null=True,
+                               on_delete=models.SET_NULL)
 
     EXAMINATION_IN_PROGRESS = 0
     EXAMINATION_WAITING_FOR_PAIEMENT = 1
@@ -333,6 +337,9 @@ class Invoice(models.Model):
                             blank=True,
                             default='invoice')
 
+    officesettings_id = models.IntegerField(_('office id'), default=1)
+    check_sum = models.BinaryField(_('check_sum'), max_length=256)
+
     def _get_paiments_list(self):
         return self.paiment_set.all().order_by('-date')
 
@@ -395,6 +402,7 @@ class OfficeSettings(models.Model):
     """
     This class implements model for the settings into the application
     """
+    office_name = models.CharField(_('Office name'), max_length=250, blank=True, null=True)
     invoice_office_header = models.CharField(_('Invoice office header'),
                                              max_length=500,
                                              blank=True)
@@ -423,10 +431,6 @@ class OfficeSettings(models.Model):
                                               blank=True)
 
     def save(self, *args, **kwargs):
-        """
-        Ensure that only one instance exists in the db
-        """
-        self.id = 1
         super(OfficeSettings, self).save()
 
     UPDATE_INVOICE_SEQUENCE = 1

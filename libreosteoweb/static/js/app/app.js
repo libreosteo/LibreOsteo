@@ -71,7 +71,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
         $urlRouterProvider.otherwise('/');
 
         $stateProvider.
-            state('patient', 
+            state('patient',
             {
                 url : '/patient/{patientId}',
                 templateUrl : 'web-view/partials/patient-detail',
@@ -92,7 +92,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl : 'web-view/partials/add-patient',
                 controller : 'AddPatientCtrl'
             }).
-            state('search', 
+            state('search',
             {
                 url : '/search/:query',
                 templateUrl : function(params) {
@@ -101,7 +101,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 controller : 'SearchResultCtrl'
             }).
-            state('searchPaginated', 
+            state('searchPaginated',
             {
                 url : '/search/:query/:page',
                 templateUrl : function(params) {
@@ -113,7 +113,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 controller : 'SearchResultCtrl'
             }).
-            state('user-profile', 
+            state('user-profile',
             {
                 url : '/accounts/user-profile',
                templateUrl : 'web-view/partials/user-profile',
@@ -159,18 +159,10 @@ webshim.setOptions('forms-ext', {
 });
 
 // WEBShim configuration
-webshim.polyfill('forms-ext');
+webshim.polyfill('forms forms-ext');
 
 libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', function($scope, loEditFormManager) {
-	$scope.$on('$viewContentLoaded', function() {
-                $('[type="date"].birthdate').prop('max', function(){
-                    return new Date().toJSON().split('T')[0];
-                });
-                $('body').updatePolyfill();
-            });
-
-    $scope.editFormManager = loEditFormManager;
-
+  $scope.editFormManager = loEditFormManager;
 }]);
 
 libreosteoApp.filter('htmlToPlaintext', function() {
@@ -188,7 +180,7 @@ libreosteoApp.filter('mimeTypeToClass', function() {
             } else if (text.includes('image/')) {
                 return 'fa-file-image-o';
             }
-        } 
+        }
         return 'fa-file-text-o';
     }
 });

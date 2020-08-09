@@ -11,6 +11,8 @@ install:
   - pip install -r requirements/requirements.txt
   - pip install -r requirements/requ-testing.txt
   - yarn
+  - ls -al libreosteoweb/static/components/moment/
+  - ls -al libreosteoweb/static/components/moment/meteor/
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
   - tar -xvf /tmp/geckodriver.tar.gz
   - export PATH=$PATH:$PWD

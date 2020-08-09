@@ -24,6 +24,14 @@ before_script:
   - python ./server.py &
   - sleep 3
 script:
+  - echo 'Do unit tests pass ?'
   - python ./manage.py test
+
+  - echo 'Do functional tests pass ?'
   - xvfb-run --server-args="-screen 0 1024x768x24" robot tests
 
+  - echo 'Are translations in clean state, with no string forgotten ?'
+  - python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+
+  - echo 'Did you forgot some migration ?'
+  - python ./manage.py makemigrations --check

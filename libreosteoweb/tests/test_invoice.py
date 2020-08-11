@@ -38,9 +38,11 @@ class TestChangeIdInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount = 50
+            setting.save()
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
@@ -63,10 +65,12 @@ class TestChangeIdInvoice(APITestCase):
         self.assertEqual(response['invoice_start_sequence'], u'100')
 
     def test_no_set_start_invoice_sequence_on_already_set_value(self):
-        OfficeSettings.objects.create(office_siret='12345',
-                                      currency='EUR',
-                                      amount=50,
-                                      invoice_start_sequence=1000)
+        setting = OfficeSettings.objects.get(id=1)
+        setting.office_siret = '12345'
+        setting.currency = 'EUR'
+        setting.amount = 50
+        setting.invoice_start_sequence = 1000
+        setting.save()
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'1000')
@@ -127,7 +131,7 @@ class TestChangeIdInvoice(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.assertEqual(
-            OfficeSettings.objects.all()[0].invoice_start_sequence, u'101')
+            OfficeSettings.objects.first().invoice_start_sequence, u'101')
 
 
 class TestCancelInvoice(APITestCase):
@@ -141,9 +145,11 @@ class TestCancelInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret="12345"
+            setting.currency='EUR'
+            setting.amount=50
+            setting.save()
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
@@ -203,10 +209,13 @@ class TestRegularizeNotPaidInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount=50
+            setting.save()
             self.client.login(username='test', password='testpw')
+
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
@@ -361,7 +370,7 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                     data={
                                         'status': 'invoiced',
                                         'amount': 60,
-                                        'paiment_mode' : 'check',
+                                        'paiment_mode': 'check',
                                         'check': {}
                                     },
                                     format='json')
@@ -378,5 +387,3 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.status,
                          ExaminationStatus.INVOICED_PAID)
-
-

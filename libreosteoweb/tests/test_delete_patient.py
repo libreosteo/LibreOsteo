@@ -36,7 +36,9 @@ class TestDeletePatient(APITestCase):
                 ):
             self.user = User.objects.create_superuser("test","test@test.com", "testpw")
             TherapeutSettings.objects.create(adeli="12345",siret="12345", user=self.user)
-            OfficeSettings.objects.create(office_siret="12345")
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.save()
             self.p1 = Patient.objects.create(family_name="Picard", first_name="Jean-Luc", birth_date=datetime(1935,7,13))
             self.p2 = Patient.objects.create(family_name="Bond", first_name="James", birth_date=datetime(1924, 1, 1))
             self.e1 = Examination.objects.create(date=datetime.now(), status=0, type=1, patient=self.p1)
@@ -66,4 +68,3 @@ class TestDeletePatient(APITestCase):
         assert len(Examination.objects.filter(id=self.e1.pk)) == 0
         assert len(Invoice.objects.filter(id=current_invoice.id)) == 1
         assert Invoice.objects.filter(id=current_invoice.id).first().patient_family_name == 'Picard'
-       

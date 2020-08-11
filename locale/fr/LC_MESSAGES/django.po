@@ -311,7 +311,7 @@ msgid "office id"
 msgstr "cabinet id"
 
 msgid "check_sum"
-msgstr ""
+msgstr "somme de contrôle"
 
 msgid "Code"
 msgstr "Code"

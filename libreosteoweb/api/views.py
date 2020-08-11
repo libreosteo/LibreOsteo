@@ -472,7 +472,7 @@ class OfficeSettingsView(viewsets.ModelViewSet):
             officesettings_id=serializer.instance.id).aggregate(
                 Max('number'))['number__max']
         if result_query is not None:
-            max_value = convert_to_long(result_query)
+            max_value = convert_to_long(result_query, strip_string_prefix=True)
         else:
             max_value = 1
         try:

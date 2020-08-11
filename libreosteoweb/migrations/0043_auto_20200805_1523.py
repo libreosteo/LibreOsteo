@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='examination',
             name='office',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='libreosteoweb.OfficeSettings', verbose_name='Office Settigns'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='libreosteoweb.OfficeSettings', verbose_name='Office Settings'),
         ),
         migrations.AddField(
             model_name='officesettings',

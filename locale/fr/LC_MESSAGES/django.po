@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-11 06:51+0200\n"
-"PO-Revision-Date: 2020-08-11 06:53+0200\n"
+"POT-Creation-Date: 2020-08-11 15:29+0200\n"
+"PO-Revision-Date: 2020-08-11 15:32+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jean-baptiste.gury@cambiatech.com>\n"
 "Language: fr\n"
@@ -348,6 +348,9 @@ msgstr "Pied de page de facture"
 
 msgid "Invoice start sequence"
 msgstr "Séquence de démarrage de facture"
+
+msgid "Invoice prefix sequence"
+msgstr "Préfixe de séquence de facturation"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -859,6 +862,9 @@ msgstr "Cabinet"
 
 msgid "Paiment means"
 msgstr "Moyens de paiement"
+
+msgid "The prefix to add for invoicing sequence"
+msgstr "Le préfixe à ajouter à la séquence de facturation"
 
 msgid "The start sequence must have composed only with numbers"
 msgstr "La séquence de démarrage doit être composée uniquement de chiffres"

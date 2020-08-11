@@ -15,7 +15,8 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 import socket
 import netifaces
-import logging 
+import logging
+import re
 
 logger = logging.getLogger(__file__)
 def enum(enumName, *listValueNames):
@@ -57,11 +58,14 @@ class NetworkHelper():
         sock.close()
         return result
 
-def convert_to_long(value):
+def convert_to_long(value, strip_string_prefix=False):
+    value_to_convert = value
+    if strip_string_prefix:
+        value_to_convert = re.sub(r'^[A-Za-z]', '', value)
     try:
-        return long(value)
+        return long(value_to_convert)
     except:
-        return int(value)
+        return int(value_to_convert)
 
 class LoggerWriter:
     def __init__(self, logger_func):

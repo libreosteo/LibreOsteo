@@ -91,7 +91,7 @@ class TestChangeIdInvoice(APITestCase):
                                    data=settings)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        Invoice.objects.create(date=timezone.now(), amount=50, number=u'101')
+        Invoice.objects.create(date=timezone.now(), amount=50, number=u'W101')
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
                                    data=settings)
@@ -100,6 +100,7 @@ class TestChangeIdInvoice(APITestCase):
     def test_set_start_invoice_sequence_create_invoice(self):
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
+        settings['invoice_prefix_sequence'] = 'W'
         settings['invoice_start_sequence'] = 100
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
@@ -115,7 +116,7 @@ class TestChangeIdInvoice(APITestCase):
                                     })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoices.latest('date').number, u'100')
+        self.assertEqual(examination.invoices.latest('date').number, u'W100')
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'101')
@@ -419,7 +420,7 @@ class TestInvoiceWithOfficeSettings(APITestCase):
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
-            self.e1 = Examination.objects.create(date=datetime.now(),
+            self.e1 = Examination.objects.create(date=timezone.now(),
                                                  status=0,
                                                  type=1,
                                                  patient=self.p1)

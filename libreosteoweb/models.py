@@ -429,6 +429,8 @@ class OfficeSettings(models.Model):
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)
     invoice_start_sequence = models.TextField(_('Invoice start sequence'),
                                               blank=True)
+    invoice_prefix_sequence = models.CharField(_('Invoice prefix sequence'), blank=True,
+                                               null=True, max_length=3)
 
     UPDATE_INVOICE_SEQUENCE = 1
 

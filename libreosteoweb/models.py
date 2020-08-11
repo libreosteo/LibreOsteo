@@ -178,7 +178,7 @@ class Examination(models.Model):
                                   null=True,
                                   on_delete=models.PROTECT)
     office = models.ForeignKey('OfficeSettings',
-                               verbose_name=_('Office Settigns'),
+                               verbose_name=_('Office Settings'),
                                null=True,
                                on_delete=models.SET_NULL)
 
@@ -429,9 +429,6 @@ class OfficeSettings(models.Model):
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)
     invoice_start_sequence = models.TextField(_('Invoice start sequence'),
                                               blank=True)
-
-    def save(self, *args, **kwargs):
-        super(OfficeSettings, self).save()
 
     UPDATE_INVOICE_SEQUENCE = 1
 

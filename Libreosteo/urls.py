@@ -63,7 +63,7 @@ urlpatterns = [
     url(r'^internal/dump.json', views.DbDump.as_view(), name='db_dump'),
     url(r'^internal/restore', views.LoadDump.as_view(), name='load_dump'),
     url(r'^internal/rebuild_index', views.RebuildIndex.as_view(), name="rebuild_index"),
-    url(r'^', include('libreosteoweb.urls')),
+    url(r'', include('libreosteoweb.urls')),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),

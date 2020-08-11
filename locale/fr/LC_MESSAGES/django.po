@@ -349,6 +349,9 @@ msgstr "Pied de page de facture"
 msgid "Invoice start sequence"
 msgstr "Séquence de démarrage de facture"
 
+msgid "Invoice prefix sequence"
+msgstr "Préfixe de séquence de facturation"
+
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -862,6 +865,9 @@ msgstr "Cabinet"
 
 msgid "Paiment means"
 msgstr "Moyens de paiement"
+
+msgid "The prefix to add for invoicing sequence"
+msgstr "Le préfixe à ajouter à la séquence de facturation"
 
 msgid "The start sequence must have composed only with numbers"
 msgstr "La séquence de démarrage doit être composée uniquement de chiffres"

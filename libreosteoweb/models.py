@@ -180,8 +180,6 @@ class Examination(models.Model):
                                verbose_name=_('Office Settings'),
                                null=True,
                                on_delete=models.SET_NULL)
-                                  null=True,
-                                  on_delete=models.PROTECT)
 
     EXAMINATION_IN_PROGRESS = 0
     EXAMINATION_WAITING_FOR_PAIEMENT = 1

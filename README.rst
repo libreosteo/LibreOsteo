@@ -31,7 +31,7 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 3.6+ (if you have no opinion, 3.6+ is the recommended choice for now)
+  - Python 3.6+
   - pip
   - nodejs
   - yarn

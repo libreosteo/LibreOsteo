@@ -15,7 +15,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from datetime import date, datetime
+from datetime import date
+from django.utils import timezone
 from libreosteoweb.api.utils import enum
 import mimetypes
 
@@ -340,7 +341,7 @@ class Invoice(models.Model):
 
     def clean(self):
         if self.date is None:
-            self.date = datetime.today()
+            self.date = timezone.now()
 
     class Meta:
         ordering = ['-date']
@@ -388,7 +389,7 @@ class OfficeEvent(models.Model):
 
     def clean(self):
         if self.date is None:
-            self.date = datetime.today()
+            self.date = timezone.now()
 
 
 class OfficeSettings(models.Model):
@@ -564,7 +565,7 @@ class Document(models.Model):
 
     def clean(self):
         if self.internal_date is None:
-            self.internal_date = datetime.today()
+            self.internal_date = timezone.now()
         self.mime_type = mimetypes.guess_type(self.document_file.path)[0]
         logger.info("mime_type = %s " % self.mime_type)
 

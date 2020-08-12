@@ -4,7 +4,7 @@
 
 .. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
     :target: https://travis-ci.com/libreosteo/Libreosteo
-© Jean-Baptiste Gury 2014-2018
+© Jean-Baptiste Gury 2014-2020
 
 *LibreOsteo*
 
@@ -31,7 +31,7 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 3.5+ (if you have no opinion, 3.6+ is the recommended choice for now)
+  - Python 3.6+ (if you have no opinion, 3.6+ is the recommended choice for now)
   - pip
   - nodejs
   - yarn
@@ -41,7 +41,12 @@ Requirements :
 
 Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-    sudo apt install python3-pip python3-venv nodejs yarnpkg linux-headers-$(uname -r)
+    sudo apt install python3-pip python3-venv nodejs linux-headers-$(uname -r)
+
+For yarnpkg, the last version contains a bug with one of dependency (see https://github.com/yarnpkg/yarn/issues/7890 ).
+Install yarnpkg by a manual installation of explicit version ::
+
+  curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
 
 Retrieve the content of the project from Git repository ::
 

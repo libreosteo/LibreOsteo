@@ -19,8 +19,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('comment', models.TextField(verbose_name='Comment')),
                 ('date', models.DateTimeField(verbose_name='Date')),
-                ('examination', models.ForeignKey(verbose_name='Examination', to='libreosteoweb.Examination')),
-                ('user', models.ForeignKey(verbose_name='User', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('examination', models.ForeignKey(verbose_name='Examination', to='libreosteoweb.Examination', on_delete=models.PROTECT)),
+                ('user', models.ForeignKey(verbose_name='User', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)),
             ],
             options={
             },

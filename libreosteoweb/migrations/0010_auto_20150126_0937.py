@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('adeli', models.TextField(verbose_name='Adeli', blank=True)),
                 ('quality', models.TextField(verbose_name='Quality', blank=True)),
-                ('user', models.OneToOneField(verbose_name='User', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(verbose_name='User', to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT)),
             ],
             options={
             },

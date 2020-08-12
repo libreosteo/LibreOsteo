@@ -15,6 +15,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from libreosteoweb.models import Patient, Examination
 from datetime import date, timedelta
+from django.utils import timezone
 import datetime
 import copy
 
@@ -36,7 +37,7 @@ class Statistics(object):
 
     def get_statistics(self, start_date=None, statistics_obj=None):
         if(start_date is None):
-            start_date = date.today()
+            start_date = timezone.now()
         if statistics_obj is None :
             statistics_obj = {
             'nb_new_patient':0,
@@ -44,7 +45,7 @@ class Statistics(object):
             'nb_non_paid':0,
             'nb_examination':0}
         period = self.subclass()
-        return self.compute_statistics(period.get_start_of_period(start_date), datetime.datetime.combine(start_date, datetime.time.max), statistics_obj)
+        return self.compute_statistics(period.get_start_of_period(start_date), timezone.make_aware(datetime.datetime.combine(start_date, datetime.time.max)), statistics_obj)
 
     def compute_statistics(self, start_date, end_date, stats_obj):
         stats_obj['nb_new_patient'] = Patient.objects.filter(creation_date__gte= start_date, creation_date__lte=end_date).count()
@@ -54,14 +55,14 @@ class Statistics(object):
 
     def get_history_statistics(self):
 
-        end_date = date.today()
+        end_date = timezone.now()
         obj_statistics = {
             'nb_new_patient':0,
             'nb_urgent_return':0,
             'nb_non_paid':0,
             'nb_examination':0
         }
-        history_statistics = { 
+        history_statistics = {
                 'nb_new_patient' : [[],[]],
                 'nb_examination' : [[],[]],
                 'nb_urgent_return': [[],[]]
@@ -108,7 +109,7 @@ class Statistics(object):
 class WeekPeriod(object):
     def get_start_of_period(self,current_date=None):
         if current_date is None :
-            d = date.today()
+            d = timezone.now()
         else:
             d = copy.copy(current_date)
 
@@ -123,7 +124,7 @@ class WeekPeriod(object):
 class MonthPeriod(object):
     def get_start_of_period(self,current_date=None):
         if current_date is None :
-            d = date.today()
+            d = timezone.now()
         else:
             d = copy.copy(current_date)
 
@@ -137,7 +138,7 @@ class MonthPeriod(object):
 class YearPeriod(object):
     def get_start_of_period(self,current_date=None):
         if current_date is None :
-            d = date.today()
+            d = timezone.now()
         else:
             d = copy.copy(current_date)
 

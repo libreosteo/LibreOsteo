@@ -17,6 +17,7 @@ from libreosteoweb.models import *
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
+from django.utils import timezone
 from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters, get_firstname_filters
 from django.core.exceptions import ObjectDoesNotExist
@@ -369,7 +370,7 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
         document_data = validated_data.pop('document')
         document_data['user'] = validated_data.pop('user')
         patient = validated_data.pop("patient")
-        document = Document.objects.create(internal_date=datetime.today(),
+        document = Document.objects.create(internal_date=timezone.now(),
                                            **document_data)
         document.clean()
         document.save()
@@ -385,7 +386,7 @@ class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
         document_data['user'] = validated_data.pop('user')
         document_data['document_file'] = get_demonstration_file()
         patient = validated_data.pop("patient")
-        document = Document.objects.create(internal_date=datetime.today(),
+        document = Document.objects.create(internal_date=timezone.now(),
                                            **document_data)
         document.clean()
         document.save()

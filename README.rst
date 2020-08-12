@@ -5,7 +5,6 @@
 .. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
     :target: https://travis-ci.com/libreosteo/Libreosteo
 © Jean-Baptiste Gury 2014-2020
-© The Libreosteo Development Team 2014-2020
 
 © The Libreosteo Development Team 2014-2020
 

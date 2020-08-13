@@ -67,6 +67,10 @@ Initialize the database ::
 
     ./venv/bin/python manage.py migrate
 
+Fetch the french postcodes for zipcode completion ::
+
+   ./venv/bin/python manage.py import_zipcodes
+
 Now you can start the server with ::
 
     ./venv/bin/python manage.py runserver

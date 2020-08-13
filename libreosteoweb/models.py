@@ -449,6 +449,8 @@ class TherapeutSettings(models.Model):
 
     # Examination view modules
     spheres_enabled = models.BooleanField(_('Spheres'), default=True)
+    zipcode_completion_enabled = models.BooleanField(_('Zipcode completion (France)'), default=True)
+
 
     MODULES_FIELDS = [
         {
@@ -472,6 +474,10 @@ class TherapeutSettings(models.Model):
                 {
                     'field': spheres_enabled,
                     'image': 'images/examination-spheres.png'
+                },
+                {
+                    'field': zipcode_completion_enabled,
+                    'image': 'images/zipcode-completion.png'
                 },
             ]
         },

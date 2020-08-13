@@ -50,6 +50,7 @@ RUN curl $url | tar xvz
 WORKDIR /$dir
 RUN pip install -r requirements/requ-py2.txt \
  && python manage.py migrate \
+ && python manage.py import_zipcodes \
  && bower install --allow-root \
  && python manage.py collectstatic --noinput
 

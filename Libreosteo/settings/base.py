@@ -80,7 +80,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'compressor',
     'zipcode_lookup',
-    'compressor'
 ]
 
 MIDDLEWARE = [

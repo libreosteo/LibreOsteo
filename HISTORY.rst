@@ -6,6 +6,7 @@ Changelog for Libreosteo
 ------------------
 
 - Add zipcode / city autocompletion
+- end of support of python 3.5 and upgrade to Django LTS 2.2
 
 
 0.6.0 (2019-10-16)

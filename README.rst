@@ -8,8 +8,6 @@
 
 © The Libreosteo Development Team 2014-2020
 
-© The Libreosteo Development Team 2014-2020
-
 *LibreOsteo*
 
 Libreosteo is a business application designed for osteopaths.

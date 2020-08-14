@@ -482,6 +482,9 @@ msgstr "Import/export"
 msgid "Rebuild index"
 msgstr "Réindexer"
 
+msgid "Change office"
+msgstr "Changer d'établissement"
+
 msgid "Help"
 msgstr "Aide"
 
@@ -1008,8 +1011,3 @@ msgstr "Paramètres d'affichage"
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 
-#~ msgid "Change office"
-#~ msgstr "Changer d'établissement"
-
-#~ msgid "n/a"
-#~ msgstr "n/a"

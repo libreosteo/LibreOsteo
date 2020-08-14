@@ -338,7 +338,7 @@ class Invoice(models.Model):
                             default='invoice')
 
     officesettings_id = models.IntegerField(_('office id'), default=1)
-    check_sum = models.BinaryField(_('check_sum'), max_length=256)
+    check_sum = models.BinaryField(_('check_sum'), max_length=256, default=b'')
 
     def _get_paiments_list(self):
         return self.paiment_set.all().order_by('-date')

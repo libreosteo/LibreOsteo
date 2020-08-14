@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 18:03+0200\n"
+"POT-Creation-Date: 2020-08-14 07:40+0200\n"
 "PO-Revision-Date: 2020-04-05 17:38+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -81,6 +81,12 @@ msgstr "Les informations de chèque sont manquantes"
 
 msgid "Missing data to continue"
 msgstr "Données manquantes"
+
+msgid "Prefix for invoicing sequence should have 3 char length maximum"
+msgstr "Le préfixe de séquence de facturation devrait avoir une longueur de 3 caractères maximum"
+
+msgid "Prefix could only contains alpha characters"
+msgstr "Le préfixe ne peut contenir que des caractères alphabétiques"
 
 msgid "Not paid"
 msgstr "Non réglée"
@@ -475,9 +481,6 @@ msgstr "Import/export"
 
 msgid "Rebuild index"
 msgstr "Réindexer"
-
-msgid "Change office"
-msgstr "Changer d'établissement"
 
 msgid "Help"
 msgstr "Aide"
@@ -1004,6 +1007,9 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+#~ msgid "Change office"
+#~ msgstr "Changer d'établissement"
 
 #~ msgid "n/a"
 #~ msgstr "n/a"

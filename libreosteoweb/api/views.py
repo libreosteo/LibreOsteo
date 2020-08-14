@@ -19,7 +19,6 @@ if sys.version_info.major == 2:
     from io import BytesIO as StringIO
 else:
     from io import BytesIO, StringIO
-from datetime import datetime
 from django.utils import timezone
 import libreosteoweb
 import logging
@@ -103,7 +102,7 @@ class CreateAdminAccountView(TemplateView):
         username = request.POST['username']
         if form.is_valid() and ' ' not in username:
             # Ensure the user-originating redirection url is safe.
-            if not is_safe_url(url=self.redirect_to, host=request.get_host()):
+            if not is_safe_url(url=self.redirect_to, allowed_hosts=None):
                 self.redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
             # Okay, security check complete. Log the user in.
             create_superuser(request, form.data)
@@ -305,7 +304,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination.save()
         return Response({'invoiced': current_examination.last_invoice.id})
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['post'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
@@ -327,12 +326,12 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         return invoice
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         serializer.save(therapeut=self.request.user)
 
     def perform_update(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         if not serializer.instance.therapeut:
             serializer.save(therapeut=self.request.user)
@@ -523,9 +522,9 @@ class ExaminationCommentViewSet(viewsets.ModelViewSet):
     queryset = models.ExaminationComment.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(user=self.request.user, date=datetime.today())
+        serializer.save(user=self.request.user, date=timezone.now())
 
 
 class FileImportViewSet(viewsets.ModelViewSet):
@@ -534,7 +533,7 @@ class FileImportViewSet(viewsets.ModelViewSet):
     queryset = models.FileImport.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         instance = serializer.save()
         logger.info("* Ready to start analyze")
@@ -618,9 +617,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
     queryset = models.Document.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(user=self.request.user, internal_date=datetime.today())
+        serializer.save(user=self.request.user, internal_date=timezone.now())
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -642,7 +641,7 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
             return models.PatientDocument.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         serializer.save(user=self.request.user)
 
@@ -686,7 +685,7 @@ class DbDump(StaffRequiredMixin, View):
         response = HttpResponse(zip_content.getvalue(),
                                 content_type="application/binary")
         response['Content-Disposition'] = 'attachment; filename=%s-%s' % (
-            datetime.now().isoformat(), DUMP_FILE)
+            timezone.now().isoformat(), DUMP_FILE)
 
         return response
 

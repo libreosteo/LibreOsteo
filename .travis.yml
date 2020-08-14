@@ -16,6 +16,8 @@ install:
   - python ./manage.py collectstatic --no-input
 python:
   - "3.6"
+  - "3.7"
+  - "3.8"
 branches:
   - develop
   - master

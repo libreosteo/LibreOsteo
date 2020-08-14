@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='patientdocument',
             name='patient',
-            field=models.ForeignKey(verbose_name='patient', to='libreosteoweb.Patient'),
+            field=models.ForeignKey(verbose_name='patient', to='libreosteoweb.Patient', on_delete=models.CASCADE),
         ),
     ]

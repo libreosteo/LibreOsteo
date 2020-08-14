@@ -21,21 +21,22 @@ logger = logging.getLogger(__name__)
 
 class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
     ignore_case = False
+    requires_context = True
 
     def __init__(self, queryset, fields, message=None, ignore_case=False):
         super(UniqueTogetherIgnoreCaseValidator, self).__init__(queryset, fields, message)
         self.ignore_case = ignore_case
 
-    def filter_queryset(self, attrs, queryset):
+    def filter_queryset(self, attrs, queryset, serializer):
         """
         Filter the queryset to all instances matching the given attributes.
         """
         # If this is an update, then any unprovided field should
         # have it's value set based on the existing instance attribute.
-        if self.instance is not None:
+        if serializer.instance is not None:
             for field_name in self.fields:
                 if field_name not in attrs:
-                    attrs[field_name] = getattr(self.instance, field_name)
+                    attrs[field_name] = getattr(serializer.instance, field_name)
         # Determine the filter keyword arguments and filter the queryset.
         filter_kwargs = {}
         for field_name in self.fields :
@@ -45,11 +46,11 @@ class UniqueTogetherIgnoreCaseValidator(UniqueTogetherValidator):
                 filter_kwargs[field_name]=attrs[field_name]
         return queryset.filter(**filter_kwargs)
 
-    def __call__(self, attrs):
-        self.enforce_required_fields(attrs)
+    def __call__(self, attrs, serializer):
+        self.enforce_required_fields(attrs, serializer)
         queryset = self.queryset
-        queryset = self.filter_queryset(attrs, queryset)
-        queryset = self.exclude_current_instance(attrs, queryset)
+        queryset = self.filter_queryset(attrs, queryset, serializer)
+        queryset = self.exclude_current_instance(attrs, queryset, serializer.instance)
 
         # Ignore validation if any field is None
         checked_values = [

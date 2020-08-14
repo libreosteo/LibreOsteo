@@ -14,7 +14,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from libreosteoweb import models
 from libreosteoweb.api.utils import _unicode, convert_to_long
-from datetime import datetime
+from django.utils import timezone
 
 class Generator(object):
     def __init__(self, office_settings, therapeut_settings):
@@ -59,7 +59,7 @@ class Generator(object):
         if self.therapeut_settings.invoice_footer is not None :
             invoice.footer = self.therapeut_settings.invoice_footer
         invoice.number = self.get_invoice_number()
-        invoice.date = datetime.today()
+        invoice.date = timezone.now()
         return invoice
 
     def get_invoice_number(self):
@@ -98,7 +98,7 @@ class Generator(object):
         credit_note.patient_address_city = invoice.patient_address_city
         credit_note.content_invoice = invoice.content_invoice
         credit_note.footer = invoice.footer
-        credit_note.date = datetime.today()
+        credit_note.date = timezone.now()
         credit_note.type = 'creditnote' if credit_note.amount < 0 else 'invoice'
         credit_note.number = self.get_invoice_number()
         credit_note.status = models.InvoiceStatus.INVOICED_PAID

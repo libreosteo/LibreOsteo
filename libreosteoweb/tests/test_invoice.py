@@ -21,6 +21,7 @@ from libreosteoweb.models import (TherapeutSettings, OfficeSettings, Invoice,
                                   Patient, Examination, InvoiceStatus,
                                   ExaminationStatus)
 from datetime import datetime
+from django.utils import timezone
 from django.db.models import signals
 from libreosteoweb.api.receivers import (block_disconnect_all_signal,
                                          receiver_examination,
@@ -45,7 +46,7 @@ class TestChangeIdInvoice(APITestCase):
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
-            self.e1 = Examination.objects.create(date=datetime.now(),
+            self.e1 = Examination.objects.create(date=timezone.now(),
                                                  status=0,
                                                  type=1,
                                                  patient=self.p1)
@@ -70,11 +71,12 @@ class TestChangeIdInvoice(APITestCase):
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'1000')
-        settings['invoice_start_sequence'] = None
+        settings['invoice_start_sequence'] = ''
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
                                    data=settings)
-        self.assertEqual(response.data['invoice_start_sequence'], u'1000')
+        # Reset to the default value
+        self.assertEqual(response.data['invoice_start_sequence'], u'10000')
 
     def test_set_start_invoice_sequence_invoice_set_limit(self):
         response = self.client.get(reverse('officesettings-list'))
@@ -85,7 +87,7 @@ class TestChangeIdInvoice(APITestCase):
                                    data=settings)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        Invoice.objects.create(date=datetime.now(), amount=50, number=u'101')
+        Invoice.objects.create(date=timezone.now(), amount=50, number=u'101')
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
                                    data=settings)
@@ -106,8 +108,7 @@ class TestChangeIdInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    },
-                                    format='json')
+                                    })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'100')
@@ -148,7 +149,7 @@ class TestCancelInvoice(APITestCase):
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
-            self.e1 = Examination.objects.create(date=datetime.now(),
+            self.e1 = Examination.objects.create(date=timezone.now(),
                                                  status=0,
                                                  type=1,
                                                  patient=self.p1)
@@ -210,7 +211,7 @@ class TestRegularizeNotPaidInvoice(APITestCase):
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
-            self.e1 = Examination.objects.create(date=datetime.now(),
+            self.e1 = Examination.objects.create(date=timezone.now(),
                                                  status=0,
                                                  type=1,
                                                  patient=self.p1)

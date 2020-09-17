@@ -1,5 +1,5 @@
 ============
- LibreOsteo
+ Libreosteo
 ============
 
 .. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
@@ -8,7 +8,7 @@
 
 © The Libreosteo Development Team 2014-2020
 
-*LibreOsteo*
+*Libreosteo*
 
 Libreosteo is a business application designed for osteopaths.
 

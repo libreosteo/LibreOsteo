@@ -333,7 +333,9 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         return 1
 
     def get_selected(self, obj):
-        return self.context['request'].officesettings.id == obj.id
+        if hasattr(self.context['request'], 'officesettings'):
+            return self.context['request'].officesettings.id == obj.id
+        return False
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):

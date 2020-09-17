@@ -89,7 +89,7 @@
               <li id="change-office" ng-if="{{ request.has_multiple_office|yesno:"true,false" }}"><a href="{% url 'officesettings-reset' %}"><i class="fa fa-exchange"></i> {% trans "Change office" %}</a>
               </li>
               <li class="divider"></li>
-              <li><a href="accounts/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
+              <li><a href="{% url "logout" %}"><i class="fa fa-sign-out fa-fw"></i> {% trans "Logout" %}</a>
               </li>
             </ul>
             <!-- /.dropdown-user -->

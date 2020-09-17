@@ -25,28 +25,31 @@ from django.utils.deprecation import MiddlewareMixin
 logger = logging.getLogger(__name__)
 
 
-
 def get_login_url():
     return reverse(settings.LOGIN_URL_NAME)
+
 
 def get_logout_url():
     return reverse(settings.LOGOUT_URL_NAME)
 
+
 def initialize_admin_url():
     return reverse(settings.INITIALIZE_ADMIN_URL_NAME)
+
 
 def no_reroute_pattern():
     no_reroute = []
     if hasattr(settings, 'NO_REROUTE_PATTERN_URL'):
-        logger.info
         no_reroute += [compile(expr) for expr in settings.NO_REROUTE_PATTERN_URL]
     return no_reroute
+
 
 def get_exempts():
     exempts = [compile(get_login_url().lstrip('/'))]
     if hasattr(settings, 'LOGIN_EXEMPT_URLS'):
         exempts += [compile(expr) for expr in settings.LOGIN_EXEMPT_URLS]
     return exempts
+
 
 class LoginRequiredMiddleware(MiddlewareMixin):
     """
@@ -76,19 +79,19 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             logger.debug("path is in no_reroute pattern")
             return
 
-        if UserModel.objects.all().count() == 0 :
+        if UserModel.objects.all().count() == 0:
             logger.info("No user found")
             if not match_install.match(request.path.lstrip('/')):
                 logger.info("redirect to install page")
                 return HttpResponseRedirect(initialize_admin_url())
-            else :
+            else:
                 logger.info("no redirect required")
                 return
 
         if not request.user.is_authenticated:
             logger.info("user not authenticated")
             path = request.path.lstrip('/')
-            if get_logout_url().lstrip('/') == path :
+            if get_logout_url().lstrip('/') == path:
                 request.path = ''
             if not any(m.match(path) for m in get_exempts()):
                 logger.info("query path %s, authentication required. redirect to authentication form" % path)
@@ -111,6 +114,9 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
 
         if not request.user.is_authenticated:
             return
+
+        path = request.path.lstrip('/')
+
         multiple_office = OfficeSettings.objects.all().count()
         request.has_multiple_office = multiple_office > 1
         if request.has_multiple_office:
@@ -119,6 +125,8 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
                 id=request.session.get('officesettings')
             ).first()
             if current_officesettings is None:
+                if any(m.match(path) for m in self.no_reroute_pattern()):
+                    return
                 # Redirect to the Office Settings form if not already
                 # redirected
                 if request.path != reverse('officesettings-set'):
@@ -126,3 +134,10 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
         else:
             current_officesettings = OfficeSettings.objects.first()
         request.officesettings = current_officesettings
+
+    def no_reroute_pattern(self):
+        no_reroute = []
+        if hasattr(settings, 'OFFICE_SETTINGS_NO_REROUTE_PATTERN_URL'):
+            no_reroute += [compile(expr) for expr in settings.OFFICE_SETTINGS_NO_REROUTE_PATTERN_URL]
+        return no_reroute
+

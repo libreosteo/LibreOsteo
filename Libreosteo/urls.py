@@ -53,7 +53,7 @@ urlpatterns = [
     url(r'^api/', include(format_suffix_patterns(router.urls))),
     path('admin/', admin.site.urls),
     url(r'^accounts/login/$', LoginView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name='login'),
-    url(r'^accounts/logout', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
+    url(r'^accounts/logout/$', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
     url(r'^accounts/create-admin/$', views.CreateAdminAccountView.as_view(), name='accounts-create-admin'),
     url(r'^install/$', views.InstallView.as_view(), name='install'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

@@ -16,6 +16,9 @@ else
     TEMP_BASE=/tmp
 fi
 
+PYTHON_APPIMAGE=python3.7.9-cp37-cp37m-manylinux1_x86_64.AppImage
+PYTHON_APPIMAGE_URL=https://github.com/niess/python-appimage/releases/download/python3.7/${PYTHON_APPIMAGE}
+
 export VERSION=develop-$(git rev-parse --short HEAD)
 BUILD_DIR=$(mktemp -d -p "$TEMP_BASE" appimage-build-XXXXXX)
 APP_DIR="$BUILD_DIR/AppDir"
@@ -37,9 +40,9 @@ OLD_CWD=$(readlink -f .)
 pushd "$BUILD_DIR"
 
 # Fetch a python relocatable installation
-wget -c https://github.com/niess/python-appimage/releases/download/python3.7/python3.7.7-cp37-cp37m-manylinux1_x86_64.AppImage
-chmod +x python*.AppImage
-./python3.7.7-cp37-cp37m-manylinux1_x86_64.AppImage --appimage-extract
+wget -c ${PYTHON_APPIMAGE_URL}
+chmod +x ${PYTHON_APPIMAGE}
+./${PYTHON_APPIMAGE} --appimage-extract
 
 mv squashfs-root/usr $APP_DIR/usr
 mv squashfs-root/opt $APP_DIR/opt
@@ -53,13 +56,17 @@ rsync -av "$REPO_ROOT/" "$APP_DIR/src" \
 
 # Install requirements (JS and Python)
 pushd $APP_DIR
+# Workaround : gcc under pip looks for python3.7m dir, although the right one is python3.7
+ln -s $APP_DIR/opt/python3.7/include/python3.7{,m}
+echo $APP_DIR/opt/python3.7/include/python3.7m
+ls $APP_DIR/opt/python3.7/include/python3.7m
 
 ./usr/bin/python3 -m pip install -r src/requirements/requirements.txt
 yarn --cwd "$REPO_ROOT"
 ./usr/bin/python3 src/manage.py collectstatic --no-input
 
 mkdir -p usr/share/metainfo
-mv src/pkg/libreosteo.metainfo.xml usr/share/metainfo/
+mv src/pkg/libreosteo.appdata.xml usr/share/metainfo/
 
 popd
 

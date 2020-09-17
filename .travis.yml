@@ -1,9 +1,9 @@
 language: python
 before_install:
-  - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
-  - wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
-  - tar -xjf /tmp/firefox-latest.tar.bz2
-  - export PATH=$PWD/firefox:$PATH
+  # - export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
+  # - wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
+  # - tar -xjf /tmp/firefox-latest.tar.bz2
+  # - export PATH=$PWD/firefox:$PATH
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
   - export PATH="$HOME/.yarn/bin:$PATH"
 install:
@@ -24,18 +24,39 @@ branches:
 env:
   - MOZ_HEADLESS=1
 
-before_script:
-  - python ./server.py &
-  - sleep 3
-script:
-  - echo 'Do unit tests pass ?'
-  - python ./manage.py test
+script: echo "Let's test !"  # travis require a default script
 
-  - echo 'Do functional tests pass ?'
-  - xvfb-run --server-args="-screen 0 1024x768x24" robot tests
+stages:
+  # - tests
+  - build
 
-  - echo 'Are translations in clean state, with no string forgotten ?'
-  - python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+jobs:
+  include:
+    # - stage: tests
+    #   script:
+    #     - echo 'Do unit tests pass ?'
+    #     - python ./manage.py test
+    # # - before_script:
+    # #     - python ./server.py &
+    # #     - sleep 30
+    # #   script:
+    # #     - echo 'Do functional tests pass ?'
+    # #     - xvfb-run --server-args="-screen 0 1024x768x24" robot tests
+    # - script:
+    #     - echo 'Are translations in clean state, with no string forgotten ?'
+    #     - python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+    # - script:
+    #     - echo 'Did you forgot some migration ?'
+    #     - python ./manage.py makemigrations --check
 
-  - echo 'Did you forgot some migration ?'
-  - python ./manage.py makemigrations --check
+    - stage: build
+      script: bash pkg/appimage/mk_appimage.sh
+
+deploy:
+  provider: bintray
+  user: jocelyndelalande
+  file: LibreOsteo*.AppImage
+  edge: true # opt in to dpl v2
+
+  key:
+    secure: O0K4mftKsEtZK4NcZIzbjd+JkyKRMI8yEkQUqbz6RgZFpOlEp7spAfne73Zk9IqikZkQOhM+PfLzQ7NOh1zUQWWuWR81lqz1H57fUhJpGvAGE8N7cv8BJ86QKnNymI+Lpj6rOiVCAfROvivSrg8/jT0vwg+eZKOeApNjv2eCXzEKJZXoQ99Tt7yLZgT6fzHlTl+pARl2Oy8KT+PXXh75Yc436nzvIQGAknhKNIzfaFqIcXFMO/LL2JtAtSPLwJ0KmjeuUVsKu2GqfV4laYrLdeZzWvB/wUDw4W9CX1AlfHOuRU2amJnVTtar7BZmRLHObKt7E33yyU1gxgGt6nBxEy06yVn/lZP7bS1ZW+DlYsU6gMK+L8iR4VfN6e8ydFSMAKn7u7yoEzXyPZtXR7HiNWKz2g0PvMWp37CyLeebRcnq8+VPLUjeM2A7deZDtDFuLyf4ZLJG/hkKeyEi4Y/AnM+T2eGxgIaC6jmBmFxQSMQ3+J0NuLJ7QxoPljnNHhpbp1QMBeelRa2+1fGsPC6y7YG6CnkRDjAQVblMpL3dvFLGNSU13v571HDcDmts9Ck51pAHQl8XVVTIUoSj8IHhA/q/baOPfRYaFSIRnlpeRH1ZSliVVz3xO0sU0XdWQkIpQ5htqwhuEBPBWerj5gUDB173MgMLM7Bkjmul+XPhqOE=

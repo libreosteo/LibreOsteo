@@ -45,7 +45,8 @@ class Statistics(object):
             'nb_non_paid':0,
             'nb_examination':0}
         period = self.subclass()
-        return self.compute_statistics(period.get_start_of_period(start_date), timezone.make_aware(datetime.datetime.combine(start_date, datetime.time.max)), statistics_obj)
+        end_date = timezone.make_aware(datetime.datetime.combine(start_date, datetime.time.max))
+        return self.compute_statistics(period.get_start_of_period(start_date), end_date, statistics_obj)
 
     def compute_statistics(self, start_date, end_date, stats_obj):
         stats_obj['nb_new_patient'] = Patient.objects.filter(creation_date__gte= start_date, creation_date__lte=end_date).count()
@@ -115,7 +116,7 @@ class WeekPeriod(object):
 
         while d.weekday() != 0 :
             d = d - timedelta(days=1)
-        return d
+        return timezone.make_aware(datetime.datetime.combine(d, datetime.time.min))
 
     def get_timedelta_of_period(self):
         # 8 days to backward a week
@@ -129,7 +130,7 @@ class MonthPeriod(object):
             d = copy.copy(current_date)
 
         d = d.replace(day=1)
-        return d
+        return timezone.make_aware(datetime.datetime.combine(d, datetime.time.min))
 
     def get_timedelta_of_period(self):
         # 1 day from the start of the month to backward to last day of the previous month
@@ -143,7 +144,7 @@ class YearPeriod(object):
             d = copy.copy(current_date)
 
         d = d.replace(day=1,month=1)
-        return d
+        return timezone.make_aware(datetime.datetime.combine(d, datetime.time.min))
 
     def get_timedelta_of_period(self):
         #1 day from the start of the year to backward to last day of the previous year

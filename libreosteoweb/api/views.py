@@ -759,7 +759,6 @@ class LoadDump(View):
                     )
                     call_command('flush',
                                  interactive=False,
-                                 load_initial_data=False,
                                  stdout=LoggerWriter(logger.info))
                     # It means that the settings.FIXTURE_DIRS should be set in settings
                     previous = settings.FIXTURE_DIRS

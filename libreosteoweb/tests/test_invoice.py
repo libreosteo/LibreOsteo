@@ -39,9 +39,11 @@ class TestChangeIdInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount = 50
+            setting.save()
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
@@ -64,10 +66,12 @@ class TestChangeIdInvoice(APITestCase):
         self.assertEqual(response['invoice_start_sequence'], u'100')
 
     def test_no_set_start_invoice_sequence_on_already_set_value(self):
-        OfficeSettings.objects.create(office_siret='12345',
-                                      currency='EUR',
-                                      amount=50,
-                                      invoice_start_sequence=1000)
+        setting = OfficeSettings.objects.get(id=1)
+        setting.office_siret = '12345'
+        setting.currency = 'EUR'
+        setting.amount = 50
+        setting.invoice_start_sequence = 1000
+        setting.save()
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'1000')
@@ -87,7 +91,7 @@ class TestChangeIdInvoice(APITestCase):
                                    data=settings)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        Invoice.objects.create(date=timezone.now(), amount=50, number=u'101')
+        Invoice.objects.create(date=timezone.now(), amount=50, number=u'W101')
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
                                    data=settings)
@@ -96,6 +100,7 @@ class TestChangeIdInvoice(APITestCase):
     def test_set_start_invoice_sequence_create_invoice(self):
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
+        settings['invoice_prefix_sequence'] = 'W'
         settings['invoice_start_sequence'] = 100
         response = self.client.put(reverse('officesettings-detail',
                                            kwargs={'pk': 1}),
@@ -111,7 +116,7 @@ class TestChangeIdInvoice(APITestCase):
                                     })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoices.latest('date').number, u'100')
+        self.assertEqual(examination.invoices.latest('date').number, u'W100')
         response = self.client.get(reverse('officesettings-list'))
         settings = response.data[0]
         self.assertEqual(settings['invoice_start_sequence'], u'101')
@@ -128,7 +133,7 @@ class TestChangeIdInvoice(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.assertEqual(
-            OfficeSettings.objects.all()[0].invoice_start_sequence, u'101')
+            OfficeSettings.objects.first().invoice_start_sequence, u'101')
 
 
 class TestCancelInvoice(APITestCase):
@@ -142,9 +147,11 @@ class TestCancelInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount = 50
+            setting.save()
             self.client.login(username='test', password='testpw')
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
@@ -204,10 +211,13 @@ class TestRegularizeNotPaidInvoice(APITestCase):
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)
-            OfficeSettings.objects.create(office_siret="12345",
-                                          currency='EUR',
-                                          amount=50)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount = 50
+            setting.save()
             self.client.login(username='test', password='testpw')
+
             self.p1 = Patient.objects.create(family_name="Picard",
                                              first_name="Jean-Luc",
                                              birth_date=datetime(1935, 7, 13))
@@ -362,7 +372,7 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                     data={
                                         'status': 'invoiced',
                                         'amount': 60,
-                                        'paiment_mode' : 'check',
+                                        'paiment_mode': 'check',
                                         'check': {}
                                     },
                                     format='json')
@@ -381,3 +391,70 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                          ExaminationStatus.INVOICED_PAID)
 
 
+class TestInvoiceWithOfficeSettings(APITestCase):
+    def setUp(self):
+        receivers_senders = [(receiver_examination, Examination),
+                             (receiver_newpatient, Patient)]
+        with block_disconnect_all_signal(signal=signals.post_save,
+                                         receivers_senders=receivers_senders):
+            self.user = User.objects.create_superuser("test", "test@test.com",
+                                                      "testpw")
+            TherapeutSettings.objects.create(adeli="12345",
+                                             siret="12345",
+                                             user=self.user)
+            setting = OfficeSettings.objects.get(id=1)
+            setting.office_siret = "12345"
+            setting.currency = 'EUR'
+            setting.amount = 50
+            setting.save()
+
+            OfficeSettings.objects.create(
+                office_siret="98765",
+                currency='EUR',
+                amount=65,
+                invoice_start_sequence=1000000,
+                invoice_prefix_sequence='W'
+            )
+            self.client.login(username='test', password='testpw')
+
+            self.p1 = Patient.objects.create(family_name="Picard",
+                                             first_name="Jean-Luc",
+                                             birth_date=datetime(1935, 7, 13))
+            self.e1 = Examination.objects.create(date=timezone.now(),
+                                                 status=0,
+                                                 type=1,
+                                                 patient=self.p1)
+
+    def testInvoiceOnOffice2(self):
+        # Given
+        session = self.client.session
+        session.update({"officesettings": 2})
+        session.save()
+        # When
+        response = self.client.post(reverse('examination-close',
+                                            kwargs={'pk': self.e1.pk}),
+                                    data={
+                                        'status': 'invoiced',
+                                        'amount': 55,
+                                        'paiment_mode': 'cash',
+                                        'check': {}
+                                    },
+                                    format='json')
+        # Then
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        examination = Examination.objects.filter(pk=self.e1.pk)[0]
+        self.assertEqual(examination.invoices.latest('date').number,
+                         u'W1000000')
+        self.assertEqual(
+            examination.invoices.latest('date').status,
+            InvoiceStatus.INVOICED_PAID)
+        invoice = Invoice.objects.filter(
+            pk=examination.invoices.latest('date').id).first()
+        self.assertIsNotNone(invoice)
+        self.assertEqual(invoice.amount, 55)
+        self.assertEqual(invoice.status, InvoiceStatus.INVOICED_PAID)
+        self.assertEquals(invoice.number, u'W1000000')
+        setting1 = OfficeSettings.objects.get(id=1)
+        setting2 = OfficeSettings.objects.get(id=2)
+        self.assertEquals(setting1.invoice_start_sequence, u'')
+        self.assertEquals(setting2.invoice_start_sequence, u'1000001')

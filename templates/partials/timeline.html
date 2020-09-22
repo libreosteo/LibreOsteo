@@ -7,7 +7,7 @@
     </div>
     <ul class="timeline" ng-switch-when="true">
         <li ng-repeat="examination in examinations" ng-class="{'timeline-inverted': examination.order %2 == 0 }">
-            <div class="timeline-badge" 
+            <div class="timeline-badge"
                 ng-class="{'success' : examination.type == 1, 'warning' : examination.type == 2, 'danger' : examination.type >= 3 }"
                 ng-click="loadExamination(examination.id)" ui-sref="patient.examination({examinationId :  examination.id })">
                 <i class="fa"
@@ -15,7 +15,9 @@
             </div>
             <div class="timeline-panel" ng-click="loadExamination(examination.id)" ui-sref="patient.examination({examinationId :  examination.id })">
                 <div class="timeline-heading">
-                    <h4 class="timeline-title">{% trans 'Session of ' %} {$ examination.date | date : 'longDate' $}</h4>
+                    <h4 class="timeline-title">{% trans 'Session of ' %} {$ examination.date | date : 'longDate' $}
+                    </h4>
+                    <p class="text-muted text-right" ng-if="examination.office.id != {{ request.officesettings.id }}"> {$ examination.office_detail.office_name $}</p>
 
                     <p>
                         <small class="text-muted"><i class="fa fa-clock-o"></i> {$ examination.date | timeAgo $} {% trans 'by' %} <span class="text-uppercase">{$ examination.therapeut.last_name $}</span> {$ examination.therapeut.first_name $}</small>
@@ -49,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            
+
         </li>
     </ul>
     <div ng-switch-default class="no-session bg-warning">

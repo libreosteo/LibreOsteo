@@ -29,7 +29,7 @@ class TestFilter(TestCase):
 
 	def test_capitalize_none(self):
 		filter_chain = get_firstname_filters()
-		text = None 
+		text = None
 		self.assertIsNone(filter_chain.filter(text))
 
 	def test_capitalize_one_word(self):

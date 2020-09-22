@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 18:03+0200\n"
+"POT-Creation-Date: 2020-08-14 11:48+0200\n"
 "PO-Revision-Date: 2020-04-05 17:38+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -81,6 +81,14 @@ msgstr "Les informations de chèque sont manquantes"
 
 msgid "Missing data to continue"
 msgstr "Données manquantes"
+
+msgid "Prefix for invoicing sequence should have 3 char length maximum"
+msgstr ""
+"Le préfixe de séquence de facturation devrait avoir une longueur de 3 "
+"caractères maximum"
+
+msgid "Prefix could only contains alpha characters"
+msgstr "Le préfixe ne peut contenir que des caractères alphabétiques"
 
 msgid "Not paid"
 msgstr "Non réglée"
@@ -232,6 +240,9 @@ msgstr "Patient"
 msgid "Therapeut"
 msgstr "Thérapeute"
 
+msgid "Office Settings"
+msgstr "Paramètres du cabinet"
+
 msgid "Normal examination"
 msgstr "Consultation normale"
 
@@ -293,16 +304,22 @@ msgid "Siret"
 msgstr "Siret"
 
 msgid "status"
-msgstr "État"
+msgstr "état"
 
 msgid "therapeut_id"
-msgstr "Thérapeute id"
+msgstr "thérapeute id"
 
 msgid "Canceled by"
 msgstr "Annulée par"
 
 msgid "Invoice type"
 msgstr "Type de facture"
+
+msgid "office id"
+msgstr "cabinet id"
+
+msgid "check_sum"
+msgstr "somme de contrôle"
 
 msgid "Code"
 msgstr "Code"
@@ -325,6 +342,9 @@ msgstr "Référence"
 msgid "user"
 msgstr "utilisateur"
 
+msgid "Office name"
+msgstr "Nom du cabinet"
+
 msgid "Invoice office header"
 msgstr "Entête de facture"
 
@@ -335,7 +355,10 @@ msgid "Invoice footer"
 msgstr "Pied de page de facture"
 
 msgid "Invoice start sequence"
-msgstr "sequence de démarrage de facture"
+msgstr "Séquence de démarrage de facture"
+
+msgid "Invoice prefix sequence"
+msgstr "Préfixe de séquence de facturation"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -386,7 +409,7 @@ msgid "document"
 msgstr "document"
 
 msgid "attachmentType"
-msgstr "Type de pièce jointe"
+msgstr "type de pièce jointe"
 
 msgid "User Profile"
 msgstr "Profil utilisateur"
@@ -460,6 +483,9 @@ msgstr "Import/export"
 
 msgid "Rebuild index"
 msgstr "Réindexer"
+
+msgid "Change office"
+msgstr "Changer d'établissement"
 
 msgid "Help"
 msgstr "Aide"
@@ -581,10 +607,13 @@ msgid "not documented"
 msgstr "non renseigné"
 
 msgid "Session of "
-msgstr "Séance du"
+msgstr "Séance du "
 
 msgid "by"
 msgstr "par"
+
+msgid "Performed at "
+msgstr "Réalisé à "
 
 msgid "Print"
 msgstr "Imprimer"
@@ -644,7 +673,7 @@ msgid "Archive"
 msgstr "Archiver"
 
 msgid "get archive"
-msgstr "Obtenir l'archive"
+msgstr "obtenir l'archive"
 
 msgid ""
 "\n"
@@ -758,7 +787,7 @@ msgid "Errors when integrating patients"
 msgstr "Erreurs lors de l'importation des patients"
 
 msgid "line : "
-msgstr "ligne :"
+msgstr "ligne : "
 
 msgid "lines imported from file examination"
 msgstr "lignes importées du fichier consultation"
@@ -779,7 +808,7 @@ msgid ""
 "Here you can download the full list of patients and examinations as CSV files"
 msgstr ""
 "Vous pouvez télécharger ici la liste complète des patients et des "
-"consultations sous forme de fichiers CSV."
+"consultations sous forme de fichiers CSV"
 
 msgid "Patients file"
 msgstr "Fichier patients"
@@ -837,13 +866,16 @@ msgid ""
 "the network : "
 msgstr ""
 "Cette instance de libreosteo peut être utilisée en utilisant les adresses "
-"suivantes sur le réseau :"
+"suivantes sur le réseau : "
 
 msgid "Office"
 msgstr "Cabinet"
 
 msgid "Paiment means"
 msgstr "Moyens de paiement"
+
+msgid "The prefix to add for invoicing sequence"
+msgstr "Le préfixe à ajouter à la séquence de facturation"
 
 msgid "The start sequence must have composed only with numbers"
 msgstr "La séquence de démarrage doit être composée uniquement de chiffres"
@@ -981,5 +1013,3 @@ msgstr "Paramètres d'affichage"
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 
-#~ msgid "n/a"
-#~ msgstr "n/a"

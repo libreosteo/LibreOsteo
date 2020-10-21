@@ -43,7 +43,7 @@ Requirements :
 
 Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-    sudo apt install python3-pip python3-venv nodejs linux-headers-$(uname -r)
+    sudo apt install python3-pip python3-venv nodejs linux-headers-$(uname -r) curl git
 
 For yarnpkg, the last version contains a bug with one of dependency (see https://github.com/yarnpkg/yarn/issues/7890 ).
 Install yarnpkg by a manual installation of explicit version ::

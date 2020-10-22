@@ -64,7 +64,7 @@ class TestFileIntegrator(TestCase):
 		f2 = MagicMock()
 		f2.read.return_value = 'Nom de famille;Prenom'
 		f2.__iter__.return_value = ['Nom de famille;Prenom',]
-		
+
 		proxy1 = file_integrator.FileContentProxy()
 		proxy2 = file_integrator.FileContentProxy()
 

@@ -1,4 +1,3 @@
-
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -15,6 +14,7 @@
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from haystack import indexes
 from libreosteoweb import models
+
 
 class PatientIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)
@@ -39,7 +39,7 @@ class PatientIndex(indexes.SearchIndex, indexes.Indexable):
     family_history = indexes.CharField(model_attr='family_history')
     trauma_history = indexes.CharField(model_attr='trauma_history')
     medical_reports = indexes.CharField(model_attr='medical_reports')
-
+    job = indexes.CharField(model_attr='job')
 
     def get_model(self):
         return models.Patient
@@ -48,11 +48,12 @@ class PatientIndex(indexes.SearchIndex, indexes.Indexable):
         """Used when the entire index for model is updated."""
         return self.get_model().objects
 
+
 class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)
     title = indexes.CharField(model_attr='title')
     notes = indexes.CharField(model_attr='notes', null=True)
-    document_date = indexes.CharField(model_attr='document_date',null=True)
+    document_date = indexes.CharField(model_attr='document_date', null=True)
 
     def get_model(self):
         return models.Document
@@ -60,4 +61,3 @@ class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects
-

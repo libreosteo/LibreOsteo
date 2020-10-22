@@ -30,7 +30,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.views.generic.base import TemplateView
 from libreosteoweb.api import displays
 
-
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.SimpleRouter(trailing_slash = False)
 router.register(r'patients', views.PatientViewSet)
@@ -54,7 +53,7 @@ urlpatterns = [
     url(r'^api/', include(format_suffix_patterns(router.urls))),
     path('admin/', admin.site.urls),
     url(r'^accounts/login/$', LoginView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name='login'),
-    url(r'^accounts/logout', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
+    url(r'^accounts/logout/$', LogoutView.as_view(template_name='account/login.html',extra_context={'demonstration' : settings.DEMONSTRATION}), name="logout"),
     url(r'^accounts/create-admin/$', views.CreateAdminAccountView.as_view(), name='accounts-create-admin'),
     url(r'^install/$', views.InstallView.as_view(), name='install'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -64,6 +63,7 @@ urlpatterns = [
     url(r'^internal/dump.json', views.DbDump.as_view(), name='db_dump'),
     url(r'^internal/restore', views.LoadDump.as_view(), name='load_dump'),
     url(r'^internal/rebuild_index', views.RebuildIndex.as_view(), name="rebuild_index"),
+    url(r'', include('libreosteoweb.urls')),
 
     # Serve web-view
     url(r'^web-view/partials/patient-detail', displays.display_patient),

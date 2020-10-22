@@ -60,6 +60,7 @@ class Generator(object):
             invoice.footer = self.therapeut_settings.invoice_footer
         invoice.number = self.get_invoice_number()
         invoice.date = timezone.now()
+        invoice.officesettings_id = self.office_settings.id
         return invoice
 
     def get_invoice_number(self):
@@ -69,6 +70,8 @@ class Generator(object):
         else :
             invoice_number = _unicode(10000)
             self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
+        if self.office_settings.invoice_prefix_sequence is not None:
+            invoice_number = self.office_settings.invoice_prefix_sequence + invoice_number
         return invoice_number
 
     def cancel_invoice(self, invoice) :
@@ -102,4 +105,5 @@ class Generator(object):
         credit_note.type = 'creditnote' if credit_note.amount < 0 else 'invoice'
         credit_note.number = self.get_invoice_number()
         credit_note.status = models.InvoiceStatus.INVOICED_PAID
+        credit_note.officesettings_id = invoice.officesettings_id
         return credit_note

@@ -17,6 +17,7 @@
 import sys
 import logging
 import os, os.path
+import webbrowser
 
 # Third-party imports
 import cherrypy
@@ -117,6 +118,11 @@ class Server(object):
             callback()
 
         if engine.state == cherrypy.engine.states.STARTED:
+            url = 'http://127.0.0.1:{}'.format(
+                server_config['server_port'],
+            )
+            webbrowser.open(url, new=1, autoraise=True)
+
             engine.block()
 
 class DjangoAppPlugin(plugins.SimplePlugin):
@@ -219,6 +225,9 @@ if __name__ == '__main__':
     	    SITE_ROOT = os.path.split(SITE_ROOT)[0]
     	    if not os.path.exists(DATA_FOLDER):
     	        os.makedirs(DATA_FOLDER)
+    elif os.environ['APPIMAGE']:
+        DATA_FOLDER = settings.LIBREOSTEO_DATA_DIR
+
     LOG_CONF = {
 	    'version': 1,
 

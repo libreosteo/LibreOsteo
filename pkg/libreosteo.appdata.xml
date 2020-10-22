@@ -1,0 +1,36 @@
+<component type="web-application">
+    <id>io.github.libreosteo</id>
+    <name>LibreOstéo</name>
+    <metadata_license>0BSD</metadata_license>
+    <project_license>GPL-3.0-or-later</project_license>
+    <summary>Gestion de cabinet ostéopathique</summary>
+    <description>
+        Gestion de cabinet ostéopathique dans une interface web.
+        <ul>
+            <li>Fiches patient ;</li>
+            <li>Notes de consultations ;</li>
+            <li>Facturation.</li>
+        </ul>
+        <p>
+            Ce logiciel peut également convenir pout toutes les profession de
+            santé non conventionnées.
+        </p>
+    </description>
+    <categories>
+        <category>Office</category>
+        <category>ContactManagement</category>
+    </categories>
+
+    <launchable type="url">https://localhost:8000</launchable>
+    <launchable type="desktop-id">libreosteo.desktop</launchable>
+
+    <url type="homepage">https://libreosteo.github.io</url>
+    <url type="bugtracker">https://github.com/libreosteo/Libreosteo/issues</url>
+    <url type="faq">https://libreosteo.github.io/faq.html</url>
+    <url type="donation">https://liberapay.com/libreosteo</url>
+    <url type="contact">https://twitter.com/Libreosteo</url>
+    <url type="contact">https://www.facebook.com/Libreosteo</url>
+    <url type="contact">https://www.linkedin.com/in/jeanbaptistegury</url>
+
+    <icon type="remote">https://github.com/libreosteo/Libreosteo/raw/master/libreosteoweb/static/images/icon.png</icon>
+</component>

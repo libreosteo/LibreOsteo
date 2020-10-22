@@ -110,3 +110,21 @@ export PATH=$PATH:$PWD
 ```
   robot tests
 ```
+
+Building an AppImage executable for GNU/Linux
+=========================================================
+
+Building an AppImage allows to provide and ship an easy-way to use LibreOsteo for
+linux users.
+
+To build a LibreOsteo `.AppImage`, setup development environment, and then
+issue :
+
+    $ bash pkg/appimage/mk_appimage.sh
+
+Then a `*.AppImage` standalone binary reflecting current working dir will be
+built. That resulting *.AppImage* could be then shipped on its own. To execute
+it on any Linux distro :
+
+    $ chmod +x LibreOsteo*.AppImage
+    $ ./LibreOsteo-VERSION.AppImage

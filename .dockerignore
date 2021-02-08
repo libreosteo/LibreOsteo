@@ -1,0 +1,7 @@
+volumes/
+node_modules/
+static/
+data/
+media/
+whoosh_index/
+settings/

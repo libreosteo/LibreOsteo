@@ -1,4 +1,3 @@
-
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -24,25 +23,33 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os,sys,logging
+import os, sys, logging
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 if getattr(sys, 'frozen', False):
     logger = logging.getLogger(__name__)
-    logger.info("Frozen with attribute value %s" % (getattr(sys, 'frozen', False)))
+    logger.info("Frozen with attribute value %s" %
+                (getattr(sys, 'frozen', False)))
     logger.info("Real path of the start : %s " % (os.path.realpath(__file__)))
-    SITE_ROOT = os.path.split(os.path.split(os.path.split(os.path.dirname(os.path.realpath(__file__)))[0])[0])[0]
+    SITE_ROOT = os.path.split(
+        os.path.split(
+            os.path.split(os.path.dirname(
+                os.path.realpath(__file__)))[0])[0])[0]
     logger.info("SITE_ROOT = %s" % SITE_ROOT)
-    if (getattr(sys, 'frozen', False)) :
+    if (getattr(sys, 'frozen', False)):
         SITE_ROOT = os.path.split(SITE_ROOT)[0]
     DATA_FOLDER = SITE_ROOT
     if (getattr(sys, 'frozen', False) == 'macosx_app'):
-    	DATA_FOLDER = os.path.join( os.path.join( os.path.join( os.environ['HOME'], 'Library'), 'Application Support' ), 'Libreosteo')
-    	SITE_ROOT = os.path.join( os.path.split(SITE_ROOT)[0], 'Resources')
-    	if not os.path.exists(DATA_FOLDER):
-    	    os.makedirs(DATA_FOLDER)
+        DATA_FOLDER = os.path.join(
+            os.path.join(os.path.join(os.environ['HOME'], 'Library'),
+                         'Application Support'), 'Libreosteo')
+        SITE_ROOT = os.path.join(os.path.split(SITE_ROOT)[0], 'Resources')
+        if not os.path.exists(DATA_FOLDER):
+            os.makedirs(DATA_FOLDER)
 else:
     SITE_ROOT = BASE_DIR
-    DATA_FOLDER = SITE_ROOT
+    DATA_FOLDER = os.path.join(SITE_ROOT, "data")
+    if not os.path.exists(DATA_FOLDER):
+        os.makedirs(DATA_FOLDER)
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -57,13 +64,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'), os.path.join(SITE_ROOT, 'locale'))
+LOCALE_PATHS = ('locale', os.path.join(SITE_ROOT, 'django', 'conf', 'locale'),
+                os.path.join(SITE_ROOT, 'locale'))
 
 APPEND_SLASH = False
 
 DEMONSTRATION = False
 
-COMPRESS_ENABLED=True
+COMPRESS_ENABLED = True
 
 # Application definition
 
@@ -104,7 +112,8 @@ MEDIA_ROOT = os.path.join(DATA_FOLDER, "media/")
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND':
+        'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(SITE_ROOT, 'templates'),
             os.path.join(SITE_ROOT, 'static'),
@@ -130,10 +139,7 @@ TEMPLATES = [
     },
 ]
 
-
-TEMPLATE_ZIP_FILES = (
-    'library.zip',
-    )
+TEMPLATE_ZIP_FILES = ('library.zip', )
 
 # Additional locations of static files
 #STATICFILES_DIRS = (
@@ -146,10 +152,10 @@ TEMPLATE_ZIP_FILES = (
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-'django.contrib.staticfiles.finders.FileSystemFinder',
-'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-'compressor.finders.CompressorFinder',
-# 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Database
@@ -163,7 +169,6 @@ DATABASES = {
     }
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -172,7 +177,7 @@ LANGUAGE_CODE = 'fr'
 LANGUAGES = (
     ('fr', _('French')),
     ('en', _('English')),
-    )
+)
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -182,7 +187,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
@@ -190,46 +194,42 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/files/'
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         #'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ),
+        'rest_framework.authentication.SessionAuthentication', ),
     # Use hyperlinked styles by default.
     # Only used if the `serializer_class` attribute is not set on a view.
     'DEFAULT_MODEL_SERIALIZER_CLASS':
-        'rest_framework.serializers.ModelSerializer',
+    'rest_framework.serializers.ModelSerializer',
 
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ],
-
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_PERMISSION_CLASSES':
+    ['rest_framework.permissions.IsAuthenticated'],
+    'DEFAULT_FILTER_BACKENDS':
+    ('django_filters.rest_framework.DjangoFilterBackend', ),
+    'TEST_REQUEST_DEFAULT_FORMAT':
+    'json',
 }
-
-
 
 LOGIN_URL = 'accounts/login'
 LOGIN_URL_NAME = 'login'
 LOGOUT_URL_NAME = 'logout'
-LOGIN_REDIRECT_URL= '/'
+LOGIN_REDIRECT_URL = '/'
 INITIALIZE_ADMIN_URL_NAME = 'install'
-NO_REROUTE_PATTERN_URL = [ r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n', r'^web-view/partials/restore', r'^web-view/partials/register' ]
-
-
-
-
+NO_REROUTE_PATTERN_URL = [
+    r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n',
+    r'^web-view/partials/restore', r'^web-view/partials/register'
+]
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format':
+            '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(asctime)s %(module)s %(message)s'
@@ -240,7 +240,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.NullHandler',
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
@@ -266,7 +266,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'libreosteoweb.api':{
+        'libreosteoweb.api': {
             'handlers': ['console'],
             'level': 'INFO',
         }
@@ -282,6 +282,9 @@ HAYSTACK_CONNECTIONS = {
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter','compressor.filters.cssmin.rCSSMinFilter']
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.rCSSMinFilter'
+]
 
-DISPLAY_SERVICE_NET_HELPER=True
+DISPLAY_SERVICE_NET_HELPER = True

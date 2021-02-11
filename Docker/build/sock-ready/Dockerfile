@@ -47,10 +47,11 @@ RUN rm libreosteoweb/static/components
 
 FROM alpine:latest as run
 LABEL maintainer="LibreOsteo Team <contact@libreosteo.org>"
-COPY --from=build /Libreosteo/ /Libreosteo
-VOLUME /data
-VOLUME /settings
-ENV VIRTUAL_ENV=/venv
+COPY --from=build /Libreosteo ./Libreosteo
+VOLUME /Libreosteo/data
+VOLUME /Libreosteo/settings
+VOLUME /var/application/static
+ENV VIRTUAL_ENV=/Libreosteo/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /Libreosteo
 # Install dependancies
@@ -69,4 +70,8 @@ RUN apk add --no-cache \
 
 
 EXPOSE 3031
-CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --socket :3031 --module Libreosteo.wsgi --master --processes 1 --threads 2 -H /Libreosteo/venv
+CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container \
+                                           && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container \
+                                           && cp -r /Libreosteo/static/. /var/application/static/. \
+                                           && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container \
+                                           && uwsgi --socket=:3031 --module Libreosteo.wsgi --master --processes 1 --threads 2 -H /Libreosteo/venv

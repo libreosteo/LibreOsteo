@@ -48,8 +48,8 @@ RUN rm libreosteoweb/static/components
 FROM alpine:latest as run
 LABEL maintainer="LibreOsteo Team <contact@libreosteo.org>"
 COPY --from=build /Libreosteo ./Libreosteo
-VOLUME /data
-VOLUME /settings
+VOLUME /Libreosteo/data
+VOLUME /Libreosteo/settings
 ENV VIRTUAL_ENV=/Libreosteo/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 WORKDIR /Libreosteo

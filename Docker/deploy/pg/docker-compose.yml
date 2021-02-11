@@ -3,6 +3,7 @@ version: '3'
 services:
   db:
     image: libreosteo-pg
+    hostname: pg_1
     volumes:
       - ${LIBREOSTEO_DB_STORAGE}:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
@@ -13,6 +14,7 @@ services:
       - POSTGRES_DB=libreosteo
   libreosteo:
     image: libreosteo-http
+    hostname: libreosteo_1
     ports:
       - "8085:8085"
     depends_on:

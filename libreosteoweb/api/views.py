@@ -131,7 +131,7 @@ class InstallView(TemplateView):
         Displays the install status and handle the action on install.
         """
         if len(User.objects.filter(is_staff__exact=True)) > 0:
-            raise HttpResponseForbidden
+            return HttpResponseForbidden()
         self.redirect_field_name = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
         return super(TemplateView,
@@ -139,7 +139,7 @@ class InstallView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if len(User.objects.filter(is_staff__exact=True)) > 0:
-            raise HttpResponseForbidden
+            return HttpResponseForbidden()
         return super(TemplateView,
                      self).render_to_response(self.get_context_data())
 
@@ -241,9 +241,11 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer, request.officesettings)
+        return self._invoice_examination(current_examination, serializer,
+                                         request.officesettings)
 
-    def _invoice_examination(self, current_examination, invoicing_serializer, officesettings):
+    def _invoice_examination(self, current_examination, invoicing_serializer,
+                             officesettings):
         if invoicing_serializer.is_valid():
             if invoicing_serializer.data['status'] == 'notinvoiced':
                 current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
@@ -309,7 +311,8 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer, request.officesettings)
+        return self._invoice_examination(current_examination, serializer,
+                                         request.officesettings)
 
     def generate_invoice(self, invoicingSerializerData, officesettings):
         therapeutsettings = models.TherapeutSettings.objects.filter(
@@ -327,7 +330,8 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(therapeut=self.request.user, office=self.request.officesettings)
+        serializer.save(therapeut=self.request.user,
+                        office=self.request.officesettings)
 
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated:
@@ -636,7 +640,8 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         try:
             patient = self.kwargs['patient']
-            return models.PatientDocument.objects.filter(patient__id=patient).order_by('document__document_date')
+            return models.PatientDocument.objects.filter(
+                patient__id=patient).order_by('document__document_date')
         except KeyError:
             return models.PatientDocument.objects.all()
 
@@ -699,7 +704,7 @@ class RebuildIndex(StaffRequiredMixin, View):
 
 
 class LoadDump(View):
-    @maintenance_available()
+    @maintenance_available
     def post(self, request, *args, **kwargs):
         # Retrieve the content of the file uploaded.
         try:
@@ -721,18 +726,18 @@ class LoadDump(View):
                         with open(os.path.join(tmpdir, 'meta')) as metafile:
                             v = metafile.read().strip()
                         if v != libreosteoweb.__version__:
-                            return HttpResponse(content=
-                                                format_lazy(
-                                                    'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
-                                                otherversion=v,
-                                                currentversion=libreosteoweb.__version__)
-                                                , status=412)
+                            return HttpResponse(content=format_lazy(
+                                'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
+                                otherversion=v,
+                                currentversion=libreosteoweb.__version__),
+                                                status=412)
                     # uncompress the dump file
                     if filename in zf.namelist():
                         zf.extract(filename, tmpdir)
                         # uncompress all document
                         for d in [
-                                f for f in zf.namelist() if f != 'dump.json' and f != 'meta'
+                                f for f in zf.namelist()
+                                if f != 'dump.json' and f != 'meta'
                         ]:
                             zf.extract(d, settings.MEDIA_ROOT)
                     else:

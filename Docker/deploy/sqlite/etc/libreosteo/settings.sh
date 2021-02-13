@@ -1,5 +1,5 @@
 LO_DIR=/opt/libreosteo
-IMAGE=littlejo/libreosteo
+IMAGE=libreosteo/libreosteo-http
 BROWSER='firefox -new-window'
 PORT=8085
 RANK=prod

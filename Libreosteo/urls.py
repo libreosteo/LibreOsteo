@@ -118,7 +118,7 @@ urlpatterns = [
         r'^zipcode_lookup/',
         include(('zipcode_lookup.urls', 'zipcode_lookup'),
                 namespace='zipcode-lookup')),
-    re_path(r'^protected/', include('protected_media.urls')),
+    re_path(r'^files/', include('protected_media.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 from django.views.i18n import JavaScriptCatalog

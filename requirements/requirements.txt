@@ -12,3 +12,4 @@ sqlparse
 netifaces
 decorator
 packaging
+django-protected-media

@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'compressor',
     'zipcode_lookup',
+    'protected_media',
 ]
 
 MIDDLEWARE = [
@@ -288,3 +289,8 @@ COMPRESS_CSS_FILTERS = [
 ]
 
 DISPLAY_SERVICE_NET_HELPER = True
+
+PROTECTED_MEDIA_ROOT = "%s/protected/" % BASE_DIR
+PROTECTED_MEDIA_URL = "/protected"
+PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
+PROTECTED_MEDIA_AS_DOWNLOADS = False  # Controls inclusion of a Content-Disposition header

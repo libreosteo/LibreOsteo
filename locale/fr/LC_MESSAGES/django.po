@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Libreosteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-14 11:48+0200\n"
+"POT-Creation-Date: 2021-02-15 17:14+0100\n"
 "PO-Revision-Date: 2020-04-05 17:38+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -375,17 +375,8 @@ msgstr "Auto-complétion via le code postal (France)"
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-msgid "Patient file"
-msgstr "Fichier patient"
-
-msgid "Examination file"
-msgstr "Fichier de consultation"
-
 msgid "validity status"
 msgstr "validité"
-
-msgid "Document file"
-msgstr "Fichier document"
 
 msgid "Title"
 msgstr "Titre"
@@ -740,6 +731,12 @@ msgstr "Gabarit du fichier consultation"
 msgid "Import"
 msgstr "Importer"
 
+msgid "Patient file"
+msgstr "Fichier patient"
+
+msgid "Examination file"
+msgstr "Fichier de consultation"
+
 msgid "Analyze"
 msgstr "Analyser"
 
@@ -1013,3 +1010,5 @@ msgstr "Paramètres d'affichage"
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 
+#~ msgid "Document file"
+#~ msgstr "Fichier document"

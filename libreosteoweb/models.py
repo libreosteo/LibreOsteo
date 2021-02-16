@@ -19,6 +19,7 @@ from datetime import date
 from django.utils import timezone
 from libreosteoweb.api.utils import enum
 import mimetypes
+from protected_media.models import ProtectedFileField
 
 # import the logging library
 import logging
@@ -131,7 +132,9 @@ class Children(models.Model):
                                    blank=True)
     first_name = models.CharField(_('Firstname'), max_length=200)
     birthday_date = models.DateField(_('Birth date'))
-    parent = models.ForeignKey(Patient, verbose_name=_('Parent'), on_delete=models.CASCADE)
+    parent = models.ForeignKey(Patient,
+                               verbose_name=_('Parent'),
+                               on_delete=models.CASCADE)
 
     def __unicode__(self):
         return "%s %s" % (self.family_name, self.first_name)
@@ -171,7 +174,9 @@ class Examination(models.Model):
     invoices = models.ManyToManyField('Invoice',
                                       verbose_name=_('Invoice'),
                                       blank=True)
-    patient = models.ForeignKey(Patient, verbose_name=_('Patient'), on_delete=models.PROTECT)
+    patient = models.ForeignKey(Patient,
+                                verbose_name=_('Patient'),
+                                on_delete=models.PROTECT)
     therapeut = models.ForeignKey(User,
                                   verbose_name=_('Therapeut'),
                                   blank=True,
@@ -265,7 +270,10 @@ class ExaminationComment(models.Model):
                              on_delete=models.PROTECT)
     comment = models.TextField(_('Comment'))
     date = models.DateTimeField(_('Date'), null=True, blank=True)
-    examination = models.ForeignKey(Examination, verbose_name=_('Examination'), on_delete=models.PROTECT)
+    examination = models.ForeignKey(Examination,
+                                    verbose_name=_('Examination'),
+                                    on_delete=models.PROTECT)
+
 
 class Invoice(models.Model):
     """
@@ -402,7 +410,10 @@ class OfficeSettings(models.Model):
     """
     This class implements model for the settings into the application
     """
-    office_name = models.CharField(_('Office name'), max_length=250, blank=True, null=True)
+    office_name = models.CharField(_('Office name'),
+                                   max_length=250,
+                                   blank=True,
+                                   null=True)
     invoice_office_header = models.CharField(_('Invoice office header'),
                                              max_length=500,
                                              blank=True)
@@ -429,8 +440,10 @@ class OfficeSettings(models.Model):
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)
     invoice_start_sequence = models.TextField(_('Invoice start sequence'),
                                               blank=True)
-    invoice_prefix_sequence = models.CharField(_('Invoice prefix sequence'), blank=True,
-                                               null=True, max_length=3)
+    invoice_prefix_sequence = models.CharField(_('Invoice prefix sequence'),
+                                               blank=True,
+                                               null=True,
+                                               max_length=3)
 
     UPDATE_INVOICE_SEQUENCE = 1
 
@@ -458,8 +471,8 @@ class TherapeutSettings(models.Model):
 
     # Examination view modules
     spheres_enabled = models.BooleanField(_('Spheres'), default=True)
-    zipcode_completion_enabled = models.BooleanField(_('Zipcode completion (France)'), default=True)
-
+    zipcode_completion_enabled = models.BooleanField(
+        _('Zipcode completion (France)'), default=True)
 
     MODULES_FIELDS = [
         {
@@ -508,8 +521,8 @@ class FileImport(models.Model):
     implements a couple of file for importing data.
     It concerns only Patient and examination
     """
-    file_patient = models.FileField(_('Patient file'))
-    file_examination = models.FileField(_('Examination file'), blank=True)
+    file_patient = models.FileField(upload_to="tmp/")
+    file_examination = models.FileField(upload_to="tmp/", blank=True)
     status = models.IntegerField(_('validity status'),
                                  blank=True,
                                  default=None,
@@ -531,13 +544,12 @@ class FileImport(models.Model):
             storage_examination.delete(path_examination)
 
 
-
 class Document(models.Model):
     """
     Implements a document to be attached to
     an examination or patient file
     """
-    document_file = models.FileField(_('Document file'), upload_to="documents")
+    document_file = models.FileField(upload_to="documents")
     title = models.TextField(_('Title'))
     notes = models.TextField(_('Notes'), blank=True, null=True, default=None)
     internal_date = models.DateTimeField(_('Adding date'),

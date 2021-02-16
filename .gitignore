@@ -9,6 +9,7 @@ libreosteoweb/static/bower_components/
 /static/
 /media/
 /node_modules/
+/data/
 
 # Indexes
 whoosh_index/

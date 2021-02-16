@@ -521,8 +521,8 @@ class FileImport(models.Model):
     implements a couple of file for importing data.
     It concerns only Patient and examination
     """
-    file_patient = ProtectedFileField(upload_to="tmp/")
-    file_examination = ProtectedFileField(upload_to="tmp/", blank=True)
+    file_patient = models.FileField(upload_to="tmp/")
+    file_examination = models.FileField(upload_to="tmp/", blank=True)
     status = models.IntegerField(_('validity status'),
                                  blank=True,
                                  default=None,
@@ -549,7 +549,7 @@ class Document(models.Model):
     Implements a document to be attached to
     an examination or patient file
     """
-    document_file = ProtectedFileField(upload_to="documents")
+    document_file = models.FileField(upload_to="documents")
     title = models.TextField(_('Title'))
     notes = models.TextField(_('Notes'), blank=True, null=True, default=None)
     internal_date = models.DateTimeField(_('Adding date'),

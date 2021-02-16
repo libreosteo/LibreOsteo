@@ -193,7 +193,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/files/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -290,7 +290,7 @@ COMPRESS_CSS_FILTERS = [
 
 DISPLAY_SERVICE_NET_HELPER = True
 
-PROTECTED_MEDIA_ROOT = "%s/protected/" % BASE_DIR
+PROTECTED_MEDIA_ROOT = os.path.join(DATA_FOLDER, "media")
 PROTECTED_MEDIA_URL = "/files"
 PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
 PROTECTED_MEDIA_AS_DOWNLOADS = False  # Controls inclusion of a Content-Disposition header

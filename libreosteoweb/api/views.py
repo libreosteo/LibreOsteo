@@ -70,6 +70,7 @@ from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long, LoggerWriter
 from libreosteoweb.api.invoicing import generator as invoicing_generator
 from libreosteoweb.api.events.settings import settings_event_tracer
+from django.core.files.storage import default_storage
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -196,12 +197,14 @@ class PatientViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         instance = models.Patient(**serializer.validated_data)
         instance.set_user_operation(self.request.user)
+        instance.set_request(self.request)
         instance.full_clean()
         instance.save()
         serializer.instance = instance
 
     def perform_update(self, serializer):
         serializer.instance.set_user_operation(self.request.user)
+        serializer.instance.set_request(self.request)
         return super(PatientViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, instance):
@@ -219,6 +222,7 @@ class PatientViewSet(viewsets.ModelViewSet):
                 reference=e.id, clazz=models.Examination.__name__).delete()
         models.Examination.objects.filter(patient=instance.id).delete()
         models.PatientDocument.objects.filter(patient=instance.id).delete()
+        instance.set_request(self.request)
         return super(PatientViewSet, self).perform_destroy(instance)
 
 
@@ -623,7 +627,9 @@ class DocumentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(user=self.request.user, internal_date=timezone.now())
+        serializer.save(user=self.request.user,
+                        internal_date=timezone.now(),
+                        request=self.request)
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -739,7 +745,7 @@ class LoadDump(View):
                                 f for f in zf.namelist()
                                 if f != 'dump.json' and f != 'meta'
                         ]:
-                            zf.extract(d, settings.MEDIA_ROOT)
+                            zf.extract(d, default_storage.location)
                     else:
                         raise Exception(
                             "This zipfile does not contain the db dump")

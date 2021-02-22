@@ -118,6 +118,10 @@ class Patient(models.Model):
             Not mapped in DB only for the runtime"""
         self.current_user_operation = user
 
+    def set_request(self, request):
+        """ Use this setter to transit the request on the instance"""
+        self.request = request
+
     TYPE_NEW_PATIENT = 1
     TYPE_UPDATE_PATIENT = 2
 
@@ -582,6 +586,10 @@ class Document(models.Model):
             self.internal_date = timezone.now()
         self.mime_type = mimetypes.guess_type(self.document_file.path)[0]
         logger.info("mime_type = %s " % self.mime_type)
+
+    def set_request(self, request):
+        """ Use this setter to have the request which creates the instance """
+        self.request = request
 
 
 class PatientDocument(models.Model):

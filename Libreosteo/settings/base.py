@@ -76,19 +76,11 @@ COMPRESS_ENABLED = True
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'haystack',
-    'libreosteoweb',
-    'django_filters',
-    'rest_framework',
-    'compressor',
-    'zipcode_lookup',
-    'protected_media',
+    'django.contrib.admin', 'django.contrib.auth',
+    'django.contrib.contenttypes', 'django.contrib.sessions',
+    'django.contrib.messages', 'django.contrib.staticfiles', 'libreosteoweb',
+    'django_filters', 'rest_framework', 'compressor', 'zipcode_lookup',
+    'protected_media', 'haystack'
 ]
 
 MIDDLEWARE = [

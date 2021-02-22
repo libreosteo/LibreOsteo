@@ -1,4 +1,3 @@
-
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -40,7 +39,9 @@ def initialize_admin_url():
 def no_reroute_pattern():
     no_reroute = []
     if hasattr(settings, 'NO_REROUTE_PATTERN_URL'):
-        no_reroute += [compile(expr) for expr in settings.NO_REROUTE_PATTERN_URL]
+        no_reroute += [
+            compile(expr) for expr in settings.NO_REROUTE_PATTERN_URL
+        ]
     return no_reroute
 
 
@@ -61,6 +62,7 @@ class LoginRequiredMiddleware(MiddlewareMixin):
     Requires authentication middleware and template context processors to be
     loaded. You'll get an error if they aren't.
     """
+
     def process_request(self, request):
         assert hasattr(request, 'user'), "The Login Required middleware\
  requires authentication middleware to be installed. Edit your\
@@ -94,9 +96,11 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             if get_logout_url().lstrip('/') == path:
                 request.path = ''
             if not any(m.match(path) for m in get_exempts()):
-                logger.info("query path %s, authentication required. redirect to authentication form" % path)
-                return HttpResponseRedirect(
-                    get_login_url() + "?next=" + request.path)
+                logger.info(
+                    "query path %s, authentication required. redirect to authentication form"
+                    % path)
+                return HttpResponseRedirect(get_login_url() + "?next=" +
+                                            request.path)
         logger.info("user [%s] authenticated" % request.user)
 
 
@@ -115,6 +119,9 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
         if not request.user.is_authenticated:
             return
 
+        if hasattr(request, 'officesettings'):
+            return
+
         path = request.path.lstrip('/')
 
         multiple_office = OfficeSettings.objects.all().count()
@@ -122,8 +129,7 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
         if request.has_multiple_office:
             # Search into the session the current officesettings set
             current_officesettings = OfficeSettings.objects.filter(
-                id=request.session.get('officesettings')
-            ).first()
+                id=request.session.get('officesettings')).first()
             if current_officesettings is None:
                 if any(m.match(path) for m in self.no_reroute_pattern()):
                     return
@@ -138,6 +144,8 @@ class OfficeSettingsMiddleware(MiddlewareMixin):
     def no_reroute_pattern(self):
         no_reroute = []
         if hasattr(settings, 'OFFICE_SETTINGS_NO_REROUTE_PATTERN_URL'):
-            no_reroute += [compile(expr) for expr in settings.OFFICE_SETTINGS_NO_REROUTE_PATTERN_URL]
+            no_reroute += [
+                compile(expr)
+                for expr in settings.OFFICE_SETTINGS_NO_REROUTE_PATTERN_URL
+            ]
         return no_reroute
-

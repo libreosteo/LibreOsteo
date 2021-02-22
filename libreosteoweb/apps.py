@@ -1,4 +1,3 @@
-
 # This file is part of Libreosteo.
 #
 # Libreosteo is free software: you can redistribute it and/or modify
@@ -14,11 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
 from django.apps import AppConfig
-from sqlite3 import OperationalError
 import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 class LibreosteoConfig(AppConfig):
     name = 'libreosteoweb'
@@ -32,11 +31,12 @@ class LibreosteoConfig(AppConfig):
             for f in file_import_list:
                 f.delete()
         except Exception:
-            logger.debug("Exception when purging files at starting application")
-    
+            logger.debug(
+                "Exception when purging files at starting application")
+
         try:
-            office_settings_list = models.OfficeSettings.objects.all()
-            if len(office_settings_list) <= 0 :
+            nb_office_settings = models.OfficeSettings.objects.all().count()
+            if nb_office_settings <= 0:
                 default = models.OfficeSettings()
                 default.save()
         except Exception:

@@ -71,6 +71,7 @@ from .utils import convert_to_long, LoggerWriter
 from libreosteoweb.api.invoicing import generator as invoicing_generator
 from libreosteoweb.api.events.settings import settings_event_tracer
 from django.core.files.storage import default_storage
+import uuid
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -718,7 +719,7 @@ class LoadDump(View):
                 logger.info("Load a dump from a sent file.")
                 # Write the received file into a file into settings.FIXTURE_DIRS
                 file_content = ContentFile(request.FILES['file'].read())
-                filename = 'dump.json'
+                filename = 'dump-%s.json' % uuid.uuid4()
                 tmpdir = tempfile.gettempdir()
                 fixture = os.path.join(tmpdir, filename)
 

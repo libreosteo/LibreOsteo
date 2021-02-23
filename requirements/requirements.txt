@@ -2,7 +2,7 @@ Django==2.2
 Whoosh==2.7.4
 argparse==1.2.1
 django-filter==2.3.0
-django-haystack==3.0b1
+django-haystack==3.0
 djangorestframework==3.11.0
 cherrypy==18.6.0
 djangorestframework-csv==2.1.0

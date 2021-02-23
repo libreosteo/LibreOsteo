@@ -719,8 +719,8 @@ class LoadDump(View):
                 logger.info("Load a dump from a sent file.")
                 # Write the received file into a file into settings.FIXTURE_DIRS
                 file_content = ContentFile(request.FILES['file'].read())
-                filename = 'dump-%s.json' % uuid.uuid4()
-                tmpdir = tempfile.gettempdir()
+                filename = 'dump.json'
+                tmpdir = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
                 fixture = os.path.join(tmpdir, filename)
 
                 # Check if zip file

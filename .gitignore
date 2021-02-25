@@ -6,6 +6,7 @@ db.sqlite3
 
 # Assets
 libreosteoweb/static/bower_components/
+libreosteoweb/static/components/
 /static/
 /media/
 /node_modules/

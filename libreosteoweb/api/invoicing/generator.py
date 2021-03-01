@@ -1,20 +1,21 @@
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from libreosteoweb import models
 from libreosteoweb.api.utils import _unicode, convert_to_long
 from django.utils import timezone
+
 
 class Generator(object):
     def __init__(self, office_settings, therapeut_settings):
@@ -34,7 +35,7 @@ class Generator(object):
         invoice.office_siret = self.office_settings.office_siret
 
         # Override the siret on the invoice with the therapeut siret if defined
-        if self.therapeut_settings.siret is not None :
+        if self.therapeut_settings.siret is not None:
             invoice.office_siret = self.therapeut_settings.siret
 
         invoice.paiment_mode = serializer_data['paiment_mode']
@@ -56,7 +57,7 @@ class Generator(object):
         invoice.footer = self.office_settings.invoice_footer
 
         # Override the footer on the invoice with the therapeut settings if defined
-        if self.therapeut_settings.invoice_footer is not None :
+        if self.therapeut_settings.invoice_footer is not None:
             invoice.footer = self.therapeut_settings.invoice_footer
         invoice.number = self.get_invoice_number()
         invoice.date = timezone.now()
@@ -64,17 +65,21 @@ class Generator(object):
         return invoice
 
     def get_invoice_number(self):
-        if self.office_settings.invoice_start_sequence is not None and len(self.office_settings.invoice_start_sequence) > 0:
-            invoice_number = _unicode(convert_to_long(self.office_settings.invoice_start_sequence))
-            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
-        else :
+        if self.office_settings.invoice_start_sequence is not None and len(
+                self.office_settings.invoice_start_sequence) > 0:
+            invoice_number = _unicode(
+                convert_to_long(self.office_settings.invoice_start_sequence))
+            self.office_settings.invoice_start_sequence = _unicode(
+                convert_to_long(invoice_number) + 1)
+        else:
             invoice_number = _unicode(10000)
-            self.office_settings.invoice_start_sequence = _unicode(convert_to_long(invoice_number) + 1)
+            self.office_settings.invoice_start_sequence = _unicode(
+                convert_to_long(invoice_number) + 1)
         if self.office_settings.invoice_prefix_sequence is not None:
             invoice_number = self.office_settings.invoice_prefix_sequence + invoice_number
         return invoice_number
 
-    def cancel_invoice(self, invoice) :
+    def cancel_invoice(self, invoice):
         credit_note = models.Invoice()
         credit_note.amount = -1 * invoice.amount
         credit_note.currency = invoice.currency

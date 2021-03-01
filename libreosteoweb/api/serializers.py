@@ -1,17 +1,17 @@
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from rest_framework import serializers, validators
 from libreosteoweb.models import *
 from django.contrib.auth.models import User
@@ -155,6 +155,7 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
         fields = '__all__'
         depth = 1
 
+
 class ExaminationSerializer(serializers.ModelSerializer):
     invoice_number = serializers.CharField(source="get_invoice_number",
                                            required=False,
@@ -176,7 +177,8 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                              allow_null=True,
                                              read_only=True)
 
-    office_detail = OfficeDetailSerializer(source="office", required=False,
+    office_detail = OfficeDetailSerializer(source="office",
+                                           required=False,
                                            allow_null=True,
                                            read_only=True)
 
@@ -297,17 +299,21 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
             input_invoice_prefix_seq = None
         if input_invoice_start_seq is None or len(
                 input_invoice_start_seq) <= 0:
-            last_invoice_number = Invoice.objects.filter(officesettings_id=self.instance.id).aggregate(
-                Max('number'))['number__max']
+            last_invoice_number = Invoice.objects.filter(
+                officesettings_id=self.instance.id).aggregate(
+                    Max('number'))['number__max']
             if last_invoice_number is not None:
                 data['invoice_start_sequence'] = _unicode(last_invoice_number)
             else:
                 data['invoice_start_sequence'] = _unicode(10000)
-        if input_invoice_prefix_seq is not None :
+        if input_invoice_prefix_seq is not None:
             if len(input_invoice_prefix_seq) > 3:
-                raise serializers.ValidationError(_('Prefix for invoicing sequence should have 3 char length maximum'))
+                raise serializers.ValidationError(
+                    _('Prefix for invoicing sequence should have 3 char length maximum'
+                      ))
             if not re.match('^[A-Za-z]{1,3}$', input_invoice_prefix_seq):
-                raise serializers.ValidationError(_('Prefix could only contains alpha characters'))
+                raise serializers.ValidationError(
+                    _('Prefix could only contains alpha characters'))
         return data
 
     def get_network_list(self, obj):
@@ -324,10 +330,8 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         return addresses
 
     def get_invoice_min_sequence(self, obj):
-        result_query = Invoice.objects.filter(officesettings_id=
-                                              obj.id
-                                              ).aggregate(Max('number')
-                                                          )['number__max']
+        result_query = Invoice.objects.filter(
+            officesettings_id=obj.id).aggregate(Max('number'))['number__max']
         if result_query is not None and len(result_query) > 0:
             return convert_to_long(result_query, strip_string_prefix=True) + 1
         return 1
@@ -336,6 +340,7 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         if hasattr(self.context['request'], 'officesettings'):
             return self.context['request'].officesettings.id == obj.id
         return False
+
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
     def validate_family_name(self, value):

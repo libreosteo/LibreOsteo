@@ -2,8 +2,8 @@
   "name": "libreosteo",
   "private": true,
   "version": "0.0.0",
-  "description": "Libreosteo",
-  "repository": "https://github.com/garthylou/Libreosteo",
+  "description": "LibreOsteo",
+  "repository": "https://github.com/garthylou/LibreOsteo",
   "license": "GNU-GPL",
   "devDependencies": {},
   "scripts": {

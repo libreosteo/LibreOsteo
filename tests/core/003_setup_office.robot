@@ -20,17 +20,17 @@ ${INVOICE_FOOTER}               Footer
 
 Open Settings
   [Documentation]   login a user and check that the user is asked to setup the office
-  Open Browser To Login Page 
-  Title Should Be     Identifiez-vous sur Libreosteo
-  Login with      test   test 
-  Title Should Be     Libreosteo
+  Open Browser To Login Page
+  Title Should Be     Identifiez-vous sur LibreOsteo
+  Login with      test   test
+  Title Should Be     LibreOsteo
   ${COOKIE} =         Get Cookie      sessionid
   Element Should Not Be Visible     class:alert-danger
   Wait Until Element Is Enabled     jquery:div.popover-content
   Element Should Contain            jquery:div.popover-content      ADELI
   Element Should Be Visible         jquery:ul.dropdown-user
   Edit Settings
-  Check Rest Settings               ${COOKIE.value} 
+  Check Rest Settings               ${COOKIE.value}
   [TearDown]    Close Browser
 
 
@@ -45,7 +45,7 @@ Login With
 Edit Settings
   Click Element                   jquery:li.open
   Click Element                   jquery:li#office-settings
-  Wait Until Element Contains     jquery:h1.page-header         Paramètres du cabinet  
+  Wait Until Element Contains     jquery:h1.page-header         Paramètres du cabinet
   Input Text                      office_address_street         ${OFFICE_ADDRESS_STREET}
   Input Text                      office_address_complement     ${OFFICE_ADDRESS_COMPLEMENT}
   Input Text                      office_address_zipcode                ${OFFICE_ADDRESS_ZIPCODE}
@@ -58,14 +58,14 @@ Edit Settings
   Input Text                      invoice_content               ${INVOICE_CONTENT}
   Input Text                      invoice_footer                ${INVOICE_FOOTER}
   Click Button                    jquery:button.btn.btn-primary
-  Wait Until Element Is Enabled   jquery:div.growl-item
+  Wait Until Element Is Enabled   jquery:div.growl-item.alert
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success
 
 Check Rest Settings
   [Arguments]     ${session_token}
   ${session_cookie}   Create Dictionary   sessionid=${session_token}
   Login REST with     test        ${session_cookie}
-  ${resp} =           Get Request   restapi     /api/settings
+  ${resp} =           GET On Session   restapi     /api/settings
   RequestsLogger.Write log        ${resp}
   ${settings}=    Set variable   ${resp.json()[0]}
   Should Be Equal As Strings     ${settings['office_address_street']}    ${OFFICE_ADDRESS_STREET}
@@ -82,4 +82,4 @@ Check Rest Settings
 
 Logout
   Go To   ${ROOT_URL}/logout
-  Title Should Be     Identifiez-vous sur Libreosteo
+  Title Should Be     Identifiez-vous sur LibreOsteo

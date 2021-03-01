@@ -1,4 +1,4 @@
-Changelog for Libreosteo
+Changelog for LibreOsteo
 ========================
 
 

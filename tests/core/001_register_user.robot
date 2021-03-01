@@ -8,7 +8,7 @@ Resource   resources.txt
 First Installation
   [Documentation]   Register an administrator on freshed installation
   Open Browser To Login Page 
-  Title Should Be     Installer Libreosteo
+  Title Should Be     Installer LibreOsteo
   Click RegisterUser
   Input Username    test 
   Input Password1   test
@@ -37,8 +37,8 @@ Submit Credentials
   Click Button  login 
 
 Login Page Should Be Open
-  Title Should Be  Identifiez-vous sur Libreosteo 
+  Title Should Be  Identifiez-vous sur LibreOsteo 
 
 Clear database
-  Remove File   db.sqlite3
+  Remove File   data/db.sqlite3
   Run   python ./manage.py migrate

@@ -13,19 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-import sys
-if sys.version_info.major == 2:
-    from io import BytesIO
-    from io import BytesIO as StringIO
-else:
-    from io import BytesIO, StringIO
+from io import BytesIO, StringIO
 from django.utils import timezone
 import libreosteoweb
 import logging
 import os
 import tempfile
 import zipfile
-
+from libreosteoweb.management.commands.backup_db import backup_db
 from rest_framework import pagination, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError, PermissionDenied, ParseError
@@ -675,26 +670,7 @@ DUMP_FILE = "libreosteo.db"
 class DbDump(StaffRequiredMixin, View):
     @never_cache
     def get(self, request, *args, **kwargs):
-        zip_content = BytesIO()
-        zf = zipfile.ZipFile(zip_content, "w")
-
-        buf = StringIO()
-        call_command('dumpdata',
-                     exclude=['contenttypes', 'admin', 'auth.Permission'],
-                     stdout=buf)
-        buf.seek(0)
-
-        zf.writestr('dump.json', buf.getvalue())
-
-        documents = models.Document.objects.all()
-
-        for document in documents:
-            zf.write(document.document_file.path, document.document_file.name)
-
-        zf.writestr("meta", libreosteoweb.__version__)
-        zf.close()
-
-        response = HttpResponse(zip_content.getvalue(),
+        response = HttpResponse(backup_db().getvalue(),
                                 content_type="application/binary")
         response['Content-Disposition'] = 'attachment; filename=%s-%s' % (
             timezone.now().isoformat(), DUMP_FILE)

@@ -50,12 +50,12 @@ Ensure Examination Is Paid
   [Arguments]                     ${session_id}       ${exmination_id}      ${invoice_id}
   ${session_cookie}               Create Dictionary   sessionid=${session_id}
   Login REST with                 test        ${session_cookie}
-  ${resp} =                       Get Request   restapi     /api/examinations/${exmination_id}
+  ${resp} =                       GET On Session   restapi     /api/examinations/${exmination_id}
   RequestsLogger.Write log        ${resp}
   Should Be Equal As Strings      ${resp.status_code}         200
   ${examination}=                  Set Variable  ${resp.json()}
   Should Be Equal As Strings      ${examination['status']}    2
-  ${resp} =                       Get Request   restapi     /api/invoices/${invoice_id}
+  ${resp} =                       GET On Session   restapi     /api/invoices/${invoice_id}
   RequestsLogger.Write log        ${resp}
   Should Be Equal As Strings      ${resp.status_code}         200
   ${invoice}=                     Set Variable  ${resp.json()}

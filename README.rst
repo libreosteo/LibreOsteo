@@ -1,16 +1,16 @@
 ============
- Libreosteo
+ LibreOsteo
 ============
 
-.. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
-    :target: https://travis-ci.com/libreosteo/Libreosteo
+.. image:: https://travis-ci.com/libreosteo/LibreOsteo.svg?branch=master
+    :target: https://travis-ci.com/libreosteo/LibreOsteo
 © Jean-Baptiste Gury 2014-2020
 
-© The Libreosteo Development Team 2014-2020
+© The LibreOsteo Development Team 2014-2020
 
-*Libreosteo*
+*LibreOsteo*
 
-Libreosteo is a business application designed for osteopaths.
+LibreOsteo is a business application designed for osteopaths.
 
 It manages patients, folder and runs as a work portal on a folder patient.
 
@@ -52,11 +52,11 @@ Install yarnpkg by a manual installation of explicit version ::
 
 Retrieve the content of the project from Git repository ::
 
-    git clone https://github.com/libreosteo/Libreosteo.git
+    git clone https://github.com/libreosteo/LibreOsteo.git
 
 Enter the cloned folder ::
 
-    cd Libreosteo
+    cd LibreOsteo
 
 Create a virtualenv ::
 
@@ -94,7 +94,7 @@ You can use the software in production by changing some settings.
 Settings are in the folder
 ::
 
-   Libreosteo/settings/
+   LibreOsteo/settings/
 
 There are some settings in this folder, the base_ settings is the main settings. All settings should
 use this base settings as reference.
@@ -161,8 +161,8 @@ To change the default port of the server, write a file server.cfg like this  (to
    [server]
    server.port = 9000
 
-.. _base : Libreosteo/settings/base.py
-.. _standalone : Libreosteo/settings/standalone.py
+.. _base : LibreOsteo/settings/base.py
+.. _standalone : LibreOsteo/settings/standalone.py
 .. _CherryPy : https://cherrypy.org/
 
 Contributing code
@@ -184,5 +184,5 @@ The libreosteo team consist of:
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
 .. _jocelynDelalande: https://github.com/JocelynDelalande
-.. _pull requests: https://github.com/libreosteo/Libreosteo/pulls
+.. _pull requests: https://github.com/libreosteo/LibreOsteo/pulls
 .. _CONTRIBUTING.md: CONTRIBUTING.md

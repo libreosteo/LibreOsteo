@@ -12,7 +12,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{ STATIC_URL }}images/favicon.png">
 
-    <title>{% trans  "Install Libreosteo" %}</title>
+    <title>{% trans  "Install LibreOsteo" %}</title>
 
     {% compress css %}
     <!-- Bootstrap core CSS -->
@@ -37,14 +37,14 @@
             <div class="col-md-9">
                 <div class="jumbotron">
                     {% blocktrans %}
-                    <h1>Libreosteo</h1>
-                    <p>Thank you to chose Libreosteo as your software to manage your patients.</p>
-                    <p>You successfully installed the software on your machine. Now you have to decide if you want to restore a previous backup of your patient file (performed from Libreosteo) or use a new installation and register your first user on the softwarewhich will be the administrator of the software</p>
-                    <p>Join the user community from the main <a href="https://libreosteo.github.io/" target="_blank">website</a> in order to share your experience with this software.</p>
+                    <h1>LibreOsteo</h1>
+                    <p>Thank you to chose LibreOsteo as your software to manage your patients.</p>
+                    <p>You successfully installed the software on your machine. Now you have to decide if you want to restore a previous backup of your patient file (performed from LibreOsteo) or use a new installation and register your first user on the softwarewhich will be the administrator of the software</p>
+                    <p>Join the user community from the main <a href="https://www.libreosteo.org/" target="_blank">website</a> in order to share your experience with this software.</p>
                     {% endblocktrans %}
                     <div class="center-block center">
                         <button id="restore" class="btn btn-default" ng-click="prepare_restore()" type="submit">{% trans 'Restore database' %}</button>
-                        or 
+                        or
                         <button id="register" class="btn btn-primary" ng-click="prepare_register()" type="submit">{% trans 'Register the administrator' %}</button>
                     </div>
                 </div>

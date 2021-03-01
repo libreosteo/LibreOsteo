@@ -1,17 +1,17 @@
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 # -*- coding: utf-8 -*-
 from django.urls import reverse
 from rest_framework import status
@@ -132,8 +132,8 @@ class TestChangeIdInvoice(APITestCase):
                                    data=settings)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.assertEqual(
-            OfficeSettings.objects.first().invoice_start_sequence, u'101')
+        self.assertEqual(OfficeSettings.objects.first().invoice_start_sequence,
+                         u'101')
 
 
 class TestCancelInvoice(APITestCase):
@@ -387,8 +387,7 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         paiements = invoice.paiment_set
         self.assertEqual(paiements.count(), 0)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.status,
-                         ExaminationStatus.INVOICED_PAID)
+        self.assertEqual(examination.status, ExaminationStatus.INVOICED_PAID)
 
 
 class TestInvoiceWithOfficeSettings(APITestCase):
@@ -408,13 +407,11 @@ class TestInvoiceWithOfficeSettings(APITestCase):
             setting.amount = 50
             setting.save()
 
-            OfficeSettings.objects.create(
-                office_siret="98765",
-                currency='EUR',
-                amount=65,
-                invoice_start_sequence=1000000,
-                invoice_prefix_sequence='W'
-            )
+            OfficeSettings.objects.create(office_siret="98765",
+                                          currency='EUR',
+                                          amount=65,
+                                          invoice_start_sequence=1000000,
+                                          invoice_prefix_sequence='W')
             self.client.login(username='test', password='testpw')
 
             self.p1 = Patient.objects.create(family_name="Picard",
@@ -443,8 +440,8 @@ class TestInvoiceWithOfficeSettings(APITestCase):
         # Then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
-        self.assertEqual(examination.invoices.latest('date').number,
-                         u'W1000000')
+        self.assertEqual(
+            examination.invoices.latest('date').number, u'W1000000')
         self.assertEqual(
             examination.invoices.latest('date').status,
             InvoiceStatus.INVOICED_PAID)

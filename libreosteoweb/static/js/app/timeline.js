@@ -37,7 +37,7 @@ timeline.directive('timeline', function()
             if ($scope.currentExamination.id == null)
             {
               ExaminationServ.get({examinationId : examinationId}, function(data){
-                  $scope.archiveExamination.data = data;
+                  $scope.archiveExamination.data = loadExamination(data);
                   loEditFormManager.available = true;
 
               });
@@ -46,9 +46,9 @@ timeline.directive('timeline', function()
               $scope.currentExaminationManager();
             } else {
               ExaminationServ.get({examinationId : examinationId}, function(data){
-                  $scope.archiveExamination.data = data;
-                  loEditFormManager.available = true;
-                });
+                $scope.archiveExamination.data = loadExamination(data);
+                loEditFormManager.available = true;
+              });
             }
           }  ;
 
@@ -56,7 +56,7 @@ timeline.directive('timeline', function()
             if ($scope.currentExamination.id == null || $scope.currentExamination.id != examinationId) {
               var panelComment = $(event.target).parents(".timeline-footer").next(".timeline-panel-footer");
 
-              ExaminationCommentServ.query({examinationId : examinationId}, function(data){  
+              ExaminationCommentServ.query({examinationId : examinationId}, function(data){
                 panelComment.toggleClass('hidden');
                 var examination = $scope.examinations.find(function(element, index, array)
                   {
@@ -86,6 +86,10 @@ timeline.directive('timeline', function()
               examination.comments_list.unshift(result);
               examination.comments = examination.comments_list.length;
            });
+          }
+
+          $scope.getTime = function(lDate) {
+            return lDate.getTime();
           }
         },
         templateUrl: 'web-view/partials/examinations-timeline'

@@ -13,7 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-from io import BytesIO, StringIO
 from django.utils import timezone
 import libreosteoweb
 import logging
@@ -41,9 +40,11 @@ from django.core.management import call_command
 from django.db.models import signals
 from django.http import (HttpResponse, HttpResponseForbidden,
                          HttpResponseRedirect, Http404)
+from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
+from django.utils.dateparse import parse_datetime
 from django.utils.text import format_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
@@ -336,6 +337,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated:
             raise Http404()
+        self._validate_examination_date(serializer)
         if not serializer.instance.therapeut:
             serializer.save(therapeut=self.request.user)
         serializer.save(therapeut=serializer.instance.therapeut)
@@ -346,6 +348,18 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         models.OfficeEvent.objects.filter(
             reference=instance.id, clazz=models.Examination.__name__).delete()
         return super(ExaminationViewSet, self).perform_destroy(instance)
+
+    def _validate_examination_date(self, serializer):
+        if not serializer.is_valid():
+            raise SuspiciousOperation("Invalid request: data is invalid")
+        if serializer.instance and not serializer.instance.last_invoice:
+            return
+
+        if serializer.validated_data['date'] and serializer.instance and serializer.instance.last_invoice \
+                                            and serializer.validated_data['date'] < serializer.instance.last_invoice.date :
+            return
+        raise SuspiciousOperation(
+            "Invalid request : examination date is not allowed")
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):

@@ -15,7 +15,7 @@
         <div class="row" style="margin-bottom: 15px">
         <div class="col-md-12">
 
-            <h4>{% trans 'Session of ' %} {$ model.date | date : 'longDate' $} {% trans 'by'%} <span class="text-uppercase">{$ model.therapeut_detail.last_name $}</span> {$ model.therapeut_detail.first_name $}
+          <h4>{% trans 'Session of ' %} <span onbeforesave="validateExaminationDate($data)" e-class="polyfill-updatable examinationdate" e-ng-change="updateExaminationDateValidatorClass()" e-ng-max="{$ maxExaminationDateAngular() $}" e-max="{$ maxExaminationDate() $}" editable-date="model.date" onshow="updateComponentPolyfill()" id="examinationDate" >{$ model.date | date : 'longDate' $}</span> {% trans 'by'%} <span class="text-uppercase">{$ model.therapeut_detail.last_name $}</span> {$ model.therapeut_detail.first_name $}
             </h4>
             {% if request.has_multiple_office %}
             <p class="text-muted text-right" ng-if="model.office != {{ request.officesettings.id }}">{% trans 'Performed at ' %} {$ model.office_detail.office_name $}</p>

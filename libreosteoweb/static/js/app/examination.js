@@ -92,6 +92,12 @@ function isEmpty(str) {
   return (!str || 0 === str.length);
 }
 
+function loadExamination(data) {
+  var examination = angular.copy(data);
+  examination.date = new Date(data.date);
+  return examination;
+}
+
 
 examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ) {
   "use strict";
@@ -277,8 +283,8 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
       };
 
       $scope.save = function() {
-        $scope.examinationForm.$save();
-        $scope.form.partialPatientForm.$save();
+        $scope.examinationForm.$submit();
+        $scope.form.partialPatientForm.$submit();
       };
 
       $scope.saveAndClose = function() {
@@ -308,6 +314,34 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
         ['save', 'edit', 'cancel', 'delete'],
         false
       );
+
+      // max date for examination
+      $scope.maxExaminationDate = function() {
+        if ($scope.model && $scope.model.last_invoice) {
+          return moment($scope.model.last_invoice.date).toISOString();
+        }
+        return moment().endOf("day").toISOString();
+      };
+
+      $scope.maxExaminationDateAngular = function() {
+        return moment($scope.maxExaminationDate()).toDate();
+      }
+
+      $scope.updateExaminationDateValidatorClass = function() {
+        var original_input = jQuery('input[class~="examinationdate"][ng-model]');
+        if (original_input.hasClass('ng-invalid-add')) {
+          jQuery('input[class~="examinationdate"][class*="ws-"]').addClass('ng-invalid');
+        } else {
+          jQuery('input[class~="examinationdate"][class*="ws-"]').removeClass('ng-invalid');
+        }
+      };
+
+      $scope.validateExaminationDate = function(data) {
+        if (data === undefined || moment(data).isAfter(moment($scope.maxExaminationDate()))) {
+          return "La date est invalide";
+        }
+
+      }
     }],
 
     templateUrl: 'web-view/partials/examination'

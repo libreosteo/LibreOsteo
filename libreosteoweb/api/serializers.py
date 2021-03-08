@@ -27,6 +27,7 @@ from django.conf import settings
 from .utils import NetworkHelper
 from django.db.models import Max
 from .utils import convert_to_long
+from django.utils.dateparse import parse_datetime
 from libreosteoweb.api.utils import _unicode
 from libreosteoweb.api.demonstration import get_demonstration_file
 import re
@@ -185,6 +186,12 @@ class ExaminationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Examination
         fields = '__all__'
+
+    def validate_date(self, value):
+        if value >= timezone.now():
+            raise serializers.ValidationError(
+                _('The examination date is not valid'))
+        return value
 
 
 class CheckSerializer(serializers.Serializer):

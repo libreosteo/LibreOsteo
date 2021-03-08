@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LibreOsteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 09:36+0100\n"
+"POT-Creation-Date: 2021-03-08 20:55+0100\n"
 "PO-Revision-Date: 2020-04-05 17:38+0200\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -65,6 +65,9 @@ msgstr "Date de naissance"
 
 msgid "This patient already exists"
 msgstr "Ce patient existe déjà"
+
+msgid "The examination date is not valid"
+msgstr "La date de consultation est invalide"
 
 msgid "Reason is mandatory when the examination is not invoiced"
 msgstr "La raison est obligatoire lorsque la consultation n'est pas facturée"

@@ -7,10 +7,10 @@ Resource   resources.txt
 *** Test Cases ***
 First Installation
   [Documentation]   Register an administrator on freshed installation
-  Open Browser To Login Page 
+  Open Browser To Login Page
   Title Should Be     Installer LibreOsteo
   Click RegisterUser
-  Input Username    test 
+  Input Username    test
   Input Password1   test
   Input Password2   test
   Submit Credentials
@@ -34,10 +34,10 @@ Input Password2
   Input Text  password2  ${password}
 
 Submit Credentials
-  Click Button  login 
+  Click Button  login
 
 Login Page Should Be Open
-  Title Should Be  Identifiez-vous sur LibreOsteo 
+  Title Should Be  Identifiez-vous sur LibreOsteo
 
 Clear database
   Remove File   data/db.sqlite3

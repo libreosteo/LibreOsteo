@@ -303,6 +303,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }, function(data) {
         examinationsList = data;
         angular.forEach(examinationsList, function(value, index, obj) {
+          value.date = loadExamination(value).date;
           value.order = examinationsList.length - index;
         });
       });
@@ -388,8 +389,17 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
             $scope.newExamination[key] = value[key];
           });
           $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
+          $scope.newExamination = loadExamination($scope.newExamination);
         });
       } else {
+        if (examinationToSave.date == null) {
+          // restore the previous date
+          angular.forEach($scope.examinations, function(value, key) {
+            if (value.id == examinationToSave.id) {
+              examinationToSave.date = value.date;
+            }
+          });
+        }
         localExamination = ExaminationServ.save({
           examinationId: examinationToSave.id
         }, examinationToSave, function(value) {
@@ -397,6 +407,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         });
       }
       $scope.updateDeleteTrigger();
+      localExamination = loadExamination(localExamination);
       return localExamination;
     };
 
@@ -432,7 +443,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           examinationId: examination.id
         },
         function(data) {
-          $scope.previousExamination.data = data;
+          $scope.previousExamination.data = loadExamination(data);
         });
     };
 
@@ -492,8 +503,8 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           examinationId: $state.params.examinationId
         },
         function(data) {
-          $scope.previousExamination.data = data;
           loEditFormManager.available = true;
+          $scope.previousExamination.data = loadExamination(data);
         },
         function(error) {
           $scope.previousExamination.data = null;

@@ -392,6 +392,14 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           $scope.newExamination = loadExamination($scope.newExamination);
         });
       } else {
+        if (examinationToSave.date == null) {
+          // restore the previous date
+          angular.forEach($scope.examinations, function(value, key) {
+            if (value.id == examinationToSave.id) {
+              examinationToSave.date = value.date;
+            }
+          });
+        }
         localExamination = ExaminationServ.save({
           examinationId: examinationToSave.id
         }, examinationToSave, function(value) {

@@ -339,8 +339,18 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
       $scope.validateExaminationDate = function(data) {
         if (data === undefined || moment(data).isAfter(moment($scope.maxExaminationDate()))) {
           return "La date est invalide";
+        } else {
+          $scope.frozenExaminationDate = null;
         }
+      };
 
+      // Freeze the examination date from the model to be able to support an "undo" or "cancel"
+      // edition on the date
+      $scope.freezeExaminationDate = function() {
+        if(!$scope.frozenExaminationDate) {
+          $scope.frozenExaminationDate = moment($scope.model.date).format("DD/MM/YYYY");
+        }
+        return $scope.frozenExaminationDate;
       }
     }],
 

@@ -419,13 +419,19 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
     // Handle the invoice function
 
-    $scope.invoiceExamination = function(examination, handleClose) {
+    $scope.invoiceExamination = function(examination, handleClose, invoice_only, allow_amount_change) {
       var modalInstance = $uibModal.open({
         templateUrl: 'web-view/partials/invoice-modal',
         controller: InvoiceFormCtrl,
         resolve: {
           examination: function() {
             return examination;
+          },
+          invoice_only: function() {
+            return invoice_only || false;
+          },
+          allow_amount_override: function() {
+            return allow_amount_change || false;
           }
         }
       });
@@ -737,7 +743,7 @@ var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk)
   };
 }
 
-var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, OfficePaimentMeansServ, examination) {
+var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, OfficePaimentMeansServ, examination, invoice_only, allow_amount_override) {
   "use strict";
   $scope.invoicing = {
     status: null,
@@ -751,6 +757,8 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     },
   };
   $scope.examinationToInvoice = examination;
+  $scope.invoice_only = invoice_only;
+  $scope.allow_amount_override = allow_amount_override;
 
   if ($scope.examinationToInvoice != null && $scope.examinationToInvoice.last_invoice != null) {
     $scope.invoicing.status = 'invoiced';
@@ -761,6 +769,10 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
       $scope.officesettings = Array.isArray(selectedArray)? selectedArray[0]:selectedArray || {amount: null};
       $scope.invoicing.amount = $scope.officesettings.amount;
     });
+  }
+
+  if ($scope.invoice_only) {
+    $scope.invoicing.status = 'invoiced';
   }
 
   OfficePaimentMeansServ.query(function(paimentmeans) {

@@ -130,8 +130,11 @@ class PaimentModeSerializer(serializers.Serializer):
     paiment_mode_text = serializers.SerializerMethodField()
 
     def get_paiment_mode_text(self, obj):
-        paiment_mean = PaimentMean.objects.filter(
-            code=obj.paiment_mode).first()
+        if hasattr(obj, 'paiment_mode'):
+            paiment_code = obj.paiment_mode
+        else:
+            paiment_code = obj.get('paiment_mode')
+        paiment_mean = PaimentMean.objects.filter(code=paiment_code).first()
         if paiment_mean is not None:
             return paiment_mean.text
         return 'n/a'
@@ -242,6 +245,11 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
             return attrs
         except KeyError:
             raise serializers.ValidationError(_('Missing data to continue'))
+
+
+class InvoiceCancelingWithCorrectiveInvoiceSerializer(serializers.Serializer):
+    examination = ExaminationSerializer()
+    corrective_invoice = ExaminationInvoicingSerializer()
 
 
 class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):

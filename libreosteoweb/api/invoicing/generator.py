@@ -22,7 +22,7 @@ class Generator(object):
         self.office_settings = office_settings
         self.therapeut_settings = therapeut_settings
 
-    def generate_invoice(self, examination, serializer_data, request):
+    def generate_invoice(self, examination, serializer_data, user_therapeut):
         invoice = models.Invoice()
         invoice.amount = serializer_data['amount']
         invoice.currency = self.office_settings.currency
@@ -39,9 +39,9 @@ class Generator(object):
             invoice.office_siret = self.therapeut_settings.siret
 
         invoice.paiment_mode = serializer_data['paiment_mode']
-        invoice.therapeut_name = request.user.last_name
-        invoice.therapeut_first_name = request.user.first_name
-        invoice.therapeut_id = request.user.id
+        invoice.therapeut_name = user_therapeut.last_name
+        invoice.therapeut_first_name = user_therapeut.first_name
+        invoice.therapeut_id = user_therapeut.id
         invoice.quality = self.therapeut_settings.quality
         invoice.adeli = self.therapeut_settings.adeli
         invoice.location = self.office_settings.office_address_city
@@ -112,3 +112,62 @@ class Generator(object):
         credit_note.status = models.InvoiceStatus.INVOICED_PAID
         credit_note.officesettings_id = invoice.officesettings_id
         return credit_note
+
+
+class ExaminationInvoiceHelper(object):
+    def __init__(self, office_settings, therapeut_settings, therapeut_user):
+        self.office_settings = office_settings
+        self.therapeut_settings = therapeut_settings
+        self.therapeut_user = therapeut_user
+
+    def invoice_examination(self,
+                            invoicing_serializer,
+                            current_examination,
+                            invoice_to_cancel=None):
+        if hasattr(invoicing_serializer,
+                   'initial_data') and not invoicing_serializer.is_valid():
+            return {'errors': invoicing_serializer.errors}
+
+        if invoicing_serializer.validated_data['status'] == 'notinvoiced':
+            current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
+            current_examination.status_reason = invoicing_serializer.validated_data[
+                'reason']
+            current_examination.save()
+            return {'invoiced': None}
+        if invoicing_serializer.validated_data['status'] == 'invoiced':
+            current_invoice = self.generate_invoice(
+                current_examination, invoicing_serializer.validated_data,
+                invoice_to_cancel)
+            current_examination.invoices.add(current_invoice)
+            if invoicing_serializer.validated_data[
+                    'paiment_mode'] == 'notpaid':
+                current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
+                current_invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
+                current_invoice.save()
+                current_examination.save()
+            if invoicing_serializer.validated_data['paiment_mode'] in [
+                    p.code
+                    for p in models.PaimentMean.objects.filter(enable=True)
+            ]:
+                current_examination.status = models.ExaminationStatus.INVOICED_PAID
+                current_invoice.status = models.InvoiceStatus.INVOICED_PAID
+                current_invoice.save()
+                current_examination.save()
+            return {'invoiced': current_invoice.id}
+        return {}
+
+    def generate_invoice(self, examination, invoicingSerializerData,
+                         invoice_to_cancel):
+        invoice = Generator(self.office_settings,
+                            self.therapeut_settings).generate_invoice(
+                                examination, invoicingSerializerData,
+                                self.therapeut_user)
+        self.office_settings.save()
+        invoice.save()
+        if invoice_to_cancel:
+            invoice_to_cancel.status = models.InvoiceStatus.CANCELED
+            invoice_to_cancel.canceled_by = invoice
+            invoice.replace = invoice_to_cancel.number
+            invoice_to_cancel.save()
+            invoice.save()
+        return invoice

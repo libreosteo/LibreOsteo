@@ -247,34 +247,19 @@ class ExaminationViewSet(viewsets.ModelViewSet):
 
     def _invoice_examination(self, current_examination, invoicing_serializer,
                              officesettings):
-        if invoicing_serializer.is_valid():
-            if invoicing_serializer.data['status'] == 'notinvoiced':
-                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
-                current_examination.status_reason = invoicing_serializer.data[
-                    'reason']
-                current_examination.save()
-                return Response({'invoiced': None})
-            if invoicing_serializer.data['status'] == 'invoiced':
-                current_invoice = self.generate_invoice(
-                    invoicing_serializer.data, officesettings)
-                current_examination.invoices.add(current_invoice)
-                if invoicing_serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
-                    current_invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
-                    current_invoice.save()
-                    current_examination.save()
-                if invoicing_serializer.data['paiment_mode'] in [
-                        p.code
-                        for p in models.PaimentMean.objects.filter(enable=True)
-                ]:
-                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
-                    current_invoice.status = models.InvoiceStatus.INVOICED_PAID
-                    current_invoice.save()
-                    current_examination.save()
-            return Response({'invoiced': current_invoice.id})
-        else:
-            return Response(invoicing_serializer.errors,
+        therapeutsettings = models.TherapeutSettings.objects.filter(
+            user=self.request.user)[0]
+
+        invoicing_helper = invoicing_generator.ExaminationInvoiceHelper(
+            officesettings, therapeutsettings, self.request.user)
+
+        result = invoicing_helper.invoice_examination(invoicing_serializer,
+                                                      current_examination)
+        if 'errors' in result:
+            return Response(result['errors'],
                             status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(result)
 
     @action(detail=True, methods=['post'])
     def update_paiement(self, request, pk=None):
@@ -314,19 +299,6 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             data=request.data)
         return self._invoice_examination(current_examination, serializer,
                                          request.officesettings)
-
-    def generate_invoice(self, invoicingSerializerData, officesettings):
-        therapeutsettings = models.TherapeutSettings.objects.filter(
-            user=self.request.user)[0]
-
-        invoice = invoicing_generator.Generator(
-            officesettings,
-            therapeutsettings).generate_invoice(self.get_object(),
-                                                invoicingSerializerData,
-                                                self.request)
-        officesettings.save()
-        invoice.save()
-        return invoice
 
     def perform_create(self, serializer):
         if not self.request.user.is_authenticated:
@@ -442,19 +414,49 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         # Ensure that invoice was not canceled before
         if self.get_object().status != models.InvoiceStatus.CANCELED:
             officesettings = request.officesettings
-            cancelation = invoicing_generator.Generator(
-                officesettings, None).cancel_invoice(self.get_object())
-            canceled = self.get_object()
-            canceled.status = models.InvoiceStatus.CANCELED
-            cancelation.save()
-            canceled.canceled_by = cancelation
-            canceled.save()
-            officesettings.save()
-            response = {
-                'canceled': self.serializer_class(self.get_object()).data,
-                'credit_note': self.serializer_class(cancelation).data
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            if officesettings.cancel_invoice_credit_note:
+                cancelation = invoicing_generator.Generator(
+                    officesettings, None).cancel_invoice(self.get_object())
+                canceled = self.get_object()
+                canceled.status = models.InvoiceStatus.CANCELED
+                cancelation.save()
+                canceled.canceled_by = cancelation
+                canceled.save()
+                officesettings.save()
+                response = {
+                    'canceled': self.serializer_class(self.get_object()).data,
+                    'credit_note': self.serializer_class(cancelation).data
+                }
+            else:
+                # The new invoicing has to be provided
+                serializer = apiserializers.InvoiceCancelingWithCorrectiveInvoiceSerializer(
+                    data=request.data)
+                if serializer.is_valid():
+                    therapeutsettings = models.TherapeutSettings.objects.filter(
+                        user=self.request.user)[0]
+                    invoicing_serializer = apiserializers.ExaminationInvoicingSerializer(
+                        data=dict(
+                            serializer.validated_data['corrective_invoice']))
+
+                    result = invoicing_generator.ExaminationInvoiceHelper(officesettings, therapeutsettings, request.user)\
+                        .invoice_examination(invoicing_serializer,
+                                             models.Examination.objects.get(id=request.data['examination']['id']),
+                                             self.get_object())
+                    if 'errors' in result:
+                        return Response(result['errors'],
+                                        status=status.HTTP_400_BAD_REQUEST)
+                    corrective_invoice = models.Invoice.objects.get(
+                        id=result['invoiced'])
+                    response = {
+                        'canceled':
+                        self.serializer_class(self.get_object()).data,
+                        'corrective_invoice':
+                        self.serializer_class(corrective_invoice).data
+                    }
+                else:
+                    return Response(serializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

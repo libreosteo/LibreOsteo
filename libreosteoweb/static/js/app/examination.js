@@ -13,7 +13,7 @@
 
     You should have received a copy of the GNU General Public License
     along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
-*/
+    */
 var examination = angular.module('loExamination', ['ngResource', 'loInvoice']);
 
 
@@ -99,7 +99,7 @@ function loadExamination(data) {
 }
 
 
-examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ) {
+examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', 'OfficeSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ, OfficeSettingsServ) {
   "use strict";
   return {
     restrict: 'E',
@@ -116,9 +116,9 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
     },
     controller: ['$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal) {
       $scope.types = [{
-          value: 1,
-          text: gettext('Normal examination')
-        },
+        value: 1,
+        text: gettext('Normal examination')
+      },
         {
           value: 2,
           text: gettext('Continuing examination')
@@ -219,13 +219,34 @@ examination.directive('examination', ['ExaminationServ', 'PatientServ', 'Therape
           }
         });
         modalInstance.result.then(function() {
-          InvoiceService.cancel({
-            invoiceId: invoice.id
-          }, null, function(result) {
-            $scope.model.last_invoice = null;
-            $scope.model.invoice_number = null;
-            $scope.model.invoices_list.unshift(result.canceled);
-            $scope.model.invoices_list.unshift(result.credit_note);
+          OfficeSettingsServ.get(function(settings) {
+            var officesettings = settings.find(x => x.selected);
+            if (officesettings.cancel_invoice_credit_note) {
+              // Credit note on canceling mode
+              InvoiceService.cancel({
+                invoiceId: invoice.id
+              }, null, function(result) {
+                $scope.model.last_invoice = null;
+                $scope.model.invoice_number = null;
+                $scope.model.invoices_list.unshift(result.canceled);
+                $scope.model.invoices_list.unshift(result.credit_note);
+              });
+            } else {
+              // Corrective invoice in this case
+              $scope.closeHandle()($scope.model, function(examination, invoicing) {
+                InvoiceService.cancel({invoiceId: invoice.id}, { examination: examination, corrective_invoice: invoicing },
+                  function(result) {
+                    $scope.model.last_invoice = result.corrective_invoice;
+                    $scope.model.invoice_number = result.corrective_invoice.number;
+                    $scope.model.invoices_list.unshift(result.canceled);
+                    if (invoicing.paiment_mode == "notpaid"){
+                      $scope.model.status = 1;
+                    } else {
+                      $scope.model.status = 2;
+                    }
+                  });
+              }, true, true);
+            }
           });
         });
       };

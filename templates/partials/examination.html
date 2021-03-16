@@ -74,7 +74,7 @@
                     {{ examination.reason }}
                     <div class="badge" ng-class="{'badge-warning' : model.type == 2, 'badge-danger' : model.type >= 3 }">
                         <i class="fa fa-check" ></i>
-                        <span ng-if="!readOnly" editable-select="model.type" e-ng-options="t.value as t.text for t in types">{$ showTypes() | lowercase $}</span>
+                        <span ng-if="!readOnly" e-class="input-sm" editable-select="model.type" e-ng-options="t.value as t.text for t in types">{$ showTypes() | lowercase $}</span>
                         <span ng-if="readOnly">{$ showTypes() |lowercase $}</span>
                     </div>
 

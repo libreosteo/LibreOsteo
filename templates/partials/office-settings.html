@@ -1,222 +1,247 @@
 {% load i18n %}
 <h1 class="page-header">
-    {% trans 'Office settings' %}
+  {% trans 'Office settings' %}
 </h1>
 
 <uib-tabset>
 
-<uib-tab heading="{% trans 'General' %}">
-<div class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12" ng-if="officesettings.network_list.length > 0">
-              <p>{% trans 'This instance of libreosteo could be accessed on the following addresses of the network : '%}
-              <span ng-repeat="addr in officesettings.network_list"><a ng-href="{$ addr $}">{$ addr $}</a><span ng-if="!$last">, </span></span>
-              </p>
+  <uib-tab heading="{% trans 'General' %}">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12" ng-if="officesettings.network_list.length > 0">
+          <p>{% trans 'This instance of libreosteo could be accessed on the following addresses of the network : '%}
+          <span ng-repeat="addr in officesettings.network_list"><a ng-href="{$ addr $}">{$ addr $}</a><span ng-if="!$last">, </span></span>
+          </p>
+        </div>
+        <div class="clearfix">
+          <form novalidate name="form">
+            <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
+              <h2>{% trans 'Office' %}</h2>
             </div>
-            <div class="clearfix">
-            <form novalidate name="form">
-                <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
-                    <h2>{% trans 'Office' %}</h2>
+            <div class="col-xs-8 col-sm-7 col-md-8">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12" ng-if="multiple_office">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_name" required name="office_name" placeholder="{{ officesettings.office_name }}"
+                                                                                                                                       tooltip="{{ officesettings.office_name }}"
+                                                                                                                                       tooltip-trigger="mouseenter"
+                                                                                                                                       ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
                 </div>
-                <div class="col-xs-8 col-sm-7 col-md-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12" ng-if="multiple_office">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_name" required name="office_name" placeholder="{{ officesettings.office_name }}"
-                                tooltip="{{ officesettings.office_name }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_street" required name="office_address_street" placeholder="{{ officesettings.office_address_street }}"
-                                tooltip="{{ officesettings.office_address_street }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_complement" name="office_address_complement" placeholder="{{ officesettings.office_address_complement }}"
-                                tooltip="{{ officesettings.office_address_complement }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_zipcode" name="office_address_zipcode" placeholder="{{ officesettings.office_address_zipcode }}" tooltip="{{ officesettings.office_address_zipcode }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-8 col-sm-8 col-md-8">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_city" name="office_address_city" placeholder="{{ officesettings.office_address_city }}" tooltip="{{ officesettings.office_address_city }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="glyphicon glyphicon-phone-alt input-group-addon"></span>
-                                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_phone" name="office_phone" placeholder="{{ officesettings.office_phone }}"
-                                    tooltip="{{ officesettings.office_phone }}"
-                                    tooltip-trigger="mouseenter"
-                                    ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.office_siret" name="office_siret" placeholder="{{ officesettings.office_siret }}"
-                                tooltip="{{ officesettings.office_siret }}"
-                                tooltip-trigger="mouseenter"
-                                required
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_street" required name="office_address_street" placeholder="{{ officesettings.office_address_street }}"
+                                                                                                                                                           tooltip="{{ officesettings.office_address_street }}"
+                                                                                                                                                           tooltip-trigger="mouseenter"
+                                                                                                                                                           ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_complement" name="office_address_complement" placeholder="{{ officesettings.office_address_complement }}"
+                                                                                                                                                          tooltip="{{ officesettings.office_address_complement }}"
+                                                                                                                                                          tooltip-trigger="mouseenter"
+                                                                                                                                                          ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_zipcode" name="office_address_zipcode" placeholder="{{ officesettings.office_address_zipcode }}" tooltip="{{ officesettings.office_address_zipcode }}"
+                                                                                                                                                                                                              tooltip-trigger="mouseenter"
+                                                                                                                                                                                                              ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_address_city" name="office_address_city" placeholder="{{ officesettings.office_address_city }}" tooltip="{{ officesettings.office_address_city }}"
+                                                                                                                                                                                                     tooltip-trigger="mouseenter"
+                                                                                                                                                                                                     ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="glyphicon glyphicon-phone-alt input-group-addon"></span>
+                      <input type="text" class="form-control input-lg" ng-model="officesettings.office_phone" name="office_phone" placeholder="{{ officesettings.office_phone }}"
+                                                                                                                                  tooltip="{{ officesettings.office_phone }}"
+                                                                                                                                  tooltip-trigger="mouseenter"
+                                                                                                                                  ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
                     </div>
+                  </div>
                 </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_siret" name="office_siret" placeholder="{{ officesettings.office_siret }}"
+                                                                                                                                tooltip="{{ officesettings.office_siret }}"
+                                                                                                                                tooltip-trigger="mouseenter"
+                                                                                                                                required
+                                                                                                                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
-                    <h2>{% trans 'Invoicing' %}</h2>
+            <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
+              <h2>{% trans 'Invoicing' %}</h2>
+            </div>
+            <div class="col-xs-8 col-sm-7 col-md-8">
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="amount">{{officesettings.amount}}</label>
+                    <input type="text"
+                           class="form-control input-lg"
+                           ng-model="officesettings.amount"
+                           required
+                           name="amount"
+                           id="amount"
+                           placeholder="{{ officesettings.amount }}"
+                           tooltip="{{ officesettings.amount }}"
+                           tooltip-trigger="mouseenter"
+                           ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                           pattern="[1-9][0-9,.]*"
+                           />
+                  </div>
                 </div>
-                <div class="col-xs-8 col-sm-7 col-md-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="amount">{{officesettings.amount}}</label>
-                                <input type="text"
-                                       class="form-control input-lg"
-                                       ng-model="officesettings.amount"
-                                       required
-                                       name="amount"
-                                       id="amount"
-                                       placeholder="{{ officesettings.amount }}"
-                                      tooltip="{{ officesettings.amount }}"
-                                      tooltip-trigger="mouseenter"
-                                      ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
-                                      pattern="[1-9][0-9,.]*"
-                                />
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="currency">{{officesettings.currency}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.currency" required name="currency" id="currency" placeholder="{{ officesettings.currency }}"
-                                tooltip="{{ officesettings.currency }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-				<div class="form-group">
-					<label for="paiement-means">{% trans 'Paiment means' %}</label>
-					<div class="form-inline">
-					<div class="form-group checkbox paimentmean" ng-repeat="paiment_mean in paiment_means">
-						<label>
-						<input type="checkbox" ng-model="paiment_mean.enable"
-							tooltip="{% trans 'Paiment means' %}"
-                                			tooltip-trigger="mouseenter"
-                                			ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-						{$ paiment_mean.text $}
-						</label>
-					</div>
-					</div>
-				</div>
-                        </div>
-      <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-          <label for="invoice_prefix_sequence">{{officesettings.invoice_prefix_sequence}}</label>
-          <input type="text" class="form-control input-lg"
-                             ng-model="officesettings.invoice_prefix_sequence"
-                             name="invoice_prefix_sequence"
-                             id="invoice_prefix_sequence"
-                             placeholder="{{ officesettings.invoice_prefix_sequence}}"
-                             tooltip={{officesettings.invoice_prefix_sequence}}
-                             tooltip-trigger="mouseenter"
-                             ng-disabled={{ user.is_staff|yesno:"false,true" }}
-                             ng-maxlength="3"
-                             title="{% trans 'The prefix to add for invoicing sequence' %}"
-          />
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="currency">{{officesettings.currency}}</label>
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.currency" required name="currency" id="currency" placeholder="{{ officesettings.currency }}"
+                                                                                                                                               tooltip="{{ officesettings.currency }}"
+                                                                                                                                               tooltip-trigger="mouseenter"
+                                                                                                                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="paiement-means">{% trans 'Paiment means' %}</label>
+                    <div class="form-inline">
+                      <div class="form-group checkbox paimentmean" ng-repeat="paiment_mean in paiment_means">
+                        <label>
+                          <input type="checkbox" ng-model="paiment_mean.enable"
+                                                 tooltip="{% trans 'Paiment means' %}"
+                                                 tooltip-trigger="mouseenter"
+                                                 ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                          {$ paiment_mean.text $}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="invoice_prefix_sequence">{{officesettings.invoice_prefix_sequence}}</label>
+                    <input type="text" class="form-control input-lg"
+                                       ng-model="officesettings.invoice_prefix_sequence"
+                                       name="invoice_prefix_sequence"
+                                       id="invoice_prefix_sequence"
+                                       placeholder="{{ officesettings.invoice_prefix_sequence}}"
+                                       tooltip={{officesettings.invoice_prefix_sequence}}
+                                       tooltip-trigger="mouseenter"
+                                       ng-disabled={{ user.is_staff|yesno:"false,true" }}
+                                       ng-maxlength="3"
+                                       title="{% trans 'The prefix to add for invoicing sequence' %}"
+                                       />
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <label for="invoice_canceling_option">{{officesettings.cancel_invoice_credit_note}}</label>
+                  <div class="form-inline">
+                    <div class="form-group radio cancelinginvoice">
+                      <label>
+
+                        <input type="radio" ng-model="officesettings.cancel_invoice_credit_note"
+                                            ng-value="true"
+                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                               />
+                        {% trans 'Credit note on canceling' %}
+                      </label>
+                      <label>
+
+                        <input type="radio" ng-model="officesettings.cancel_invoice_credit_note"
+                                            ng-value="false"
+                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                               />
+                        {% trans 'Corrective invoice on canceling' %}
+                      </label>
+
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for"invoice_start_sequence">{{officesettings.invoice_start_sequence}}</label>
+                    <input type="text" class="form-control input-lg"
+                                       ng-model="officesettings.invoice_start_sequence"
+                                       name="invoice_start_sequence"
+                                       id="invoice_start_sequence"
+                                       placeholder="{{ officesettings.invoice_start_sequence}}"
+                                       tooltip={{ officesettings.invoice_start_sequence }}
+                                       tooltip-trigger="mouseenter"
+                                       ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
+                                       ng-pattern='/^\d+$/'
+                                       validate-invoice-start
+                                       required="true"
+                                       title="{% trans 'The start sequence must have composed only with numbers' %}"
+                                       />
+
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="invoice_office_header">{{officesettings.invoice_office_header}}</label>
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_office_header" required name="invoice_office_header" id="invoice_office_header" placeholder="{{ officesettings.invoice_office_header }}"
+                                                                                                                                                                                      tooltip="{{ officesettings.invoice_office_header }}"
+                                                                                                                                                                                      tooltip-trigger="mouseenter"
+                                                                                                                                                                                      ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="invoice_content">{{officesettings.invoice_content}}</label>
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_content" required name="invoice_content" id="invoice_content" placeholder="{{ officesettings.invoice_content }}"
+                                                                                                                                                                    tooltip="{{ officesettings.invoice_content }}"
+                                                                                                                                                                    tooltip-trigger="mouseenter"
+                                                                                                                                                                    ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <label for="invoice_footer">{{officesettings.invoice_footer}}</label>
+                    <textarea class="form-control input-lg" ng-model="officesettings.invoice_footer" name="invoice_footer" id="invoice_footer" placeholder="{{ officesettings.invoice_footer }}"
+                                                                                                                                               tooltip="{{ officesettings.invoice_footer }}"
+                                                                                                                                               tooltip-trigger="mouseenter"
+                                                                                                                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-3 col-md-offset-3">
+              <button class="btn btn-primary"
+                      ng-click="updateSettings(officesettings)"
+                      ng-disabled="{{ user.is_staff|yesno:"false,true" }}">{% trans 'Update' %}</button>
+            </div>
+          </form>
         </div>
       </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                          <div class="form-group">
-                            <label for"invoice_start_sequence">{{officesettings.invoice_start_sequence}}</label>
-                            <input type="text" class="form-control input-lg"
-                                               ng-model="officesettings.invoice_start_sequence"
-                                               name="invoice_start_sequence"
-                                               id="invoice_start_sequence"
-                                               placeholder="{{ officesettings.invoice_start_sequence}}"
-                                               tooltip={{ officesettings.invoice_start_sequence }}
-                                               tooltip-trigger="mouseenter"
-                                               ng-disabled="{{ user.is_staff|yesno:"false,true" }}"
-                                               ng-pattern='/^\d+$/'
-                                               validate-invoice-start
-                                               required="true"
-                                               title="{% trans 'The start sequence must have composed only with numbers' %}"
-                                               />
-
-                          </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="invoice_office_header">{{officesettings.invoice_office_header}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_office_header" required name="invoice_office_header" id="invoice_office_header" placeholder="{{ officesettings.invoice_office_header }}"
-                                tooltip="{{ officesettings.invoice_office_header }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="invoice_content">{{officesettings.invoice_content}}</label>
-                                <input type="text" class="form-control input-lg" ng-model="officesettings.invoice_content" required name="invoice_content" id="invoice_content" placeholder="{{ officesettings.invoice_content }}"
-                                tooltip="{{ officesettings.invoice_content }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <label for="invoice_footer">{{officesettings.invoice_footer}}</label>
-                                <textarea class="form-control input-lg" ng-model="officesettings.invoice_footer" name="invoice_footer" id="invoice_footer" placeholder="{{ officesettings.invoice_footer }}"
-                                tooltip="{{ officesettings.invoice_footer }}"
-                                tooltip-trigger="mouseenter"
-                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-3 col-md-offset-3">
-                    <button class="btn btn-primary"
-                        ng-click="updateSettings(officesettings)"
-                        ng-disabled="{{ user.is_staff|yesno:"false,true" }}">{% trans 'Update' %}</button>
-                </div>
-            </form>
-        </div>
     </div>
-</div>
 
-<div id="update-info" ng-hide="true">{% trans 'Settings was updated' %}</div>
-</uib-tab>
-<uib-tab heading="{% trans 'Users'%}" ng-if="{{ user.is_staff|yesno:"true,false" }}">
+    <div id="update-info" ng-hide="true">{% trans 'Settings was updated' %}</div>
+  </uib-tab>
+  <uib-tab heading="{% trans 'Users'%}" ng-if="{{ user.is_staff|yesno:"true,false" }}">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-primary"
-                        ng-click="addUser()">{% trans 'Add user' %}</button>
+      <div class="row">
+        <div class="col-md-12">
+          <button class="btn btn-primary"
+                  ng-click="addUser()">{% trans 'Add user' %}</button>
 
-            </div>
-            <div class="col-md-12">
-                <div ui-grid="gridOptions" ui-grid-edit ui-grid-cellnav class="usersGrid"></div>
-            </div>
         </div>
+        <div class="col-md-12">
+          <div ui-grid="gridOptions" ui-grid-edit ui-grid-cellnav class="usersGrid"></div>
+        </div>
+      </div>
     </div>
-</uib-tab>
+  </uib-tab>
 </uib-tabset>

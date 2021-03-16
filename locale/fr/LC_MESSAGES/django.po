@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LibreOsteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-08 20:55+0100\n"
-"PO-Revision-Date: 2020-04-05 17:38+0200\n"
+"POT-Creation-Date: 2021-03-11 17:30+0100\n"
+"PO-Revision-Date: 2021-03-11 17:32+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -362,6 +362,9 @@ msgstr "Séquence de démarrage de facture"
 
 msgid "Invoice prefix sequence"
 msgstr "Préfixe de séquence de facturation"
+
+msgid "Invoice canceling by credit note"
+msgstr "Annulation de facture par avoir"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -1019,6 +1022,13 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
+
+msgid "Credit note on canceling"
+msgstr "Avoir sur annulation"
+
+msgid "Corrective invoice on canceling"
+msgstr "Facture corrective sur annulation"
+
 
 #~ msgid "Document file"
 #~ msgstr "Fichier document"

@@ -394,11 +394,15 @@ ul li.documenttile  {
 	width : 12%;
 }
 
+.radio.cancelinginvoice {
+  width: 25%;
+}
+
 input.ng-invalid-email,
 input.ng-invalid,
 input.ng-invalid-email:focus,
 input.ng-invalid:focus {
-  color: #a94442; 
+  color: #a94442;
   border-color: #a94442;
 }
 

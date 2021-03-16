@@ -179,7 +179,7 @@ class TestCancelInvoice(APITestCase):
         response = self.client.post(
             reverse('invoice-cancel',
                     kwargs={'pk': examination.invoices.latest('date').id}))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
         # Then
         self.assertEqual(response.data['credit_note']['number'], u'10001')
         self.assertEqual(response.data['canceled']['status'],

@@ -344,6 +344,10 @@ class Invoice(models.Model):
                                     blank=True,
                                     null=True,
                                     on_delete=models.PROTECT)
+    replace = models.TextField(_('Invoice replaced'),
+                               blank=True,
+                               null=True,
+                               default=None)
     type = models.CharField(_('Invoice type'),
                             max_length=10,
                             blank=True,
@@ -448,6 +452,8 @@ class OfficeSettings(models.Model):
                                                blank=True,
                                                null=True,
                                                max_length=3)
+    cancel_invoice_credit_note = models.BooleanField(
+        _('Invoice canceling by credit note'), default=True)
 
     UPDATE_INVOICE_SEQUENCE = 1
 

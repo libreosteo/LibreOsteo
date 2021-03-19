@@ -5,7 +5,7 @@ django-appconf==1.0.1
 django-filter==1.0.4
 django-haystack==2.8.1
 django-statici18n==1.4.0
-djangorestframework==3.9.1
+djangorestframework==3.11.2
 six==1.11.0
 cherrypy==14.0.0
 djangorestframework-csv==1.4.1

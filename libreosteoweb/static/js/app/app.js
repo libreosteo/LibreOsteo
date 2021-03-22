@@ -61,6 +61,23 @@ libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
     $http.defaults.xsrfCookieName = 'csrftoken';
 }]);
 
+libreosteoApp.config(function($httpProvider) {
+  $httpProvider.interceptors.push(function($q, $location) {
+    return {
+      'response': function(response) {
+        if (typeof response.data === 'string') {
+          if (response.data.indexOf instanceof Function &&
+            response.data.indexOf("<form class=\"form-signin\"") != -1) {
+            $location.url("/accounts/login/");
+            window.location = "/accounts/login/";
+          }
+        }
+        return response;
+      },
+    }
+  });
+});
+
 libreosteoApp.config(['growlProvider', function(growlProvider) {
     growlProvider.globalTimeToLive(5000);
     growlProvider.onlyUniqueMessages(false);

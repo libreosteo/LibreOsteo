@@ -5,7 +5,8 @@
 </h1>
 
 <uib-tabset>
-<uib-tab heading="{% trans 'Archive and restore database' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+  {% if allow_data_dump %}
+  <uib-tab heading="{% trans 'Archive and restore database' %}">
 <div class="container-fluid">
     <div class="row">
         <p>{% blocktrans %}This system helps you to archive and restore the full system.{% endblocktrans %}</p>
@@ -31,7 +32,7 @@
     </div>
 </div>
 </uib-tab>
-
+{% endif %}
 
 
 <uib-tab heading="{% trans 'Import from external system' %}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
@@ -260,7 +261,8 @@
 </div>
 
 </uib-tab>
-<uib-tab heading="{% trans 'Export to an external system'%}" ng-if="{{ request.user.is_staff|yesno:"true,false" }}">
+{% if allow_data_dump %}
+<uib-tab heading="{% trans 'Export to an external system'%}">
 <div class="container-fluid">
     <div class="row">
         <p>{% blocktrans %}Here you can download the full list of patients and examinations as CSV files{% endblocktrans %}</p>
@@ -285,4 +287,5 @@
     </div>
 </div>
 </uib-tab>
+{% endif %}
 </uib-tabset>

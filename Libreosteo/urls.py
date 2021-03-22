@@ -50,7 +50,6 @@ urlpatterns = [
     # Examples:
     url(r'^$', displays.display_index),
     url(r'^api/', include(format_suffix_patterns(router.urls))),
-    path('admin/', admin.site.urls),
     url(r'^accounts/login/$',
         LoginView.as_view(
             template_name='account/login.html',

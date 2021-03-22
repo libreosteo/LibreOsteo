@@ -15,7 +15,8 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.utils.translation import ugettext_lazy as _
-from ..models import OfficeEvent, Patient, Examination, PatientDocument
+from django.contrib.auth import user_logged_in, user_logged_out
+from ..models import OfficeEvent, Patient, Examination, PatientDocument, LoggedInUser
 import logging
 
 # Get an instance of a logger
@@ -31,14 +32,14 @@ class block_disconnect_all_signal():
         self.dispatch_uid = dispatch_uid
 
     def __enter__(self):
-        for (receiver, sender) in self.receivers_senders:
-            self.signal.disconnect(receiver=receiver,
+        for (lreceiver, sender) in self.receivers_senders:
+            self.signal.disconnect(receiver=lreceiver,
                                    sender=sender,
                                    dispatch_uid=self.dispatch_uid)
 
     def __exit__(self, type, value, traceback):
-        for (receiver, sender) in self.receivers_senders:
-            self.signal.connect(receiver=receiver,
+        for (lreceiver, sender) in self.receivers_senders:
+            self.signal.connect(receiver=lreceiver,
                                 sender=sender,
                                 dispatch_uid=self.dispatch_uid)
 
@@ -101,3 +102,13 @@ def receiver_examination(sender, **kwargs):
 def delete_document(sender, **kwargs):
     doc_instance = kwargs['instance']
     doc_instance.document.delete()
+
+
+@receiver(user_logged_in)
+def on_user_logged_in(sender, request, **kwargs):
+    LoggedInUser.objects.get_or_create(user=kwargs.get('user'))
+
+
+@receiver(user_logged_out)
+def on_user_logged_out(sender, request, **kwargs):
+    LoggedInUser.objects.filter(user=kwargs.get('user')).delete()

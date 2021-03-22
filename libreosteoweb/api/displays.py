@@ -193,7 +193,14 @@ def display_setpassword(request):
 
 
 def display_import_files(request):
-    return render(request, 'partials/import-file.html', {'request': request})
+    return render(
+        request, 'partials/import-file.html', {
+            'request':
+            request,
+            'allow_data_dump':
+            request.user.is_superuser
+            or request.user.has_perm('libreosteoweb.patient.data_dump')
+        })
 
 
 def display_rebuild_index(request):

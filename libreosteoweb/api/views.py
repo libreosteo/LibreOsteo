@@ -44,19 +44,19 @@ from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
-from django.utils.dateparse import parse_datetime
 from django.utils.text import format_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 from django.db.models import Max
-
 from libreosteoweb.api import serializers as apiserializers
 from libreosteoweb import models
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
 from .permissions import (IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser,
-                          maintenance_available, IsStaffOrTargetUserFactory)
+                          maintenance_available, IsStaffOrTargetUserFactory,
+                          IsDataAccessAllowed)
 from .receivers import (block_disconnect_all_signal, receiver_examination,
                         temp_disconnect_signal, receiver_newpatient)
 from .renderers import (ExaminationCSVRenderer, InvoiceCSVRenderer,
@@ -65,8 +65,9 @@ from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long, LoggerWriter
 from libreosteoweb.api.invoicing import generator as invoicing_generator
-from libreosteoweb.api.events.settings import settings_event_tracer
+from libreosteoweb.api.events.settings import settings_event_tracer, full_db_download, full_retrieve_patient_list
 from django.core.files.storage import default_storage
+from libreosteoweb.api.signals import post_reload_db
 import uuid
 
 # Get an instance of a logger
@@ -178,9 +179,14 @@ class PatientViewSet(viewsets.ModelViewSet):
     model = models.Patient
     serializer_class = apiserializers.PatientSerializer
     queryset = models.Patient.objects.all()
+    permission_classes = [IsDataAccessAllowed]
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
         PatientCSVRenderer,
     ]
+
+    def list(self, request, *args, **kwargs):
+        full_retrieve_patient_list(request.user)
+        return super().list(request, args, kwargs)
 
     @action(detail=True, methods=['get'])
     def examinations(self, request, pk=None):
@@ -683,14 +689,16 @@ class PaimentMeanViewSet(viewsets.ModelViewSet):
 DUMP_FILE = "libreosteo.db"
 
 
-class DbDump(StaffRequiredMixin, View):
+class DbDump(PermissionRequiredMixin, View):
+    permission_required = 'libreosteoweb.patient.data_dump'
+
     @never_cache
     def get(self, request, *args, **kwargs):
         response = HttpResponse(backup_db().getvalue(),
                                 content_type="application/binary")
         response['Content-Disposition'] = 'attachment; filename=%s-%s' % (
             timezone.now().isoformat(), DUMP_FILE)
-
+        full_db_download(request.user)
         return response
 
 
@@ -778,6 +786,8 @@ class LoadDump(View):
                     settings.FIXTURE_DIRS = previous
                     logger.info("Could restore signals")
                 logger.info("end of reloading.")
+                # Send signals for post_reload treatment
+                post_reload_db.send(self.__class__)
                 return HttpResponse(content=u'reloaded')
             else:
                 return HttpResponse()

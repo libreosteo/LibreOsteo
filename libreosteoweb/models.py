@@ -125,6 +125,9 @@ class Patient(models.Model):
     TYPE_NEW_PATIENT = 1
     TYPE_UPDATE_PATIENT = 2
 
+    class Meta:
+        permissions = [('patient.data_dump', "Can dump data from patient")]
+
 
 class Children(models.Model):
     """
@@ -456,6 +459,8 @@ class OfficeSettings(models.Model):
         _('Invoice canceling by credit note'), default=True)
 
     UPDATE_INVOICE_SEQUENCE = 1
+    DOWNLOAD_FULL_DB = 2
+    DOWNLOAD_PATIENT_LIST = 3
 
 
 class TherapeutSettings(models.Model):
@@ -617,3 +622,13 @@ class PatientDocument(models.Model):
     def delete(self, *args, **kwargs):
         super(PatientDocument, self).delete(*args, **kwargs)
         self.document.delete()
+
+
+class LoggedInUser(models.Model):
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                related_name='logged_in_user')
+    session_key = models.CharField(max_length=32, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

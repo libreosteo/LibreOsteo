@@ -16,8 +16,6 @@ from rest_framework import permissions
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .exceptions import Forbidden
-from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from functools import wraps
@@ -38,6 +36,16 @@ class IsStaffOrReadOnlyTargetUser(permissions.BasePermission):
             return getattr(obj, 'user') == request.user
         except AttributeError:
             return obj == request.user
+
+
+class IsDataAccessAllowed(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if view.action == 'list' and request.user.has_perm(
+                'libreosteoweb.patient.data_dump'):
+            return True
+        if view.action != 'list' and request.user:
+            return True
+        return False
 
 
 class IsStaffOrTargetUserFactory(object):

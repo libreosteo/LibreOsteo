@@ -35,3 +35,27 @@ def settings_event_tracer(officesettings, user, new_value):
         event.user = user
         event.clean()
         event.save()
+
+
+def full_retrieve_patient_list(user):
+    event = OfficeEvent()
+    event.clazz = OfficeSettings.__name__
+    event.type = OfficeSettings.DOWNLOAD_PATIENT_LIST
+    event.comment = _('%s has downloaded the full list of patient') %\
+                      user.username
+    event.reference = user.id
+    event.user = user
+    event.clean()
+    event.save()
+
+
+def full_db_download(user):
+    event = OfficeEvent()
+    event.clazz = OfficeSettings.__name__
+    event.type = OfficeSettings.DOWNLOAD_FULL_DB
+    event.comment = _('%s has downloaded the full content of the Database') %\
+                      user.username
+    event.reference = user.id
+    event.user = user
+    event.clean()
+    event.save()

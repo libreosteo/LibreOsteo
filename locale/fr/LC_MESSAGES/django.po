@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LibreOsteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 17:30+0100\n"
-"PO-Revision-Date: 2021-03-11 17:32+0100\n"
+"POT-Creation-Date: 2021-03-18 17:01+0100\n"
+"PO-Revision-Date: 2021-03-18 17:02+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -26,6 +26,14 @@ msgstr "Anglais"
 #, python-format
 msgid "Invoice sequence updated from %(previous)s to %(actual)s"
 msgstr "Séquence de facturation modifiée de %(previous)s à %(actual)s"
+
+#, python-format
+msgid "%s has downloaded the full list of patient"
+msgstr "%s a téléchargé la liste complète des patients"
+
+#, python-format
+msgid "%s has downloaded the full content of the Database"
+msgstr "%s a téléchargé le contenu complet de la base de données"
 
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
@@ -314,6 +322,9 @@ msgstr "thérapeute id"
 
 msgid "Canceled by"
 msgstr "Annulée par"
+
+msgid "Invoice replaced"
+msgstr "Facture remplacée"
 
 msgid "Invoice type"
 msgstr "Type de facture"
@@ -672,13 +683,6 @@ msgstr "Archiver"
 msgid "get archive"
 msgstr "obtenir l'archive"
 
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "                            This file is the full content of your "
-#| "database. It could only be used by LibreOsteo. Use it to restore your "
-#| "database or transfert the content to an other machine.\n"
-#| "                            "
 msgid ""
 "\n"
 "                            This file is the full content of your database. "
@@ -887,6 +891,12 @@ msgstr "Moyens de paiement"
 msgid "The prefix to add for invoicing sequence"
 msgstr "Le préfixe à ajouter à la séquence de facturation"
 
+msgid "Credit note on canceling"
+msgstr "Avoir sur annulation"
+
+msgid "Corrective invoice on canceling"
+msgstr "Facture corrective sur annulation"
+
 msgid "The start sequence must have composed only with numbers"
 msgstr "La séquence de démarrage doit être composée uniquement de chiffres"
 
@@ -1022,13 +1032,6 @@ msgstr "Paramètres d'affichage"
 
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
-
-msgid "Credit note on canceling"
-msgstr "Avoir sur annulation"
-
-msgid "Corrective invoice on canceling"
-msgstr "Facture corrective sur annulation"
-
 
 #~ msgid "Document file"
 #~ msgstr "Fichier document"

@@ -2,8 +2,9 @@
  LibreOsteo
 ============
 
-.. image:: https://travis-ci.com/libreosteo/LibreOsteo.svg?branch=master
-    :target: https://travis-ci.com/libreosteo/LibreOsteo
+.. image:: https://github.com/libreosteo/LibreOsteo/actions/workflows/main.yml/badge.svg?branch=develop
+   :alt: ci-status-develop
+
 © Jean-Baptiste Gury 2014-2020
 
 © The LibreOsteo Development Team 2014-2020

@@ -38,6 +38,7 @@ Cancel And Replace Invoice
   Wait Until Element Is Visible         jquery:h3.modal-title
   Click Button                          modal-btn-ok
   Wait Until Element Is Visible         jquery:input[value="cash"]
+  Wait For Condition                    return !$("div.modal").hasClass("ng-animate")
   Click Element                         jquery:input[value="cash"]
   Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
   Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')

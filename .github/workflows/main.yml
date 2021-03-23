@@ -61,7 +61,7 @@ jobs:
       - name: Translations state
         run: |
           echo 'Translations status'
-          python ./manage.py makemessages -d django -no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+          python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
       - name: Model migration status
         run: |
           echo "Model migration status"

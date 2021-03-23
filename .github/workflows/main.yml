@@ -29,12 +29,14 @@ jobs:
           wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
           tar -xvf /tmp/geckodriver.tar.gz
           export PATH=$PATH:$PWD
+          echo "$PATH"
       - name: Install dependencies
         run: |
+          echo "$PATH"
           python -m pip install --upgrade pip
           pip install -r requirements/requirements.txt
           pip install -r requirements/requ-testing.txt
-          yarn
+          $HOME/.yarn/bin/yarn
           python ./manage.py collectstatic --no-input
       - name: Run unit tests
         run: |

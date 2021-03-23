@@ -47,6 +47,7 @@ jobs:
           xvfb-run --server-args="-screen 0 1024x768x24" robot -P . tests
       - name: Archiving results
         uses: actions/upload-artifact@v2
+        if: ${{ always() }}
         with:
           name: result-tests
           path: |

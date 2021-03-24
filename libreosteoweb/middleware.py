@@ -15,7 +15,7 @@
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from re import compile
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, logout
 from django.contrib.sessions.models import Session
 from django.urls import reverse
 import logging
@@ -163,6 +163,9 @@ class OneSessionPerUserMiddleware:
         # Code to be executed for each request before
         # the view (and later middleware) are called.
         if request.user.is_authenticated:
+            if not hasattr(request.user, 'logged_in_user'):
+                logout(request)
+                return HttpResponseRedirect(get_login_url())
             stored_session_key = request.user.logged_in_user.session_key
 
             # if there is a stored_session_key  in our database and it is

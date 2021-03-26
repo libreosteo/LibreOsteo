@@ -37,6 +37,7 @@ jobs:
           pip install -r requirements/requ-testing.txt
           $HOME/.yarn/bin/yarn
           python ./manage.py collectstatic --no-input
+          python ./manage.py compilejsi18n
       - name: Run unit tests
         run: |
           echo 'Execute Unit tests'

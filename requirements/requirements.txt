@@ -13,3 +13,4 @@ netifaces
 decorator
 packaging
 django-protected-media
+django-statici18n

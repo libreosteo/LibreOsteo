@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load static from staticfiles %}
 {% load compress %}
+{% load statici18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="en"  xmlns:ng="http://angularjs.org" ng-app="libreosteoinstaller">
     <head>
@@ -81,6 +83,5 @@
 <script src="{% static "js/installer/restore.js" %}"></script>
 <script src="{% static "js/installer/register.js" %}"></script>
     {% endcompress %}
-<script src="{% url 'javascript-catalog' %}" type="text/javascript"></script>
-
+<script src="{% statici18n LANGUAGE_CODE %}" type="text/javascript"></script>
 </body></html>

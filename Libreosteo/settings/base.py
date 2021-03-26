@@ -80,7 +80,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes', 'django.contrib.sessions',
     'django.contrib.messages', 'django.contrib.staticfiles', 'libreosteoweb',
     'django_filters', 'rest_framework', 'compressor', 'zipcode_lookup',
-    'protected_media', 'haystack'
+    'protected_media', 'haystack', 'statici18n'
 ]
 
 MIDDLEWARE = [
@@ -123,6 +123,7 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

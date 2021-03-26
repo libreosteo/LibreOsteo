@@ -233,8 +233,7 @@
   <script src="{% static "js/app/invoice.js" %}"></script>
   <script src="{% static "js/app/zipcode.js" %}"></script>
   {% endcompress %}
-  <script src="{% url 'javascript-catalog' %}" type="text/javascript"></script>
-
+  <script src="{% statici18n LANGUAGE_CODE %}" type="text/javascript"></script>
   {% compress css %}
   <link href="{% static "components/angular-xeditable/dist/css/xeditable.css" %}" rel="stylesheet">
   <link href="{% static "components/angular-growl/build/angular-growl.min.css" %}" rel="stylesheet">

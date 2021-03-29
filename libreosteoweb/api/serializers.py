@@ -444,6 +444,22 @@ class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
         return patient_doc
 
 
+class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
+    def create(self, validated_data):
+        document_data = validated_data.pop('document')
+        document_data['user'] = validated_data.pop('user')
+        document_data['document_file'] = get_demonstration_file()
+        patient = validated_data.pop("patient")
+        document = Document.objects.create(internal_date=datetime.today(),
+                                           **document_data)
+        document.clean()
+        document.save()
+        patient_doc = PatientDocument.objects.create(patient=patient,
+                                                     document=document,
+                                                     **validated_data)
+        return patient_doc
+
+
 class PaimentMeanSerializer(WithPkMixin, serializers.ModelSerializer):
     class Meta:
         model = PaimentMean

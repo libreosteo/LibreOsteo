@@ -8,6 +8,9 @@ Changelog for LibreOsteo
 - Add zipcode / city autocompletion
 - end of support of python 3.5 and upgrade to Django LTS 2.2
 - Add generic frame for multiple office for the instance. It allows to have multiple office-settings into the product.
+- Add support to generate corrective invoice instead of credit not when canceling invoice
+- Add permission to download full data
+- Add CLI to allow to backup data
 
 
 0.6.0 (2019-10-16)

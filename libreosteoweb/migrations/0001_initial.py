@@ -91,25 +91,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='patient',
             name='doctor',
-            field=models.ForeignKey(verbose_name='Regular doctor', blank=True, to='libreosteoweb.RegularDoctor', null=True),
+            field=models.ForeignKey(verbose_name='Regular doctor', blank=True, to='libreosteoweb.RegularDoctor', null=True, on_delete=models.SET_NULL),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='examination',
             name='patient',
-            field=models.ForeignKey(verbose_name='Patient', to='libreosteoweb.Patient'),
+            field=models.ForeignKey(verbose_name='Patient', to='libreosteoweb.Patient', on_delete=models.PROTECT),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='examination',
             name='therapeut',
-            field=models.ForeignKey(verbose_name='Therapeut', blank=True, to=settings.AUTH_USER_MODEL, null=True),
+            field=models.ForeignKey(verbose_name='Therapeut', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='children',
             name='parent',
-            field=models.ForeignKey(verbose_name='Parent', to='libreosteoweb.Patient'),
+            field=models.ForeignKey(verbose_name='Parent', to='libreosteoweb.Patient', on_delete=models.PROTECT),
             preserve_default=True,
         ),
     ]

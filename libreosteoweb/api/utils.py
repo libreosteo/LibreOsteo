@@ -1,49 +1,61 @@
-
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 import socket
 import netifaces
-import logging 
+import logging
+import re
 
 logger = logging.getLogger(__file__)
+
+
 def enum(enumName, *listValueNames):
     listValueNumbers = range(len(listValueNames))
-    dictAttrib = dict( zip(listValueNames, listValueNumbers) )
-    dictReverse = dict( zip(listValueNumbers, listValueNames) )
+    dictAttrib = dict(zip(listValueNames, listValueNumbers))
+    dictReverse = dict(zip(listValueNumbers, listValueNames))
     dictAttrib["dictReverse"] = dictReverse
     mainType = type(enumName, (), dictAttrib)
     return mainType
 
+
 class Singleton(type):
     _instances = {}
+
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super(Singleton,
+                                        cls).__call__(*args, **kwargs)
         return cls._instances[cls]
-try :
+
+
+try:
     UNICODE_EXISTS = bool(type(unicode))
     _unicode = unicode
 except NameError:
-    _unicode = lambda s:str(s)
+    _unicode = lambda s: str(s)
+
 
 class NetworkHelper():
     def get_all_addresses(self):
         addresses = []
-        try :
-            addresses = [netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr'] for it in netifaces.interfaces() if netifaces.AF_INET in netifaces.ifaddresses(it) ]
-        except :
+        try:
+            addresses = [
+                netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr']
+                for it in netifaces.interfaces()
+                if netifaces.AF_INET in netifaces.ifaddresses(it)
+            ]
+        except:
             logger.exception("Cannot obtain address on the host")
         return addresses
 
@@ -57,8 +69,23 @@ class NetworkHelper():
         sock.close()
         return result
 
-def convert_to_long(value):
+
+def convert_to_long(value, strip_string_prefix=False):
+    value_to_convert = value
+    if strip_string_prefix:
+        value_to_convert = re.sub(r'^[A-Za-z]', '', value)
     try:
-        return long(value)
+        return long(value_to_convert)
     except:
-        return int(value)
+        return int(value_to_convert)
+
+
+class LoggerWriter:
+    def __init__(self, logger_func):
+        self._logger = logger_func
+
+    def write(self, message):
+        self._logger(message)
+
+    def flush(self):
+        pass

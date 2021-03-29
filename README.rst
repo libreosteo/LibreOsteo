@@ -2,13 +2,16 @@
  LibreOsteo
 ============
 
-.. image:: https://travis-ci.com/libreosteo/Libreosteo.svg?branch=master
-    :target: https://travis-ci.com/libreosteo/Libreosteo
-© Jean-Baptiste Gury 2014-2018
+.. image:: https://github.com/libreosteo/LibreOsteo/actions/workflows/main.yml/badge.svg?branch=develop
+   :alt: ci-status-develop
+
+© Jean-Baptiste Gury 2014-2020
+
+© The LibreOsteo Development Team 2014-2020
 
 *LibreOsteo*
 
-Libreosteo is a business application designed for osteopaths.
+LibreOsteo is a business application designed for osteopaths.
 
 It manages patients, folder and runs as a work portal on a folder patient.
 
@@ -31,45 +34,38 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 3.5+ (if you have no opinion, 3.6+ is the recommended choice for now)
+  - Python 3.6+
   - pip
   - nodejs
   - yarn
   - virtualenv
-  - nodejs and npm (if on Debian, you will need `nodesource packages`_, official ones will not work)
-  - if on linux system, you need linux-headers package. On debian and derivated uses ::
+  - nodejs
+  - if on linux system, you need linux-headers package.
 
-    sudo apt install linux-headers-$(uname -r)
+Install system dependencies, for example, on Debian-like sytem, that would be ::
 
-.. _nodesource packages: https://github.com/nodesource/distributions#debinstall
+    sudo apt install python3-pip python3-venv nodejs linux-headers-$(uname -r) curl git
 
-Install system dependencies, for example, on Debian-like sytem, that would **one of** those two lines:
+For yarnpkg, the last version contains a bug with one of dependency (see https://github.com/yarnpkg/yarn/issues/7890 ).
+Install yarnpkg by a manual installation of explicit version ::
 
-Python 3.5+ ::
-
-    sudo apt install python3-pip virtualenv nodejs
+  curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
 
 Retrieve the content of the project from Git repository ::
 
-    git clone https://github.com/libreosteo/Libreosteo.git
+    git clone https://github.com/libreosteo/LibreOsteo.git
 
 Enter the cloned folder ::
 
-    cd Libreosteo
+    cd LibreOsteo
 
-Create a virtualenv with **one of those** two commands.
+Create a virtualenv ::
 
-Python 3 ::
+  python3 -m venv venv
 
-    virtualenv --python /usr/bin/python3 venv
+Then retrieve the python requirements ::
 
-(at virtualenv creation you automatically entered the virtualenv, if you close the terminal, you will need to enter the virtualenv manually using ``source venv/bin/activate``).
-
-Then retrieve the python requirements with **one of those**.
-
-Python 3 ::
-
-    pip install -r requirements/requirements.txt
+    ./venv/bin/pip install -r requirements/requirements.txt
 
 Install Javascript dependencies ::
 
@@ -77,11 +73,15 @@ Install Javascript dependencies ::
 
 Initialize the database ::
 
-    python manage.py migrate
+    ./venv/bin/python manage.py migrate
+
+Fetch the french postcodes for zipcode completion ::
+
+   ./venv/bin/python manage.py import_zipcodes
 
 Now you can start the server with ::
 
-    python manage.py runserver
+    ./venv/bin/python manage.py runserver
 
 Point your browser on : http://localhost:8000/ it will guide you towards creating the first admin user.
 
@@ -95,7 +95,7 @@ You can use the software in production by changing some settings.
 Settings are in the folder
 ::
 
-   Libreosteo/settings/
+   LibreOsteo/settings/
 
 There are some settings in this folder, the base_ settings is the main settings. All settings should
 use this base settings as reference.
@@ -162,8 +162,8 @@ To change the default port of the server, write a file server.cfg like this  (to
    [server]
    server.port = 9000
 
-.. _base : Libreosteo/settings/base.py
-.. _standalone : Libreosteo/settings/standalone.py
+.. _base : LibreOsteo/settings/base.py
+.. _standalone : LibreOsteo/settings/standalone.py
 .. _CherryPy : https://cherrypy.org/
 
 Contributing code
@@ -185,5 +185,5 @@ The libreosteo team consist of:
 .. _jbgury: https://github.com/jbgury
 .. _littlejo: https://github.com/littlejo
 .. _jocelynDelalande: https://github.com/JocelynDelalande
-.. _pull requests: https://github.com/libreosteo/Libreosteo/pulls
+.. _pull requests: https://github.com/libreosteo/LibreOsteo/pulls
 .. _CONTRIBUTING.md: CONTRIBUTING.md

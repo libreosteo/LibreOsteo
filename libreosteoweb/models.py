@@ -1,26 +1,25 @@
-
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
-from django.core.exceptions import NON_FIELD_ERRORS
-from datetime import date, datetime
+from datetime import date
+from django.utils import timezone
 from libreosteoweb.api.utils import enum
 import mimetypes
+from protected_media.models import ProtectedFileField
 
 # import the logging library
 import logging
@@ -74,7 +73,8 @@ class Patient(models.Model):
     doctor = models.ForeignKey(RegularDoctor,
                                verbose_name=_('Regular doctor'),
                                blank=True,
-                               null=True)
+                               null=True,
+                               on_delete=models.SET_NULL)
     smoker = models.BooleanField(_('Smoker'), default=False)
     laterality = models.CharField(_('Laterality'),
                                   max_length=1,
@@ -118,8 +118,15 @@ class Patient(models.Model):
             Not mapped in DB only for the runtime"""
         self.current_user_operation = user
 
+    def set_request(self, request):
+        """ Use this setter to transit the request on the instance"""
+        self.request = request
+
     TYPE_NEW_PATIENT = 1
     TYPE_UPDATE_PATIENT = 2
+
+    class Meta:
+        permissions = [('patient.data_dump', "Can dump data from patient")]
 
 
 class Children(models.Model):
@@ -132,7 +139,9 @@ class Children(models.Model):
                                    blank=True)
     first_name = models.CharField(_('Firstname'), max_length=200)
     birthday_date = models.DateField(_('Birth date'))
-    parent = models.ForeignKey(Patient, verbose_name=_('Parent'))
+    parent = models.ForeignKey(Patient,
+                               verbose_name=_('Parent'),
+                               on_delete=models.CASCADE)
 
     def __unicode__(self):
         return "%s %s" % (self.family_name, self.first_name)
@@ -172,11 +181,18 @@ class Examination(models.Model):
     invoices = models.ManyToManyField('Invoice',
                                       verbose_name=_('Invoice'),
                                       blank=True)
-    patient = models.ForeignKey(Patient, verbose_name=_('Patient'))
+    patient = models.ForeignKey(Patient,
+                                verbose_name=_('Patient'),
+                                on_delete=models.PROTECT)
     therapeut = models.ForeignKey(User,
                                   verbose_name=_('Therapeut'),
                                   blank=True,
-                                  null=True)
+                                  null=True,
+                                  on_delete=models.PROTECT)
+    office = models.ForeignKey('OfficeSettings',
+                               verbose_name=_('Office Settings'),
+                               null=True,
+                               on_delete=models.SET_NULL)
 
     EXAMINATION_IN_PROGRESS = 0
     EXAMINATION_WAITING_FOR_PAIEMENT = 1
@@ -257,11 +273,13 @@ class ExaminationComment(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('User'),
                              blank=True,
-                             null=True)
+                             null=True,
+                             on_delete=models.PROTECT)
     comment = models.TextField(_('Comment'))
     date = models.DateTimeField(_('Date'), null=True, blank=True)
-    examination = models.ForeignKey(Examination, verbose_name=_('Examination'))
-
+    examination = models.ForeignKey(Examination,
+                                    verbose_name=_('Examination'),
+                                    on_delete=models.PROTECT)
 
 
 class Invoice(models.Model):
@@ -327,11 +345,19 @@ class Invoice(models.Model):
     canceled_by = models.ForeignKey('self',
                                     verbose_name=_("Canceled by"),
                                     blank=True,
-                                    null=True)
+                                    null=True,
+                                    on_delete=models.PROTECT)
+    replace = models.TextField(_('Invoice replaced'),
+                               blank=True,
+                               null=True,
+                               default=None)
     type = models.CharField(_('Invoice type'),
                             max_length=10,
                             blank=True,
                             default='invoice')
+
+    officesettings_id = models.IntegerField(_('office id'), default=1)
+    check_sum = models.BinaryField(_('check_sum'), max_length=256, default=b'')
 
     def _get_paiments_list(self):
         return self.paiment_set.all().order_by('-date')
@@ -340,7 +366,7 @@ class Invoice(models.Model):
 
     def clean(self):
         if self.date is None:
-            self.date = datetime.today()
+            self.date = timezone.now()
 
     class Meta:
         ordering = ['-date']
@@ -383,17 +409,22 @@ class OfficeEvent(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('user'),
                              blank=True,
-                             null=False)
+                             null=False,
+                             on_delete=models.PROTECT)
 
     def clean(self):
         if self.date is None:
-            self.date = datetime.today()
+            self.date = timezone.now()
 
 
 class OfficeSettings(models.Model):
     """
     This class implements model for the settings into the application
     """
+    office_name = models.CharField(_('Office name'),
+                                   max_length=250,
+                                   blank=True,
+                                   null=True)
     invoice_office_header = models.CharField(_('Invoice office header'),
                                              max_length=500,
                                              blank=True)
@@ -420,15 +451,16 @@ class OfficeSettings(models.Model):
     invoice_footer = models.TextField(_('Invoice footer'), blank=True)
     invoice_start_sequence = models.TextField(_('Invoice start sequence'),
                                               blank=True)
-
-    def save(self, *args, **kwargs):
-        """
-        Ensure that only one instance exists in the db
-        """
-        self.id = 1
-        super(OfficeSettings, self).save()
+    invoice_prefix_sequence = models.CharField(_('Invoice prefix sequence'),
+                                               blank=True,
+                                               null=True,
+                                               max_length=3)
+    cancel_invoice_credit_note = models.BooleanField(
+        _('Invoice canceling by credit note'), default=True)
 
     UPDATE_INVOICE_SEQUENCE = 1
+    DOWNLOAD_FULL_DB = 2
+    DOWNLOAD_PATIENT_LIST = 3
 
 
 class TherapeutSettings(models.Model):
@@ -440,7 +472,8 @@ class TherapeutSettings(models.Model):
     user = models.OneToOneField(User,
                                 verbose_name=_('User'),
                                 blank=True,
-                                null=True)
+                                null=True,
+                                on_delete=models.PROTECT)
     siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
     invoice_footer = models.TextField(_('Invoice footer'),
                                       blank=True,
@@ -451,14 +484,39 @@ class TherapeutSettings(models.Model):
     last_events_enabled = models.BooleanField(_('Events history'),
                                               default=True)
 
-    DASHBOARD_MODULES_FIELDS = [
+    # Examination view modules
+    spheres_enabled = models.BooleanField(_('Spheres'), default=True)
+    zipcode_completion_enabled = models.BooleanField(
+        _('Zipcode completion (France)'), default=True)
+
+    MODULES_FIELDS = [
         {
-            'field': stats_enabled,
-            'image': 'images/dashboard-stats.png'
+            'name':
+            _('Dashboard'),
+            'modules': [
+                {
+                    'field': stats_enabled,
+                    'image': 'images/dashboard-stats.png'
+                },
+                {
+                    'field': last_events_enabled,
+                    'image': 'images/dashboard-events.png'
+                },
+            ]
         },
         {
-            'field': last_events_enabled,
-            'image': 'images/dashboard-events.png'
+            'name':
+            _('Examination'),
+            'modules': [
+                {
+                    'field': spheres_enabled,
+                    'image': 'images/examination-spheres.png'
+                },
+                {
+                    'field': zipcode_completion_enabled,
+                    'image': 'images/zipcode-completion.png'
+                },
+            ]
         },
     ]
 
@@ -478,8 +536,8 @@ class FileImport(models.Model):
     implements a couple of file for importing data.
     It concerns only Patient and examination
     """
-    file_patient = models.FileField(_('Patient file'))
-    file_examination = models.FileField(_('Examination file'), blank=True)
+    file_patient = models.FileField(upload_to="tmp/")
+    file_examination = models.FileField(upload_to="tmp/", blank=True)
     status = models.IntegerField(_('validity status'),
                                  blank=True,
                                  default=None,
@@ -500,14 +558,13 @@ class FileImport(models.Model):
         if bool(self.file_examination):
             storage_examination.delete(path_examination)
 
-import mimetypes
 
 class Document(models.Model):
     """
     Implements a document to be attached to
     an examination or patient file
     """
-    document_file = models.FileField(_('Document file'), upload_to="documents")
+    document_file = models.FileField(upload_to="documents")
     title = models.TextField(_('Title'))
     notes = models.TextField(_('Notes'), blank=True, null=True, default=None)
     internal_date = models.DateTimeField(_('Adding date'),
@@ -520,7 +577,8 @@ class Document(models.Model):
     user = models.ForeignKey(User,
                              verbose_name=_('User'),
                              blank=True,
-                             null=True)
+                             null=True,
+                             on_delete=models.PROTECT)
     mime_type = models.TextField(_('Mime-Type'),
                                  blank=False,
                                  null=True,
@@ -536,9 +594,13 @@ class Document(models.Model):
 
     def clean(self):
         if self.internal_date is None:
-            self.internal_date = datetime.today()
+            self.internal_date = timezone.now()
         self.mime_type = mimetypes.guess_type(self.document_file.path)[0]
         logger.info("mime_type = %s " % self.mime_type)
+
+    def set_request(self, request):
+        """ Use this setter to have the request which creates the instance """
+        self.request = request
 
 
 class PatientDocument(models.Model):
@@ -560,3 +622,13 @@ class PatientDocument(models.Model):
     def delete(self, *args, **kwargs):
         super(PatientDocument, self).delete(*args, **kwargs)
         self.document.delete()
+
+
+class LoggedInUser(models.Model):
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE,
+                                related_name='logged_in_user')
+    session_key = models.CharField(max_length=32, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username

@@ -1,35 +1,28 @@
-
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import unicode_literals
-import sys
-if sys.version_info.major == 2:
-    from io import BytesIO
-    from io import BytesIO as StringIO
-else :
-    from io import BytesIO,StringIO
-from datetime import datetime
 from django.utils import timezone
+import libreosteoweb
 import logging
 import os
 import tempfile
 import zipfile
-
+from libreosteoweb.management.commands.backup_db import backup_db
 from rest_framework import pagination, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError,PermissionDenied,ParseError
+from rest_framework.exceptions import ValidationError, PermissionDenied, ParseError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
@@ -45,35 +38,37 @@ from django.core.files.base import ContentFile
 from django.core.files import File
 from django.core.management import call_command
 from django.db.models import signals
-from django.http import (
-    HttpResponse, HttpResponseForbidden,
-    HttpResponseRedirect, Http404)
+from django.http import (HttpResponse, HttpResponseForbidden,
+                         HttpResponseRedirect, Http404)
+from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import resolve_url
 from django.utils.http import is_safe_url
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import format_lazy
 from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 from django.db.models import Max
-
 from libreosteoweb.api import serializers as apiserializers
 from libreosteoweb import models
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from .exceptions import Forbidden
 from .permissions import StaffRequiredMixin
-from .permissions import (
-    IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser, maintenance_available,
-    IsStaffOrTargetUserFactory)
-from .receivers import (
-    block_disconnect_all_signal, receiver_examination, temp_disconnect_signal,
-    receiver_newpatient)
-from .renderers import (
-    ExaminationCSVRenderer, InvoiceCSVRenderer,
-    PatientCSVRenderer)
+from .permissions import (IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser,
+                          maintenance_available, IsStaffOrTargetUserFactory,
+                          IsDataAccessAllowed)
+from .receivers import (block_disconnect_all_signal, receiver_examination,
+                        temp_disconnect_signal, receiver_newpatient)
+from .renderers import (ExaminationCSVRenderer, InvoiceCSVRenderer,
+                        PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
-from .utils import convert_to_long
+from .utils import convert_to_long, LoggerWriter
 from libreosteoweb.api.invoicing import generator as invoicing_generator
-from libreosteoweb.api.events.settings import settings_event_tracer
+from libreosteoweb.api.events.settings import settings_event_tracer, full_db_download, full_retrieve_patient_list
+from django.core.files.storage import default_storage
+from libreosteoweb.api.signals import post_reload_db
+import uuid
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -101,15 +96,16 @@ class CreateAdminAccountView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         form = UserCreationForm(request.POST)
-        redirect_to = request.POST.get(
+        self.redirect_to = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
-        if form.is_valid():
+        username = request.POST['username']
+        if form.is_valid() and ' ' not in username:
             # Ensure the user-originating redirection url is safe.
-            if not is_safe_url(url=redirect_to, host=request.get_host()):
-                redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
+            if not is_safe_url(url=self.redirect_to, allowed_hosts=None):
+                self.redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
             # Okay, security check complete. Log the user in.
             create_superuser(request, form.data)
-            return HttpResponseRedirect(redirect_to)
+            return HttpResponseRedirect(self.redirect_to)
         else:
             self.form = form
         return super(TemplateView,
@@ -134,7 +130,7 @@ class InstallView(TemplateView):
         Displays the install status and handle the action on install.
         """
         if len(User.objects.filter(is_staff__exact=True)) > 0:
-            raise HttpResponseForbidden
+            return HttpResponseForbidden()
         self.redirect_field_name = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
         return super(TemplateView,
@@ -142,7 +138,7 @@ class InstallView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if len(User.objects.filter(is_staff__exact=True)) > 0:
-            raise HttpResponseForbidden
+            return HttpResponseForbidden()
         return super(TemplateView,
                      self).render_to_response(self.get_context_data())
 
@@ -183,9 +179,14 @@ class PatientViewSet(viewsets.ModelViewSet):
     model = models.Patient
     serializer_class = apiserializers.PatientSerializer
     queryset = models.Patient.objects.all()
+    permission_classes = [IsDataAccessAllowed]
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
         PatientCSVRenderer,
     ]
+
+    def list(self, request, *args, **kwargs):
+        full_retrieve_patient_list(request.user)
+        return super().list(request, args, kwargs)
 
     @action(detail=True, methods=['get'])
     def examinations(self, request, pk=None):
@@ -199,12 +200,14 @@ class PatientViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         instance = models.Patient(**serializer.validated_data)
         instance.set_user_operation(self.request.user)
+        instance.set_request(self.request)
         instance.full_clean()
         instance.save()
         serializer.instance = instance
 
     def perform_update(self, serializer):
         serializer.instance.set_user_operation(self.request.user)
+        serializer.instance.set_request(self.request)
         return super(PatientViewSet, self).perform_update(serializer)
 
     def perform_destroy(self, instance):
@@ -222,6 +225,7 @@ class PatientViewSet(viewsets.ModelViewSet):
                 reference=e.id, clazz=models.Examination.__name__).delete()
         models.Examination.objects.filter(patient=instance.id).delete()
         models.PatientDocument.objects.filter(patient=instance.id).delete()
+        instance.set_request(self.request)
         return super(PatientViewSet, self).perform_destroy(instance)
 
 
@@ -229,7 +233,6 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
     model = models.RegularDoctor
     queryset = models.RegularDoctor.objects.all()
     serializer_class = apiserializers.RegularDoctorSerializer
-
 
 
 class ExaminationViewSet(viewsets.ModelViewSet):
@@ -245,37 +248,24 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer)
+        return self._invoice_examination(current_examination, serializer,
+                                         request.officesettings)
 
-    def _invoice_examination(self, current_examination, invoicing_serializer):
-        if invoicing_serializer.is_valid():
-            if invoicing_serializer.data['status'] == 'notinvoiced':
-                current_examination.status = models.Examination.EXAMINATION_NOT_INVOICED
-                current_examination.status_reason = invoicing_serializer.data[
-                    'reason']
-                current_examination.save()
-                return Response({'invoiced': None})
-            if invoicing_serializer.data['status'] == 'invoiced':
-                current_invoice = self.generate_invoice(
-                    invoicing_serializer.data, )
-                current_examination.invoices.add(current_invoice)
-                if invoicing_serializer.data['paiment_mode'] == 'notpaid':
-                    current_examination.status = models.ExaminationStatus.WAITING_FOR_PAIEMENT
-                    current_invoice.status = models.InvoiceStatus.WAITING_FOR_PAIEMENT
-                    current_invoice.save()
-                    current_examination.save()
-                if invoicing_serializer.data['paiment_mode'] in [
-                        p.code
-                        for p in models.PaimentMean.objects.filter(enable=True)
-                ]:
-                    current_examination.status = models.ExaminationStatus.INVOICED_PAID
-                    current_invoice.status = models.InvoiceStatus.INVOICED_PAID
-                    current_invoice.save()
-                    current_examination.save()
-            return Response({'invoiced': current_invoice.id})
-        else:
-            return Response(invoicing_serializer.errors,
+    def _invoice_examination(self, current_examination, invoicing_serializer,
+                             officesettings):
+        therapeutsettings = models.TherapeutSettings.objects.filter(
+            user=self.request.user)[0]
+
+        invoicing_helper = invoicing_generator.ExaminationInvoiceHelper(
+            officesettings, therapeutsettings, self.request.user)
+
+        result = invoicing_helper.invoice_examination(invoicing_serializer,
+                                                      current_examination)
+        if 'errors' in result:
+            return Response(result['errors'],
                             status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(result)
 
     @action(detail=True, methods=['post'])
     def update_paiement(self, request, pk=None):
@@ -296,7 +286,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         invoice_to_update = models.Invoice.objects.get(
             id=current_examination.last_invoice.id)
         invoice_to_update.status = models.InvoiceStatus.INVOICED_PAID
-        officesettings = models.OfficeSettings.objects.all()[0]
+        officesettings = request.officesettings
         p = models.Paiment(amount=invoice_to_update.amount,
                            currency=officesettings.currency,
                            date=timezone.now(),
@@ -308,36 +298,24 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         current_examination.save()
         return Response({'invoiced': current_examination.last_invoice.id})
 
-    @action(detail=True, methods=['POST'])
+    @action(detail=True, methods=['post'])
     def close(self, request, pk=None):
         current_examination = self.get_object()
         serializer = apiserializers.ExaminationInvoicingSerializer(
             data=request.data)
-        return self._invoice_examination(current_examination, serializer)
-
-    def generate_invoice(self, invoicingSerializerData):
-        officesettings = models.OfficeSettings.objects.all()[0]
-        therapeutsettings = models.TherapeutSettings.objects.filter(
-            user=self.request.user)[0]
-
-        invoice = invoicing_generator.Generator(
-            officesettings,
-            therapeutsettings).generate_invoice(self.get_object(),
-                                                invoicingSerializerData,
-                                                self.request)
-        officesettings.save()
-        invoice.save()
-        return invoice
-
+        return self._invoice_examination(current_examination, serializer,
+                                         request.officesettings)
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(therapeut=self.request.user)
+        serializer.save(therapeut=self.request.user,
+                        office=self.request.officesettings)
 
     def perform_update(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
+        self._validate_examination_date(serializer)
         if not serializer.instance.therapeut:
             serializer.save(therapeut=self.request.user)
         serializer.save(therapeut=serializer.instance.therapeut)
@@ -348,6 +326,18 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         models.OfficeEvent.objects.filter(
             reference=instance.id, clazz=models.Examination.__name__).delete()
         return super(ExaminationViewSet, self).perform_destroy(instance)
+
+    def _validate_examination_date(self, serializer):
+        if not serializer.is_valid():
+            raise SuspiciousOperation("Invalid request: data is invalid")
+        if serializer.instance and not serializer.instance.last_invoice:
+            return
+
+        if serializer.validated_data['date'] and serializer.instance and serializer.instance.last_invoice \
+                                            and serializer.validated_data['date'] < serializer.instance.last_invoice.date :
+            return
+        raise SuspiciousOperation(
+            "Invalid request : examination date is not allowed")
 
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
@@ -393,9 +383,7 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class StatisticsView(APIView):
-
     def get(self, request, *args, **kwargs):
         myStats = Statistics(*args, **kwargs)
         result = myStats.compute()
@@ -431,20 +419,50 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     def cancel(self, request, pk=None):
         # Ensure that invoice was not canceled before
         if self.get_object().status != models.InvoiceStatus.CANCELED:
-            officesettings = models.OfficeSettings.objects.all()[0]
-            cancelation = invoicing_generator.Generator(
-                officesettings, None).cancel_invoice(self.get_object())
-            canceled = self.get_object()
-            canceled.status = models.InvoiceStatus.CANCELED
-            cancelation.save()
-            canceled.canceled_by = cancelation
-            canceled.save()
-            officesettings.save()
-            response = {
-                'canceled': self.serializer_class(self.get_object()).data,
-                'credit_note': self.serializer_class(cancelation).data
-            }
-            return Response(response, status=status.HTTP_200_OK)
+            officesettings = request.officesettings
+            if officesettings.cancel_invoice_credit_note:
+                cancelation = invoicing_generator.Generator(
+                    officesettings, None).cancel_invoice(self.get_object())
+                canceled = self.get_object()
+                canceled.status = models.InvoiceStatus.CANCELED
+                cancelation.save()
+                canceled.canceled_by = cancelation
+                canceled.save()
+                officesettings.save()
+                response = {
+                    'canceled': self.serializer_class(self.get_object()).data,
+                    'credit_note': self.serializer_class(cancelation).data
+                }
+            else:
+                # The new invoicing has to be provided
+                serializer = apiserializers.InvoiceCancelingWithCorrectiveInvoiceSerializer(
+                    data=request.data)
+                if serializer.is_valid():
+                    therapeutsettings = models.TherapeutSettings.objects.filter(
+                        user=self.request.user)[0]
+                    invoicing_serializer = apiserializers.ExaminationInvoicingSerializer(
+                        data=dict(
+                            serializer.validated_data['corrective_invoice']))
+
+                    result = invoicing_generator.ExaminationInvoiceHelper(officesettings, therapeutsettings, request.user)\
+                        .invoice_examination(invoicing_serializer,
+                                             models.Examination.objects.get(id=request.data['examination']['id']),
+                                             self.get_object())
+                    if 'errors' in result:
+                        return Response(result['errors'],
+                                        status=status.HTTP_400_BAD_REQUEST)
+                    corrective_invoice = models.Invoice.objects.get(
+                        id=result['invoiced'])
+                    response = {
+                        'canceled':
+                        self.serializer_class(self.get_object()).data,
+                        'corrective_invoice':
+                        self.serializer_class(corrective_invoice).data
+                    }
+                else:
+                    return Response(serializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -476,10 +494,11 @@ class OfficeSettingsView(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         # Check that the invoice_start_sequence is valid
-        result_query = models.Invoice.objects.aggregate(
-            Max('number'))['number__max']
+        result_query = models.Invoice.objects.filter(
+            officesettings_id=serializer.instance.id).aggregate(
+                Max('number'))['number__max']
         if result_query is not None:
-            max_value = convert_to_long(result_query)
+            max_value = convert_to_long(result_query, strip_string_prefix=True)
         else:
             max_value = 1
         try:
@@ -529,9 +548,9 @@ class ExaminationCommentViewSet(viewsets.ModelViewSet):
     queryset = models.ExaminationComment.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(user=self.request.user, date=datetime.today())
+        serializer.save(user=self.request.user, date=timezone.now())
 
 
 class FileImportViewSet(viewsets.ModelViewSet):
@@ -539,9 +558,8 @@ class FileImportViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.FileImportSerializer
     queryset = models.FileImport.objects.all()
 
-
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         instance = serializer.save()
         logger.info("* Ready to start analyze")
@@ -625,9 +643,11 @@ class DocumentViewSet(viewsets.ModelViewSet):
     queryset = models.Document.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
-        serializer.save(user=self.request.user, internal_date=datetime.today())
+        serializer.save(user=self.request.user,
+                        internal_date=timezone.now(),
+                        request=self.request)
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
@@ -644,17 +664,18 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         try:
             patient = self.kwargs['patient']
-            return models.PatientDocument.objects.filter(patient__id=patient)
+            return models.PatientDocument.objects.filter(
+                patient__id=patient).order_by('document__document_date')
         except KeyError:
             return models.PatientDocument.objects.all()
 
     def perform_create(self, serializer):
-        if not self.request.user.is_authenticated():
+        if not self.request.user.is_authenticated:
             raise Http404()
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
-        if settings.DEMONSTRATION :
+        if settings.DEMONSTRATION:
             return apiserializers.PatientDocumentDemonstrationSerializer
         return apiserializers.PatientDocumentSerializer
 
@@ -668,43 +689,29 @@ class PaimentMeanViewSet(viewsets.ModelViewSet):
 DUMP_FILE = "libreosteo.db"
 
 
-class DbDump(StaffRequiredMixin, View):
+class DbDump(PermissionRequiredMixin, View):
+    permission_required = 'libreosteoweb.patient.data_dump'
+
     @never_cache
     def get(self, request, *args, **kwargs):
-        zip_content = BytesIO()
-        zf = zipfile.ZipFile(zip_content, "w")
-
-        buf = StringIO()
-        call_command('dumpdata',
-                     exclude=['contenttypes', 'admin', 'auth.Permission'],
-                     stdout=buf)
-        buf.seek(0)
-
-        zf.writestr('dump.json', buf.getvalue())
-
-        documents = models.Document.objects.all()
-
-        for document in documents:
-            zf.write(document.document_file.path, document.document_file.name)
-
-        zf.close()
-
-        response = HttpResponse(zip_content.getvalue(),
+        response = HttpResponse(backup_db().getvalue(),
                                 content_type="application/binary")
         response['Content-Disposition'] = 'attachment; filename=%s-%s' % (
-            datetime.now().isoformat(), DUMP_FILE)
-
+            timezone.now().isoformat(), DUMP_FILE)
+        full_db_download(request.user)
         return response
 
 
 class RebuildIndex(StaffRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        call_command('rebuild_index', interactive=False)
+        call_command('rebuild_index',
+                     interactive=False,
+                     stdout=LoggerWriter(logger.info))
         return HttpResponse(u'index rebuilt')
 
 
 class LoadDump(View):
-    @maintenance_available()
+    @maintenance_available
     def post(self, request, *args, **kwargs):
         # Retrieve the content of the file uploaded.
         try:
@@ -713,21 +720,33 @@ class LoadDump(View):
                 # Write the received file into a file into settings.FIXTURE_DIRS
                 file_content = ContentFile(request.FILES['file'].read())
                 filename = 'dump.json'
-                tmpdir = tempfile.gettempdir()
+                tmpdir = os.path.join(tempfile.gettempdir(), str(uuid.uuid4()))
                 fixture = os.path.join(tmpdir, filename)
 
                 # Check if zip file
                 if zipfile.is_zipfile(file_content):
                     # uncompress the files
-                    # uncompress the dump file
                     zf = zipfile.ZipFile(file_content)
+                    # Check that a meta is present
+                    if 'meta' in zf.namelist():
+                        zf.extract('meta', tmpdir)
+                        with open(os.path.join(tmpdir, 'meta')) as metafile:
+                            v = metafile.read().strip()
+                        if v != libreosteoweb.__version__:
+                            return HttpResponse(content=format_lazy(
+                                'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
+                                otherversion=v,
+                                currentversion=libreosteoweb.__version__),
+                                                status=412)
+                    # uncompress the dump file
                     if filename in zf.namelist():
                         zf.extract(filename, tmpdir)
                         # uncompress all document
                         for d in [
-                                f for f in zf.namelist() if f != 'dump.json'
+                                f for f in zf.namelist()
+                                if f != 'dump.json' and f != 'meta'
                         ]:
-                            zf.extract(d, settings.MEDIA_ROOT)
+                            zf.extract(d, default_storage.location)
                     else:
                         raise Exception(
                             "This zipfile does not contain the db dump")
@@ -752,19 +771,23 @@ class LoadDump(View):
                     )
                     call_command('flush',
                                  interactive=False,
-                                 load_initial_data=False)
+                                 stdout=LoggerWriter(logger.info))
                     # It means that the settings.FIXTURE_DIRS should be set in settings
                     previous = settings.FIXTURE_DIRS
                     settings.FIXTURE_DIRS = [tempfile.gettempdir()]
                     # And when loading dumps, write the file into this directory with the name : load_dump.json
                     logger.info("Load the fixture from path : %s " % (fixture))
-                    call_command('loaddata', fixture)
+                    call_command('loaddata',
+                                 fixture,
+                                 stdout=LoggerWriter(logger.info))
                     # Delete the fixture
                     logger.info("Clearing the fixture")
                     os.remove(fixture)
                     settings.FIXTURE_DIRS = previous
                     logger.info("Could restore signals")
                 logger.info("end of reloading.")
+                # Send signals for post_reload treatment
+                post_reload_db.send(self.__class__)
                 return HttpResponse(content=u'reloaded')
             else:
                 return HttpResponse()

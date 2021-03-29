@@ -1,17 +1,17 @@
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from django.shortcuts import render
 from django.forms.models import ModelForm
 from libreosteoweb import models
@@ -118,6 +118,12 @@ def display_doctor(request):
                   {'doctor': display.display_fields()})
 
 
+def select_doctor(request):
+    display = RegularDoctorDisplay()
+    return render(request, 'partials/doctor-selector.html',
+                  {'doctor': display.display_fields()})
+
+
 def display_examination_timeline(request):
     display = ExaminationDisplay()
     return render(request, 'partials/timeline.html',
@@ -126,8 +132,15 @@ def display_examination_timeline(request):
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
-    return render(request, 'partials/examination.html',
-                  {'examination': displayExamination.display_fields()})
+    displayPatient = PatientDisplay()
+    therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
+        user=request.user)
+    return render(
+        request, 'partials/examination.html', {
+            'examination': displayExamination.display_fields(),
+            'patient': displayPatient.display_fields(),
+            'therapeutsettings': therapeut_settings,
+        })
 
 
 def display_search_result(request):
@@ -141,8 +154,7 @@ def display_userprofile(request):
         request, 'partials/user-profile.html', {
             'user': displayUser.display_fields(),
             'therapeutsettings': displayTherapeutSettings.display_fields(),
-            'dashboard_modules':
-            models.TherapeutSettings.DASHBOARD_MODULES_FIELDS,
+            'optional_modules': models.TherapeutSettings.MODULES_FIELDS,
             'DEMONSTRATION': settings.DEMONSTRATION
         })
 
@@ -181,7 +193,14 @@ def display_setpassword(request):
 
 
 def display_import_files(request):
-    return render(request, 'partials/import-file.html', {'request': request})
+    return render(
+        request, 'partials/import-file.html', {
+            'request':
+            request,
+            'allow_data_dump':
+            request.user.is_superuser
+            or request.user.has_perm('libreosteoweb.patient.data_dump')
+        })
 
 
 def display_rebuild_index(request):
@@ -197,12 +216,12 @@ def display_confirmation(request):
 
 
 @never_cache
-@maintenance_available()
+@maintenance_available
 def display_restore(request):
     return render(request, 'partials/restore.html', {'request': request})
 
 
 @never_cache
-@maintenance_available()
+@maintenance_available
 def display_register(request):
     return render(request, 'partials/register.html', {'request': request})

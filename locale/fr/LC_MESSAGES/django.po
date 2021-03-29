@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Libreosteo 1.0\n"
+"Project-Id-Version: LibreOsteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-14 20:46+0200\n"
-"PO-Revision-Date: 2019-10-14 20:48+0200\n"
+"POT-Creation-Date: 2021-03-25 14:10+0100\n"
+"PO-Revision-Date: 2021-03-18 17:02+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
 "Language: fr\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Loco-Source-Locale: fr_FR\n"
 "X-Loco-Parser: loco_parse_po\n"
 "X-Loco-Target-Locale: zxx\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 
 msgid "French"
 msgstr "Français"
@@ -26,6 +26,14 @@ msgstr "Anglais"
 #, python-format
 msgid "Invoice sequence updated from %(previous)s to %(actual)s"
 msgstr "Séquence de facturation modifiée de %(previous)s à %(actual)s"
+
+#, python-format
+msgid "%s has downloaded the full list of patient"
+msgstr "%s a téléchargé la liste complète des patients"
+
+#, python-format
+msgid "%s has downloaded the full content of the Database"
+msgstr "%s a téléchargé le contenu complet de la base de données"
 
 msgid "Analyze failed on this file"
 msgstr "L'analyse a échoué sur ce fichier"
@@ -66,6 +74,9 @@ msgstr "Date de naissance"
 msgid "This patient already exists"
 msgstr "Ce patient existe déjà"
 
+msgid "The examination date is not valid"
+msgstr "La date de consultation est invalide"
+
 msgid "Reason is mandatory when the examination is not invoiced"
 msgstr "La raison est obligatoire lorsque la consultation n'est pas facturée"
 
@@ -81,6 +92,14 @@ msgstr "Les informations de chèque sont manquantes"
 
 msgid "Missing data to continue"
 msgstr "Données manquantes"
+
+msgid "Prefix for invoicing sequence should have 3 char length maximum"
+msgstr ""
+"Le préfixe de séquence de facturation devrait avoir une longueur de 3 "
+"caractères maximum"
+
+msgid "Prefix could only contains alpha characters"
+msgstr "Le préfixe ne peut contenir que des caractères alphabétiques"
 
 msgid "Not paid"
 msgstr "Non réglée"
@@ -232,6 +251,9 @@ msgstr "Patient"
 msgid "Therapeut"
 msgstr "Thérapeute"
 
+msgid "Office Settings"
+msgstr "Paramètres du cabinet"
+
 msgid "Normal examination"
 msgstr "Consultation normale"
 
@@ -293,16 +315,25 @@ msgid "Siret"
 msgstr "Siret"
 
 msgid "status"
-msgstr "État"
+msgstr "état"
 
 msgid "therapeut_id"
-msgstr "Thérapeute id"
+msgstr "thérapeute id"
 
 msgid "Canceled by"
 msgstr "Annulée par"
 
+msgid "Invoice replaced"
+msgstr "Facture remplacée"
+
 msgid "Invoice type"
 msgstr "Type de facture"
+
+msgid "office id"
+msgstr "cabinet id"
+
+msgid "check_sum"
+msgstr "somme de contrôle"
 
 msgid "Code"
 msgstr "Code"
@@ -325,6 +356,9 @@ msgstr "Référence"
 msgid "user"
 msgstr "utilisateur"
 
+msgid "Office name"
+msgstr "Nom du cabinet"
+
 msgid "Invoice office header"
 msgstr "Entête de facture"
 
@@ -335,7 +369,13 @@ msgid "Invoice footer"
 msgstr "Pied de page de facture"
 
 msgid "Invoice start sequence"
-msgstr "sequence de démarrage de facture"
+msgstr "Séquence de démarrage de facture"
+
+msgid "Invoice prefix sequence"
+msgstr "Préfixe de séquence de facturation"
+
+msgid "Invoice canceling by credit note"
+msgstr "Annulation de facture par avoir"
 
 msgid "Statistics"
 msgstr "Statistiques"
@@ -343,17 +383,17 @@ msgstr "Statistiques"
 msgid "Events history"
 msgstr "Historique des évènements"
 
-msgid "Patient file"
-msgstr "Fichier patient"
+msgid "Spheres"
+msgstr "Sphères"
 
-msgid "Examination file"
-msgstr "Fichier de consultation"
+msgid "Zipcode completion (France)"
+msgstr "Auto-complétion via le code postal (France)"
+
+msgid "Dashboard"
+msgstr "Tableau de bord"
 
 msgid "validity status"
 msgstr "validité"
-
-msgid "Document file"
-msgstr "Fichier document"
 
 msgid "Title"
 msgstr "Titre"
@@ -377,7 +417,7 @@ msgid "document"
 msgstr "document"
 
 msgid "attachmentType"
-msgstr "Type de pièce jointe"
+msgstr "type de pièce jointe"
 
 msgid "User Profile"
 msgstr "Profil utilisateur"
@@ -394,17 +434,17 @@ msgstr "Recherche..."
 msgid "New patient"
 msgstr "Nouveau patient"
 
-msgid "Create admin account on Libreosteo"
-msgstr "Créé un compte administrateur sur Libreosteo"
+msgid "Create admin account on LibreOsteo"
+msgstr "Créé un compte administrateur sur LibreOsteo"
 
 msgid "Registration"
 msgstr "Enregistrement"
 
 msgid ""
-"In order to use Libreosteo, you have to register a login and password on the "
+"In order to use LibreOsteo, you have to register a login and password on the "
 "application. Please select it before to use the application."
 msgstr ""
-"Afin d'utiliser Libreosteo, vous devez enregistrer un utilisateur et un mot "
+"Afin d'utiliser LibreOsteo, vous devez enregistrer un utilisateur et un mot "
 "de passe sur l'application. Veuillez les saisir avant d'utiliser "
 "l'application."
 
@@ -429,8 +469,8 @@ msgstr "Se rappeler de moi"
 msgid "Register"
 msgstr "Enregistrer"
 
-msgid "Signin on Libreosteo"
-msgstr "Identifiez-vous sur Libreosteo"
+msgid "Signin on LibreOsteo"
+msgstr "Identifiez-vous sur LibreOsteo"
 
 msgid "Please sign in"
 msgstr "Veuillez vous identifier"
@@ -452,14 +492,17 @@ msgstr "Import/export"
 msgid "Rebuild index"
 msgstr "Réindexer"
 
+msgid "Change office"
+msgstr "Changer d'établissement"
+
 msgid "Help"
 msgstr "Aide"
 
 msgid "Project web page"
 msgstr "Site vitrine"
 
-msgid "Community support (forum)"
-msgstr "Support communautaire (forum)"
+msgid "Community support"
+msgstr "Support communautaire"
 
 msgid "Development and code project"
 msgstr "Code et développement"
@@ -479,35 +522,35 @@ msgstr "Fin d'édition"
 msgid "Delete"
 msgstr "Supprimer"
 
-msgid "Install Libreosteo"
-msgstr "Installer Libreosteo"
+msgid "Install LibreOsteo"
+msgstr "Installer LibreOsteo"
 
 msgid ""
 "\n"
-"                    <h1>Libreosteo</h1>\n"
-"                    <p>Thank you to chose Libreosteo as your software to "
+"                    <h1>LibreOsteo</h1>\n"
+"                    <p>Thank you to chose LibreOsteo as your software to "
 "manage your patients.</p>\n"
 "                    <p>You successfully installed the software on your "
 "machine. Now you have to decide if you want to restore a previous backup of "
-"your patient file (performed from Libreosteo) or use a new installation and "
+"your patient file (performed from LibreOsteo) or use a new installation and "
 "register your first user on the softwarewhich will be the administrator of "
 "the software</p>\n"
 "                    <p>Join the user community from the main <a href="
-"\"https://libreosteo.github.io/\" target=\"_blank\">website</a> in order to "
+"\"https://www.libreosteo.org/\" target=\"_blank\">website</a> in order to "
 "share your experience with this software.</p>\n"
 "                    "
 msgstr ""
 "\n"
-"                    <h1>Libreosteo</h1>\n"
-"                    <p>Merci d'avoir choisi Libreosteo comme votre logiciel "
+"                    <h1>LibreOsteo</h1>\n"
+"                    <p>Merci d'avoir choisi LibreOsteo comme votre logiciel "
 "pour gérer vos patients.</p>\n"
 "                    <p>Vous avez correctement installé le logiciel sur votre "
 "machine. Maintenant vous devez décider si vous voulez restaurer une "
-"précédente sauvegarde de votre fichier patient (réalisé depuis Libreosteo) "
+"précédente sauvegarde de votre fichier patient (réalisé depuis LibreOsteo) "
 "ou bien utiliser cette nouvelle installation et enregistrer votre premier "
 "utilisateur sur le logiciel qui en sera l'administrateur.</p>\n"
 "                    <p>Rejoignez la communauté des utilisateurs depuis le <a "
-"href=\"https://libreosteo.github.io/\" target=\"_blank\">site web</a> "
+"href=\"https://www.libreosteo.org/\" target=\"_blank\">site web</a> "
 "principal afin de partager votre expérience de ce logiciel.</p>\n"
 "                    "
 
@@ -541,9 +584,6 @@ msgstr "Confirmer"
 msgid "Ok"
 msgstr "Ok"
 
-msgid "Dashboard"
-msgstr "Tableau de bord"
-
 msgid "Week"
 msgstr "Semaine"
 
@@ -571,11 +611,17 @@ msgstr "Ajouter un médecin"
 msgid "Add"
 msgstr "Ajouter"
 
+msgid "not documented"
+msgstr "non renseigné"
+
 msgid "Session of "
-msgstr "Séance du"
+msgstr "Séance du "
 
 msgid "by"
 msgstr "par"
+
+msgid "Performed at "
+msgstr "Réalisé à "
 
 msgid "Print"
 msgstr "Imprimer"
@@ -604,6 +650,12 @@ msgstr "Avoir"
 msgid "Close"
 msgstr "Clôturer"
 
+msgid "Infos patient"
+msgstr "Infos patient"
+
+msgid "Not smoker"
+msgstr "Non fumeur"
+
 msgid "Click to send"
 msgstr "Cliquer pour envoyer"
 
@@ -629,18 +681,18 @@ msgid "Archive"
 msgstr "Archiver"
 
 msgid "get archive"
-msgstr "Obtenir l'archive"
+msgstr "obtenir l'archive"
 
 msgid ""
 "\n"
 "                            This file is the full content of your database. "
-"It could only be used by Libreosteo. Use it to restore your database or "
+"It could only be used by LibreOsteo. Use it to restore your database or "
 "transfert the content to an other machine.\n"
 "                            "
 msgstr ""
 "\n"
 "                            Ce fichier est le contenu complet de votre base. "
-"Il peut uniquement être utilisé par Libreosteo. Utilisez-le afin de "
+"Il peut uniquement être utilisé par LibreOsteo. Utilisez-le afin de "
 "restaurer votre base de données ou pour transférer le contenu vers une autre "
 "machine.\n"
 "                            "
@@ -672,7 +724,7 @@ msgstr ""
 "vous devez télécharger ces deux fichiers gabarits ci-dessous. Renseignez-les "
 "avec votre éditeur de feuilles de calcul favori et enregistrez-les en "
 "fichier csv.</p>\n"
-"            <p>Ne changez pas le format car Libreosteo lit uniquement des "
+"            <p>Ne changez pas le format car LibreOsteo lit uniquement des "
 "fichiers csv.</p>\n"
 "            <br/>\n"
 "            <p>Une fois que vous les avez renseignés, transmettez les "
@@ -695,6 +747,12 @@ msgstr "Gabarit du fichier consultation"
 
 msgid "Import"
 msgstr "Importer"
+
+msgid "Patient file"
+msgstr "Fichier patient"
+
+msgid "Examination file"
+msgstr "Fichier de consultation"
 
 msgid "Analyze"
 msgstr "Analyser"
@@ -743,7 +801,7 @@ msgid "Errors when integrating patients"
 msgstr "Erreurs lors de l'importation des patients"
 
 msgid "line : "
-msgstr "ligne :"
+msgstr "ligne : "
 
 msgid "lines imported from file examination"
 msgstr "lignes importées du fichier consultation"
@@ -764,7 +822,7 @@ msgid ""
 "Here you can download the full list of patients and examinations as CSV files"
 msgstr ""
 "Vous pouvez télécharger ici la liste complète des patients et des "
-"consultations sous forme de fichiers CSV."
+"consultations sous forme de fichiers CSV"
 
 msgid "Patients file"
 msgstr "Fichier patients"
@@ -822,13 +880,22 @@ msgid ""
 "the network : "
 msgstr ""
 "Cette instance de libreosteo peut être utilisée en utilisant les adresses "
-"suivantes sur le réseau :"
+"suivantes sur le réseau : "
 
 msgid "Office"
 msgstr "Cabinet"
 
 msgid "Paiment means"
 msgstr "Moyens de paiement"
+
+msgid "The prefix to add for invoicing sequence"
+msgstr "Le préfixe à ajouter à la séquence de facturation"
+
+msgid "Credit note on canceling"
+msgstr "Avoir sur annulation"
+
+msgid "Corrective invoice on canceling"
+msgstr "Facture corrective sur annulation"
 
 msgid "The start sequence must have composed only with numbers"
 msgstr "La séquence de démarrage doit être composée uniquement de chiffres"
@@ -859,12 +926,6 @@ msgstr "Infos générales"
 
 msgid "Patient infos"
 msgstr "Infos patient"
-
-msgid "not documented"
-msgstr "non renseigné"
-
-msgid "Not smoker"
-msgstr "Non fumeur"
 
 msgid "History"
 msgstr "Antécédents"
@@ -902,6 +963,16 @@ msgstr "Terminé"
 
 msgid "Failed"
 msgstr "Echec"
+
+msgid "Your login must not contain space"
+msgstr "Votre login ne doit pas contenir d'espace"
+
+msgid ""
+"150 characters maximum. Only letters, numbers or characters \"@\",\".\",\"+"
+"\",\"-\",\"_\""
+msgstr ""
+"150 caractères maximum. Uniquement des lettres, nombres ou les caractères \"@"
+"\",\".\",\"+\",\"-\",\"_\""
 
 msgid ""
 "You can restore a previous archive of the database. This archive should be "
@@ -962,5 +1033,5 @@ msgstr "Paramètres d'affichage"
 msgid "Profile was updated"
 msgstr "Profil mis à jour"
 
-#~ msgid "n/a"
-#~ msgstr "n/a"
+#~ msgid "Document file"
+#~ msgstr "Fichier document"

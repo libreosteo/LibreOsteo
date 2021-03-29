@@ -1,19 +1,19 @@
 
 /**
-    This file is part of Libreosteo.
+    This file is part of LibreOsteo.
 
-    Libreosteo is free software: you can redistribute it and/or modify
+    LibreOsteo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Libreosteo is distributed in the hope that it will be useful,
+    LibreOsteo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+    along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 */
 function open_dropdown() {
         $('#user-toggle').parent().addClass('open');
@@ -58,26 +58,29 @@ function stepUserProfile() {
 
 function stepOfficeSettings() {
   return $.getJSON('/api/settings').done(function(data){
-  if (data.length == 0 || typeof data[0].currency === 'undefined' || data[0].currency == "" ){
-    console.log("passe ici car : "+data.currency);
-    console.log(typeof data.currency === 'undefined' || data.currency == "" );
-    tour.addStep(
-    {
-      element: "#office-settings",
-      title: "Paramétrer le cabinet",
-      content: "Afin de pouvoir générer correctement les factures, il est nécessaire de mettre à jour les informations du cabinet.",
-      backdrop : false,
-      placement: 'left',
-      orphan : true,
-      onShow : function(tour)
+    let setting;
+    if (data.length != 0 ) {
+      setting = data.filter(x => x.selected)[0];
+    }
+    if (setting === 'undefined' || typeof setting.currency === 'undefined' || setting.currency == "" ){
+      tour.addStep(
       {
-        $('#user-toggle').parent().on('hidden.bs.dropdown', open_dropdown);
-        $('#user-toggle').parent().addClass('open');
-      },
-    });
-  }
+        element: "#office-settings",
+        title: "Paramétrer le cabinet",
+        content: "Afin de pouvoir générer correctement les factures, il est nécessaire de mettre à jour les informations du cabinet.",
+        backdrop : false,
+        placement: 'left',
+        orphan : true,
+        onShow : function(tour)
+        {
+          $('#user-toggle').parent().on('hidden.bs.dropdown', open_dropdown);
+          $('#user-toggle').parent().addClass('open');
+        },
+      }
+      );
+    }
   });
-};
+}
 
 function defineSteps() {
   stepUserProfile().then(stepOfficeSettings).then(function () {
@@ -86,6 +89,6 @@ function defineSteps() {
       tour.start(true);
     }
   });
-};
+}
 
 defineSteps();

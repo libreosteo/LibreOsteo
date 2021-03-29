@@ -1,7 +1,7 @@
-Contributing code to Libreosteo
+Contributing code to LibreOsteo
 ===============================
 
-Libreosteo is using AngularJS + Django. You can contribute to it via `pull
+LibreOsteo is using AngularJS + Django. You can contribute to it via `pull
 requests`_ .
 
 **Please target the** ``develop`` **branch with your pull requests**
@@ -10,7 +10,7 @@ requests`_ .
 Internationalization
 ====================
 
-Libreosteo code and strings are written in *English*
+LibreOsteo code and strings are written in *English*
 Language. Internationalization is used to provide a full translation in
 French. If you need it in another language, please contribute your translations
 :-).

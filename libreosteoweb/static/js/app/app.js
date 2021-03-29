@@ -1,19 +1,19 @@
 
 /**
-    This file is part of Libreosteo.
+    This file is part of LibreOsteo.
 
-    Libreosteo is free software: you can redistribute it and/or modify
+    LibreOsteo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Libreosteo is distributed in the hope that it will be useful,
+    LibreOsteo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+    along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 */
 var libreosteoApp = angular.module('libreosteo', [
     'ngRoute',
@@ -61,6 +61,23 @@ libreosteoApp.run(['$http', '$cookies', function ($http, $cookies) {
     $http.defaults.xsrfCookieName = 'csrftoken';
 }]);
 
+libreosteoApp.config(function($httpProvider) {
+  $httpProvider.interceptors.push(function($q, $location) {
+    return {
+      'response': function(response) {
+        if (typeof response.data === 'string') {
+          if (response.data.indexOf instanceof Function &&
+            response.data.indexOf("<form class=\"form-signin\"") != -1) {
+            $location.url("/accounts/login/");
+            window.location = "/accounts/login/";
+          }
+        }
+        return response;
+      },
+    }
+  });
+});
+
 libreosteoApp.config(['growlProvider', function(growlProvider) {
     growlProvider.globalTimeToLive(5000);
     growlProvider.onlyUniqueMessages(false);
@@ -71,7 +88,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
         $urlRouterProvider.otherwise('/');
 
         $stateProvider.
-            state('patient', 
+            state('patient',
             {
                 url : '/patient/{patientId}',
                 templateUrl : 'web-view/partials/patient-detail',
@@ -92,7 +109,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl : 'web-view/partials/add-patient',
                 controller : 'AddPatientCtrl'
             }).
-            state('search', 
+            state('search',
             {
                 url : '/search/:query',
                 templateUrl : function(params) {
@@ -101,7 +118,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 controller : 'SearchResultCtrl'
             }).
-            state('searchPaginated', 
+            state('searchPaginated',
             {
                 url : '/search/:query/:page',
                 templateUrl : function(params) {
@@ -113,7 +130,7 @@ libreosteoApp.config(['$stateProvider', '$urlRouterProvider',
                 },
                 controller : 'SearchResultCtrl'
             }).
-            state('user-profile', 
+            state('user-profile',
             {
                 url : '/accounts/user-profile',
                templateUrl : 'web-view/partials/user-profile',
@@ -159,18 +176,10 @@ webshim.setOptions('forms-ext', {
 });
 
 // WEBShim configuration
-webshim.polyfill('forms-ext');
+webshim.polyfill('forms forms-ext');
 
 libreosteoApp.controller('MainController', ['$scope', 'loEditFormManager', function($scope, loEditFormManager) {
-	$scope.$on('$viewContentLoaded', function() {
-                $('[type="date"].birthdate').prop('max', function(){
-                    return new Date().toJSON().split('T')[0];
-                });
-                $('body').updatePolyfill();
-            });
-
-    $scope.editFormManager = loEditFormManager;
-
+  $scope.editFormManager = loEditFormManager;
 }]);
 
 libreosteoApp.filter('htmlToPlaintext', function() {
@@ -188,7 +197,7 @@ libreosteoApp.filter('mimeTypeToClass', function() {
             } else if (text.includes('image/')) {
                 return 'fa-file-image-o';
             }
-        } 
+        }
         return 'fa-file-text-o';
     }
 });

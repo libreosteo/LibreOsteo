@@ -1,18 +1,18 @@
-import logging
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
+import logging
 import csv
 from django.utils.translation import ugettext_lazy as _
 import random
@@ -502,7 +502,7 @@ class IntegratorExamination(AbstractIntegrator):
                     'diagnosis': r[11],
                     'treatments': r[12],
                     'conclusion': r[13],
-                    'patient': patient,
+                    'patient': patient.id,
                     'therapeut': user.id,
                     'type': ExaminationType.NORMAL,
                     'status': ExaminationStatus.NOT_INVOICED,
@@ -558,6 +558,6 @@ class IntegratorExamination(AbstractIntegrator):
             self.patient_table[int(c[0])] = Patient.objects.filter(
                 family_name=serializer.validated_data['family_name'],
                 first_name=serializer.validated_data['first_name'],
-                birth_date=serializer.validated_data['birth_date'])
+                birth_date=serializer.validated_data['birth_date']).first()
 
             logger.info("found patient %s " % self.patient_table[int(c[0])])

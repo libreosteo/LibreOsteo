@@ -1,26 +1,26 @@
 /**
-    This file is part of Libreosteo.
+    This file is part of LibreOsteo.
 
-    Libreosteo is free software: you can redistribute it and/or modify
+    LibreOsteo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Libreosteo is distributed in the hope that it will be useful,
+    LibreOsteo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
-*/
+    along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
+    */
 var examination = angular.module('loExamination', ['ngResource', 'loInvoice']);
 
 
 examination.factory('ExaminationServ', ['$resource',
   function($resource) {
     "use strict";
-    return $resource('api/examinations/:examinationId', null, {
+    var serv = $resource('api/examinations/:examinationId', null, {
       query: {
         method: 'GET',
         isArray: true
@@ -63,6 +63,10 @@ examination.factory('ExaminationServ', ['$resource',
 
       }
     });
+    serv.SPHERES_LIST = [
+      'orl', 'visceral', 'pulmo', 'uro_gyneco', 'periphery', 'generalState'
+    ];
+    return serv;
   }
 ]);
 
@@ -83,19 +87,19 @@ examination.factory('CommentServ', ['$resource',
   }
 ]);
 
-examination.controller('ExaminationCtrl', ['$scope', '$routeParams', 'ExaminationServ', function($scope, $routeParams, ExaminationServ) {
-  "use strict";
-  $scope.examination = ExaminationServ.get({
-    examinationId: $routeParams.examinationId
-  });
-}]);
 
 function isEmpty(str) {
   return (!str || 0 === str.length);
 }
 
+function loadExamination(data) {
+  var examination = angular.copy(data);
+  examination.date = new Date(data.date);
+  return examination;
+}
 
-examination.directive('examination', ['ExaminationServ', function(ExaminationServ) {
+
+examination.directive('examination', ['ExaminationServ', 'PatientServ', 'TherapeutSettingsServ', 'OfficeSettingsServ', function(ExaminationServ, PatientServ, TherapeutSettingsServ, OfficeSettingsServ) {
   "use strict";
   return {
     restrict: 'E',
@@ -106,19 +110,15 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
       closeHandle: '&',
       newExamination: '=',
       onDelete: '&',
-      reloadExaminations : '&'
-    },
-    compile: function(element, attrs) {
-      if (!attrs.newExamination) {
-        attrs.newExamination = false
-      }
-
+      patient: '=?',
+      externalPatientSave: '&',
+      reloadExaminations: '&'
     },
     controller: ['$scope', '$filter', '$window', 'growl', '$q', '$timeout', 'InvoiceService', '$uibModal', function($scope, $filter, $window, growl, $q, $timeout, InvoiceService, $uibModal) {
       $scope.types = [{
-          value: 1,
-          text: gettext('Normal examination')
-        },
+        value: 1,
+        text: gettext('Normal examination')
+      },
         {
           value: 2,
           text: gettext('Continuing examination')
@@ -143,41 +143,34 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
         }
       };
 
-      $scope.examinationSettings = {
-        orl: false,
-        visceral: false,
-        pulmo: false,
-        uro_gyneco: false,
-        periphery: false,
-        general_state: false,
-      }
+      TherapeutSettingsServ.get_by_user().$promise.then(function(therapeutSettings) {
+        /* Display spheres if the examination has notes about spheres,
+         *  even if spheres display is disabled in settings (to avoid
+         *  hiding information).
+         */
+        var filled = ExaminationServ.SPHERES_LIST.map(function(sphere) {
+          return !isEmpty($scope.model[sphere]);
+        }).reduce(function(enabled, atLeastOne) {
+          return atLeastOne || enabled;
+        });
 
-      $scope.accordionOpenState = {
-        orl: true,
-        visceral: true,
-        pulmo: true,
-        uro_gyneco: true,
-        periphery: true,
-        general_state: true
-      }
+        if (therapeutSettings.spheres_enabled || filled) {
+          // Initialize UI
+          $scope.examinationSettings = initWithKeys(
+            ExaminationServ.SPHERES_LIST,
+            false
+          );
+          $scope.accordionOpenState = initWithKeys(
+            ExaminationServ.SPHERES_LIST,
+            true
+          );
 
-      $scope.$watch('model.orl', function(newValue, oldValue) {
-        $scope.examinationSettings.orl = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.visceral', function(newValue, oldValue) {
-        $scope.examinationSettings.visceral = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.pulmo', function(newValue, oldValue) {
-        $scope.examinationSettings.pulmo = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.uro_gyneco', function(newValue, oldValue) {
-        $scope.examinationSettings.uro_gyneco = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.periphery', function(newValue, oldValue) {
-        $scope.examinationSettings.periphery = !isEmpty(newValue) || $scope.newExamination;
-      });
-      $scope.$watch('model.general_state', function(newValue, oldValue) {
-        $scope.examinationSettings.general_state = !isEmpty(newValue) || $scope.newExamination;
+          angular.forEach(ExaminationServ.SPHERES_LIST, function(sphere, _) {
+            $scope.$watch('model.' + sphere, function(newValue, oldValue) {
+              $scope.examinationSettings[sphere] = !isEmpty(newValue) || $scope.newExamination;
+            });
+          });
+        }
       });
 
       $scope.$watch('model.status', function(newValue, oldValue) {
@@ -226,13 +219,34 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
           }
         });
         modalInstance.result.then(function() {
-          InvoiceService.cancel({
-            invoiceId: invoice.id
-          }, null, function(result) {
-            $scope.model.last_invoice = null;
-            $scope.model.invoice_number = null;
-            $scope.model.invoices_list.unshift(result.canceled);
-            $scope.model.invoices_list.unshift(result.credit_note);
+          OfficeSettingsServ.get(function(settings) {
+            var officesettings = settings.find(x => x.selected);
+            if (officesettings.cancel_invoice_credit_note) {
+              // Credit note on canceling mode
+              InvoiceService.cancel({
+                invoiceId: invoice.id
+              }, null, function(result) {
+                $scope.model.last_invoice = null;
+                $scope.model.invoice_number = null;
+                $scope.model.invoices_list.unshift(result.canceled);
+                $scope.model.invoices_list.unshift(result.credit_note);
+              });
+            } else {
+              // Corrective invoice in this case
+              $scope.closeHandle()($scope.model, function(examination, invoicing) {
+                InvoiceService.cancel({invoiceId: invoice.id}, { examination: examination, corrective_invoice: invoicing },
+                  function(result) {
+                    $scope.model.last_invoice = result.corrective_invoice;
+                    $scope.model.invoice_number = result.corrective_invoice.number;
+                    $scope.model.invoices_list.unshift(result.canceled);
+                    if (invoicing.paiment_mode == "notpaid"){
+                      $scope.model.status = 1;
+                    } else {
+                      $scope.model.status = 2;
+                    }
+                  });
+              }, true, true);
+            }
           });
         });
       };
@@ -246,7 +260,7 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
         $scope.closeHandle()(examination, function(examination, invoicing) {
           ExaminationServ.update_paiement({
             examinationId: examination.id
-          },invoicing , function(resultOk) {
+          }, invoicing, function(resultOk) {
             $scope.reloadExaminations()(examination);
           }, function(resultNok) {
             console.log(resultNok);
@@ -271,12 +285,8 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
 
       };
 
-      $scope.$watch('newExamination', function(newValue, oldValue) {
-        if (newValue) {
-          $scope.edit();
-        }
-      });
-      $scope.$watch('editableForm.$visible', function(newValue, oldValue) {
+      // $visible means this form is in edit mode
+      $scope.$watch('examinationForm.$visible', function(newValue, oldValue) {
         if (oldValue === false && newValue === true) {
           $scope.triggerEditForm.edit = false;
           $scope.triggerEditForm.save = true;
@@ -287,11 +297,15 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
       });
 
       $scope.edit = function() {
-        $scope.editableForm.$show();
+        $scope.form.partialPatientForm.$show();
+        $timeout(function() {
+          $scope.examinationForm.$show();
+        });
       };
 
       $scope.save = function() {
-        $scope.editableForm.$save();
+        $scope.examinationForm.$submit();
+        $scope.form.partialPatientForm.$submit();
       };
 
       $scope.saveAndClose = function() {
@@ -304,13 +318,63 @@ examination.directive('examination', ['ExaminationServ', function(ExaminationSer
         cancel: null,
         delete: false,
       };
-      $timeout(function() {
-        //DOM has finished rendering
+      $scope.$on('uiTabChange', function(event) {
+        // Hackish : we have to wait that the tab has finished rendering
+        // to trigger edit, otherwise, the form is considered inactive
+        // by edit-form-manager, and « save » button is not shown.
         if ($scope.newExamination) {
-          $scope.editableForm.$show();
+          $scope.edit();
         }
       });
+      // Patient
+      $scope.lateralities = PatientServ.lateralities;
+
+      // No need to handle buttons with partialPatientForm ; examinationForm
+      // controls it.
+      $scope.triggerEditFormPatient = initWithKeys(
+        ['save', 'edit', 'cancel', 'delete'],
+        false
+      );
+
+      // max date for examination
+      $scope.maxExaminationDate = function() {
+        if ($scope.model && $scope.model.last_invoice) {
+          return moment($scope.model.last_invoice.date).toISOString();
+        }
+        return moment().endOf("day").toISOString();
+      };
+
+      $scope.maxExaminationDateAngular = function() {
+        return moment($scope.maxExaminationDate()).toDate();
+      }
+
+      $scope.updateExaminationDateValidatorClass = function() {
+        var original_input = jQuery('input[class~="examinationdate"][ng-model]');
+        if (original_input.hasClass('ng-invalid-add')) {
+          jQuery('input[class~="examinationdate"][class*="ws-"]').addClass('ng-invalid');
+        } else {
+          jQuery('input[class~="examinationdate"][class*="ws-"]').removeClass('ng-invalid');
+        }
+      };
+
+      $scope.validateExaminationDate = function(data) {
+        if (data === undefined || moment(data).isAfter(moment($scope.maxExaminationDate()))) {
+          return "La date est invalide";
+        } else {
+          $scope.frozenExaminationDate = null;
+        }
+      };
+
+      // Freeze the examination date from the model to be able to support an "undo" or "cancel"
+      // edition on the date
+      $scope.freezeExaminationDate = function() {
+        if(!$scope.frozenExaminationDate) {
+          $scope.frozenExaminationDate = moment($scope.model.date).format("DD/MM/YYYY");
+        }
+        return $scope.frozenExaminationDate;
+      }
     }],
+
     templateUrl: 'web-view/partials/examination'
-  }
+  };
 }]);

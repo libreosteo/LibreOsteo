@@ -19,11 +19,25 @@
 /* For fixed navbar */
 body { padding-top: 50px; }
 
+
+/* angular-xeditable override */
+
 .editable-click {
     !important;
     color : black;
     border-bottom : none;
 }
+
+.editable-empty,
+.editable-empty:hover,
+.editable-empty:focus,
+a.editable-empty,
+a.editable-empty:hover,
+a.editable-empty:focus {
+    color: #ccc;
+}
+
+/* end angular-xeditable override */
 
 pre {
     background-color : transparent;
@@ -177,6 +191,16 @@ div.readyForEditMode {
     width: 250px;
     top:0px;
 }
+
+.inner-spaced .panel-body {
+    margin-left: 5px;
+    margin-right : 5px;
+}
+
+.left-bordered-col {
+    border-left: 2px solid #eee;
+}
+
 ul li.documenttile  {
     list-style-type: none;
     margin: 0;
@@ -331,6 +355,22 @@ ul li.documenttile  {
     margin-bottom: 15px;
 }
 
+.panel-heading .badge {
+    float: right;
+}
+
+.panel-primary > .panel-heading .badge-danger {
+	color: #a94442;
+}
+
+.panel-primary > .panel-heading .badge-danger  {
+	color: #c9302c;
+}
+
+.panel-primary > .panel-heading .badge-warning  {
+	color: #ec971f;
+}
+
 .dashboard-catalog-item img {
     box-shadow: 3px 3px 5px 6px #ccc;
     max-width: 100%;
@@ -354,11 +394,15 @@ ul li.documenttile  {
 	width : 12%;
 }
 
+.radio.cancelinginvoice {
+  width: 25%;
+}
+
 input.ng-invalid-email,
 input.ng-invalid,
 input.ng-invalid-email:focus,
 input.ng-invalid:focus {
-  color: #a94442; 
+  color: #a94442;
   border-color: #a94442;
 }
 
@@ -367,5 +411,8 @@ input.ng-invalid:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
           box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(233, 116, 102, .6);
 
+}
+.editable-error {
+  font-size: small;
 }
 

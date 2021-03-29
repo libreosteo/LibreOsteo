@@ -3,10 +3,12 @@ Library     SeleniumLibrary   timeout=5    implicit_wait=2
 Library     Collections
 Library     RequestsLibrary
 Library     RequestsLogger
+Library     DateTime
+Library     keywords/utils.py
 
 *** Variables ***
 ${ROOT_URL}  http://localhost:8085
-${BROWSER}    Firefox 
+${BROWSER}    Firefox
 
 *** Keywords ***
 Open Browser To Login Page
@@ -18,10 +20,10 @@ Login With
   Input Text    password    ${password}
   Click Button  login
 
-Login REST with 
+Login REST with
   [Arguments]   ${login}    ${cookie_session}
   Create Session        restapi   ${ROOT_URL}    cookies=${cookie_session}
-  ${resp} =             Get Request   restapi   /api/users
+  ${resp} =             GET On Session   restapi   /api/users
   RequestsLogger.Write Log      ${resp}
   Should Be Equal As Strings    ${resp.status_code}    200
   Should Be Equal As Strings    ${resp.json()[0]['username']}     ${login}

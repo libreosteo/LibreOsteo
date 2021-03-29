@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='examination',
             name='invoice',
-            field=models.OneToOneField(null=True, blank=True, to='libreosteoweb.Invoice', verbose_name='Invoice'),
+            field=models.OneToOneField(null=True, blank=True, to='libreosteoweb.Invoice', verbose_name='Invoice', on_delete=models.PROTECT),
             preserve_default=True,
         ),
     ]

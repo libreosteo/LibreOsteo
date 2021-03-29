@@ -1,22 +1,23 @@
-# This file is part of Libreosteo.
+# This file is part of LibreOsteo.
 #
-# Libreosteo is free software: you can redistribute it and/or modify
+# LibreOsteo is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# Libreosteo is distributed in the hope that it will be useful,
+# LibreOsteo is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+# along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from rest_framework import serializers, validators
 from libreosteoweb.models import *
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
+from django.utils import timezone
 from .validators import UniqueTogetherIgnoreCaseValidator
 from .filter import get_name_filters, get_firstname_filters
 from django.core.exceptions import ObjectDoesNotExist
@@ -26,8 +27,10 @@ from django.conf import settings
 from .utils import NetworkHelper
 from django.db.models import Max
 from .utils import convert_to_long
+from django.utils.dateparse import parse_datetime
 from libreosteoweb.api.utils import _unicode
 from libreosteoweb.api.demonstration import get_demonstration_file
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -101,14 +104,21 @@ class RegularDoctorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OfficeDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OfficeSettings
+        fields = ['office_name']
+
+
 class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer()
     comments = serializers.SerializerMethodField('get_nb_comments')
+    office_detail = OfficeDetailSerializer(source='office')
 
     class Meta:
         model = Examination
         fields = ('id', 'reason', 'date', 'status', 'therapeut', 'type',
-                  'comments')
+                  'comments', 'office', 'office_detail')
         depth = 1
 
     def get_nb_comments(self, obj):
@@ -120,8 +130,11 @@ class PaimentModeSerializer(serializers.Serializer):
     paiment_mode_text = serializers.SerializerMethodField()
 
     def get_paiment_mode_text(self, obj):
-        paiment_mean = PaimentMean.objects.filter(
-            code=obj.paiment_mode).first()
+        if hasattr(obj, 'paiment_mode'):
+            paiment_code = obj.paiment_mode
+        else:
+            paiment_code = obj.get('paiment_mode')
+        paiment_mean = PaimentMean.objects.filter(code=paiment_code).first()
         if paiment_mean is not None:
             return paiment_mean.text
         return 'n/a'
@@ -168,9 +181,20 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                              allow_null=True,
                                              read_only=True)
 
+    office_detail = OfficeDetailSerializer(source="office",
+                                           required=False,
+                                           allow_null=True,
+                                           read_only=True)
+
     class Meta:
         model = Examination
         fields = '__all__'
+
+    def validate_date(self, value):
+        if value >= timezone.now():
+            raise serializers.ValidationError(
+                _('The examination date is not valid'))
+        return value
 
 
 class CheckSerializer(serializers.Serializer):
@@ -223,6 +247,11 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
             raise serializers.ValidationError(_('Missing data to continue'))
 
 
+class InvoiceCancelingWithCorrectiveInvoiceSerializer(serializers.Serializer):
+    examination = ExaminationSerializer()
+    corrective_invoice = ExaminationInvoicingSerializer()
+
+
 class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
     user_info = UserInfoSerializer(source="user",
                                    required=False,
@@ -272,20 +301,34 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
     network_list = serializers.SerializerMethodField()
     invoice_min_sequence = serializers.SerializerMethodField()
+    selected = serializers.SerializerMethodField()
 
     def validate(self, data):
         try:
             input_invoice_start_seq = data['invoice_start_sequence']
         except KeyError:
             input_invoice_start_seq = None
+        try:
+            input_invoice_prefix_seq = data['invoice_prefix_sequence']
+        except KeyError:
+            input_invoice_prefix_seq = None
         if input_invoice_start_seq is None or len(
                 input_invoice_start_seq) <= 0:
-            last_invoice_number = Invoice.objects.aggregate(
-                Max('number'))['number__max']
+            last_invoice_number = Invoice.objects.filter(
+                officesettings_id=self.instance.id).aggregate(
+                    Max('number'))['number__max']
             if last_invoice_number is not None:
                 data['invoice_start_sequence'] = _unicode(last_invoice_number)
             else:
                 data['invoice_start_sequence'] = _unicode(10000)
+        if input_invoice_prefix_seq is not None:
+            if len(input_invoice_prefix_seq) > 3:
+                raise serializers.ValidationError(
+                    _('Prefix for invoicing sequence should have 3 char length maximum'
+                      ))
+            if not re.match('^[A-Za-z]{1,3}$', input_invoice_prefix_seq):
+                raise serializers.ValidationError(
+                    _('Prefix could only contains alpha characters'))
         return data
 
     def get_network_list(self, obj):
@@ -302,10 +345,16 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
         return addresses
 
     def get_invoice_min_sequence(self, obj):
-        result_query = Invoice.objects.aggregate(Max('number'))['number__max']
+        result_query = Invoice.objects.filter(
+            officesettings_id=obj.id).aggregate(Max('number'))['number__max']
         if result_query is not None and len(result_query) > 0:
-            return convert_to_long(result_query) + 1
+            return convert_to_long(result_query, strip_string_prefix=True) + 1
         return 1
+
+    def get_selected(self, obj):
+        if hasattr(self.context['request'], 'officesettings'):
+            return self.context['request'].officesettings.id == obj.id
+        return False
 
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
@@ -369,7 +418,23 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
         document_data = validated_data.pop('document')
         document_data['user'] = validated_data.pop('user')
         patient = validated_data.pop("patient")
-        document = Document.objects.create(internal_date=datetime.today(),
+        document = Document.objects.create(internal_date=timezone.now(),
+                                           **document_data)
+        document.clean()
+        document.save()
+        patient_doc = PatientDocument.objects.create(patient=patient,
+                                                     document=document,
+                                                     **validated_data)
+        return patient_doc
+
+
+class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
+    def create(self, validated_data):
+        document_data = validated_data.pop('document')
+        document_data['user'] = validated_data.pop('user')
+        document_data['document_file'] = get_demonstration_file()
+        patient = validated_data.pop("patient")
+        document = Document.objects.create(internal_date=timezone.now(),
                                            **document_data)
         document.clean()
         document.save()

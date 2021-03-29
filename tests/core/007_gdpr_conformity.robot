@@ -44,23 +44,20 @@ Check That All Is Deleted
   [Arguments]                     ${session_id}
   ${session_cookie}   Create Dictionary   sessionid=${session_id}
   Login REST with     test        ${session_cookie}
-  ${resp} =           Get Request   restapi     /api/patients/1
+  ${resp} =           GET On Session   restapi     /api/patients/1    expected_status=404
   RequestsLogger.Write log       ${resp}
-  Should Be Equal As Strings     ${resp.status_code}         404
-  ${resp} =           Get Request   restapi     /api/examinations
-  RequestsLogger.Write log       ${resp}
-  Should Be Equal As Strings     ${resp.status_code}         200
-  Should Be Empty     ${resp.json()}
-  ${resp} =           Get Request   restapi     /api/events
+  ${resp} =           GET On Session   restapi     /api/examinations
   RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.status_code}         200
   Should Be Empty     ${resp.json()}
-  ${resp} =           Get Request   restapi     /api/invoices
+  ${resp} =           GET On Session   restapi     /api/events
+  RequestsLogger.Write log       ${resp}
+  Should Be Equal As Strings     ${resp.status_code}         200
+  Should Be Empty     ${resp.json()}
+  ${resp} =           GET On Session   restapi     /api/invoices
   RequestsLogger.Write log       ${resp}
   ${length} =         Get Length           ${resp.json()}
   Should Be Equal As Integers       ${length}     1
-  ${resp} =           Get Request   restapi     /api/patient-documents?patient=1
+  ${resp} =           GET On Session   restapi     /api/patient-documents?patient\=1   expected_status=400
   RequestsLogger.Write log       ${resp}
-  ${length} =         Get Length    ${resp.json()}
-  Should Be Equal As Integers       ${length}     0
 

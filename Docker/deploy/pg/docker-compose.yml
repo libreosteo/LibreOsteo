@@ -2,20 +2,24 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: libreosteo-pg
+    hostname: pg_1
     volumes:
-      - ./volumes/libreosteo-db-storage:/var/lib/postgresql/data
+      - ${LIBREOSTEO_DB_STORAGE}:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
+      - ${LIBREOSTEO_BAK_STORAGE}:/var/lib/backup
+    environment:
+      - POSTGRES_USER=libreosteo
+      - POSTGRES_PASSWORD=libreosteo
+      - POSTGRES_DB=libreosteo
   libreosteo:
-    image: littlejo/libreosteo-0.5
+    image: libreosteo-http
+    hostname: libreosteo_1
     ports:
       - "8085:8085"
     depends_on:
       - db
-    environment:
-      sql_type: postgres
-      sql_name: postgres
-      sql_host: db
-      sql_port: 5432
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ${DATA}:/Libreosteo/data
+      - ${SETTINGS}:/Libreosteo/settings

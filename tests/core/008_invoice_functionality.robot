@@ -119,7 +119,7 @@ Ensure That Event Is Created
    [Arguments]                     ${session_id}    ${value}
   ${session_cookie}               Create Dictionary   sessionid=${session_id}
   Login REST with                 test        ${session_cookie}
-  ${resp} =                       Get Request   restapi     /api/events
+  ${resp} =                       GET On Session   restapi     /api/events
   RequestsLogger.Write log        ${resp}
   Should Be Equal As Strings      ${resp.status_code}         200
   ${last_event}=                  Set Variable  ${resp.json()[0]}

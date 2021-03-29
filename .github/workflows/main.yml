@@ -1,0 +1,71 @@
+name: Libreosteo Continuous Integration
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Tooling
+        run: |
+          export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
+          wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
+          tar -xjf /tmp/firefox-latest.tar.bz2
+          curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
+          wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
+          tar -xvf /tmp/geckodriver.tar.gz
+          sudo locale-gen fr_FR
+          sudo locale-gen fr_FR.UTF-8
+          sudo update-locale
+          sudo apt install gettext
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/requirements.txt
+          pip install -r requirements/requ-testing.txt
+          $HOME/.yarn/bin/yarn
+          python ./manage.py collectstatic --no-input
+          python ./manage.py compilejsi18n
+      - name: Run unit tests
+        run: |
+          echo 'Execute Unit tests'
+          python ./manage.py test
+      - name: Run functional tests
+        run: |
+          echo 'Execute functional tests'
+          export PATH=$PWD/firefox:$PATH:$PWD
+          which geckodriver
+          which firefox
+          python ./server.py &
+          xvfb-run --server-args="-screen 0 1024x768x24" robot -P . tests
+      - name: Archiving results
+        uses: actions/upload-artifact@v2
+        if: ${{ always() }}
+        with:
+          name: result-tests-${{matrix.python-version}}
+          path: |
+            log.html
+            report.html
+            output.xml
+            selenium-screenshot-*.png
+      - name: Translations state
+        run: |
+          echo 'Translations status'
+          python ./manage.py makemessages -d django --no-location ; python ./manage.py makemessages --no-location -d djangojs ; git diff --exit-code -G'^[^"]'
+      - name: Model migration status
+        run: |
+          echo "Model migration status"
+          python ./manage.py makemigrations --check
+

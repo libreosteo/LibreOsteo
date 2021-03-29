@@ -1,19 +1,19 @@
 
 /**
-    This file is part of Libreosteo.
+    This file is part of LibreOsteo.
 
-    Libreosteo is free software: you can redistribute it and/or modify
+    LibreOsteo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    Libreosteo is distributed in the hope that it will be useful,
+    LibreOsteo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Libreosteo.  If not, see <http://www.gnu.org/licenses/>.
+    along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 */
 var timeline = angular.module('loTimeline', ['loExamination']);
 
@@ -37,7 +37,7 @@ timeline.directive('timeline', function()
             if ($scope.currentExamination.id == null)
             {
               ExaminationServ.get({examinationId : examinationId}, function(data){
-                  $scope.archiveExamination.data = data;
+                  $scope.archiveExamination.data = loadExamination(data);
                   loEditFormManager.available = true;
 
               });
@@ -46,9 +46,9 @@ timeline.directive('timeline', function()
               $scope.currentExaminationManager();
             } else {
               ExaminationServ.get({examinationId : examinationId}, function(data){
-                  $scope.archiveExamination.data = data;
-                  loEditFormManager.available = true;
-                });
+                $scope.archiveExamination.data = loadExamination(data);
+                loEditFormManager.available = true;
+              });
             }
           }  ;
 
@@ -56,7 +56,7 @@ timeline.directive('timeline', function()
             if ($scope.currentExamination.id == null || $scope.currentExamination.id != examinationId) {
               var panelComment = $(event.target).parents(".timeline-footer").next(".timeline-panel-footer");
 
-              ExaminationCommentServ.query({examinationId : examinationId}, function(data){  
+              ExaminationCommentServ.query({examinationId : examinationId}, function(data){
                 panelComment.toggleClass('hidden');
                 var examination = $scope.examinations.find(function(element, index, array)
                   {
@@ -86,6 +86,10 @@ timeline.directive('timeline', function()
               examination.comments_list.unshift(result);
               examination.comments = examination.comments_list.length;
            });
+          }
+
+          $scope.getTime = function(lDate) {
+            return lDate.getTime();
           }
         },
         templateUrl: 'web-view/partials/examinations-timeline'

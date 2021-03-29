@@ -55,6 +55,9 @@
 
 		<div id="invoice-number">
 			<p> Facture {{invoice.number}}</p>
+      {% if invoice.replace is not None %}
+      <p>Annule et remplace la facture {{invoice.replace}}</p>
+      {% endif %}
 		</div>
 
 

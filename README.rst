@@ -2,12 +2,12 @@
  LibreOsteo
 ============
 
-.. image:: https://github.com/libreosteo/LibreOsteo/actions/workflows/main.yml/badge.svg?branch=develop
+.. image:: https://github.com/libreosteo/LibreOsteo/actions/workflows/main.yml/badge.svg?branch=master
    :alt: ci-status-develop
 
-© Jean-Baptiste Gury 2014-2020
+© Jean-Baptiste Gury 2014-2021
 
-© The LibreOsteo Development Team 2014-2020
+© The LibreOsteo Development Team 2014-2021
 
 *LibreOsteo*
 

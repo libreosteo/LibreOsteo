@@ -21,7 +21,7 @@ build-postgres:
 	docker build -f Docker/build/postgresql/Dockerfile . -t $(REPOSITORY)/$(APP)-pg:${TAG}
 
 run:
-	docker run -d --rm --name $(APP)_app -p $(HOST_PORT):$(GUEST_PORT) --mount source=libreosteo-data,target=/data --mount source=libreosteo-settings,target=/settings $(REPOSITORY)/$(APP)-http:$(TAG)
+	docker run -d --rm --name $(APP)_app -p $(HOST_PORT):$(GUEST_PORT) --mount source=libreosteo-data,target=/Libreosteo/data --mount source=libreosteo-settings,target=/Libreosteo/settings $(REPOSITORY)/$(APP)-http:$(TAG)
 
 run-pg:
 	docker-compose --env-file=.env -f Docker/deploy/pg/docker-compose.yml up

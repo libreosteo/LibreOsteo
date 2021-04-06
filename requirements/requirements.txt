@@ -1,4 +1,4 @@
-Django==2.2
+Django==2.2.18
 Whoosh==2.7.4
 argparse==1.2.1
 django-filter==2.3.0
@@ -13,4 +13,4 @@ netifaces
 decorator
 packaging
 django-protected-media
-django-statici18n
+django-statici18n>=2.0

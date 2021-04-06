@@ -698,8 +698,12 @@ class DbDump(PermissionRequiredMixin, View):
                                 content_type="application/binary")
         response['Content-Disposition'] = 'attachment; filename=%s-%s' % (
             timezone.now().isoformat(), DUMP_FILE)
-        full_db_download(request.user)
+        if not self._api_backup():
+            full_db_download(request.user)
         return response
+
+    def _api_backup(self):
+        return False
 
 
 class RebuildIndex(StaffRequiredMixin, View):

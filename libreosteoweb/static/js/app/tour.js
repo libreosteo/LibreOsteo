@@ -84,8 +84,8 @@ function stepOfficeSettings() {
 
 function defineSteps() {
   stepUserProfile().then(stepOfficeSettings).then(function () {
-    tour.init();
-    if (tour.getStep(0)) {
+    if (tour._options.steps.length > 0) {
+      tour.init();
       tour.start(true);
     }
   });

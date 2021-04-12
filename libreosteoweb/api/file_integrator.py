@@ -400,7 +400,7 @@ class FilePatientFactory(object):
                 'medical_history': row[20],
                 'family_history': row[21],
                 'trauma_history': row[22],
-                'medical_report': row[23],
+                'medical_reports': row[23],
                 'creation_date': self.get_default_date(),
             }
             serializer = self.serializer_class(data=data)

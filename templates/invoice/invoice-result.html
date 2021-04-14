@@ -3,7 +3,7 @@
 {% load invoice_extras %}
 <html>
 <head>
-	<title>Invoice</title>
+  <title>{{invoice.date | date:"Y-m-d"}}-{{invoice.number}}</title>
 	<link rel="stylesheet" href="{{ STATIC_URL }}css/invoice-style.css" type="text/css">
 	<link rel="stylesheet" href="{{ STATIC_URL}}/font-awesome/css/font-awesome.min.css">
 

@@ -15,6 +15,7 @@ Changelog for LibreOsteo
 - Fix trouble in the browser console (error on the home page)
 - Fix import database on Windows platform
 - Fix registering user with bad character
+- Add title on Invoice document for easy saving file
 
 
 0.6.0 (2019-10-16)

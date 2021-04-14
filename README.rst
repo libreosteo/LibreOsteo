@@ -87,6 +87,49 @@ Point your browser on : http://localhost:8000/ it will guide you towards creatin
 
 Have fun !
 
+With Docker
+===========
+
+- Copy this repository in your local environment.
+- Ensure you have docker installed on your machine ::
+
+    make build
+    make run
+
+Point your browser on : http://localhost:8085/ it will guide you towards creating the first admin user.
+
+- To use PostgreSQL with your Docker container, you have to define into your .env file these values ::
+
+    LIBREOSTEO_DB_STORAGE=volumes/libreosteo-db-storage
+    DATA=volumes/data
+    SETTINGS=settings
+    LIBREOSTEO_BAK_STORAGE=volumes/libreosteo-backup
+    POSTGRES_USER=libreosteo
+    POSTGRES_PASSWORD=libreosteo
+
+Then ::
+
+    make run-pg
+
+- LIBREOSTEO_DB_STORAGE define the postgresql storage
+- DATA define the volume where the data will be stored : index of the database and uploaded documents
+- SETTINGS define the directory which contains settings into __init__.py file
+- LIBREOSTEO_BAK_STORAGE define the volume where you can backup your database in PostgreSQL dump format.
+- POSTGRES_USER and POSTGRES_PASSWORD defines the credential required for your PostgreSQL database
+
+
+into your __init__.py file for settings you can have ::
+
+  DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'libreosteo',
+        'USER': 'PUT_YOUR_POSTGRES_USER_HERE',
+        'PASSWORD': 'PUT_YOUR_POSTGRES_PASSWORD_HERE',
+        'HOST': 'pg_1',
+        'PORT': '5432',
+    }
+  }
 
 Use it in production
 ====================

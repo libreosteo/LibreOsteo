@@ -11,6 +11,11 @@ Changelog for LibreOsteo
 - Add support to generate corrective invoice instead of credit not when canceling invoice
 - Add permission to download full data
 - Add CLI to allow to backup data
+- Fix issue to export/import medical reports from csv
+- Fix trouble in the browser console (error on the home page)
+- Fix import database on Windows platform
+- Fix registering user with bad character
+- Add title on Invoice document for easy saving file
 
 
 0.6.0 (2019-10-16)

@@ -9,8 +9,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ${LIBREOSTEO_BAK_STORAGE}:/var/lib/backup
     environment:
-      - POSTGRES_USER=libreosteo
-      - POSTGRES_PASSWORD=libreosteo
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=libreosteo
   libreosteo:
     image: libreosteo-http

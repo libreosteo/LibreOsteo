@@ -402,6 +402,7 @@ class FilePatientFactory(object):
                 'trauma_history': row[22],
                 'medical_reports': row[23],
                 'creation_date': self.get_default_date(),
+                'consent_check': False
             }
             serializer = self.serializer_class(data=data)
         except ValueError as e:

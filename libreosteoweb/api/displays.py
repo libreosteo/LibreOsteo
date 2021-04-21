@@ -15,7 +15,7 @@
 from django.shortcuts import render
 from django.forms.models import ModelForm
 from libreosteoweb import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.conf import settings
 import libreosteoweb
 from .permissions import maintenance_available
@@ -35,7 +35,7 @@ def filter_fields(f):
 
 class GenericDisplay(ModelForm):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
 
     def display_fields(self):
@@ -65,7 +65,7 @@ class ExaminationDisplay(GenericDisplay):
 
 class UserDisplay(GenericDisplay):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
 
 

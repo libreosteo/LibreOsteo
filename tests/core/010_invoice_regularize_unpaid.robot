@@ -36,6 +36,7 @@ Regularize Invoice
   [Arguments]       ${examination_id}     ${paiment_mean}
   Click Button      finishPaimentBtn
   Wait Until Element Is Visible         jquery:input[value=${paiment_mean}]
+  Wait For Condition                    return $("#amount").val() == '55'
   Click Element                         jquery:input[value=${paiment_mean}]
   Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')
   Click Button                          jquery:button[class~="btn-primary"]:contains('Valider')

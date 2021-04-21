@@ -25,10 +25,11 @@ Change Invoice Start Number
   [Documentation]   Edit the office settings to change the invoice start number
   ${COOKIE} =         Get Cookie      sessionid
   Edit Settings
-  Clear Element Text              invoice_start_sequence
-  Should Be Invalid               invoice_start_sequence
-  Input Text                      invoice_start_sequence         25000
-  Should Be Valid                 invoice_start_sequence
+  Sleep                           2s
+  Clear Element Text              id:invoice_start_sequence
+  Should Be Invalid               id:invoice_start_sequence
+  Input Text                      id:invoice_start_sequence         25000
+  Should Be Valid                 id:invoice_start_sequence
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                  25000
@@ -42,19 +43,20 @@ Change Invoice Start Number Before
   [Documentation]   Edit the office settings to change the invoice start number on a number before an existing invoice
   ${COOKIE} =         Get Cookie      sessionid
   Edit Settings
-  Clear Element Text              invoice_start_sequence
-  Should Be Invalid               invoice_start_sequence
-  Input Text                      invoice_start_sequence         15000
-  Should Be Invalid               invoice_start_sequence
-  Input Text                      invoice_start_sequence         25500
-  Should Be Valid                 invoice_start_sequence
+  Sleep                           2s
+  Clear Element Text              id:invoice_start_sequence
+  Should Be Invalid               id:invoice_start_sequence
+  Input Text                      id:invoice_start_sequence         15000
+  Should Be Invalid               id:invoice_start_sequence
+  Input Text                      id:invoice_start_sequence         25500
+  Should Be Valid                 id:invoice_start_sequence
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                25500
-  Input Text                      invoice_start_sequence         25000
-  Should Be Invalid               invoice_start_sequence
-  Input Text                      invoice_start_sequence         25001
-  Should Be Valid                 invoice_start_sequence
+  Input Text                      id:invoice_start_sequence         25000
+  Should Be Invalid               id:invoice_start_sequence
+  Input Text                      id:invoice_start_sequence         25001
+  Should Be Valid                 id:invoice_start_sequence
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                25001
@@ -63,10 +65,11 @@ Change Invoice Start Number Before
 Change Invoice Start Number With Text
   [Documentation]   Edit the office settings to change the invoice start number on a number before an existing invoice
   Edit Settings
-  Clear Element Text              invoice_start_sequence
-  Should Be Invalid               invoice_start_sequence
-  Input Text                      invoice_start_sequence        FACT00001
-  Should Be Invalid               invoice_start_sequence
+  Sleep                           2s
+  Clear Element Text              id:invoice_start_sequence
+  Should Be Invalid               id:invoice_start_sequence
+  Input Text                      id:invoice_start_sequence        FACT00001
+  Should Be Invalid               id:invoice_start_sequence
   Apply Settings
   Element Should Be Visible       jquery:div.growl-item.alert.alert-danger
 
@@ -106,10 +109,12 @@ Should Be Valid
 
 Should Have Class
   [Arguments]                     ${element_locator}    ${class_on_element}
-  Wait For Condition              return $(${element_locator}).attr('class').split(' ').indexOf('ng-animate') == -1
+  Sleep                           2s
   ${class_on_input}=              Get Element Attribute       ${element_locator}      class
   ${class_list_on_input}=         Evaluate                    $class_on_input.split(' ')
-  Should Contain                  ${class_list_on_input}           ${class_on_element}
+  ${status}     ${value}=         Run Keyword And Ignore Error      Should Contain                  ${class_list_on_input}           ${class_on_element}
+  Run Keyword Unless              '${status}' == 'PASS'         Capture Page Screenshot
+
 
 Apply Settings
   Click Button                    jquery:button.btn.btn-primary

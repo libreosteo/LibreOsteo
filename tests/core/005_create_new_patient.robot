@@ -101,6 +101,7 @@ Create Patient Duplicate
   Input Text                      jquery:input.dd               ${BIRTH_DAY}
   Input Text                      jquery:input.mm               ${BIRTH_MONTH}
   Input Text                      jquery:input.yy               ${BIRTH_YEAR}
+  Select Checkbox                 consent
   Wait Until Element Is Enabled   jquery:button.btn.btn-primary
   Click Button                    jquery:button.btn.btn-primary
   Wait Until Element Is Enabled   jquery:div.growl-item
@@ -130,6 +131,7 @@ Check Rest Patient
   Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique
   Should Be True                  ${resp.json()['smoker']}
   Should Be Equal As Strings      ${resp.json()['laterality']}            L
+  Should Be True                  ${resp.json()['consent_check']}
 
 Check Rest Patient Documents
   [Arguments]     ${session_token}

@@ -415,4 +415,12 @@ input.ng-invalid:focus {
 .editable-error {
   font-size: small;
 }
+.request_consent {
+  margin: auto;
+  width: 40%;
+}
 
+.consent_refused {
+  height: 5em;
+  width: 75%;
+}

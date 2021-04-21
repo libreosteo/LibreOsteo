@@ -32,7 +32,6 @@ from haystack.query import SearchQuerySet
 from haystack.views import SearchView
 from django.contrib.auth import get_user_model, REDIRECT_FIELD_NAME
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files import File
@@ -86,7 +85,7 @@ class CreateAdminAccountView(TemplateView):
         """
         Displays the login form and handles the login action.
         """
-        if len(User.objects.filter(is_staff__exact=True)) > 0:
+        if len(get_user_model().objects.filter(is_staff__exact=True)) > 0:
             raise Http404
         self.redirect_to = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
@@ -129,7 +128,7 @@ class InstallView(TemplateView):
         """
         Displays the install status and handle the action on install.
         """
-        if len(User.objects.filter(is_staff__exact=True)) > 0:
+        if len(get_user_model().objects.filter(is_staff__exact=True)) > 0:
             return HttpResponseForbidden()
         self.redirect_field_name = request.POST.get(
             REDIRECT_FIELD_NAME, request.GET.get(REDIRECT_FIELD_NAME, ''))
@@ -137,7 +136,7 @@ class InstallView(TemplateView):
                      self).render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        if len(User.objects.filter(is_staff__exact=True)) > 0:
+        if len(get_user_model().objects.filter(is_staff__exact=True)) > 0:
             return HttpResponseForbidden()
         return super(TemplateView,
                      self).render_to_response(self.get_context_data())
@@ -359,14 +358,14 @@ class ExaminationViewSet(viewsets.ModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    model = User
+    model = get_user_model()
     serializer_class = apiserializers.UserInfoSerializer
     permission_classes = [IsStaffOrTargetUser]
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
 
 
 class UserOfficeViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = apiserializers.UserOfficeSerializer
     permission_classes = [IsStaffOrReadOnlyTargetUser]
 

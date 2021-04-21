@@ -51,6 +51,12 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
         params: {
           patientId: 'patientId'
         }
+      },
+      save_partial : {
+        method: 'PATCH',
+        params: {
+          patientId: 'patientId'
+        }
       }
     });
 
@@ -726,6 +732,26 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         });
       });
     };
+
+    $scope.consent_confirmed = function() {
+      PatientServ.save_partial(
+        {
+          patientId: $scope.patient.id
+        }, { consent_check: true }, function(data) {
+          $scope.patient.consent = new Date(data.consent);
+          $scope.patient.consent_check = data.consent_check;
+        }, function(error) {
+        // Should display the error
+        if (error.data.detail) {
+          growl.addErrorMessage(error.data.detail);
+        } else {
+          growl.addErrorMessage(formatGrowlError(error.data), {
+            enableHtml: true
+          });
+        }
+
+        });
+    }
   }
 ]);
 

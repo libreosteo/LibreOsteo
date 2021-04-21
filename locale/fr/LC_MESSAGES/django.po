@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LibreOsteo 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-25 14:10+0100\n"
+"POT-Creation-Date: 2021-04-19 18:38+0200\n"
 "PO-Revision-Date: 2021-03-18 17:02+0100\n"
 "Last-Translator: GURY <jeanbaptiste.gury@gmail.com>\n"
 "Language-Team: France <jeanbaptiste.gury@gmail.com>\n"
@@ -71,6 +71,9 @@ msgstr "La date de naissance est invalide"
 msgid "Birth date"
 msgstr "Date de naissance"
 
+msgid "Consent"
+msgstr "Consentement"
+
 msgid "This patient already exists"
 msgstr "Ce patient existe déjà"
 
@@ -121,6 +124,9 @@ msgstr "Ville"
 
 msgid "Original name"
 msgstr "Nom de naissance"
+
+msgid "Date of consent"
+msgstr "Date du consentement"
 
 msgid "Street"
 msgstr "Rue"
@@ -560,6 +566,13 @@ msgstr "Restaurer la base de données"
 msgid "Register the administrator"
 msgstr "Enregistrer l'administrateur"
 
+msgid ""
+"Patient gives its consent to handle its personnal information in order to "
+"perform the good osteopathic care."
+msgstr ""
+"Le patient donne son consentement pour l'enregistrement de données personnelles afin "
+"de réaliser le bon traitement ostéopathique."
+
 msgid "Init the patient file"
 msgstr "Initialiser la fiche patient"
 
@@ -921,11 +934,66 @@ msgstr "Par jour"
 msgid "All"
 msgstr "Tout"
 
+msgid ""
+"This patient didn't give its consent to handle data in an information "
+"technology system."
+msgstr ""
+"Ce patient n'a pas donné son consentement à l'utilisation des données dans un système "
+"d'information."
+
+msgid ""
+"Please inform about data that you use : specially phone number and email, "
+"and request for consentment."
+msgstr ""
+"Veuillez l'informer sur les données que vous utilisez: en particulier téléphone et email,"
+" et veuillez demander son consentement."
+
+msgid "Otherwise you have to delete this folder or these data"
+msgstr ""
+"Autrement vous devez supprimer ce dossier ou ces données"
+
+msgid "Get consent"
+msgstr "Obtenir le consentement"
+
+msgid ""
+"In accordance with GDPR law, you have to request consent of your patient in "
+"order to store personal information"
+msgstr ""
+"En accord avec la loi RGPD, vous devez obtenir le consentement de votre patient "
+"pour enregistrer les données personnelles"
+
+msgid ""
+"Inform your patient, that personal information are required for the "
+"osteopathic treatment"
+msgstr ""
+"Informez votre patient que des données personnelles sont nécessaires pour le "
+" traitement ostéopathique."
+
+msgid ""
+"For email or phone, please indicates to the patient what is the usage for"
+msgstr ""
+"Pour l'email ou le téléphone, merci de préciser au patient l'usage que vous en ferez"
+
+msgid "Does the patient give you its consent ?"
+msgstr "Est-ce que le patient donne son consentement ?"
+
+msgid "Accept"
+msgstr "Accepter"
+
+msgid "Refuse"
+msgstr "Refuser"
+
+msgid "You have to delete this folder"
+msgstr "Vous devez supprimer ce dossier"
+
 msgid "General infos"
 msgstr "Infos générales"
 
 msgid "Patient infos"
 msgstr "Infos patient"
+
+msgid "Consent given on "
+msgstr "Consentement donné le "
 
 msgid "History"
 msgstr "Antécédents"

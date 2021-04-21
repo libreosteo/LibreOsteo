@@ -12,9 +12,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
-from rest_framework import serializers, validators
+from rest_framework import serializers
 from libreosteoweb.models import *
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from django.utils import timezone
@@ -50,6 +50,7 @@ class PatientSerializer(serializers.ModelSerializer):
     current_user_operation = None
     birth_date = serializers.DateField(label=_('Birth date'),
                                        validators=[check_birth_date])
+    consent_check = serializers.BooleanField(label=_('Consent'), default=False)
 
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
@@ -59,6 +60,23 @@ class PatientSerializer(serializers.ModelSerializer):
 
     def validate_original_name(self, value):
         return get_name_filters().filter(value)
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['consent_check'] = bool(ret['consent'])
+        return ret
+
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        if data['consent_check'] and not 'id' in data:
+            ret['consent'] = timezone.now().date()
+        else:
+            if self.instance:
+                ret['consent'] = self.instance.consent
+            else:
+                ret['consent'] = None
+        ret.pop('consent_check')
+        return ret
 
     class Meta:
         model = Patient
@@ -88,7 +106,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
         return get_name_filters().filter(value)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('username', 'email', 'first_name', 'last_name')
 
 
@@ -365,7 +383,7 @@ class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
         return get_name_filters().filter(value)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('id', 'username', 'first_name', 'last_name', 'is_staff',
                   'is_active')
 
@@ -435,22 +453,6 @@ class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
         document_data['document_file'] = get_demonstration_file()
         patient = validated_data.pop("patient")
         document = Document.objects.create(internal_date=timezone.now(),
-                                           **document_data)
-        document.clean()
-        document.save()
-        patient_doc = PatientDocument.objects.create(patient=patient,
-                                                     document=document,
-                                                     **validated_data)
-        return patient_doc
-
-
-class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
-    def create(self, validated_data):
-        document_data = validated_data.pop('document')
-        document_data['user'] = validated_data.pop('user')
-        document_data['document_file'] = get_demonstration_file()
-        patient = validated_data.pop("patient")
-        document = Document.objects.create(internal_date=datetime.today(),
                                            **document_data)
         document.clean()
         document.save()

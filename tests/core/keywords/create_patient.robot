@@ -9,6 +9,7 @@ Create Patient
   Input Text                      jquery:input.dd               ${BIRTH_DAY}
   Input Text                      jquery:input.mm               ${BIRTH_MONTH}
   Input Text                      jquery:input.yy               ${BIRTH_YEAR}
+  Select Checkbox                 consent
   Wait Until Element Is Enabled   jquery:button.btn.btn-primary
   Click Button                    jquery:button.btn.btn-primary
   Wait Until Element Contains     jquery:h1.page-header         ${LAST_NAME}

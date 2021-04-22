@@ -18,7 +18,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from libreosteoweb.models import Patient, Examination, TherapeutSettings, OfficeSettings, Invoice
 from libreosteoweb.api.views import ExaminationViewSet, PatientViewSet
 from datetime import datetime
@@ -36,8 +36,8 @@ class TestDeletePatient(APITestCase):
                              (receiver_newpatient, Patient)]
         with block_disconnect_all_signal(signal=signals.post_save,
                                          receivers_senders=receivers_senders):
-            self.user = User.objects.create_superuser("test", "test@test.com",
-                                                      "testpw")
+            self.user = get_user_model().objects.create_superuser(
+                "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(adeli="12345",
                                              siret="12345",
                                              user=self.user)

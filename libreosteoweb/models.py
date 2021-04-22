@@ -12,8 +12,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from datetime import date
 from django.utils import timezone
@@ -55,6 +55,7 @@ class Patient(models.Model):
                                      blank=True)
     first_name = models.CharField(_('Firstname'), max_length=200, blank=True)
     birth_date = models.DateField(_('Birth date'))
+    consent = models.DateField(_('Date of consent'), null=True, blank=False)
     address_street = models.CharField(_('Street'), max_length=500, blank=True)
     address_complement = models.CharField(_('Address complement'),
                                           max_length=500,
@@ -184,7 +185,7 @@ class Examination(models.Model):
     patient = models.ForeignKey(Patient,
                                 verbose_name=_('Patient'),
                                 on_delete=models.PROTECT)
-    therapeut = models.ForeignKey(User,
+    therapeut = models.ForeignKey(settings.AUTH_USER_MODEL,
                                   verbose_name=_('Therapeut'),
                                   blank=True,
                                   null=True,
@@ -270,7 +271,7 @@ InvoiceStatus = enum('InvoiceStatus', 'DRAFT', 'WAITING_FOR_PAIEMENT',
 class ExaminationComment(models.Model):
     """This class represents a comment on examination
     """
-    user = models.ForeignKey(User,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              verbose_name=_('User'),
                              blank=True,
                              null=True,
@@ -406,7 +407,7 @@ class OfficeEvent(models.Model):
     type = models.SmallIntegerField(_('Type'))
     comment = models.TextField(_('Comment'), blank=True)
     reference = models.IntegerField(_('Reference'), blank=True, null=False)
-    user = models.ForeignKey(User,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              verbose_name=_('user'),
                              blank=True,
                              null=False,
@@ -469,7 +470,7 @@ class TherapeutSettings(models.Model):
     """
     adeli = models.TextField(_('Adeli'), blank=True)
     quality = models.TextField(_('Quality'), blank=True)
-    user = models.OneToOneField(User,
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 verbose_name=_('User'),
                                 blank=True,
                                 null=True,
@@ -574,7 +575,7 @@ class Document(models.Model):
                                      blank=True,
                                      null=True,
                                      default=None)
-    user = models.ForeignKey(User,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              verbose_name=_('User'),
                              blank=True,
                              null=True,
@@ -625,7 +626,7 @@ class PatientDocument(models.Model):
 
 
 class LoggedInUser(models.Model):
-    user = models.OneToOneField(User,
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE,
                                 related_name='logged_in_user')
     session_key = models.CharField(max_length=32, null=True, blank=True)

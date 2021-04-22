@@ -1,4 +1,19 @@
 {% load i18n %}
+<div ng-if="!patient.consent_check" class="alert alert-warning" role="alert">
+  <p>{% trans "This patient didn't give its consent to handle data in an information technology system." %}</p>
+  <p>{% trans "Please inform about data that you use : specially phone number and email, and request for consentment." %}</p>
+  <p>{% trans "Otherwise you have to delete this folder or these data" %}</p>
+  <button type="button" class="btn btn-primary" ng-click="unfold_get_consent=true">{% trans 'Get consent' %}</button>
+  <div ng-show="unfold_get_consent" class="request_consent">
+    <p>{% trans 'In accordance with GDPR law, you have to request consent of your patient in order to store personal information'%}</p>
+    <p>{% trans 'Inform your patient, that personal information are required for the osteopathic treatment'%}</p>
+    <p>{% trans 'For email or phone, please indicates to the patient what is the usage for'%}</p>
+    <p>{% trans 'Does the patient give you its consent ?'%}</p>
+    <button type="button" class="btn btn-success" ng-click="consent_confirmed()">{% trans 'Accept' %}</button>
+    <button type="button" class="btn btn-danger" ng-click="consent_refused = true">{% trans 'Refuse' %}</button>
+  </div>
+  <div ng-if="consent_refused" class="alert alert-danger center-block" role="alert">{% trans 'You have to delete this folder' %}</div>
+</div>
 <h1 class="page-header">
     <span editable-text="patient.family_name" onaftersave="savePatient()">{$ patient.family_name $}</span>
     <span ng-show="patient.original_name || form.patientForm.$visible">(<span blur="submit" e-name="original_name" e-placeholder="{{ patient.original_name }}" e-form="originalNameInput" buttons="no" editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
@@ -16,6 +31,7 @@
             <div class="panel panel-info">
                 <div class="panel-heading">
                     {% trans 'Patient infos' %}
+                    <span class="pull-right" ng-if="patient.consent_check">{% trans 'Consent given on '%}{$ patient.consent | date:"dd/MM/yyyy" $}</span>
                 </div>
                 <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
                     <div class="row">

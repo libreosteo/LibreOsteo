@@ -16,6 +16,7 @@ Changelog for LibreOsteo
 - Fix import database on Windows platform
 - Fix registering user with bad character
 - Add title on Invoice document for easy saving file
+- Add support for storing consent track on patient
 
 
 0.6.0 (2019-10-16)

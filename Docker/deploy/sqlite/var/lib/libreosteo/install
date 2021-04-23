@@ -6,10 +6,8 @@ function install {
     check_install_all
 
     lo_rank_dir=$LO_DIR/$rank
-    lo_media_dir=$lo_rank_dir/media
-    lo_sql_dir=$lo_rank_dir/sql
 
-    mkdir -p $lo_media_dir $lo_sql_dir
+    mkdir -p $lo_rank_dir
     cat > $lo_rank_dir/docker-compose.yml << EOM
 version: '3'
 
@@ -19,8 +17,7 @@ services:
     ports:
       - "$port:8085"
     volumes:
-      - ./media:/Libreosteo/media
-      - ./sql:/Libreosteo/sql
+      - ./data:/Libreosteo/data
       - /etc/localtime:/etc/localtime:ro
     restart: always
 EOM

@@ -5,18 +5,12 @@ function backup {
     check_rm_rank_lo
     backup_dir=$BACKUP_DIR/$rank
     temporary_dir=$backup_dir/tmp
-    backup_file=$backup_dir/libreosteo-$(date +%Y-%m-%d-%H%M%S).db
+    backup_file=libreosteo-$(date +%Y-%m-%d-%H%M%S).db
     lo_rank_dir=$LO_DIR/$rank
-    backup_cmd='python manage.py dumpdata -e contenttypes -e admin -e auth.Permission -o sql/dump.json'
-
-    mkdir -p $temporary_dir/documents
+    backup_cmd="python3 manage.py backup_db /Libreosteo/data/${backup_file}"
 
     cd $lo_rank_dir
     docker-compose exec libreosteo $backup_cmd
-    mv sql/dump.json $temporary_dir
-    cp media/documents/* $temporary_dir/documents/
-    cd $temporary_dir
-    zip -r $backup_file .
-    rm -rf $temporary_dir
+    mv ${lo_rank_dir}/data/${backup_file} ${backup_dir}/${backup_file}
 }
 

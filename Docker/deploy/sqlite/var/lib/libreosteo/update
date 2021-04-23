@@ -4,8 +4,7 @@ function update {
     check_remove_all
 
     lo_rank_dir=$LO_DIR/$rank
-    lo_media_dir=$lo_rank_dir/media
-    lo_sql_dir=$lo_rank_dir/sql
+    lo_data_dir=$lo_rank_dir/data
 
     cd $lo_rank_dir && docker-compose pull
 }

@@ -12,6 +12,7 @@ VOLUME /Libreosteo/settings
 VOLUME /Libreosteo/node_modules
 
 # Install dependancies
+WORKDIR /Libreosteo
 RUN apk add --no-cache \
     tzdata \
     gettext \
@@ -23,11 +24,11 @@ RUN apk add --no-cache \
     linux-headers\
     curl\
     bash\
-    git\
-    nodejs-npm && npm install fs path
+    git \
+    nodejs \
+    npm && npm install fs path
 RUN curl -o - -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
 
-WORKDIR /Libreosteo
 
 COPY ./requirements ./requirements
 COPY ./package.json .

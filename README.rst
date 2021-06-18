@@ -79,6 +79,10 @@ Fetch the french postcodes for zipcode completion ::
 
    ./venv/bin/python manage.py import_zipcodes
 
+Compile the translations for the web UI ::
+
+   ./venv/bin/python manage.py compilejsi18n
+
 Now you can start the server with ::
 
     ./venv/bin/python manage.py runserver

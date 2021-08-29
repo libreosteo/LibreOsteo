@@ -18,22 +18,19 @@ class Command(BaseCommand):
         group.add_argument(
             '--json-url',
             default=DEFAULT_JSON_URL,
-            help=
-            "Must follow the format of this data : https://www.data.gouv.fr/en/datasets/codes-postaux/",
+            help="Must follow the format of this data : https://www.data.gouv.fr/en/datasets/codes-postaux/",
         )
         group.add_argument(
             '--json-file',
             default=None,
-            help=
-            "Must follow the format of this data : https://www.data.gouv.fr/en/datasets/codes-postaux/",
+            help="Must follow the format of this data : https://www.data.gouv.fr/en/datasets/codes-postaux/",
         )
 
         parser.add_argument(
             '--download-only',
             action="store_true",
             default=False,
-            help=
-            "Download the default dataset from the list of zipcode for France")
+            help="Download the default dataset from the list of zipcode for France")
 
     def handle(self, json_url, json_file, **options):
         print('Fetching zipcodes for FRANCE from {}'.format(json_file
@@ -51,7 +48,8 @@ class Command(BaseCommand):
 
         else:
             try:
-                response = json.loads(urlopen(json_url).read().decode('utf-8'))
+                response = json.loads(
+                    urlopen(json_url, timeout=15).read().decode('utf-8'))
             except URLError:
                 raise CommandError('Cannot fetch {}'.format(json_url))
 

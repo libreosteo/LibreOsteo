@@ -72,7 +72,7 @@ RUN apk add --no-cache \
 
 EXPOSE 3031
 CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container \
-                                           && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container \
+                                           && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container || test 1=1\
                                            && cp -r /Libreosteo/static/. /var/application/static/. \
                                            && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container \
                                            && uwsgi --socket=:3031 --module Libreosteo.wsgi --master --processes 1 --threads 2 -H /Libreosteo/venv

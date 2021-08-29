@@ -70,4 +70,4 @@ RUN apk add --no-cache \
     && apk --purge del .build-deps
 
 EXPOSE 8085
-CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --http :8085 --module Libreosteo.wsgi --master --processes 1 --threads 2 --static-map /files=/Libreosteo/data/media --static-map /static=/Libreosteo/static -H /Libreosteo/venv
+CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container || test 1=1 && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --http :8085 --module Libreosteo.wsgi --master --processes 1 --threads 2 --static-map /files=/Libreosteo/data/media --static-map /static=/Libreosteo/static -H /Libreosteo/venv

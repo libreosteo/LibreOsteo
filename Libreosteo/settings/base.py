@@ -125,6 +125,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.template.context_processors.i18n',
             ],
+            'libraries': {
+                'compress' : 'compressor.templatetags.compress',
+                'statici18n': 'statici18n.templatetags.statici18n'
+                },
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',

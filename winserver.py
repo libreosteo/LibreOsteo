@@ -21,6 +21,9 @@ import sys
 import logging
 import os, os.path
 
+if sys.argv[0].endswith('.exe') or not sys.argv[0].endswith('.py'):
+    setattr(sys, 'frozen', True)
+
 if getattr(sys, 'frozen', False):
     # frozen
     dir = os.path.dirname(sys.executable)
@@ -38,15 +41,18 @@ import cherrypy
 import patch
 import server
 
+rootLogger = logging.getLogger(__name__)
 
 class LibreosteoService(win32serviceutil.ServiceFramework):
     """Libreosteo NT Service."""
 
     _svc_name_ = "LibreosteoService"
     _svc_display_name_ = "Libreosteo Service"
+    _exe_name_ = 'LibreOsteo.exe'
 
     def log(self, msg):
         servicemanager.LogInfoMsg(str(msg))
+        rootLogger.info(msg)
 
     def SvcDoRun(self):
         self.ReportServiceStatus(win32service.SERVICE_START_PENDING)
@@ -224,6 +230,7 @@ if __name__ == '__main__':
     else:
         logging.info("Start Controller")
         logging.info("Handle command line on service manager")
+        logging.info("Command = %s" % sys.argv)
         try:
             win32serviceutil.HandleCommandLine(LibreosteoService)
         except Exception as e:

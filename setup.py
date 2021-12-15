@@ -265,7 +265,7 @@ if sys.platform in ['win32']:
           ])
 
     # Create a web shorcut link
-    build_dir = glob.glob('build/exe.%s-%s' % (sys.platform, sys.winver[:3]))
+    build_dir = glob.glob('build/exe.%s-%s' % (get_platform_identifier(), sys.winver[:3]))
     for b in build_dir:
         shortlink = open(b + "/LibreOsteo.url", "w")
         shortlink.write("[InternetShortcut]\n")

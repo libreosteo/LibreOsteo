@@ -110,7 +110,7 @@ if sys.platform in ['win32']:
 
     def get_platform_identifier():
         platform_identifier = sys.platform
-        if [ os.environ['PROCESSOR_ARCHITECTURE'].lower() == 'amd64']:
+        if os.environ['PROCESSOR_ARCHITECTURE'].lower() == 'amd64':
             platform_identifier = 'win-%s' % os.environ['PROCESSOR_ARCHITECTURE'].lower()
         return platform_identifier
 
@@ -285,7 +285,7 @@ if sys.platform in ['win32']:
 
     ## Patch django migration loader
     from patch import patch_django_loader_pyc
-
+    print("Platform identifier : %s" % get_platform_identifier())
     patch_django_loader_pyc('build/exe.%s-%s/' % (get_platform_identifier(), sys.winver[:3]))
 
     # Restore file for jaraco

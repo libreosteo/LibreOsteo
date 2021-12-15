@@ -104,9 +104,16 @@ if sys.platform in ['win32']:
     def add_jaraco_files():
         import jaraco
         directory = os.path.join(jaraco.__path__[0], 'text')
-        zipf = zipfile.ZipFile('build/exe.%s-%s/lib/library.zip' % (sys.platform, sys.winver[0:3]), "a")
+        zipf = zipfile.ZipFile('build/exe.%s-%s/lib/library.zip' % (get_platform_identifier(), sys.winver[0:3]), "a")
         zipf.write(os.path.join(directory, 'Lorem ipsum.txt'), os.path.join('jaraco', 'text', 'Lorem ipsum.txt'))
         zipf.close()
+
+    def get_platform_identifier():
+        platform_identifier = sys.platform
+        if [ os.environ['PROCESSOR_ARCHITECTURE'].lower() == 'amd64']:
+            platform_identifier = 'win-%s' % os.environ['PROCESSOR_ARCHITECTURE'].lower()
+        return platform_identifier
+
 
     def compressor_path(t):
         (c, c1) = t
@@ -279,7 +286,7 @@ if sys.platform in ['win32']:
     ## Patch django migration loader
     from patch import patch_django_loader_pyc
 
-    patch_django_loader_pyc('build/exe.%s-%s/' % (sys.platform, sys.winver[:3]))
+    patch_django_loader_pyc('build/exe.%s-%s/' % (get_platform_identifier(), sys.winver[:3]))
 
     # Restore file for jaraco
     add_jaraco_files()

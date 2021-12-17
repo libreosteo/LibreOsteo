@@ -17,6 +17,7 @@ import webbrowser
 
 if __name__ == '__main__':
     addr = 'localhost'
-    webbrowser.open("http://%s:%s/" % (addr, server.SERVER_PORT),
+    server_config = server.configure()
+    webbrowser.open("http://%s:%s/" % (addr, server_config['server_port']),
                     new=2,
                     autoraise=True)

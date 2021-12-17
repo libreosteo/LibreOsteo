@@ -45,7 +45,7 @@ class Command(BaseCommand):
             return
         if json_file:
             try:
-                response = json.load(open(json_file))
+                response = json.load(open(json_file, encoding='utf-8'))
             except OSError:
                 raise CommandError('Cannot read {}'.format(json_file))
 

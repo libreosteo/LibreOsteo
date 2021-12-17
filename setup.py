@@ -308,7 +308,7 @@ if sys.platform in ['darwin']:
 
     APP = ['server.py']
 
-    DATA_FILES = ['static', 'locale', 'templates', 'media']
+    DATA_FILES = ['static', 'locale', 'templates']
 
     OPTIONS = {
         'argv_emulation':
@@ -320,6 +320,7 @@ if sys.platform in ['darwin']:
             "django",
             "Libreosteo",
             "libreosteoweb",
+            "zipcode_lookup",
             "rest_framework",
             "haystack",
             "sqlite3",
@@ -327,6 +328,7 @@ if sys.platform in ['darwin']:
             "email",
             "compressor",
             "django_filters",
+            "protected_media",
         ],
         'plist': {
             'LSBackgroundOnly': True,

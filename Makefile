@@ -1,4 +1,4 @@
-TAG := latest
+TAG :=  0.6.1
 HOST_PORT := 8085
 GUEST_PORT := 8085
 REPOSITORY := libreosteo

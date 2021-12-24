@@ -5,7 +5,7 @@ Changelog for LibreOsteo
 0.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix permission on therapeut settings when not admin.
 
 
 0.6.1 (2021-12-17)

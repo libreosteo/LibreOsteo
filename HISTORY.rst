@@ -6,6 +6,7 @@ Changelog for LibreOsteo
 ------------------
 
 - Fix permission on therapeut settings when not admin.
+- Fix restoring archive and foreign key issue with django_content_types
 
 
 0.6.1 (2021-12-17)

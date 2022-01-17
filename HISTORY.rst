@@ -2,7 +2,7 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.2 (unreleased)
+0.6.2 (2022-01-17)
 ------------------
 
 - Fix permission on therapeut settings when not admin.

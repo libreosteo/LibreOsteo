@@ -21,7 +21,7 @@ from django.urls import reverse
 import logging
 from django.utils.deprecation import MiddlewareMixin
 from libreosteoweb.models import OfficeSettings
-from django.utils.deprecation import MiddlewareMixin
+from django.utils.module_loading import import_string
 logger = logging.getLogger(__name__)
 
 
@@ -51,6 +51,20 @@ def get_exempts():
     if hasattr(settings, 'LOGIN_EXEMPT_URLS'):
         exempts += [compile(expr) for expr in settings.LOGIN_EXEMPT_URLS]
     return exempts
+
+
+def get_authenticator():
+    if hasattr(settings, "LIBREOSTEO_AUTHENTICATOR"):
+        authenticator = [auth for auth in settings.LIBREOSTEO_AUTHENTICATOR][0]
+        authenticator = import_string(authenticator)
+        return authenticator()
+    else:
+        return FakeDummyAuthenticator()
+
+
+class FakeDummyAuthenticator():
+    def authenticate(self, request):
+        pass
 
 
 class LoginRequiredMiddleware(MiddlewareMixin):
@@ -91,6 +105,15 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 logger.info("no redirect required")
                 return
 
+        if get_authenticator():
+            # Try to authenticate the request
+            try:
+                get_authenticator().authenticate(request)
+            except Exception as ex:
+                logger.error(
+                    "Request on %s, but authentication failed on authenticator"
+                    % request.path, str(ex))
+
         if not request.user.is_authenticated:
             logger.info("user not authenticated")
             path = request.path.lstrip('/')
@@ -100,8 +123,8 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 request.path = ''
             if not any(m.match(path) for m in get_exempts()):
                 logger.info(
-                    "query path %s, authentication required. redirect to authentication form"
-                    % path)
+                    "query path %s, authentication required. redirect to authentication form %s "
+                    % (path, get_login_url()))
                 return HttpResponseRedirect(get_login_url() + "?next=" +
                                             request.path)
         logger.info("user [%s] authenticated" % request.user)
@@ -172,11 +195,7 @@ class OneSessionPerUserMiddleware:
             # different from the current session, delete the stored_session_key
             # session_key with from the Session table
             if stored_session_key and stored_session_key != request.session.session_key:
-                try:
-                    Session.objects.get(
-                        session_key=stored_session_key).delete()
-                except:
-                    pass
+                Session.objects.get(session_key=stored_session_key).delete()
 
             request.user.logged_in_user.session_key = request.session.session_key
             request.user.logged_in_user.save()

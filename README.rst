@@ -91,8 +91,13 @@ Point your browser on : http://localhost:8000/ it will guide you towards creatin
 
 Have fun !
 
-With Docker
-===========
+Installation with Docker
+========================
+You can follow this `Wiki page <https://github.com/libreosteo/LibreOsteo/wiki/Installation-sous-GNU-Linux-avec-Docker>`_ in French
+
+
+Docker for testing only or with PostgreSQL
+==========================================
 
 - Copy this repository in your local environment.
 - Ensure you have docker installed on your machine ::

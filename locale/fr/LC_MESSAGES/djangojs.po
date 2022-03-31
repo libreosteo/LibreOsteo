@@ -84,7 +84,7 @@ msgid "June"
 msgstr "Juin"
 
 msgid "July"
-msgstr "Juin"
+msgstr "Juillet"
 
 msgid "August"
 msgstr "Août"

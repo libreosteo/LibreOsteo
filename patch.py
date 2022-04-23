@@ -21,31 +21,6 @@ import logging
 
 logger = logging.getLogger("patch")
 
-if getattr(sys, 'frozen', False):
-
-    from django.utils.translation.trans_real import DjangoTranslation
-    DATA_FOLDER = os.path.dirname(sys.executable)
-    from django.conf import settings
-
-    def new_init_translation_catalog(self):
-        """Creates a base catalog using global django translations."""
-        localedir = os.path.join(
-            os.path.join(os.path.join(DATA_FOLDER, 'django'), 'conf'),
-            'locale')
-        use_null_fallback = True
-        if self.language() == settings.LANGUAGE_CODE:
-            # default lang should be present and parseable, if not
-            # gettext will raise an IOError (refs #18192).
-            use_null_fallback = False
-        translation = self._new_gnu_trans(localedir, use_null_fallback)
-        self.plural = translation.plural
-        self._info = translation._info.copy()
-        self._catalog = translation._catalog.copy()
-
-    original_init_translation_catalog = DjangoTranslation._init_translation_catalog
-    DjangoTranslation._init_translation_catalog = new_init_translation_catalog
-
-
 def wr_long(f, x):
     f.write(
         bytes([x & 0xff, (x >> 8) & 0xff, (x >> 16) & 0xff, (x >> 24) & 0xff]))
@@ -65,8 +40,9 @@ def patch_file(module_name, file_name, patch_function, path_prefix):
         source = patch_function(loader.get_source(module_name))
         source_stats = loader.path_stats(loader.path)
         code = loader.source_to_code(source, '<string>')
-        bytecode = importlib._bootstrap_external._code_to_bytecode(
+        bytecode = importlib._bootstrap_external._code_to_timestamp_pyc(
             code, source_stats['mtime'], source_stats['size'])
+        mode = importlib._bootstrap_external._calc_mode(loader.path)
         importlib._bootstrap_external._write_atomic(loader_file, bytecode)
     else:
         code = compile(patch_function(loader.get_source()), "<string>",

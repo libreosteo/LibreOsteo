@@ -12,6 +12,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
+from django.db import OperationalError
+from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404, HttpResponseForbidden
 from rest_framework import permissions
 from django.contrib.auth import get_user_model
 from django.utils.decorators import method_decorator
@@ -60,7 +62,7 @@ class IsStaffOrTargetUser(permissions.BasePermission):
         'create',
         'retrieve',
         'partial_update',
-        'update'
+        'update',
         'get_by_user',
     ]
 
@@ -83,10 +85,6 @@ class IsStaffOrTargetUser(permissions.BasePermission):
             return getattr(obj, 'user') == request.user
         except AttributeError:
             return obj == request.user
-
-
-from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404, HttpResponseForbidden
-from django.db import OperationalError
 
 
 def maintenance_available(func):

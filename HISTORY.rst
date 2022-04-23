@@ -2,7 +2,20 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.1 (unreleased)
+0.6.3 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+0.6.2 (2022-01-17)
+------------------
+
+- Fix permission on therapeut settings when not admin.
+- #276 - Fix restoring archive and foreign key issue with django_content_types
+
+
+0.6.1 (2021-12-17)
 ------------------
 
 - Add zipcode / city autocompletion

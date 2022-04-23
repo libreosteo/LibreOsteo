@@ -27,24 +27,33 @@ def remove_useless_files(directory, keepfiles_list, keepdir_list):
                 shutil.rmtree(os.path.join(root, d))
 
 
-def collectstatic():
-    from subprocess import call
-    call(["python", "manage.py", "collectstatic", "--noinput"])
+def execute_cmd_context(cmd):
+    from subprocess import run
+    run("activate;"+cmd, shell=True, env=os.environ.copy())
 
+def collectstatic():
+    print("Collect static")
+    cmd="python manage.py collectstatic --no-input"
+    execute_cmd_context(cmd)
 
 def compress():
-    from subprocess import call
-    call(["python", "manage.py", "compress", "--force"])
-
+    print("Compress css/js")
+    cmd = "python manage.py compress --force"
+    execute_cmd_context(cmd)
 
 def compilejsi18n():
-    from subprocess import call
-    call(["python", "manage.py", "compilejsi18n"])
+    print("Compile JsI18n")
+    cmd = "python manage.py compilejsi18n"
+    execute_cmd_context(cmd)
+
+def get_zipcodes():
+    print("Retrieve ZipCode dataset")
+    execute_cmd_context("python manage.py import_zipcodes --download-only")
 
 
 def purge_static():
-    purge_dir = ['bower_components']
-    keep_path = ['bower_components/webshim']
+    purge_dir = ['components']
+    keep_path = ['components/webshim']
     to_remove_list = []
     # For each dir in purge dir from static :
     # delete each files
@@ -71,7 +80,10 @@ if sys.platform in ['win32']:
 
     compress()
 
+    get_zipcodes()
+
     from cx_Freeze import setup, Executable
+    import zipfile
     # GUI applications require a different base on Windows (the default is for a
     # console application).
     base = 'Console'
@@ -89,8 +101,21 @@ if sys.platform in ['win32']:
         directory = os.path.join(django.__path__[0], 'conf', 'locale')
         return [(directory, 'django/conf/locale')]
 
+    def add_jaraco_files():
+        import jaraco
+        directory = os.path.join(jaraco.__path__[0], 'text')
+        zipf = zipfile.ZipFile('build/exe.%s-%s/lib/library.zip' % (get_platform_identifier(), sys.winver[0:3]), "a")
+        zipf.write(os.path.join(directory, 'Lorem ipsum.txt'), os.path.join('jaraco', 'text', 'Lorem ipsum.txt'))
+        zipf.close()
+
+    def get_platform_identifier():
+        platform_identifier = sys.platform
+        if os.environ['PROCESSOR_ARCHITECTURE'].lower() == 'amd64':
+            platform_identifier = 'win-%s' % os.environ['PROCESSOR_ARCHITECTURE'].lower()
+        return platform_identifier
+
+
     def compressor_path(t):
-        print(t)
         (c, c1) = t
         return (c, c1.replace(compressor.__path__[0] + os.sep, ''))
 
@@ -155,6 +180,7 @@ if sys.platform in ['win32']:
         'Libreosteo.zip_loader',
         'libreosteoweb.admin',
         'libreosteoweb.middleware',
+        'libreosteoweb.management',
         'libreosteoweb.models',
         'libreosteoweb.search_indexes',
         'libreosteoweb.api',
@@ -163,6 +189,7 @@ if sys.platform in ['win32']:
         'email.mime.image',
         "rcssmin",
         "rjsmin",
+        "jaraco.text"
     ]
     migrations = [
         'libreosteoweb.migrations', "django.contrib.admin.migrations",
@@ -172,9 +199,9 @@ if sys.platform in ['win32']:
     ]
 
     include_files = get_filepaths('media') + get_filepaths(
-        'locale') + get_djangolocale()
+        'locale') + [('zipcode_dataset.json', 'zipcode_dataset')]
     extra_includes = get_filepaths(
-        'templates') + get_compressor_templates() + get_filepaths('static')
+        'templates') + get_compressor_templates() + get_filepaths('static') 
     packages = [
         "os",
         "django",
@@ -182,6 +209,7 @@ if sys.platform in ['win32']:
         #"HTMLParser",
         #"Cookie",
         'http',
+        "gettext",
         'html',
         "rest_framework",
         "haystack",
@@ -192,9 +220,14 @@ if sys.platform in ['win32']:
         "compressor",
         "libreosteoweb",
         "pkg_resources._vendor",
-        "django_filters"
+        "django_filters",
+        "jaraco",
+        "zipcode_lookup",
+        "django.core.management.commands",
+        "zipcode_lookup.management.commands",
+        "libreosteoweb.management.commands",
+        "protected_media"
     ]
-    namespace_packages = ["jaraco"]
     in_zip_packages = includes + [
         '_markerlib', 'appconf', 'backports', 'cheroot', 'compiler',
         'compressor', 'ctypes', 'distutils', 'django_filters', 'email',
@@ -208,11 +241,10 @@ if sys.platform in ['win32']:
         "packages": packages,
         "includes": includes + migrations,
         "include_files": include_files + extra_includes,
-        #"zip_includes" : extra_includes,
+        "zip_includes" : extra_includes,
         "excludes": ['cStringIO', 'tcl', 'Tkinter'],
-        #"no-compress" : False,
+        "no_compress" : False,
         "optimize": 2,
-        "namespace_packages": namespace_packages,
         "zip_include_packages": in_zip_packages,
         "zip_exclude_packages": ['libreosteoweb'],
         "include_msvcr": True
@@ -233,27 +265,31 @@ if sys.platform in ['win32']:
           ])
 
     # Create a web shorcut link
-    build_dir = glob.glob('build/exe.win*')
-    if len(build_dir) > 0:
-        shortlink = open(build_dir[0] + "/LibreOsteo.url", "w")
+    build_dir = glob.glob('build/exe.%s-%s' % (get_platform_identifier(), sys.winver[:3]))
+    for b in build_dir:
+        shortlink = open(b + "/LibreOsteo.url", "w")
         shortlink.write("[InternetShortcut]\n")
         shortlink.write("URL=http://localhost:8085/\n")
         shortlink.write("\n")
         shortlink.write("\n")
 
         ##Remove useless locales
-        remove_useless_files(build_dir[0] + "/django/conf/locale", [],
+        remove_useless_files(b + "/django/conf/locale", [],
                              ["fr", "en"])
+        remove_useless_files(b + "lib/django/conf/locale", [], ['fr', 'en'])
         remove_useless_files(
-            build_dir[0] + "/static/bower_components/angular-i18n", [
+            b + "/static/components/angular-i18n", [
                 "angular-locale_en.js", "angular-locale_en-us.js",
                 "angular-locale_fr.js", "angular-locale_fr-fr.js"
             ], [])
 
     ## Patch django migration loader
     from patch import patch_django_loader_pyc
+    print("Platform identifier : %s" % get_platform_identifier())
+    patch_django_loader_pyc('build/exe.%s-%s/' % (get_platform_identifier(), sys.winver[:3]))
 
-    patch_django_loader_pyc('build/exe.*/')
+    # Restore file for jaraco
+    add_jaraco_files()
 
 #### MACOS X build
 #
@@ -272,7 +308,7 @@ if sys.platform in ['darwin']:
 
     APP = ['server.py']
 
-    DATA_FILES = ['static', 'locale', 'templates', 'media']
+    DATA_FILES = ['static', 'locale', 'templates']
 
     OPTIONS = {
         'argv_emulation':
@@ -284,6 +320,7 @@ if sys.platform in ['darwin']:
             "django",
             "Libreosteo",
             "libreosteoweb",
+            "zipcode_lookup",
             "rest_framework",
             "haystack",
             "sqlite3",
@@ -291,6 +328,7 @@ if sys.platform in ['darwin']:
             "email",
             "compressor",
             "django_filters",
+            "protected_media",
         ],
         'plist': {
             'LSBackgroundOnly': True,
@@ -457,54 +495,3 @@ elif sys.platform not in ['win32']:
               Executable("server.py", base=base, targetName="libreosteo"),
               Executable("manager.py", base=base)
           ])
-else:
-    from setuptools import setup
-    from setuptools import find_packages
-
-    #collectstatic()
-
-    #compress()
-    #purge_static()
-
-    from setuptools.command.build_py import build_py
-
-    class BowerInstall(build_py):
-        def run(self):
-            self.run_command('build_bower')
-            collectstatic()
-            compress()
-            compilejsi18n()
-            purge_static()
-            build_py.run(self)
-
-    dependencies = open(os.path.join('requirements/requirements.txt'),
-                        'rU').read().split('\n')
-
-    setup(
-        cmdclass={
-            'bower': BowerInstall,
-        },
-        name='LibreOsteo',
-        version=version,
-        description='Open source software and free software for osteopaths',
-        author='Jean-Baptiste Gury',
-        author_email='jean-baptiste.gury@cambiatech.com',
-        url='https://www.libreosteo.org',
-        packages=find_packages(),
-        entry_points={'console_scripts': ['libreosteo-server=server:main']},
-        install_requires=dependencies,
-        include_package_data=True,
-        exclude_package_data={'': ['.gitignore', 'db.sqlite3', '*.log']},
-        maintainer='Jean-Baptiste Gury',
-        maintainer_email='jean-baptiste.gury@cambiatech.com',
-        license='GPL v3',
-        classifiers=[
-            'Environment :: Web Environment',
-            'Framework :: Django',
-            'Licence :: OSI Approoved :: GPLv3 Licence',
-            'Operating System :: OS Independent',
-            'Programming Language :: Python',
-            'Topic :: Internet :: WWW/HTTP',
-            'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-        ],
-    )

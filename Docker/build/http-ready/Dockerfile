@@ -12,6 +12,8 @@ VOLUME /Libreosteo/settings
 VOLUME /Libreosteo/node_modules
 
 # Install dependancies
+WORKDIR /Libreosteo
+
 RUN apk add --no-cache \
     tzdata \
     gettext \
@@ -24,10 +26,10 @@ RUN apk add --no-cache \
     curl\
     bash\
     git\
-    nodejs-npm && npm install fs path
+    nodejs\
+    npm && npm install fs path
 RUN curl -o - -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
 
-WORKDIR /Libreosteo
 
 COPY ./requirements ./requirements
 COPY ./package.json .
@@ -35,7 +37,6 @@ COPY ./libreosteoweb ./libreosteoweb
 COPY ./Libreosteo ./Libreosteo
 COPY ./locale ./locale
 COPY ./zipcode_lookup ./zipcode_lookup
-COPY ./templates ./templates
 COPY ./manage.py .
 COPY ./server.py .
 
@@ -68,4 +69,4 @@ RUN apk add --no-cache \
     && apk --purge del .build-deps
 
 EXPOSE 8085
-CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --http :8085 --module Libreosteo.wsgi --master --processes 1 --threads 2 --static-map /files=/Libreosteo/data/media --static-map /static=/Libreosteo/static -H /Libreosteo/venv
+CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container || test 1=1 && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --http :8085 --module Libreosteo.wsgi --master --processes 1 --threads 1 --static-map /files=/Libreosteo/data/media --static-map /static=/Libreosteo/static -H /Libreosteo/venv

@@ -64,7 +64,7 @@ examination.factory('ExaminationServ', ['$resource',
       }
     });
     serv.SPHERES_LIST = [
-      'orl', 'visceral', 'pulmo', 'uro_gyneco', 'periphery', 'generalState'
+      'orl', 'visceral', 'pulmo', 'uro_gyneco', 'periphery', 'general_state'
     ];
     return serv;
   }

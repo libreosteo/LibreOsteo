@@ -48,6 +48,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 from django.db.models import Max
+from django.db import connection
 from libreosteoweb.api import serializers as apiserializers
 from libreosteoweb import models
 from django.contrib.auth.mixins import PermissionRequiredMixin
@@ -68,6 +69,7 @@ from libreosteoweb.api.events.settings import settings_event_tracer, full_db_dow
 from django.core.files.storage import default_storage
 from libreosteoweb.api.signals import post_reload_db
 import uuid
+from io import StringIO
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -333,7 +335,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
             return
 
         if serializer.validated_data['date'] and serializer.instance and serializer.instance.last_invoice \
-                                            and serializer.validated_data['date'] < serializer.instance.last_invoice.date :
+                and serializer.validated_data['date'] < serializer.instance.last_invoice.date:
             return
         raise SuspiciousOperation(
             "Invalid request : examination date is not allowed")
@@ -445,7 +447,8 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
 
                     result = invoicing_generator.ExaminationInvoiceHelper(officesettings, therapeutsettings, request.user)\
                         .invoice_examination(invoicing_serializer,
-                                             models.Examination.objects.get(id=request.data['examination']['id']),
+                                             models.Examination.objects.get(
+                                                 id=request.data['examination']['id']),
                                              self.get_object())
                     if 'errors' in result:
                         return Response(result['errors'],
@@ -740,7 +743,7 @@ class LoadDump(View):
                                 'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
                                 otherversion=v,
                                 currentversion=libreosteoweb.__version__),
-                                                status=412)
+                                status=412)
                     # uncompress the dump file
                     if filename in zf.namelist():
                         zf.extract(filename, tmpdir)
@@ -772,9 +775,19 @@ class LoadDump(View):
                     logger.info(
                         "Signals were disactivated, perform clearing of the database"
                     )
-                    call_command('flush',
-                                 interactive=False,
-                                 stdout=LoggerWriter(logger.info))
+                    buf = StringIO()
+                    call_command('sqlflush', no_color=True, stdout=buf)
+                    with connection.cursor() as cursor:
+                        deferred_delete = ''
+                        for s in buf.getvalue().split('\n'):
+                            if "django_content_type" not in s and "COMMIT" not in s:
+                                logger.info("Execute query : %s" % s)
+                                cursor.execute(s)
+                            else:
+                                deferred_delete = deferred_delete + '\n' + s
+                        for s in deferred_delete.split('\n'):
+                            logger.info(s)
+                            cursor.execute(s)
                     # It means that the settings.FIXTURE_DIRS should be set in settings
                     previous = settings.FIXTURE_DIRS
                     settings.FIXTURE_DIRS = [tempfile.gettempdir()]
@@ -799,4 +812,4 @@ class LoadDump(View):
             return HttpResponse(content=_(
                 u'This archive file seems to be incorrect. Impossible to load it.'
             ),
-                                status=412)
+                status=412)

@@ -43,7 +43,7 @@ try:
     UNICODE_EXISTS = bool(type(unicode))
     _unicode = unicode
 except NameError:
-    _unicode = lambda s: str(s)
+    def _unicode(s): return str(s)
 
 
 class NetworkHelper():
@@ -73,7 +73,7 @@ class NetworkHelper():
 def convert_to_long(value, strip_string_prefix=False):
     value_to_convert = value
     if strip_string_prefix:
-        value_to_convert = re.sub(r'^[A-Za-z]', '', value)
+        value_to_convert = re.sub(r'^[A-Za-z][A-Za-z]*', '', value)
     try:
         return long(value_to_convert)
     except:

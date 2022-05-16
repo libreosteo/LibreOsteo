@@ -113,7 +113,7 @@ class TestChangeIdInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    })
+        })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'W100')
@@ -170,8 +170,8 @@ class TestCancelInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'10000')
@@ -235,8 +235,8 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'notpaid',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'10000')
@@ -247,13 +247,13 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         response = self.client.post(reverse(
             'examination-update-paiement',
             kwargs={'pk': examination.invoices.latest('date').id}),
-                                    data={
-                                        'status': 'invoiced',
-                                        'amount': 60,
-                                        'paiment_mode': 'check',
-                                        'check': {}
-                                    },
-                                    format='json')
+            data={
+            'status': 'invoiced',
+            'amount': 60,
+            'paiment_mode': 'check',
+            'check': {}
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Then
@@ -277,8 +277,8 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'notpaid',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'10000')
@@ -289,13 +289,13 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         response = self.client.post(reverse(
             'examination-update-paiement',
             kwargs={'pk': examination.invoices.latest('date').id}),
-                                    data={
-                                        'status': 'invoiced',
-                                        'amount': 60,
-                                        'paiment_mode': 'notpaid',
-                                        'check': {}
-                                    },
-                                    format='json')
+            data={
+            'status': 'invoiced',
+            'amount': 60,
+            'paiment_mode': 'notpaid',
+            'check': {}
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Then
@@ -316,8 +316,8 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'notpaid',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'10000')
@@ -328,12 +328,12 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         response = self.client.post(reverse(
             'examination-update-paiement',
             kwargs={'pk': examination.invoices.latest('date').id}),
-                                    data={
-                                        'status': 'invoiced',
-                                        'amount': 60,
-                                        'check': {}
-                                    },
-                                    format='json')
+            data={
+            'status': 'invoiced',
+            'amount': 60,
+            'check': {}
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Then
@@ -357,8 +357,8 @@ class TestRegularizeNotPaidInvoice(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(examination.invoices.latest('date').number, u'10000')
@@ -369,13 +369,13 @@ class TestRegularizeNotPaidInvoice(APITestCase):
         response = self.client.post(reverse(
             'examination-update-paiement',
             kwargs={'pk': examination.invoices.latest('date').id}),
-                                    data={
-                                        'status': 'invoiced',
-                                        'amount': 60,
-                                        'paiment_mode': 'check',
-                                        'check': {}
-                                    },
-                                    format='json')
+            data={
+            'status': 'invoiced',
+            'amount': 60,
+            'paiment_mode': 'check',
+            'check': {}
+        },
+            format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         # Then
@@ -411,7 +411,7 @@ class TestInvoiceWithOfficeSettings(APITestCase):
                                           currency='EUR',
                                           amount=65,
                                           invoice_start_sequence=1000000,
-                                          invoice_prefix_sequence='W')
+                                          invoice_prefix_sequence='WAD')
             self.client.login(username='test', password='testpw')
 
             self.p1 = Patient.objects.create(family_name="Picard",
@@ -435,13 +435,13 @@ class TestInvoiceWithOfficeSettings(APITestCase):
                                         'amount': 55,
                                         'paiment_mode': 'cash',
                                         'check': {}
-                                    },
-                                    format='json')
+        },
+            format='json')
         # Then
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         examination = Examination.objects.filter(pk=self.e1.pk)[0]
         self.assertEqual(
-            examination.invoices.latest('date').number, u'W1000000')
+            examination.invoices.latest('date').number, u'WAD1000000')
         self.assertEqual(
             examination.invoices.latest('date').status,
             InvoiceStatus.INVOICED_PAID)
@@ -450,7 +450,7 @@ class TestInvoiceWithOfficeSettings(APITestCase):
         self.assertIsNotNone(invoice)
         self.assertEqual(invoice.amount, 55)
         self.assertEqual(invoice.status, InvoiceStatus.INVOICED_PAID)
-        self.assertEquals(invoice.number, u'W1000000')
+        self.assertEquals(invoice.number, u'WAD1000000')
         setting1 = OfficeSettings.objects.get(id=1)
         setting2 = OfficeSettings.objects.get(id=2)
         self.assertEquals(setting1.invoice_start_sequence, u'')

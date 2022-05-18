@@ -5,7 +5,8 @@ Changelog for LibreOsteo
 0.6.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix issue with invoice prefix sequence
+- Fix translation for June in French
 
 
 0.6.2 (2022-01-17)

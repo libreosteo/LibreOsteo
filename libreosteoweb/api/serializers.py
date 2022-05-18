@@ -254,11 +254,11 @@ class ExaminationInvoicingSerializer(serializers.Serializer):
                     if attrs['check'] is None:
                         raise serializers.ValidationError(
                             _("Check information is missing"))
-                #if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
+                # if attrs['check']['bank'] is None or len(attrs['check']['bank'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Bank information is missing about the check paiment"))
-                #if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
+                # if attrs['check']['payer'] is None or len(attrs['check']['payer'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Payer information is missing about the check paiment"))
-                #if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
+                # if attrs['check']['number'] is None or len(attrs['check']['number'].strip()) == 0:
                 #    raise serializers.ValidationError(_("Number information is missing about the check paiment"))
             return attrs
         except KeyError:
@@ -340,13 +340,17 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
             else:
                 data['invoice_start_sequence'] = _unicode(10000)
         if input_invoice_prefix_seq is not None:
+            input_invoice_prefix_seq = input_invoice_prefix_seq.strip()
             if len(input_invoice_prefix_seq) > 3:
                 raise serializers.ValidationError(
                     _('Prefix for invoicing sequence should have 3 char length maximum'
                       ))
-            if not re.match('^[A-Za-z]{1,3}$', input_invoice_prefix_seq):
+            if len(input_invoice_prefix_seq) == 0:
+                input_invoice_prefix_seq = None
+            elif not re.match('^[A-Za-z]{1,3}$', input_invoice_prefix_seq):
                 raise serializers.ValidationError(
                     _('Prefix could only contains alpha characters'))
+            data['invoice_prefix_sequence'] = input_invoice_prefix_seq
         return data
 
     def get_network_list(self, obj):

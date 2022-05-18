@@ -2,7 +2,7 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.3 (unreleased)
+0.6.3 (2022-05-18)
 ------------------
 
 - Fix issue with invoice prefix sequence

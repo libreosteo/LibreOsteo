@@ -780,14 +780,16 @@ class LoadDump(View):
                     with connection.cursor() as cursor:
                         deferred_delete = ''
                         for s in buf.getvalue().split('\n'):
-                            if "django_content_type" not in s and "COMMIT" not in s:
+                            if "django_content_type" not in s and "COMMIT" not in s and len(s.strip()) > 0:
                                 logger.info("Execute query : %s" % s)
                                 cursor.execute(s)
                             else:
-                                deferred_delete = deferred_delete + '\n' + s
+                                if len(s.strip()) > 0:
+                                    deferred_delete = deferred_delete + '\n' + s
                         for s in deferred_delete.split('\n'):
-                            logger.info(s)
-                            cursor.execute(s)
+                            if len(s.strip()) > 0:
+                                logger.info(s)
+                                cursor.execute(s)
                     # It means that the settings.FIXTURE_DIRS should be set in settings
                     previous = settings.FIXTURE_DIRS
                     settings.FIXTURE_DIRS = [tempfile.gettempdir()]

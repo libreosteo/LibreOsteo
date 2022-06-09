@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: libreosteo-pg
+    image: libreosteo/libreosteo-pg
     hostname: pg_1
     volumes:
       - ${LIBREOSTEO_DB_STORAGE}:/var/lib/postgresql/data
@@ -12,8 +12,10 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=libreosteo
+    ports:
+      - "5432:5432"
   libreosteo:
-    image: libreosteo-http
+    image: libreosteo/libreosteo-http
     hostname: libreosteo_1
     ports:
       - "8085:8085"

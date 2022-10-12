@@ -34,7 +34,7 @@ HOW-TO try it ?
 ===============
 
 Requirements :
-  - Python 3.6+
+  - Python 3.7+
   - pip
   - nodejs
   - yarn

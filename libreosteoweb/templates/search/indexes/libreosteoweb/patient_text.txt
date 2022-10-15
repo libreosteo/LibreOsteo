@@ -13,3 +13,4 @@
 {{ object.family_history|safe }}
 {{ object.trauma_history|safe }}
 {{ object.medical_reports|safe }}
+{{ object.job }}

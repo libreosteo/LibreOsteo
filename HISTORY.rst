@@ -5,7 +5,10 @@ Changelog for LibreOsteo
 0.6.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix corruption on session on some situations.
+- Fix display of the navbar on mobile device.
+- Generates Docker image on arm64,arm and amd64
+- End of the support python 3.6
 
 
 0.6.3 (2022-05-18)

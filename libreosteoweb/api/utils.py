@@ -43,10 +43,11 @@ try:
     UNICODE_EXISTS = bool(type(unicode))
     _unicode = unicode
 except NameError:
-    def _unicode(s): return str(s)
+    _unicode = lambda s: str(s)
 
 
 class NetworkHelper():
+
     def get_all_addresses(self):
         addresses = []
         try:
@@ -73,7 +74,7 @@ class NetworkHelper():
 def convert_to_long(value, strip_string_prefix=False):
     value_to_convert = value
     if strip_string_prefix:
-        value_to_convert = re.sub(r'^[A-Za-z][A-Za-z]*', '', value)
+        value_to_convert = re.sub(r'^[A-Za-z]*', '', value)
     try:
         return long(value_to_convert)
     except:
@@ -81,6 +82,7 @@ def convert_to_long(value, strip_string_prefix=False):
 
 
 class LoggerWriter:
+
     def __init__(self, logger_func):
         self._logger = logger_func
 

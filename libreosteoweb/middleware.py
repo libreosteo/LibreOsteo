@@ -20,7 +20,7 @@ from django.contrib.sessions.models import Session
 from django.urls import reverse
 import logging
 from django.utils.deprecation import MiddlewareMixin
-from libreosteoweb.models import OfficeSettings
+from libreosteoweb.models import OfficeSettings, LoggedInUser
 from django.utils.module_loading import import_string
 
 logger = logging.getLogger(__name__)

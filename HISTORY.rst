@@ -2,10 +2,10 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.5 (unreleased)
+0.6.5 (2023-03-24)
 ------------------
 
-- Nothing changed yet.
+- Fix the previous fix corruption on session on some situations. No, it's not a joke...
 
 
 0.6.4 (2023-02-22)

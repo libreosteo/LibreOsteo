@@ -14,7 +14,7 @@
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 import logging
 import csv
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 import random
 from libreosteoweb.models import Patient, ExaminationType, ExaminationStatus
 from datetime import date, datetime
@@ -26,6 +26,7 @@ _CSV_BUFFER_SIZE = 1024 * 1024 * 10
 
 
 class Extractor(object):
+
     def extract(self, instance):
         """
         return a dict with key patient and examination which gives some extract of the content,
@@ -134,6 +135,7 @@ FileCsvType = enum('FileCsvType', 'PATIENT', 'EXAMINATION')
 
 
 class AnalyzeReport(object):
+
     def __init__(self, is_empty, is_valid, internal_type):
         self.is_empty = is_empty
         self.is_valid = is_valid
@@ -199,6 +201,7 @@ class AnalyzerExaminationFile(Analyzer):
 
 
 class FileContentAdapter(dict):
+
     def __init__(self, ourfile, line_filter=None):
         self.file = ourfile
         self['content'] = None
@@ -245,6 +248,7 @@ class FileContentAdapter(dict):
 
 
 class DecodeCsvReader(object):
+
     def __init__(self, underlying_instance, decode_filter):
         self.reader_instance = underlying_instance
         self.filter = decode_filter
@@ -257,6 +261,7 @@ class DecodeCsvReader(object):
 
 
 class FileContentKey(object):
+
     def __init__(self, ourfile, line_filter):
         self.file = ourfile
         self.line_filter = line_filter
@@ -327,6 +332,7 @@ class AnalyzerHandler(object):
 
 
 class InvalidIntegrationFile(Exception):
+
     def __init__(self, value):
         self.value = value
 
@@ -335,6 +341,7 @@ class InvalidIntegrationFile(Exception):
 
 
 class IntegratorHandler(object):
+
     def integrate(self, file, file_additional=None, user=None):
         integrator = IntegratorFactory().get_instance(file)
         if integrator is None:
@@ -353,6 +360,7 @@ class IntegratorHandler(object):
 
 
 class IntegratorFactory(object):
+
     def __init__(self, serializer_class=None):
         self.extractor = Extractor()
         self.serializer_class = serializer_class
@@ -371,6 +379,7 @@ class IntegratorFactory(object):
 
 
 class FilePatientFactory(object):
+
     def __init__(self):
         from .serializers import PatientSerializer
         self.serializer_class = PatientSerializer
@@ -440,11 +449,13 @@ class FilePatientFactory(object):
 
 
 class AbstractIntegrator(object):
+
     def integrate(self, file, file_additional=None, user=None):
         pass
 
 
 class IntegratorPatient(AbstractIntegrator):
+
     def __init__(self, serializer_class=None):
         self.extractor = Extractor()
         self.serializer_class = serializer_class
@@ -474,6 +485,7 @@ class IntegratorPatient(AbstractIntegrator):
 
 
 class IntegratorExamination(AbstractIntegrator):
+
     def __init__(self, serializer_class=None):
         self.extractor = Extractor()
         self.serializer_class = serializer_class

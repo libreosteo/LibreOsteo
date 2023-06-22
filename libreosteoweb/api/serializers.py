@@ -15,7 +15,7 @@
 from rest_framework import serializers
 from libreosteoweb.models import *
 from django.contrib.auth import get_user_model
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from datetime import date
 from django.utils import timezone
 from .validators import UniqueTogetherIgnoreCaseValidator
@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 class WithPkMixin(object):
+
     def get_pk_field(self, model_field):
         return self.get_field(model_field)
 
@@ -99,6 +100,7 @@ class PatientExportSerializer(serializers.ModelSerializer):
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
+
     def validate_last_name(self, value):
         return get_name_filters().filter(value)
 
@@ -111,6 +113,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class RegularDoctorSerializer(serializers.ModelSerializer):
+
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
 
@@ -123,6 +126,7 @@ class RegularDoctorSerializer(serializers.ModelSerializer):
 
 
 class OfficeDetailSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = OfficeSettings
         fields = ['office_name']
@@ -281,6 +285,7 @@ class ExaminationCommentSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         model = OfficeEvent
         fields = '__all__'
@@ -307,12 +312,14 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class TherapeutSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         model = TherapeutSettings
         fields = '__all__'
 
 
 class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         model = OfficeSettings
         fields = '__all__'
@@ -380,6 +387,7 @@ class OfficeSettingsSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
+
     def validate_family_name(self, value):
         return get_name_filters().filter(value)
 
@@ -415,12 +423,14 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         model = Document
         fields = '__all__'
 
 
 class DocumentUpdateSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         fields = ['title', 'notes', 'document_date']
         model = Document
@@ -451,6 +461,7 @@ class PatientDocumentSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
+
     def create(self, validated_data):
         document_data = validated_data.pop('document')
         document_data['user'] = validated_data.pop('user')
@@ -467,6 +478,7 @@ class PatientDocumentDemonstrationSerializer(PatientDocumentSerializer):
 
 
 class PaimentMeanSerializer(WithPkMixin, serializers.ModelSerializer):
+
     class Meta:
         model = PaimentMean
         fields = '__all__'

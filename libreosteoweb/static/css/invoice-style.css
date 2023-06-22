@@ -17,11 +17,8 @@
 */
 * { margin: 0; padding: 0; }
 
-body {
-	font:16px/1.4 Georgia, serif;
-}
-
 #page_wrap {
+	font:16px/1.4 Georgia, serif;
 	width: 800px;
 	margin : 0 auto;
 }
@@ -98,4 +95,17 @@ body {
 #footer {
 	margin-top: 300px;
 	margin-left: 100px;
+}
+#watermark {
+  position:absolute;
+  top:50%;
+  right:25%;
+  user-slect:none;
+  -ms-user-select:none;
+  -moz-user-select:none;
+  -webkit-user-select:none;
+  font-family:"Roboto", "Arial", sans-serif;
+  font-size: 10em;
+  opacity:0.2;
+  transform: rotate(-30deg);
 }

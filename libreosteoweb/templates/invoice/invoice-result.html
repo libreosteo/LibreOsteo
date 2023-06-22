@@ -10,6 +10,12 @@
 </head>
 <body>
 	<div id="page_wrap">
+    {% if watermark %}
+    <div id="watermark">
+      {{ watermark.text }}
+    </div>
+    {% endif %}
+
 		<div id="header">
 			<div id="title">
 					<div class="frame">
@@ -85,7 +91,7 @@
 		</div>
 
 		<div id="footer">
-			<p>{{ invoice.footer | linebreaksbr | safe }}</p>
+			<p>{{ invoice.footer | safe | linebreaksbr }}</p>
 		</div>
 	</div>
 </body>

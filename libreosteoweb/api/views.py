@@ -157,7 +157,7 @@ class SearchViewHtml(SearchView):
 
 
 class InvoiceViewHtml(TemplateView):
-    template_name = 'invoice/invoice-result.html'
+    template_name = settings.INVOICE_TEMPLATE
 
     def get_context_data(self, **kwargs):
         context = super(InvoiceViewHtml, self).get_context_data(**kwargs)
@@ -385,6 +385,7 @@ class UserOfficeViewSet(viewsets.ModelViewSet):
 
 
 class StatisticsView(APIView):
+
     def get(self, request, *args, **kwargs):
         myStats = Statistics(*args, **kwargs)
         result = myStats.compute()
@@ -709,6 +710,7 @@ class DbDump(PermissionRequiredMixin, View):
 
 
 class RebuildIndex(StaffRequiredMixin, View):
+
     def get(self, request, *args, **kwargs):
         call_command('rebuild_index',
                      interactive=False,
@@ -717,6 +719,7 @@ class RebuildIndex(StaffRequiredMixin, View):
 
 
 class LoadDump(View):
+
     @maintenance_available
     def post(self, request, *args, **kwargs):
         # Retrieve the content of the file uploaded.
@@ -743,7 +746,7 @@ class LoadDump(View):
                                 'This file is an archive of the version {otherversion}, the current version is {currentversion}. Install the version {otherversion} and load it.',
                                 otherversion=v,
                                 currentversion=libreosteoweb.__version__),
-                                status=412)
+                                                status=412)
                     # uncompress the dump file
                     if filename in zf.namelist():
                         zf.extract(filename, tmpdir)
@@ -780,7 +783,8 @@ class LoadDump(View):
                     with connection.cursor() as cursor:
                         deferred_delete = ''
                         for s in buf.getvalue().split('\n'):
-                            if "django_content_type" not in s and "COMMIT" not in s and len(s.strip()) > 0:
+                            if "django_content_type" not in s and "COMMIT" not in s and len(
+                                    s.strip()) > 0:
                                 logger.info("Execute query : %s" % s)
                                 cursor.execute(s)
                             else:
@@ -814,4 +818,4 @@ class LoadDump(View):
             return HttpResponse(content=_(
                 u'This archive file seems to be incorrect. Impossible to load it.'
             ),
-                status=412)
+                                status=412)

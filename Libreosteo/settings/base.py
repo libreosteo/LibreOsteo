@@ -24,6 +24,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os, sys, logging
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 if getattr(sys, 'frozen', False):
     logger = logging.getLogger(__name__)
@@ -126,9 +127,9 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
             ],
             'libraries': {
-                'compress' : 'compressor.templatetags.compress',
+                'compress': 'compressor.templatetags.compress',
                 'statici18n': 'statici18n.templatetags.statici18n'
-                },
+            },
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
                 'django.template.loaders.app_directories.Loader',
@@ -221,6 +222,8 @@ NO_REROUTE_PATTERN_URL = [
     r'^accounts/create-admin/$', r'^internal/restore', r'^jsi18n',
     r'^web-view/partials/restore', r'^web-view/partials/register'
 ]
+
+INVOICE_TEMPLATE = 'invoice/invoice-result.html'
 
 LOGGING = {
     'version': 1,

@@ -52,7 +52,7 @@ else:
     if not os.path.exists(DATA_FOLDER):
         os.makedirs(DATA_FOLDER)
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/

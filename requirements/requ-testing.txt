@@ -1,5 +1,6 @@
 robotframework
-robotframework-seleniumlibrary
+robotframework-seleniumlibrary==6.0.0
+selenium==4.9.1
 requests
 robotframework-requests
 robotframework-requestslogger

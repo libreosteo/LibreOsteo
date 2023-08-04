@@ -21,6 +21,9 @@ from libreosteoweb.api.utils import _unicode
 register = template.Library()
 
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @register.filter(name='templatize')
@@ -32,7 +35,10 @@ def templatize(value, obj):
     def replace(match):
         val = match.groups()[0]
         if val is not None:
-            todisplay = getattr(obj, val)
+            if hasattr(obj, val):
+                todisplay = getattr(obj, val)
+            elif hasattr(obj, 'keys'):
+                todisplay = obj.get(val, None)
             if type(todisplay) is float:
                 locale_desc = to_locale(get_language())
                 return _unicode(locale.str(todisplay))

@@ -66,14 +66,21 @@ libreosteoApp.config(function($httpProvider) {
     return {
       'response': function(response) {
         if (typeof response.data === 'string') {
-          if (response.data.indexOf instanceof Function &&
-            response.data.indexOf("<form class=\"form-signin\"") != -1) {
+          if (response.data.indexOf instanceof Function && (
+            response.data.indexOf("<form class=\"form-signin\"") != -1 ||
+            response.data.indexOf("login-form") != -1)
+          ) {
             $location.url("/accounts/login/");
             window.location = "/accounts/login/";
           }
         }
         return response;
       },
+      'responseError': function(response) {
+        if (response.status == 302 ) {
+          console.log("Redirect required", response);
+        }
+      }
     }
   });
 });

@@ -76,11 +76,6 @@ libreosteoApp.config(function($httpProvider) {
         }
         return response;
       },
-      'responseError': function(response) {
-        if (response.status == 302 ) {
-          console.log("Redirect required", response);
-        }
-      }
     }
   });
 });

@@ -114,7 +114,8 @@ class LoginRequiredMiddleware(MiddlewareMixin):
             except Exception as ex:
                 logger.error(
                     "Request on %s, but authentication failed on authenticator"
-                    % request.path, str(ex))
+                    % request.path)
+                return HttpResponseRedirect(get_login_url())
 
         if not request.user.is_authenticated:
             logger.info("user not authenticated")

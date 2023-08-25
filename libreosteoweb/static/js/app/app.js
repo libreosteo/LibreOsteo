@@ -67,11 +67,10 @@ libreosteoApp.config(function($httpProvider) {
       'response': function(response) {
         if (typeof response.data === 'string') {
           if (response.data.indexOf instanceof Function && (
-            response.data.indexOf("<form class=\"form-signin\"") != -1 ||
-            response.data.indexOf("login-form") != -1)
-          ) {
-            $location.url("/accounts/login/");
-            window.location = "/accounts/login/";
+            response.data.indexOf("<form class=\"form-signin\"") != -1) ||
+            response.data.indexOf("<!doctype html><html") != -1) {
+            $location.url("/accounts/login");
+            window.location = "/accounts/login";
           }
         }
         return response;

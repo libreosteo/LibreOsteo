@@ -43,7 +43,7 @@ def templatize(value, obj):
                 locale_desc = to_locale(get_language())
                 return _unicode(locale.str(todisplay))
             else:
-                return _unicode(getattr(obj, val))
+                return _unicode(todisplay)
         return val
 
     p = re.compile(r'<(?P<tag>.*?)>')

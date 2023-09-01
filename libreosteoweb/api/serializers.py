@@ -218,7 +218,7 @@ class ExaminationSerializer(serializers.ModelSerializer):
         if value >= timezone.now():
             raise serializers.ValidationError(
                 _('The examination date is not valid'))
-        return value
+        return timezone.make_aware(value)
 
 
 class CheckSerializer(serializers.Serializer):

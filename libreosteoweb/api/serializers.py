@@ -208,7 +208,7 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                            allow_null=True,
                                            read_only=True)
 
-    date = serializers.DateTimeField(default_timezone=timezone.utc)
+    #date = serializers.DateTimeField(default_timezone=timezone.utc)
 
     class Meta:
         model = Examination

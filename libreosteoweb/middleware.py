@@ -91,11 +91,9 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         match_install = compile(initialize_admin_url().lstrip('/'))
 
         path = request.path.lstrip('/')
-        logger.debug("path = %s " % path)
 
         UserModel = get_user_model()
         if any(m.match(path) for m in no_reroute_pattern()):
-            logger.debug("path is in no_reroute pattern")
             return
 
         if UserModel.objects.all().count() == 0:
@@ -113,8 +111,8 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                 get_authenticator().authenticate(request)
             except Exception as ex:
                 logger.error(
-                    "Request on %s, but authentication failed on authenticator"
-                    % request.path)
+                    "Request on %s %s, but authentication failed on authenticator"
+                    % (request.method, request.path))
                 return HttpResponseRedirect(get_login_url())
 
         if not request.user.is_authenticated:
@@ -130,7 +128,8 @@ class LoginRequiredMiddleware(MiddlewareMixin):
                     % (path, get_login_url()))
                 return HttpResponseRedirect(get_login_url() + "?next=" +
                                             request.path)
-        logger.info("user [%s] authenticated" % request.user)
+        logger.info("user [%s] authenticated for %s %s" %
+                    (request.user, request.method, request.path))
 
 
 class OfficeSettingsMiddleware(MiddlewareMixin):

@@ -208,19 +208,23 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                            allow_null=True,
                                            read_only=True)
 
-    # date = serializers.DateTimeField(default_timezone=timezone.utc)
+    #date = serializers.DateTimeField(default_timezone=timezone.utc)
 
     class Meta:
         model = Examination
         fields = '__all__'
 
     def validate_date(self, value):
-        if value >= timezone.now():
+        to_validate = value
+        if timezone.is_naive(value):
+            to_validate = timezone.make_aware(value, timezone.utc)
+        current = timezone.now()
+        if timezone.is_naive(current):
+            current = timezone.make_aware(current, timezone.utc)
+        if to_validate >= current:
             raise serializers.ValidationError(
                 _('The examination date is not valid'))
-        if timezone.is_naive(value):
-            return timezone.make_aware(value, timezone.utc)
-        return value
+        return to_validate
 
 
 class CheckSerializer(serializers.Serializer):

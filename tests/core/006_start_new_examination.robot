@@ -20,6 +20,7 @@ Write New Examination Not Invoiced
   Input Text                            jquery:input[placeholder~="Motif"]      Motif de consultation
   Input Text                            jquery:div[class~="inPlaceholderMode"]:contains(Examen)         Examen normal
   Click Button                          close-examination
+  Wait Until Element Is Visible         jquery:input[value="notinvoiced"]
   Click Element                         jquery:input[value="notinvoiced"]
   Input Text                            reason                                  Test
   Element Should Be Enabled             jquery:button[class~="btn-primary"]:contains('Valider')

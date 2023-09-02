@@ -218,7 +218,10 @@ class ExaminationSerializer(serializers.ModelSerializer):
         to_validate = value
         if timezone.is_naive(value):
             to_validate = timezone.make_aware(value, timezone.utc)
-        if to_validate >= timezone.make_aware(timezone.now(), timezone.utc):
+        current = timezone.now()
+        if timezone.is_naive(current):
+            current = timezone.make_aware(current, timezone.utc)
+        if to_validate >= current:
             raise serializers.ValidationError(
                 _('The examination date is not valid'))
         return to_validate

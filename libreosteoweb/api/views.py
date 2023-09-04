@@ -334,9 +334,16 @@ class ExaminationViewSet(viewsets.ModelViewSet):
         if serializer.instance and not serializer.instance.last_invoice:
             return
 
-        if serializer.validated_data['date'] and serializer.instance and serializer.instance.last_invoice \
-                and serializer.validated_data['date'] < serializer.instance.last_invoice.date:
-            return
+        if serializer.validated_data[
+                'date'] and serializer.instance and serializer.instance.last_invoice:
+            provided_date = serializer.validated_data['date']
+            if provided_date.tzinfo is None:
+                provided_date = pytz.utc.localize(provided_date)
+            last_invoice_date = serializer.instance.last_invoice.date
+            if last_invoice_date.tzinfo is None:
+                last_invoice_date = pytz.utc.localize(last_invoice_date)
+            if provided_date < last_invoice_date:
+                return
         raise SuspiciousOperation(
             "Invalid request : examination date is not allowed")
 

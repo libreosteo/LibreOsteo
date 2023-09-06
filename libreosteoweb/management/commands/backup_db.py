@@ -9,7 +9,8 @@ import zipfile
 from io import BytesIO, StringIO
 
 
-def backup_db(exclude=['contenttypes', 'admin', 'auth.Permission']):
+def backup_db(exclude=['contenttypes', 'admin', 'auth.Permission'],
+              version=libreosteoweb.__version__):
     zip_wrapper = BytesIO()
     zip_content = zipfile.ZipFile(zip_wrapper, "w")
 
@@ -25,7 +26,7 @@ def backup_db(exclude=['contenttypes', 'admin', 'auth.Permission']):
         zip_content.write(document.document_file.path,
                           document.document_file.name)
 
-    zip_content.writestr("meta", libreosteoweb.__version__)
+    zip_content.writestr("meta", version)
     zip_content.close()
     return zip_wrapper
 

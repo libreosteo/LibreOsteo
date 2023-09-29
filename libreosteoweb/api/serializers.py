@@ -175,6 +175,13 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
                                       read_only=True,
                                       allow_null=True,
                                       required=False)
+    office_name = serializers.SerializerMethodField()
+
+    def get_office_name(self, obj):
+        office = OfficeSettings.objects.get(id=obj.officesettings_id)
+        if office is not None:
+            return office.office_name
+        return 'n/a'
 
     class Meta:
         model = Invoice

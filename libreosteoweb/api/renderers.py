@@ -37,4 +37,37 @@ class ExaminationCSVRenderer(renderers.CSVRenderer):
 
 
 class InvoiceCSVRenderer(renderers.CSVRenderer):
-    pass
+    labels = {
+        'amount': 'montant',
+        'currency': 'devise',
+        'paiment_mode': 'code mode de paiement',
+        'paiment_mode_text': 'mode de paiement',
+        'header': 'entête',
+        'therapeut_name': 'Nom du thérapeute',
+        'therapeut_first_name': 'Prénom du thérapeute',
+        'quality': 'En qualité de',
+        'adeli': 'ADELI',
+        'location': 'lieu',
+        'number': 'Numéro',
+        'patient_family_name': 'Nom d\'usage du patient',
+        'patient_original_name': 'Nom du patient',
+        'patient_first_name': 'Prénom du patient',
+        'patient_address_street': 'Rue',
+        'patient_address_complement': 'Complément d\'adresse',
+        'patient_address_zipcode': 'Code postal',
+        'patient_address_city': 'Ville',
+        'content_invoice': 'contenu de facture',
+        'footer': 'pied de page',
+        'office_siret': 'SIRET',
+        'office_address_street': 'Rue du cabinet',
+        'office_address_complement': 'Complément d\'adresse',
+        'office_address_city': 'Ville',
+        'office_address_zipcode': 'Code postal',
+        'office_phone': 'Téléphone',
+        'status': 'Etat (1=En attente de paiement,2=Payé)',
+        'therapeut_id': 'Identifiant interne thérapeute',
+        'canceled_by': 'Annulée par',
+        'replace': 'Remplacée par',
+        'officesettings_id': 'Identifiant interne cabinet',
+        'office_name': 'Nom d\'établissement'
+    }

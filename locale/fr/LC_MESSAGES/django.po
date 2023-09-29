@@ -1103,3 +1103,6 @@ msgstr "Profil mis à jour"
 
 #~ msgid "Document file"
 #~ msgstr "Fichier document"
+
+msgid "Total amount on selected period"
+msgstr "Montant total sur la période sélectionnée"

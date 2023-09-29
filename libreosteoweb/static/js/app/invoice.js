@@ -62,8 +62,8 @@ function localizeDaterangePicker() {
     };
 }
 
-invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ','$uibModal',
-    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ, $uibModal) {
+invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ','$uibModal','OfficeSettingsServ',
+    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ, $uibModal, OfficeSettingsServ) {
         "use strict";
 
         function buildAPIFilter() {
@@ -71,12 +71,16 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
                 date__lte: $scope.filters.dateRange.endDate.toISOString(),
                 date__gte: $scope.filters.dateRange.startDate.toISOString(),
 		            therapeut_id : $scope.filters.therapeut_id,
+                office_settings_id: $scope.filters.office_settings_id
             };
         }
 
         function getInvoices() {
             InvoiceService.query(buildAPIFilter(), function(result) {
                 $scope.invoices = result;
+                var invoices_to_delete = $scope.invoices.filter((invoice) => invoice.replace != null).map((invoice)=> invoice.replace);
+                var listToSum = $scope.invoices.filter((invoice) => invoices_to_delete.findIndex((n) => n === invoice.number) == -1);
+                $scope.total_amount = listToSum.reduce((acc, invoice) => acc + invoice.amount, 0);
             });
         }
 
@@ -113,6 +117,16 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
 
         $scope.invoices = [];
 
+        OfficeSettingsServ.get(function(settings){
+          $scope.officesettings = settings.find(x => x.selected);
+          $scope.filters.office_settings_id = $scope.officesettings.id;
+          getInvoices();
+          $scope.list_office_settings = settings;
+          $scope.multiple_office = Array.isArray(settings) && settings.length > 1;
+        });
+
+
+
         // Daterangepicker configuration
         // http://www.daterangepicker.com/#options
         $scope.daterangePickerOptions = {
@@ -127,7 +141,8 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
                 startDate: moment().startOf('month'),
                 endDate: moment().endOf('month')
             },
-		        therapeut_id : $scope.user.id
+          therapeut_id : $scope.user.id,
+          office_settings_id : 1
         };
 
         // Refresh & filter from API on new date selection
@@ -156,6 +171,12 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
         $scope.filters.therapeut_id = user.id;
         getInvoices();
       };
+
+      $scope.changeOffice = function(office) {
+        $scope.officesettings = office;
+        $scope.filters.office_settings_id = office.id;
+        getInvoices();
+      }
 
       $scope.cancelInvoice = function(invoice) {
         var modalInstance = $uibModal.open({

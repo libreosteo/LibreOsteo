@@ -423,6 +423,10 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         therapeut_id = self.request.query_params.get('therapeut_id', None)
         if therapeut_id is not None:
             queryset = queryset.filter(therapeut_id=therapeut_id)
+        office_settings_id = self.request.query_params.get(
+            'office_settings_id', None)
+        if office_settings_id is not None:
+            queryset = queryset.filter(officesettings_id=office_settings_id)
         return queryset
 
     @action(detail=True, methods=["post"])

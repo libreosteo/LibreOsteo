@@ -28,6 +28,19 @@
 	    <li ng-repeat="u in users"><a ng-click="changeTherapeut(u)"><i class="fa fa-user fa-fw"></i>{$ u.last_name $} {$ u.first_name $}</a></li>
     </ul>
 </div>
+<div class="btn-group" ng-if="multiple_office">
+    <button class="btn btn-default dropdown-toggle" type="button" id="officeSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+	    {$ officesettings.office_name $}
+	    <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="officeSelect">
+      <li ng-repeat="o in list_office_settings"><a ng-click="changeOffice(o)"><i class="fa fa-home fa-fw"></i><b ng-if="o.selected">{$ o.office_name $}</b><span ng-if="!o.selected">{$ o.office_name $}</span></a></li>
+    </ul>
+</div>
+
+<div class="mb-3">
+  <p><b>{% trans 'Total amount on selected period' %}</b>: <span>{$ total_amount $}</span></p>
+</div>
 
 <table class="table table-striped table-hover">
     <thead>

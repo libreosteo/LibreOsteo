@@ -296,7 +296,9 @@ class Invoice(models.Model):
     therapeut_name = models.TextField(_('Therapeut name'))
     therapeut_first_name = models.TextField(_('Therapeut firstname'))
     quality = models.TextField(_('Quality'), blank=True)
-    adeli = models.TextField(_('Adeli'))
+    professional_id = models.TextField(_('Professional id'))
+    professional_id_label = models.TextField(_('Professional id label'),
+                                             default='Adeli')
     location = models.TextField(_('Location'))
     number = models.TextField(_('Number'))
     patient_family_name = models.CharField(_('Family name'), max_length=200)
@@ -426,6 +428,11 @@ class OfficeSettings(models.Model):
                                    max_length=250,
                                    blank=True,
                                    null=True)
+    professional_id_label = models.CharField(_('Professional id label'),
+                                             max_length=250,
+                                             blank=False,
+                                             null=False,
+                                             default='Adeli')
     invoice_office_header = models.CharField(_('Invoice office header'),
                                              max_length=500,
                                              blank=True)
@@ -468,7 +475,7 @@ class TherapeutSettings(models.Model):
     """
     This class implements model for extending the User model
     """
-    adeli = models.TextField(_('Adeli'), blank=True)
+    professional_id = models.TextField(_('Professional id'), blank=True)
     quality = models.TextField(_('Quality'), blank=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 verbose_name=_('User'),

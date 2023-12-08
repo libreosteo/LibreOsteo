@@ -27,7 +27,7 @@ Open Settings
   ${COOKIE} =         Get Cookie      sessionid
   Element Should Not Be Visible     class:alert-danger
   Wait Until Element Is Enabled     jquery:div.popover-content
-  Element Should Contain            jquery:div.popover-content      ADELI
+  Element Should Contain            jquery:div.popover-content      identifiant
   Element Should Be Visible         jquery:ul.dropdown-user
   Edit Settings
   Check Rest Settings               ${COOKIE.value}

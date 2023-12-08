@@ -44,7 +44,7 @@ Edit Therapeut Settings
   Input Text                      jquery:input[name="last_name"]    ${LAST_NAME}
   Input Text                      first_name                        ${FIRST_NAME}
   Input Text                      email                             ${EMAIL}
-  Input Text                      inputAdeli                        ${ADELI}
+  Input Text                      inputProfessionalId               ${ADELI}
   Input Text                      inputQuality                      ${QUALITY}
   Click Button                    jquery:button.btn.btn-primary
   Wait Until Element Is Enabled   jquery:div.growl-item
@@ -68,7 +68,7 @@ Check Rest User Profile
   ${resp} =           GET On Session   restapi     /api/profiles/get_by_user
   RequestsLogger.Write log        ${resp}
   Should Be Equal As Numbers      ${resp.json()['id']}            1
-  Should Be Equal As Strings      ${resp.json()['adeli']}         ${ADELI}
+  Should Be Equal As Strings      ${resp.json()['professional_id']}         ${ADELI}
   Should Be Equal As Strings      ${resp.json()['quality']}       ${QUALITY}
 
 Logout

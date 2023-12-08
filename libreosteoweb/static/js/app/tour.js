@@ -37,12 +37,12 @@ var tour = new Tour({
 function stepUserProfile() {
   return $.getJSON('/api/profiles/get_by_user').done(function(data)
   {
-    if (!data.hasOwnProperty("adeli") || data.adeli == '') {
+    if (!data.hasOwnProperty("professional_id") || data.professional_id == '') {
       tour.addStep(
       {
           element: "#user-profile",
           title: "Thérapeute",
-          content: "Mettez à jour votre profil thérapeute. Le numéro ADELI est obligatoire pour les factures.",
+          content: "Mettez à jour votre profil thérapeute. L'identifiant professionnel est obligatoire pour les factures.",
           backdrop : false,
           placement: 'left',
           orphan : true,

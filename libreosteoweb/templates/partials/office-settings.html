@@ -15,7 +15,18 @@
         </div>
         <div class="clearfix">
           <form novalidate name="form">
-            <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="form-group">
+                  <label for="professional_id_label">{{officesettings.professional_id_label}}</label>
+                  <input type="text" class="form-control input-lg" ng-model="officesettings.professional_id_label" required name="professional_id_label" placeholder="{{ officesettings.professional_id_label }}"
+                                                                                                                                       tooltip="{{ officesettings.professional_id_label }}"
+                                                                                                                                       tooltip-trigger="mouseenter"
+                                                                                                                                       ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                </div>
+              </div>
+            </div>
+             <div class="col-xs-4 col-sm-4 col-md-2 col-sm-offset-1 col-md-offset-1">
               <h2>{% trans 'Office' %}</h2>
             </div>
             <div class="col-xs-8 col-sm-7 col-md-8">

@@ -31,6 +31,7 @@ from django.db.models import signals
 
 
 class TestDeletePatient(APITestCase):
+
     def setUp(self):
         receivers_senders = [(receiver_examination, Examination),
                              (receiver_newpatient, Patient)]
@@ -38,7 +39,7 @@ class TestDeletePatient(APITestCase):
                                          receivers_senders=receivers_senders):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
-            TherapeutSettings.objects.create(adeli="12345",
+            TherapeutSettings.objects.create(professional_id="12345",
                                              siret="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)

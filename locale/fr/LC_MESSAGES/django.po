@@ -302,8 +302,11 @@ msgstr "Prénom du thérapeute"
 msgid "Quality"
 msgstr "Qualité"
 
-msgid "Adeli"
-msgstr "Adeli"
+msgid "Professional id"
+msgstr "Identifiant professionnel"
+
+msgid "Professional id label"
+msgstr "Libellé d'identifiant professionnel"
 
 msgid "Location"
 msgstr "Lieu"

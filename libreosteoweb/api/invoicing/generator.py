@@ -18,6 +18,7 @@ from django.utils import timezone
 
 
 class Generator(object):
+
     def __init__(self, office_settings, therapeut_settings):
         self.office_settings = office_settings
         self.therapeut_settings = therapeut_settings
@@ -43,7 +44,8 @@ class Generator(object):
         invoice.therapeut_first_name = user_therapeut.first_name
         invoice.therapeut_id = user_therapeut.id
         invoice.quality = self.therapeut_settings.quality
-        invoice.adeli = self.therapeut_settings.adeli
+        invoice.professional_id = self.therapeut_settings.professional_id
+        invoice.professional_id_label = self.office_settings.professional_id_label
         invoice.location = self.office_settings.office_address_city
 
         invoice.patient_family_name = examination.patient.family_name
@@ -95,7 +97,8 @@ class Generator(object):
         credit_note.therapeut_first_name = invoice.therapeut_first_name
         credit_note.therapeut_id = invoice.therapeut_id
         credit_note.quality = invoice.quality
-        credit_note.adeli = invoice.adeli
+        credit_note.professional_id = invoice.professional_id
+        credit_note.professional_id_label = invoice.professional_id_label
         credit_note.location = invoice.location
         credit_note.patient_family_name = invoice.patient_family_name
         credit_note.patient_original_name = invoice.patient_original_name
@@ -115,6 +118,7 @@ class Generator(object):
 
 
 class ExaminationInvoiceHelper(object):
+
     def __init__(self, office_settings, therapeut_settings, therapeut_user):
         self.office_settings = office_settings
         self.therapeut_settings = therapeut_settings

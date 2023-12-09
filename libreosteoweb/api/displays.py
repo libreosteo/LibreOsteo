@@ -34,6 +34,7 @@ def filter_fields(f):
 
 
 class GenericDisplay(ModelForm):
+
     class Meta:
         model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
@@ -46,36 +47,42 @@ class GenericDisplay(ModelForm):
 
 
 class PatientDisplay(GenericDisplay):
+
     class Meta:
         model = models.Patient
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class RegularDoctorDisplay(GenericDisplay):
+
     class Meta:
         model = models.RegularDoctor
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class ExaminationDisplay(GenericDisplay):
+
     class Meta:
         model = models.Examination
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class UserDisplay(GenericDisplay):
+
     class Meta:
         model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class TherapeutSettingsDisplay(GenericDisplay):
+
     class Meta:
         model = models.TherapeutSettings
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class OfficeSettingsDisplay(GenericDisplay):
+
     class Meta:
         model = models.OfficeSettings
         fields = [f.name for f in model._meta.fields if f.editable]
@@ -150,10 +157,12 @@ def display_search_result(request):
 def display_userprofile(request):
     displayUser = UserDisplay()
     displayTherapeutSettings = TherapeutSettingsDisplay()
+    office_settings = request.officesettings
     return render(
         request, 'partials/user-profile.html', {
             'user': displayUser.display_fields(),
             'therapeutsettings': displayTherapeutSettings.display_fields(),
+            'officesettings': office_settings,
             'optional_modules': models.TherapeutSettings.MODULES_FIELDS,
             'DEMONSTRATION': settings.DEMONSTRATION
         })

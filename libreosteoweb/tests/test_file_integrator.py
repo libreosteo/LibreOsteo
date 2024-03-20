@@ -59,13 +59,15 @@ class TestFileIntegrator(TestCase):
 
     def test_file_content_proxy_not_the_same(self):
         f = MagicMock()
+        f.file = MagicMock()
         f.file.read.return_value = 'Nom;Prenom;Nom de Famille;'
         f.__iter__.return_value = [
             'Nom;Prenom;Nom de Famille;',
         ]
 
         f2 = MagicMock()
-        f2.read.return_value = 'Nom de famille;Prenom'
+        f2.file = MagicMock()
+        f2.file.read.return_value = 'Nom de famille;Prenom'
         f2.__iter__.return_value = [
             'Nom de famille;Prenom',
         ]
@@ -91,6 +93,7 @@ class TestFileIntegrator(TestCase):
         handler = file_integrator.AnalyzerHandler()
         header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
         f = MagicMock()
+        f.file = MagicMock()
         f.file.read.return_value = header
         f.__iter__.return_value = [
             header,
@@ -107,6 +110,7 @@ class TestFileIntegrator(TestCase):
         value = u'Test;Test;Test'
 
         f = MagicMock()
+        f.file = MagicMock()
         f.file.read.return_value = header
         f.__iter__.return_value = [header, value]
 
@@ -119,6 +123,7 @@ class TestFileIntegrator(TestCase):
         header = 'Nom;Prenom;Nom de Famille'
 
         f = MagicMock()
+        f.file = MagicMock()
         f.file.read.return_value = header
         f.__iter__.return_value = (header, )
 

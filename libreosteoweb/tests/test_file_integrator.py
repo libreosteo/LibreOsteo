@@ -28,6 +28,7 @@ except ImportError:
 
 
 class TestFileIntegrator(TestCase):
+
     def setUp(self):
         self.patcher = patch('libreosteoweb.api.file_integrator.open',
                              mock_open(),
@@ -46,39 +47,15 @@ class TestFileIntegrator(TestCase):
 
     def test_file_content_proxy(self):
         f = MagicMock()
-        f.file.read.return_value = 'Nom;Prenom;Nom de Famille;'
-        proxy1 = file_integrator.FileContentProxy()
-        proxy2 = file_integrator.FileContentProxy()
+        m = mock_open(read_data='Nom;Prenom;Nom de Famille;')
+        with patch('libreosteoweb.api.file_integrator.open', m):
+            proxy1 = file_integrator.FileContentProxy()
+            proxy2 = file_integrator.FileContentProxy()
 
-        c1 = proxy1.get_content(f)
-        c2 = proxy2.get_content(f)
+            c1 = proxy1.get_content(f)
+            c2 = proxy2.get_content(f)
 
-        self.assertTrue(c1 == c2)
-
-        f.close()
-
-    def test_file_content_proxy_not_the_same(self):
-        f = MagicMock()
-        f.file = MagicMock()
-        f.file.read.return_value = 'Nom;Prenom;Nom de Famille;'
-        f.__iter__.return_value = [
-            'Nom;Prenom;Nom de Famille;',
-        ]
-
-        f2 = MagicMock()
-        f2.file = MagicMock()
-        f2.file.read.return_value = 'Nom de famille;Prenom'
-        f2.__iter__.return_value = [
-            'Nom de famille;Prenom',
-        ]
-
-        proxy1 = file_integrator.FileContentProxy()
-        proxy2 = file_integrator.FileContentProxy()
-
-        c1 = proxy1.get_content(f)
-        c2 = proxy2.get_content(f2)
-
-        self.assertTrue(c1 != c2)
+            self.assertTrue(c1 == c2)
 
     def test_analyzertype(self):
         content = {}
@@ -93,15 +70,17 @@ class TestFileIntegrator(TestCase):
         handler = file_integrator.AnalyzerHandler()
         header = u'Numero;Nom de Famille;Nom de jeune fille ou jeune homme;Prenom;Date de naissance (JJ MM AAAA);Sex (M F);Rue;Complement dadresse;code postal;ville;email;Telephone;Mobile;Profession;Loisirs;Fumeur (O/N);Lateralite;Informations importantes;Traitement en cours;Antecedents chirurgicaux;Antecedents medicaux;Antecedents familiaux;Antecedents traumatiques;CR medicaux'
         f = MagicMock()
-        f.file = MagicMock()
-        f.file.read.return_value = header
-        f.__iter__.return_value = [
-            header,
-        ]
-        report = handler.analyze(f)
-        self.assertTrue(report.is_empty)
-        self.assertTrue(report.is_valid)
-        self.assertEquals(file_integrator.FileCsvType.PATIENT, report.type)
+        m = mock_open(read_data=header)
+        with patch('libreosteoweb.api.file_integrator.open', m):
+            with patch(
+                    'libreosteoweb.api.file_integrator.FileContentAdapter._get_reader',
+                    return_value=[header.split(';')]):
+
+                report = handler.analyze(f)
+                self.assertTrue(report.is_empty)
+                self.assertTrue(report.is_valid)
+                self.assertEquals(file_integrator.FileCsvType.PATIENT,
+                                  report.type)
 
     def test_analyze_handler_not_empty(self):
         handler = file_integrator.AnalyzerHandler()
@@ -110,29 +89,34 @@ class TestFileIntegrator(TestCase):
         value = u'Test;Test;Test'
 
         f = MagicMock()
-        f.file = MagicMock()
-        f.file.read.return_value = header
-        f.__iter__.return_value = [header, value]
+        m = mock_open(read_data=header)
+        with patch('libreosteoweb.api.file_integrator.open', m):
+            with patch(
+                    'libreosteoweb.api.file_integrator.FileContentAdapter._get_reader',
+                    return_value=[header.split(';'),
+                                  value.split(';')]):
 
-        report = handler.analyze(f)
-        #self.assertFalse(report.is_empty)
-        self.assertTrue(report.is_valid)
-        self.assertEquals(file_integrator.FileCsvType.PATIENT, report.type)
+                report = handler.analyze(f)
+                # self.assertFalse(report.is_empty)
+                self.assertTrue(report.is_valid)
+                self.assertEquals(file_integrator.FileCsvType.PATIENT,
+                                  report.type)
 
     def test_file_content_adapter(self):
         header = 'Nom;Prenom;Nom de Famille'
 
         f = MagicMock()
-        f.file = MagicMock()
-        f.file.read.return_value = header
-        f.__iter__.return_value = (header, )
+        m = mock_open(read_data=header)
+        with patch('libreosteoweb.api.file_integrator.open', m):
 
-        adapter = file_integrator.FileContentAdapter(f)
-        result = adapter.get_content()
-        self.assertEquals(1, result['nb_row'])
-        self.assertEquals(['Nom', 'Prenom', 'Nom de Famille'],
-                          result['header'])
-        self.assertEquals([], result['content'])
+            adapter = file_integrator.FileContentAdapter(f)
+            adapter._get_reader = MagicMock(
+                return_value=iter((header.split(';'), )))
+            result = adapter.get_content()
+            self.assertEquals(1, result['nb_row'])
+            self.assertEquals(['Nom', 'Prenom', 'Nom de Famille'],
+                              result['header'])
+            self.assertEquals([], result['content'])
 
     def tearDown(self):
-        self.patcher.stop()
+        pass

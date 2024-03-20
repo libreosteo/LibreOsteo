@@ -236,7 +236,7 @@ class FileContentAdapter(dict):
             return None
         f = open(str(self.file.file), mode='r', encoding='utf-8')
         logger.info("* Try to guess the dialect on csv")
-        csv_buffer f.read(_CSV_BUFFER_SIZE)
+        csv_buffer = f.read(_CSV_BUFFER_SIZE)
         # Compatibility with python2 and python3
         dialect = csv.Sniffer().sniff(csv_buffer)
         f.seek(0)

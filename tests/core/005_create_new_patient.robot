@@ -128,7 +128,7 @@ Check Rest Patient
   Should Be Equal As Strings      ${resp.json()['phone']}                 01 01 01 01 01
   Should Be Equal As Strings      ${resp.json()['mobile_phone']}          07 07 07 07 07
   Should Be Equal As Strings      ${resp.json()['job']}                   Navigateur
-  Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique
+  Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique<br>
   Should Be True                  ${resp.json()['smoker']}
   Should Be Equal As Strings      ${resp.json()['laterality']}            L
   Should Be True                  ${resp.json()['consent_check']}

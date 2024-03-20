@@ -111,6 +111,7 @@
               {% if new_version_available %}
                 <li class="bg-success"><a href="https://www.libreosteo.org/" target="_blank"><i class="fa fa-star fa-fw"></i> {% trans 'New version available' %} {{ new_version }}</a></li>
               {% endif %}
+              <li class="bg-success"><a href="https://www.cambiatech.com/libreosteo-hosting" target="_blank"><i class="fa fa-star fa-fw"></i> {% trans 'LibreOsteo Hosting' %}</a></li>
               </li>
             </ul>
           </li>
@@ -210,7 +211,7 @@
   {% endif %}
   <script type="text/javascript" src="{% static "components/bootstrap-daterangepicker/daterangepicker.js" %}"></script>
   <script type="text/javascript" src="{% static "components/angular-daterangepicker/js/angular-daterangepicker.js" %}"></script>
-  <script type="text/javascript" src="{%static "components/angular-bind-html-compile/angular-bind-html-compile.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/angular-bind-html-compile/angular-bind-html-compile.js" %}"></script>
 
   <!-- web Application -->
   <script src="{% static "js/app/app.js" %}"></script>
@@ -244,5 +245,6 @@
   <link href="{% static "css/libreosteo.css" %}" rel="stylesheet"/>
   {% endcompress %}
 
+  <div id="container-pdf-generator"></div>
   </body>
 </html>

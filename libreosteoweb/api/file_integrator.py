@@ -234,13 +234,14 @@ class FileContentAdapter(dict):
     def _get_reader(self):
         if not bool(self.file):
             return None
-        self.file.open(mode='r')
+        f = open(str(self.file.file), mode='r', encoding='utf-8')
         logger.info("* Try to guess the dialect on csv")
-        csv_buffer = self.file.read(_CSV_BUFFER_SIZE)
+        csv_buffer_bytes = f.read(_CSV_BUFFER_SIZE)
+        csv_buffer = str(csv_buffer_bytes, encoding='utf-8')
         # Compatibility with python2 and python3
         dialect = csv.Sniffer().sniff(csv_buffer)
-        self.file.seek(0)
-        reader = csv.reader(self.file, dialect)
+        f.seek(0)
+        reader = csv.reader(f, dialect)
         return reader
 
     def passthrough(self, line):

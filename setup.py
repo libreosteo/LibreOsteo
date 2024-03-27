@@ -300,7 +300,10 @@ if sys.platform in ['darwin']:
 
     APP = ['server.py']
 
-    DATA_FILES = ['static', 'locale', 'templates']
+    DATA_FILES = [
+        'static',
+        'locale',
+    ]
 
     OPTIONS = {
         'argv_emulation':

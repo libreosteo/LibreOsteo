@@ -481,7 +481,7 @@ class IntegratorPatient(AbstractIntegrator):
                     errors.append((idx + 2, serializer.errors))
                     logger.info("errors detected, data is = %s, errors = %s " %
                                 (serializer.initial_data, serializer.errors))
-        logger.info("Dump errors : ", errors)
+        logger.info("Dump errors : %s ", errors)
         return (nb_line, errors)
 
 
@@ -499,7 +499,7 @@ class IntegratorExamination(AbstractIntegrator):
         nb_line = 0
         errors = []
         for idx, r in enumerate(content['content']):
-            logger.info("* Load line from content")
+            logger.info("* Load line %s from content" % idx)
             try:
                 patient = self.get_patient(int(r[0]), file_additional)
                 data = {

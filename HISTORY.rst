@@ -2,7 +2,7 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.6 (unreleased)
+0.6.6 (2024-03-27)
 ------------------
 
 - Fix import of CSV files on MacOS, reading file was done in ascii and encoding issue resolving.

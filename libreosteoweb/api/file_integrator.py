@@ -415,10 +415,10 @@ class FilePatientFactory(object):
             }
             serializer = self.serializer_class(data=data)
         except ValueError as e:
-            logger.exception("Exception when creating examination.")
+            logger.exception("Exception when creating patient %s ." % row[0])
             serializer = {'errors': ["%s" % e]}
         except:
-            logger.exception("Exception when creating examination.")
+            logger.exception("Exception when creating patient %s ." % row[0])
         return serializer
 
     def get_sex_value(self, value):
@@ -479,8 +479,9 @@ class IntegratorPatient(AbstractIntegrator):
                     # idx + 2 because : we have header and the index start from 0
                     # To have the line number we have to add 2 to the index....
                     errors.append((idx + 2, serializer.errors))
-                    logger.info("errors detected, data is = %s " %
-                                serializer.initial_data)
+                    logger.info("errors detected, data is = %s, errors = %s " %
+                                (serializer.initial_data, serializer.errors))
+        logger.info("Dump errors : ", errors)
         return (nb_line, errors)
 
 
@@ -564,13 +565,18 @@ class IntegratorExamination(AbstractIntegrator):
         self.patient_table = {}
         factory = FilePatientFactory()
         for c in content['content']:
-            serializer = factory.get_serializer(c)
-            # remove validators to get a validated data through filters
-            serializer.validators = []
-            serializer.is_valid()
-            self.patient_table[int(c[0])] = Patient.objects.filter(
-                family_name=serializer.validated_data['family_name'],
-                first_name=serializer.validated_data['first_name'],
-                birth_date=serializer.validated_data['birth_date']).first()
+            try:
+                serializer = factory.get_serializer(c)
+                # remove validators to get a validated data through filters
+                serializer.validators = []
+                serializer.is_valid()
+                self.patient_table[int(c[0])] = Patient.objects.filter(
+                    family_name=serializer.validated_data['family_name'],
+                    first_name=serializer.validated_data['first_name'],
+                    birth_date=serializer.validated_data['birth_date']).first(
+                    )
 
-            logger.info("found patient %s " % self.patient_table[int(c[0])])
+                logger.info("found patient %s " %
+                            self.patient_table[int(c[0])])
+            except:
+                logger.exception("Could not load patient %s" % c[0])

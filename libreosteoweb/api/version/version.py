@@ -18,7 +18,7 @@ import libreosteoweb
 from packaging.version import parse
 import urllib
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def ask_for_new_version():

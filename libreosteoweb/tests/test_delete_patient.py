@@ -40,7 +40,7 @@ class TestDeletePatient(APITestCase):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(professional_id="12345",
-                                             siret="12345",
+                                             office_identifier="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)
             setting.office_siret = "12345"

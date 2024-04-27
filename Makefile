@@ -10,11 +10,13 @@ build: build-http-ready build-sock-ready
 
 build-http-ready:
 	@echo "Build LibreOsteo app (Http ready)"
-	docker buildx build --platform=linux/amd64,linux/arm64,linux/arm -f Docker/build/http-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-http:$(TAG) --push
+	docker login
+	docker buildx build --platform=linux/amd64,linux/arm64 -f Docker/build/http-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-http:$(TAG) --output type=registry
 
 build-sock-ready:
 	@echo "Build LibreOsteo app (Sock ready)"
-	docker buildx build --platform=linux/amd64,linux/arm64,linux/arm -f Docker/build/sock-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-sock:$(TAG) --push
+	docker login
+	docker buildx build --platform=linux/amd64,linux/arm64 -f Docker/build/sock-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-sock:$(TAG) --output type=registry
 
 build-postgres:
 	@echo "Build Postgresql (for libreosteo)"

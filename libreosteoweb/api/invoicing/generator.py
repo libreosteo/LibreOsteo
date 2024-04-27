@@ -33,11 +33,12 @@ class Generator(object):
         invoice.office_address_zipcode = self.office_settings.office_address_zipcode
         invoice.office_address_city = self.office_settings.office_address_city
         invoice.office_phone = self.office_settings.office_phone
-        invoice.office_siret = self.office_settings.office_siret
+        invoice.office_identifier_label = self.office_settings.office_identifier_label
+        invoice.office_identifier = self.office_settings.office_identifier
 
-        # Override the siret on the invoice with the therapeut siret if defined
-        if self.therapeut_settings.siret is not None:
-            invoice.office_siret = self.therapeut_settings.siret
+        # Override the office identifier on the invoice with the therapeut office identifier if defined
+        if self.therapeut_settings.office_identifier is not None:
+            invoice.office_identifier = self.therapeut_settings.office_identifier
 
         invoice.paiment_mode = serializer_data['paiment_mode']
         invoice.therapeut_name = user_therapeut.last_name
@@ -91,7 +92,8 @@ class Generator(object):
         credit_note.office_address_zipcode = invoice.office_address_zipcode
         credit_note.office_address_city = invoice.office_address_city
         credit_note.office_phone = invoice.office_phone
-        credit_note.office_siret = invoice.office_siret
+        credit_note.office_identifier = invoice.office_identifier
+        credit_note.office_identifier_label = invoice.office_identifier_label
         credit_note.paiment_mode = invoice.paiment_mode
         credit_note.therapeut_name = invoice.therapeut_name
         credit_note.therapeut_first_name = invoice.therapeut_first_name

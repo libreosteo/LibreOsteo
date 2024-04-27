@@ -8,7 +8,7 @@ ${OFFICE_ADDRESS_COMPLEMENT}
 ${OFFICE_ADDRESS_ZIPCODE}       87110
 ${OFFICE_ADDRESS_CITY}          Le Vigen
 ${OFFICE_ADDRESS_PHONE}         05 55 12 13 14
-${OFFICE_SIRET}                 52282868700022
+${OFFICE_IDENTIFIER}            52282868700022
 ${OFFICE_AMOUNT}                55
 ${OFFICE_CURRENCY}              EUR
 ${INVOICE_OFFICE_HEADER}        Cabinet 1
@@ -51,7 +51,7 @@ Edit Settings
   Input Text                      office_address_zipcode                ${OFFICE_ADDRESS_ZIPCODE}
   Input Text                      office_address_city           ${OFFICE_ADDRESS_CITY}
   Input Text                      office_phone                  ${OFFICE_ADDRESS_PHONE}
-  Input Text                      office_siret                  ${OFFICE_SIRET}
+  Input Text                      office_identifier             ${OFFICE_IDENTIFIER}
   Input Text                      amount                        ${OFFICE_AMOUNT}
   Input Text                      currency                      ${OFFICE_CURRENCY}
   Input Text                      invoice_office_header         ${INVOICE_OFFICE_HEADER}
@@ -73,7 +73,7 @@ Check Rest Settings
   Should Be Equal As Strings     ${settings['office_address_zipcode']}       ${OFFICE_ADDRESS_ZIPCODE}
   Should Be Equal As Strings     ${settings['office_address_city']}          ${OFFICE_ADDRESS_CITY}
   Should Be Equal As Strings     ${settings['office_phone']}                 ${OFFICE_ADDRESS_PHONE}
-  Should Be Equal As Strings     ${settings['office_siret']}                 ${OFFICE_SIRET}
+  Should Be Equal As Strings     ${settings['office_identifier']}                 ${OFFICE_IDENTIFIER}
   Should Be Equal As Numbers     ${settings['amount']}                       ${OFFICE_AMOUNT}
   Should Be Equal As Strings     ${settings['currency']}                           ${OFFICE_CURRENCY}
   Should Be Equal As Strings     ${settings['invoice_office_header']}              ${INVOICE_OFFICE_HEADER}

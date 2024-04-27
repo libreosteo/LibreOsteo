@@ -87,8 +87,18 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                   <div class="form-group">
-                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_siret" name="office_siret" placeholder="{{ officesettings.office_siret }}"
-                                                                                                                                tooltip="{{ officesettings.office_siret }}"
+                    <label for="office_identifier_label">{{officesettings.office_identifier_label}}</label>
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_identifier_label" name="office_identifier_label" placeholder="{{ officesettings.office_identifier_label }}"
+                                                                                                                                tooltip="{{ officesettings.office_identifier_label }}"
+                                                                                                                                tooltip-trigger="mouseenter"
+                                                                                                                                required
+                                                                                                                                ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control input-lg" ng-model="officesettings.office_identifier" name="office_identifier" placeholder="{{ officesettings.office_identifier }}"
+                                                                                                                                tooltip="{{ officesettings.office_identifier }}"
                                                                                                                                 tooltip-trigger="mouseenter"
                                                                                                                                 required
                                                                                                                                 ng-disabled="{{ user.is_staff|yesno:"false,true" }}"/>

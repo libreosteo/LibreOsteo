@@ -38,10 +38,10 @@ class TestChangeIdInvoice(APITestCase):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(professional_id="12345",
-                                             siret="12345",
+                                             office_identifier="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)
-            setting.office_siret = "12345"
+            setting.office_identifier = "12345"
             setting.currency = 'EUR'
             setting.amount = 50
             setting.save()
@@ -68,7 +68,7 @@ class TestChangeIdInvoice(APITestCase):
 
     def test_no_set_start_invoice_sequence_on_already_set_value(self):
         setting = OfficeSettings.objects.get(id=1)
-        setting.office_siret = '12345'
+        setting.office_identifier = '12345'
         setting.currency = 'EUR'
         setting.amount = 50
         setting.invoice_start_sequence = 1000
@@ -147,10 +147,10 @@ class TestCancelInvoice(APITestCase):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(professional_id="12345",
-                                             siret="12345",
+                                             office_identifier="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)
-            setting.office_siret = "12345"
+            setting.office_identifier = "12345"
             setting.currency = 'EUR'
             setting.amount = 50
             setting.save()
@@ -212,10 +212,10 @@ class TestRegularizeNotPaidInvoice(APITestCase):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(professional_id="12345",
-                                             siret="12345",
+                                             office_identifier="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)
-            setting.office_siret = "12345"
+            setting.office_identifier = "12345"
             setting.currency = 'EUR'
             setting.amount = 50
             setting.save()
@@ -403,15 +403,15 @@ class TestInvoiceWithOfficeSettings(APITestCase):
             self.user = get_user_model().objects.create_superuser(
                 "test", "test@test.com", "testpw")
             TherapeutSettings.objects.create(professional_id="12345",
-                                             siret="12345",
+                                             office_identifier="12345",
                                              user=self.user)
             setting = OfficeSettings.objects.get(id=1)
-            setting.office_siret = "12345"
+            setting.office_identifier = "12345"
             setting.currency = 'EUR'
             setting.amount = 50
             setting.save()
 
-            OfficeSettings.objects.create(office_siret="98765",
+            OfficeSettings.objects.create(office_identifier="98765",
                                           currency='EUR',
                                           amount=65,
                                           invoice_start_sequence=1000000,

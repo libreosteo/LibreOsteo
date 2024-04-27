@@ -311,8 +311,11 @@ msgstr "Contenu"
 msgid "Footer"
 msgstr "Pied de page"
 
-msgid "Siret"
-msgstr "Siret"
+msgid "Office identifier"
+msgstr "Identifiant de structure"
+
+msgid "Office identifier label"
+msgstr "Libellé d'identifiant de structure"
 
 msgid "status"
 msgstr "état"

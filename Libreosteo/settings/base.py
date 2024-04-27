@@ -295,3 +295,5 @@ PROTECTED_MEDIA_ROOT = os.path.join(DATA_FOLDER, "media")
 PROTECTED_MEDIA_URL = "/files"
 PROTECTED_MEDIA_LOCATION_PREFIX = "/internal"  # Prefix used in nginx config
 PROTECTED_MEDIA_AS_DOWNLOADS = False  # Controls inclusion of a Content-Disposition header
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

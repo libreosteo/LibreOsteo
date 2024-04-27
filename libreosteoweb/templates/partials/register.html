@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load static from staticfiles %}
+{% load static %}
 
     <form role="form" method="post" action="{% url 'accounts-create-admin' %}">
           <input name="csrfmiddlewaretoken" value="{{csrf_token}}" type="hidden">

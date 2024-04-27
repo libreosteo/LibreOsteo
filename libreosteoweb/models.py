@@ -322,7 +322,9 @@ class Invoice(models.Model):
                                             blank=True)
     content_invoice = models.TextField(_('Content'), blank=True)
     footer = models.TextField(_('Footer'), blank=True)
-    office_siret = models.TextField(_('Siret'), blank=True)
+    office_identifier = models.TextField(_('Office identifier'), blank=True)
+    office_identifier_label = models.TextField(_('Office identifier label'),
+                                               default='SIRET')
     office_address_street = models.CharField(_('Street'),
                                              max_length=500,
                                              blank=True,
@@ -449,7 +451,12 @@ class OfficeSettings(models.Model):
                                            max_length=200,
                                            blank=True)
     office_phone = models.CharField(_('Phone'), max_length=200, blank=True)
-    office_siret = models.CharField(_('Siret'), max_length=20)
+    office_identifier = models.CharField(_('Office identifier'), max_length=50)
+    office_identifier_label = models.CharField(_('Office identifier label'),
+                                               max_length=50,
+                                               blank=False,
+                                               null=False,
+                                               default='SIRET')
     amount = models.FloatField(_('Amount'),
                                blank=True,
                                null=True,
@@ -482,7 +489,10 @@ class TherapeutSettings(models.Model):
                                 blank=True,
                                 null=True,
                                 on_delete=models.PROTECT)
-    siret = models.CharField(_('Siret'), max_length=20, blank=True, null=True)
+    office_identifier = models.CharField(_('Office identifier'),
+                                         max_length=50,
+                                         blank=True,
+                                         null=True)
     invoice_footer = models.TextField(_('Invoice footer'),
                                       blank=True,
                                       null=True)
@@ -532,8 +542,8 @@ class TherapeutSettings(models.Model):
         """
         Ensure that empty string are none in DB
         """
-        if self.siret == '':
-            self.siret = None
+        if self.office_identifier == '':
+            self.office_identifier = None
         if self.invoice_footer == '':
             self.invoice_footer = None
         super(TherapeutSettings, self).save(*args, **kwargs)

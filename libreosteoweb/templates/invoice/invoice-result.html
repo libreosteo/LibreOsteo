@@ -25,7 +25,7 @@
 						{% endif %}
 						<span class="address">{{ invoice.office_address_zipcode}} {{ invoice.office_address_city}}</span><br/>
 						<span class="phone"><i class="fa fa-phone-square"> </i> {{ invoice.office_phone }}</span><br/>
-						<span class="siret">SIRET : {{ invoice.office_siret }}</span><br/>
+            <span class="office_identifier">{{invoice.office_identifier_label}} : {{ invoice.office_identifier }}</span><br/>
 					</div>
 					<div class="therapeut-frame">
 						<span class="therapeut">{{ invoice.therapeut_name}} {{invoice.therapeut_first_name}}</span><br/>

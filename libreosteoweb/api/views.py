@@ -42,7 +42,7 @@ from django.http import (HttpResponse, HttpResponseForbidden,
                          HttpResponseRedirect, Http404)
 from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import resolve_url
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
 from django.views import View
@@ -103,7 +103,8 @@ class CreateAdminAccountView(TemplateView):
         username = request.POST['username']
         if form.is_valid() and ' ' not in username:
             # Ensure the user-originating redirection url is safe.
-            if not is_safe_url(url=self.redirect_to, allowed_hosts=None):
+            if not url_has_allowed_host_and_scheme(url=self.redirect_to,
+                                                   allowed_hosts=None):
                 self.redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)
             # Okay, security check complete. Log the user in.
             create_superuser(request, form.data)

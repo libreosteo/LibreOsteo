@@ -39,7 +39,7 @@ from django.core.files import File
 from django.core.management import call_command
 from django.db.models import signals
 from django.http import (HttpResponse, HttpResponseForbidden,
-                         HttpResponseRedirect, Http404)
+                         HttpResponseRedirect, Http404, HttpResponseBadRequest)
 from django.core.exceptions import SuspiciousOperation
 from django.shortcuts import resolve_url
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -69,6 +69,7 @@ from libreosteoweb.api.invoicing import generator as invoicing_generator
 from libreosteoweb.api.events.settings import settings_event_tracer, full_db_download, full_retrieve_patient_list
 from django.core.files.storage import default_storage
 from libreosteoweb.api.signals import post_reload_db
+import django_filters.rest_framework
 import uuid
 from io import StringIO
 
@@ -406,7 +407,8 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
     queryset = models.Invoice.objects.all()
     serializer_class = apiserializers.InvoiceSerializer
-    filter_fields = {'date': ['lte', 'gte']}
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = {'date': ['lte', 'gte']}
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
         InvoiceCSVRenderer
     ]
@@ -675,14 +677,17 @@ class DocumentViewSet(viewsets.ModelViewSet):
 class PatientDocumentViewSet(viewsets.ModelViewSet):
     model = models.PatientDocument
     serializer_class = apiserializers.PatientDocumentSerializer
-    filter_fields = ['patient']
 
     def get_queryset(self):
-        try:
-            patient = self.kwargs['patient']
-            return models.PatientDocument.objects.filter(
+        patient = self.request.query_params.get('patient')
+        if patient is not None:
+            queryset = models.PatientDocument.objects.filter(
                 patient__id=patient).order_by('document__document_date')
-        except KeyError:
+            if queryset:
+                return queryset
+            else:
+                raise ParseError()
+        else:
             return models.PatientDocument.objects.all()
 
     def perform_create(self, serializer):

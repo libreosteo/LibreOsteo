@@ -5,8 +5,9 @@ Changelog for LibreOsteo
 0.6.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Add support to have custom office identifier (removal hard coding siret which is France metropolitan restrictive)
+- upgrade technical stack with django 4.2
+- removing support for python 3.7
 
 0.6.6 (2024-03-27)
 ------------------

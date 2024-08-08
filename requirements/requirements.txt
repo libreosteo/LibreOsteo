@@ -3,7 +3,7 @@ Whoosh==2.7.4
 argparse==1.2.1
 django-filter==24.2
 django-haystack==3.2.1
-djangorestframework==3.15.1
+djangorestframework==3.15.2
 cherrypy==18.8.0
 djangorestframework-csv==3.0.0
 django_compressor

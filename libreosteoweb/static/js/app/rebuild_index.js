@@ -29,7 +29,7 @@ rebuildindex.controller('RebuildIndexCtrl', ['$scope','$http', function($scope, 
             {
                 $scope.finished = true;
             }, function error(response) {
-                scope.failed = true
+                $scope.failed = true
             });
     };
 }]);

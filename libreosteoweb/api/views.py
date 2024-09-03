@@ -679,7 +679,10 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.PatientDocumentSerializer
 
     def get_queryset(self):
-        patient = self.kwargs['patient']
+        try:
+            patient = self.kwargs['patient']
+        except KeyError:
+            patient = self.request.query_params.get('patient')
         if patient is not None:
             queryset = models.PatientDocument.objects.filter(
                 patient__id=patient).order_by('document__document_date')

@@ -30,6 +30,7 @@ from .utils import convert_to_long
 from django.utils.dateparse import parse_datetime
 from libreosteoweb.api.utils import _unicode
 from libreosteoweb.api.demonstration import get_demonstration_file
+import pytz
 import re
 
 logger = logging.getLogger(__name__)
@@ -176,6 +177,8 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
                                       allow_null=True,
                                       required=False)
     office_name = serializers.SerializerMethodField()
+
+    date = serializers.DateTimeField(default_timezone=pytz.utc)
 
     def get_office_name(self, obj):
         office = OfficeSettings.objects.get(id=obj.officesettings_id)

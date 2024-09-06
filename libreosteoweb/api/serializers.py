@@ -444,9 +444,6 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
 
-    internal_date = serializers.DateTimeField(default_timezone=pytz.utc)
-    document_date = serializers.DateTimeField(default_timezone=pytz.utc)
-
     class Meta:
         model = Document
         fields = '__all__'

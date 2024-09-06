@@ -137,6 +137,7 @@ class ExaminationExtractSerializer(WithPkMixin, serializers.ModelSerializer):
     therapeut = UserInfoSerializer()
     comments = serializers.SerializerMethodField('get_nb_comments')
     office_detail = OfficeDetailSerializer(source='office')
+    date = serializers.DateTimeField(default_timezone=pytz.utc)
 
     class Meta:
         model = Examination
@@ -218,7 +219,7 @@ class ExaminationSerializer(serializers.ModelSerializer):
                                            allow_null=True,
                                            read_only=True)
 
-    #date = serializers.DateTimeField(default_timezone=timezone.utc)
+    date = serializers.DateTimeField(default_timezone=pytz.utc)
 
     class Meta:
         model = Examination
@@ -227,10 +228,10 @@ class ExaminationSerializer(serializers.ModelSerializer):
     def validate_date(self, value):
         to_validate = value
         if timezone.is_naive(value):
-            to_validate = timezone.make_aware(value, timezone.utc)
+            to_validate = timezone.make_aware(value, pytz.utc)
         current = timezone.now()
         if timezone.is_naive(current):
-            current = timezone.make_aware(current, timezone.utc)
+            current = timezone.make_aware(current, pytz.utc)
         if to_validate >= current:
             raise serializers.ValidationError(
                 _('The examination date is not valid'))
@@ -311,6 +312,7 @@ class OfficeEventSerializer(WithPkMixin, serializers.ModelSerializer):
     patient_name = serializers.SerializerMethodField()
     translated_comment = serializers.SerializerMethodField()
     therapeut_name = UserInfoSerializer(source='user')
+    date = serializers.DateTimeField(default_timezone=pytz.utc)
 
     def get_patient_name(self, obj):
         if (obj.clazz == "Patient"):
@@ -441,6 +443,9 @@ class FileImportSerializer(WithPkMixin, serializers.ModelSerializer):
 
 
 class DocumentSerializer(WithPkMixin, serializers.ModelSerializer):
+
+    internal_date = serializers.DateTimeField(default_timezone=pytz.utc)
+    document_date = serializers.DateTimeField(default_timezone=pytz.utc)
 
     class Meta:
         model = Document

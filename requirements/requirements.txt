@@ -9,7 +9,7 @@ djangorestframework-csv==3.0.0
 django_compressor==4.4
 setuptools-bower
 sqlparse
-netifaces==0.10.9
+netifaces==0.10.8
 decorator
 packaging
 django-protected-media

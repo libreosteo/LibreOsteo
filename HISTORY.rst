@@ -2,6 +2,12 @@ Changelog for LibreOsteo
 ========================
 
 
+0.6.8 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 0.6.7 (2025-01-11)
 ------------------
 

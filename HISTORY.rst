@@ -2,7 +2,13 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.7 (unreleased)
+0.6.8 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+0.6.7 (2025-01-11)
 ------------------
 
 - Add support to have custom office identifier (removal hard coding siret which is France metropolitan restrictive)

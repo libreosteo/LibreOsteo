@@ -13,9 +13,9 @@ jobs:
       matrix:
         python-version: [3.8, 3.9, '3.10']
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Tooling
@@ -51,7 +51,7 @@ jobs:
           python ./server.py &
           xvfb-run --server-args="-screen 0 1280x1024x24" robot -P . tests
       - name: Archiving results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: result-tests-${{matrix.python-version}}

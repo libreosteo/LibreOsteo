@@ -31,6 +31,7 @@ from django.utils.dateparse import parse_datetime
 from libreosteoweb.api.utils import _unicode
 from libreosteoweb.api.demonstration import get_demonstration_file
 import re
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -224,10 +225,10 @@ class ExaminationSerializer(serializers.ModelSerializer):
     def validate_date(self, value):
         to_validate = value
         if timezone.is_naive(value):
-            to_validate = timezone.make_aware(value, timezone.utc)
+            to_validate = pytz.utc.localize(value)
         current = timezone.now()
         if timezone.is_naive(current):
-            current = timezone.make_aware(current, timezone.utc)
+            current = pytz.utc.localize(current)
         if to_validate >= current:
             raise serializers.ValidationError(
                 _('The examination date is not valid'))

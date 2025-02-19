@@ -54,7 +54,7 @@ Edit The New Patient
   Select From List By Label       laterality              Gaucher
   Select Checkbox                 smoker
   Input Text                      job                     Navigateur
-  Input Text                      hobbies                 Ski, Roller, Musique<br>
+  Input Text                      hobbies                 Ski, Roller, Musique
   Input Text                      important_info          WARNING
   Input Text                      current_treatment       Traitement H2O
   Click Button                    jquery:button:contains("Fin d'édition")
@@ -128,7 +128,7 @@ Check Rest Patient
   Should Be Equal As Strings      ${resp.json()['phone']}                 01 01 01 01 01
   Should Be Equal As Strings      ${resp.json()['mobile_phone']}          07 07 07 07 07
   Should Be Equal As Strings      ${resp.json()['job']}                   Navigateur
-  Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique<br>
+  Should Be Equal As Strings      ${resp.json()['hobbies']}               Ski, Roller, Musique
   Should Be True                  ${resp.json()['smoker']}
   Should Be Equal As Strings      ${resp.json()['laterality']}            L
   Should Be True                  ${resp.json()['consent_check']}

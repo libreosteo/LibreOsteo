@@ -21,8 +21,8 @@ jobs:
       - name: Install Tooling
         run: |
           export FIREFOX_SOURCE_URL='https://download.mozilla.org/?product=firefox-latest&lang=fr&os=linux64'
-          wget --no-verbose -O /tmp/firefox-latest.tar.bz2 $FIREFOX_SOURCE_URL
-          tar -xjf /tmp/firefox-latest.tar.bz2
+          wget --no-verbose -O /tmp/firefox-latest.tar.xz $FIREFOX_SOURCE_URL
+          tar -xJf /tmp/firefox-latest.tar.xz
           curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.21.1
           wget https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz -O /tmp/geckodriver.tar.gz
           tar -xvf /tmp/geckodriver.tar.gz

@@ -142,6 +142,6 @@ Check Rest Patient Documents
   Should Be Equal As Numbers      ${resp.json()['patient']}               1
   Should Be Equal As Numbers      ${resp.json()['attachment_type']}       5
   Should Be Equal As Strings      ${resp.json()['document']['title']}     Licence LibreOsteo
-  Should Be Equal As Strings      ${resp.json()['document']['notes']}     Licence GNU GPLv3<br>
+  Should Be Equal As Strings      ${resp.json()['document']['notes']}     Licence GNU GPLv3
   Should Be Equal As Strings      ${resp.json()['document']['document_date']}   2012-01-10
   Should Contain                  ${resp.json()['document']['document_file']}         http://localhost:8085/files/documents/resources

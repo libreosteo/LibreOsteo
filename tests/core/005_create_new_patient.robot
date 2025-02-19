@@ -54,7 +54,7 @@ Edit The New Patient
   Select From List By Label       laterality              Gaucher
   Select Checkbox                 smoker
   Input Text                      job                     Navigateur
-  Input Text                      hobbies                 Ski, Roller, Musique
+  Input Text                      hobbies                 Ski, Roller, Musique<br>
   Input Text                      important_info          WARNING
   Input Text                      current_treatment       Traitement H2O
   Click Button                    jquery:button:contains("Fin d'édition")

@@ -229,9 +229,9 @@ class ExaminationSerializer(serializers.ModelSerializer):
         current = timezone.now()
         if timezone.is_naive(current):
             current = pytz.utc.localize(current)
-        if to_validate >= current:
-            raise serializers.ValidationError(
-                _('The examination date is not valid'))
+        #if to_validate >= current:
+        #    raise serializers.ValidationError(
+        #        _('The examination date is not valid'))
         return to_validate
 
 

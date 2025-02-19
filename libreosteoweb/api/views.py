@@ -319,7 +319,7 @@ class ExaminationViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         if not self.request.user.is_authenticated:
             raise Http404()
-        self._validate_examination_date(serializer)
+        #self._validate_examination_date(serializer)
         if not serializer.instance.therapeut:
             serializer.save(therapeut=self.request.user)
         serializer.save(therapeut=serializer.instance.therapeut)

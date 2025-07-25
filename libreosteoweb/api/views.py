@@ -46,6 +46,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
 from django.views import View
+from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
 from django.db.models import Max
@@ -716,7 +717,7 @@ DUMP_FILE = "libreosteo.db"
 class DbDump(PermissionRequiredMixin, View):
     permission_required = 'libreosteoweb.patient.data_dump'
 
-    @never_cache
+    @method_decorator(never_cache)
     def get(self, request, *args, **kwargs):
         response = HttpResponse(backup_db().getvalue(),
                                 content_type="application/binary")

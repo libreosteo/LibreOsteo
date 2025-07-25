@@ -2,10 +2,10 @@ Changelog for LibreOsteo
 ========================
 
 
-0.6.8 (unreleased)
+0.6.8 (2025-07-25)
 ------------------
 
-- Nothing changed yet.
+- fix regression on retrieving archive due to Django 4 upgrade
 
 
 0.6.7 (2025-01-11)

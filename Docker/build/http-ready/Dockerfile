@@ -64,7 +64,7 @@ RUN apk add --no-cache \
     libc-dev \
     linux-headers\
     postgresql-libs\
-    && apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev\
+    && apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev libpq-dev \
     && pip install uwsgi psycopg2\
     && apk --purge del .build-deps
 

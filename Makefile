@@ -1,4 +1,4 @@
-TAG := latest 
+TAG := latest
 HOST_PORT := 8085
 GUEST_PORT := 8085
 REPOSITORY := libreosteo
@@ -11,12 +11,17 @@ build: build-http-ready build-sock-ready
 build-http-ready:
 	@echo "Build LibreOsteo app (Http ready)"
 	docker login
-	docker buildx build --platform=linux/amd64,linux/arm64 -f Docker/build/http-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-http:$(TAG) --output type=registry
+	docker buildx build --platform=linux/amd64 -f Docker/build/http-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-http:$(TAG)-amd64 --push --output type=registry
+	docker buildx build --platform=linux/arm64 -f Docker/build/http-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-http:$(TAG)-arm64 --push --output type=registry
+	docker buildx imagetools create -t ${REPOSITORY}/${APP}-http:${TAG} ${REPOSITORY}/${APP}-http:${TAG}-amd64 ${REPOSITORY}/${APP}-http:${TAG}-arm64
+
 
 build-sock-ready:
 	@echo "Build LibreOsteo app (Sock ready)"
 	docker login
-	docker buildx build --platform=linux/amd64,linux/arm64 -f Docker/build/sock-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-sock:$(TAG) --output type=registry
+	docker buildx build --platform=linux/amd64 -f Docker/build/sock-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-sock:$(TAG)-amd64 --push --output type=registry
+	docker buildx build --platform=linux/arm64 -f Docker/build/sock-ready/Dockerfile . -t $(REPOSITORY)/$(APP)-sock:$(TAG)-arm64 --push --output type=registry
+	docker buildx imagetools create -t ${REPOSITORY}/${APP}-sock:${TAG} ${REPOSITORY}/${APP}-sock:${TAG}-amd64 ${REPOSITORY}/${APP}-sock:${TAG}-arm64
 
 build-postgres:
 	@echo "Build Postgresql (for libreosteo)"

@@ -64,9 +64,11 @@ RUN apk add --no-cache \
     libc-dev \
     linux-headers\
     postgresql-libs\
-    && apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev\
-    && pip install uwsgi psycopg2\
-    && apk --purge del .build-deps
+    && apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev libpq-dev \
+    && pip install --upgrade pip \
+    && pip install psycopg2\
+    && apk --purge del .build-deps \
+    && apk add uwsgi-python3
 
 EXPOSE 8085
 CMD python3 ./manage.py migrate --settings=Libreosteo.settings.container && python3 ./manage.py import_zipcodes --settings=Libreosteo.settings.container || test 1=1 && export DJANGO_SETTINGS_MODULE=Libreosteo.settings.container && uwsgi --http :8085 --module Libreosteo.wsgi --master --processes 1 --threads 1 --static-map /files=/Libreosteo/data/media --static-map /static=/Libreosteo/static -H /Libreosteo/venv

@@ -172,10 +172,10 @@ class PaimentSerializer(PaimentModeSerializer):
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
                         PaimentModeSerializer):
-    #paiments_list = PaimentSerializer(many=True,
-    #                                  read_only=True,
-    #                                  allow_null=True,
-    #                                  required=False)
+    paiments_list = PaimentSerializer(many=True,
+                                      read_only=True,
+                                      allow_null=True,
+                                      required=False)
     office_name = serializers.SerializerMethodField()
 
     def get_office_name(self, obj):

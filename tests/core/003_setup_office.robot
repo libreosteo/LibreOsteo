@@ -59,7 +59,7 @@ Edit Settings
   Input Text                      invoice_footer                ${INVOICE_FOOTER}
   Click Button                    jquery:button.btn.btn-primary
   Wait Until Element Is Enabled   jquery:div.growl-item.alert
-  Element Should Be Visible       jquery:div.growl-item.alert.alert-success
+  Wait Until Element Is Enabled       jquery:div.growl-item.alert.alert-success
 
 Check Rest Settings
   [Arguments]     ${session_token}

@@ -187,7 +187,7 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
     class Meta:
         model = Invoice
         fields = '__all__'
-        depth = 1
+        depth = 0
 
 
 class ExaminationSerializer(serializers.ModelSerializer):

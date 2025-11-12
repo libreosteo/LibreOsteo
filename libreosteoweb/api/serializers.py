@@ -172,10 +172,10 @@ class PaimentSerializer(PaimentModeSerializer):
 
 class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
                         PaimentModeSerializer):
-    paiments_list = PaimentSerializer(many=True,
-                                      read_only=True,
-                                      allow_null=True,
-                                      required=False)
+    #paiments_list = PaimentSerializer(many=True,
+    #                                  read_only=True,
+    #                                  allow_null=True,
+    #                                  required=False)
     office_name = serializers.SerializerMethodField()
 
     def get_office_name(self, obj):
@@ -187,7 +187,7 @@ class InvoiceSerializer(WithPkMixin, serializers.ModelSerializer,
     class Meta:
         model = Invoice
         fields = '__all__'
-        depth = 1
+        depth = 0
 
 
 class ExaminationSerializer(serializers.ModelSerializer):

@@ -70,7 +70,7 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
             return {
                 date__lte: $scope.filters.dateRange.endDate.toISOString(),
                 date__gte: $scope.filters.dateRange.startDate.toISOString(),
-		            therapeut_id : $scope.filters.therapeut_id,
+		            therapeut_id : $scope.filters.therapeut_id == 0?null:$scope.filters.therapeut_id,
                 office_settings_id: $scope.filters.office_settings_id
             };
         }
@@ -113,7 +113,10 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
             getInvoices();
           }
         });
-	      $scope.users = OfficeUsersServ.query();
+        $scope.users = OfficeUsersServ.query(function(results){
+          results.push({ username : '', id:0, last_name: 'Tous', first_name:''});
+        });
+        console.log($scope.users);
 
         $scope.invoices = [];
 
@@ -153,19 +156,22 @@ invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ
             angular.element('input#billing-period').triggerHandler('click');
         }
 
-        $scope.buildCsvUrl = function(fields) {
+       $scope.buildXlsxUrl = function(fields) {
             var queryDict = buildAPIFilter();
-            var url = '/api/invoices.csv?';
+            var url = '/api/invoices?format=xlsx&';
 
             if (fields) {
                 queryDict.fields = fields
             }
 
             for (var key in queryDict) {
-                url += key + '=' + queryDict[key]+'&'
+                if (queryDict[key] != null) {
+                  url += key + '=' + queryDict[key]+'&'
+                }
             }
             return url.slice(0, -1)
         }
+
       $scope.changeTherapeut = function(user) {
         $scope.user = user;
         $scope.filters.therapeut_id = user.id;

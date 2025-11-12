@@ -25,7 +25,7 @@ user.factory('UserServ', ['$resource',
             'update' : {method : 'PUT' , params : {userId : 'userId'}},
             setpassword : {method : 'POST', params: {userId : 'userId'},
                     url : 'api/office-users/:userId/set_password'},
-	    query : {method: 'GET', isArray : true }
+	          query : {method: 'GET', isArray : true }
         });
     }
 ]);

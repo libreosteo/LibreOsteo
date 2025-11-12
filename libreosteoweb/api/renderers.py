@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with LibreOsteo.  If not, see <http://www.gnu.org/licenses/>.
 from rest_framework_csv import renderers
+from drf_excel import renderers as xlsxrenderers
 
 
 class PatientCSVRenderer(renderers.CSVRenderer):
@@ -73,3 +74,6 @@ class InvoiceCSVRenderer(renderers.CSVRenderer):
         'officesettings_id': 'Identifiant interne cabinet',
         'office_name': 'Nom d\'établissement'
     }
+
+class InvoiceXLSXRenderer(xlsxrenderers.XLSXRenderer):
+    pass

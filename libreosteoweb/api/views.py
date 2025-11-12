@@ -62,7 +62,7 @@ from .permissions import (IsStaffOrTargetUser, IsStaffOrReadOnlyTargetUser,
 from .receivers import (block_disconnect_all_signal, receiver_examination,
                         temp_disconnect_signal, receiver_newpatient)
 from .renderers import (ExaminationCSVRenderer, InvoiceCSVRenderer,
-                        PatientCSVRenderer)
+                        InvoiceXLSXRenderer, PatientCSVRenderer)
 from .statistics import Statistics
 from .file_integrator import Extractor, IntegratorHandler
 from .utils import convert_to_long, LoggerWriter
@@ -71,6 +71,7 @@ from libreosteoweb.api.events.settings import settings_event_tracer, full_db_dow
 from django.core.files.storage import default_storage
 from libreosteoweb.api.signals import post_reload_db
 import django_filters.rest_framework
+from drf_excel.mixins import XLSXFileMixin
 import uuid
 from io import StringIO
 
@@ -404,15 +405,18 @@ class StatisticsView(APIView):
         return response
 
 
-class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
+class InvoiceViewSet(XLSXFileMixin, viewsets.ReadOnlyModelViewSet):
     model = models.Invoice
     queryset = models.Invoice.objects.all()
     serializer_class = apiserializers.InvoiceSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = {'date': ['lte', 'gte']}
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
-        InvoiceCSVRenderer
+        InvoiceXLSXRenderer
     ]
+    filename="factures.xlsx"
+    xlsx_auto_filter = True
+    xlsx_use_labels = True
 
     def get_renderer_context(self):
         # allows to select which fields we want via ?fields=field1,field2

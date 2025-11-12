@@ -60,6 +60,7 @@ jobs:
             report.html
             output.xml
             selenium-screenshot-*.png
+            data/db.sqlite3
       - name: Translations state
         run: |
           echo 'Translations status'

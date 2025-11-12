@@ -186,7 +186,7 @@ class TestCancelInvoice(APITestCase):
         self.assertEqual(response.data['credit_note']['number'], u'10001')
         self.assertEqual(response.data['canceled']['status'],
                          InvoiceStatus.CANCELED)
-        self.assertEqual(response.data['canceled']['canceled_by']['id'],
+        self.assertEqual(response.data['canceled']['canceled_by'],
                          response.data['credit_note']['id'])
         self.assertEqual(response.data['canceled']['type'], 'invoice')
         self.assertEqual(response.data['credit_note']['type'], 'creditnote')

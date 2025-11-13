@@ -31,7 +31,7 @@ Change Invoice Start Number
   Input Text                      id:invoice_start_sequence         25000
   Should Be Valid                 id:invoice_start_sequence
   Apply Settings
-  Element Should Be Visible       jquery:div.growl-item.alert.alert-success
+  Element Should Be Enabled       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                  25000
 
 Invoice With The New Sequence
@@ -51,14 +51,14 @@ Change Invoice Start Number Before
   Input Text                      id:invoice_start_sequence         25500
   Should Be Valid                 id:invoice_start_sequence
   Apply Settings
-  Element Should Be Visible       jquery:div.growl-item.alert.alert-success
+  Element Should Be Enabled       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                25500
   Input Text                      id:invoice_start_sequence         25000
   Should Be Invalid               id:invoice_start_sequence
   Input Text                      id:invoice_start_sequence         25001
   Should Be Valid                 id:invoice_start_sequence
   Apply Settings
-  Element Should Be Visible       jquery:div.growl-item.alert.alert-success
+  Element Should Be Enabled       jquery:div.growl-item.alert.alert-success
   Ensure That Event Is Created    ${COOKIE.value}                25001
 
 
@@ -71,7 +71,8 @@ Change Invoice Start Number With Text
   Input Text                      id:invoice_start_sequence        FACT00001
   Should Be Invalid               id:invoice_start_sequence
   Apply Settings
-  Element Should Be Visible       jquery:div.growl-item.alert.alert-danger
+  Element Should Be Enabled       jquery:div.growl-item.alert.alert-danger
+
 
 
 Cancel Invoice

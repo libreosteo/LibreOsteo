@@ -832,10 +832,10 @@ msgid "Export to an external system"
 msgstr "Exporter vers un système externe"
 
 msgid ""
-"Here you can download the full list of patients and examinations as CSV files"
+"Here you can download the full list of patients and examinations as Excel files"
 msgstr ""
 "Vous pouvez télécharger ici la liste complète des patients et des "
-"consultations sous forme de fichiers CSV"
+"consultations sous forme de fichiers Excel"
 
 msgid "Patients file"
 msgstr "Fichier patients"

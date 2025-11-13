@@ -72,6 +72,7 @@ from django.core.files.storage import default_storage
 from libreosteoweb.api.signals import post_reload_db
 import django_filters.rest_framework
 from drf_excel.mixins import XLSXFileMixin
+from drf_excel.renderers import XLSXRenderer
 import uuid
 from io import StringIO
 
@@ -181,14 +182,17 @@ class InvoiceViewHtml(TemplateView):
         return context
 
 
-class PatientViewSet(viewsets.ModelViewSet):
+class PatientViewSet(viewsets.ModelViewSet, XLSXFileMixin):
     model = models.Patient
     serializer_class = apiserializers.PatientSerializer
     queryset = models.Patient.objects.all()
     permission_classes = [IsDataAccessAllowed]
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
         PatientCSVRenderer,
+        XLSXRenderer
     ]
+    xlsx_use_labels = True
+    filename = "patients.xsls"
 
     def list(self, request, *args, **kwargs):
         full_retrieve_patient_list(request.user)
@@ -241,13 +245,16 @@ class RegularDoctorViewSet(viewsets.ModelViewSet):
     serializer_class = apiserializers.RegularDoctorSerializer
 
 
-class ExaminationViewSet(viewsets.ModelViewSet):
+class ExaminationViewSet(viewsets.ModelViewSet, XLSXFileMixin):
     model = models.Examination
     queryset = models.Examination.objects.all()
     serializer_class = apiserializers.ExaminationSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [
         ExaminationCSVRenderer,
+        XLSXRenderer
     ]
+    xlsx_use_labels = True
+    filename = "consultations.xlsx"
 
     @action(detail=True, methods=['post'])
     def invoice(self, request, pk=None):

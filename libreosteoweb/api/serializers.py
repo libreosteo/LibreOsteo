@@ -412,7 +412,7 @@ class UserOfficeSerializer(WithPkMixin, serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('id', 'username', 'first_name', 'last_name', 'is_staff',
+        fields = ('id', 'username', 'first_name', 'last_name', 'is_staff', 'email'
                   'is_active')
 
 

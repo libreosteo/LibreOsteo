@@ -156,20 +156,20 @@
                     <hr/>
                     <div class="row">
                             <div class="col-md-7">
-                                {{ patient.hobbies }} : <span hallo-editor ng-model="patient.hobbies"
+                                {{ patient.hobbies }} : <div hallo-editor ng-model="patient.hobbies"
                                                               name="hobbies"
                                                               placeholder="'{{ patient.hobbies }}'"
-                                                              is-editable="form.patientForm.$visible"></span>
+                                                              is-editable="form.patientForm.$visible"></div>
                         </div>
                         <div class="col-md-5 left-bordered-col">
                             {{ patient.job }} :
-                            <span e-name="job"
+                            <div e-name="job"
                                   editable-text="patient.job"
                                   e-placeholder="{{ patient.job }}"
                                   tooltip="{{ patient.job }}"
                                   tooltip-trigger="mouseenter"
                                   e-width="200px"
-                            >{$ patient.job || "{% trans 'not documented' %}" $}</span>
+                            >{$ patient.job || "{% trans 'not documented' %}" $}</div>
                         </div>
                     </div>
                 </div>

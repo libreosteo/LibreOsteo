@@ -711,7 +711,7 @@ class PatientDocumentViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
     def get_serializer_class(self):
-        if settings.DEMONSTRATION:
+        if settings.DEMONSTRATION or (self.request.tenant and self.request.tenant.schema_name and self.request.tenant.schema_name == 'demonstration'):
             return apiserializers.PatientDocumentDemonstrationSerializer
         return apiserializers.PatientDocumentSerializer
 

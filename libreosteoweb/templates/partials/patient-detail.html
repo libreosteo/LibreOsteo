@@ -19,7 +19,7 @@
     <span ng-show="patient.original_name || form.patientForm.$visible">(<span blur="submit" e-name="original_name" e-placeholder="{{ patient.original_name }}" e-form="originalNameInput" buttons="no" editable-text="patient.original_name" onaftersave="savePatient()">{$ patient.original_name $}</span>)
     </span>
     <span editable-text="patient.first_name" onaftersave="savePatient()">{$ patient.first_name $}</span>
-    <small ng-if="age || patient.job"><span ng-if="patient.job">{$ patient.job $}, </span>{$ age | format_age $}</small>
+    <small ng-if="age || patient.job"><span ng-if="patient.job">{$ patient.job | filterJob $}, </span>{$ age | format_age $}</small>
 </h1>
 
 <uib-tabset active="indexTab">
@@ -166,9 +166,10 @@
                             <div name="job"
                                  hallo-editor
                                   placeholder="{{ patient.job }}"
+                                  ng-model="patient.job"
                                   tooltip="{{ patient.job }}"
                                   tooltip-trigger="mouseenter"
-                                  e-width="200px"
+                                  width="200px"
                                   is-editable="form.patientForm.$visible"
                             >{$ patient.job || "{% trans 'not documented' %}" $}</div>
                         </div>

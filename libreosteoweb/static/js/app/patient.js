@@ -18,7 +18,7 @@ var patient = angular.module('loPatient', ['ngResource', 'loDoctor', 'loExaminat
 
 
 patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
-  function($resource, PatientDocumentServ) {
+  function ($resource, PatientDocumentServ) {
     "use strict";
     var serv = $resource('api/patients/:patientId', null, {
       query: {
@@ -52,7 +52,7 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
           patientId: 'patientId'
         }
       },
-      save_partial : {
+      save_partial: {
         method: 'PATCH',
         params: {
           patientId: 'patientId'
@@ -60,7 +60,7 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
       }
     });
 
-    serv.prototype.medical_reports_doc = function(callback) {
+    serv.prototype.medical_reports_doc = function (callback) {
       return PatientDocumentServ.get({
         patient: this.id
       }, callback);
@@ -72,7 +72,7 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
     };
 
     serv.lateralities = [];
-    angular.forEach(serv.lateralitiesMap, function(v, k) {
+    angular.forEach(serv.lateralitiesMap, function (v, k) {
       serv.lateralities.push({
         value: k,
         text: v
@@ -85,7 +85,7 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
     };
 
     serv.sexes = [];
-    angular.forEach(serv.sexMap, function(v, k) {
+    angular.forEach(serv.sexMap, function (v, k) {
       serv.sexes.push({
         value: k,
         text: v
@@ -97,7 +97,7 @@ patient.factory('PatientServ', ['$resource', 'PatientDocumentServ',
 ]);
 
 patient.factory('PatientExaminationsServ', ['$resource',
-  function($resource) {
+  function ($resource) {
     "use strict";
     return $resource('api/patients/:patient/examinations', null, {
       get: {
@@ -113,7 +113,7 @@ patient.factory('PatientExaminationsServ', ['$resource',
 ]);
 
 patient.factory('PatientDocumentServ', ['$resource',
-  function($resource) {
+  function ($resource) {
     "use strict";
     return $resource('api/patients/:patient/documents', null, {
       get: {
@@ -127,9 +127,9 @@ patient.factory('PatientDocumentServ', ['$resource',
   }
 ]);
 
-patient.filter('format_age', function() {
+patient.filter('format_age', function () {
   "use strict";
-  return function(input) {
+  return function (input) {
     if (input) {
       var out = '';
       var ans = '';
@@ -162,20 +162,29 @@ patient.filter('format_age', function() {
   };
 });
 
+patient.filter('filterJob', function () {
+  return function (text) {
+    if (!text) return '';
+    const div = window.document.createElement('div');
+    div.innerHTML = text;
+    return div.firstChild.textContent;
+  }
+});
+
 patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter', '$uibModal', '$http', '$sce', 'growl', 'PatientServ',
   'PatientExaminationsServ', 'ExaminationServ', 'OfficeSettingsServ', 'loEditFormManager', 'loFileManager', 'FileServ', 'OfficePaimentMeansServ', 'TherapeutSettingsServ', 'ZipCodeServ',
-  function($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
+  function ($scope, $state, $stateParams, $filter, $uibModal, $http, $sce, growl, PatientServ, PatientExaminationsServ, ExaminationServ, OfficeSettingsServ,
     loEditFormManager, loFileManager, FileServ, OfficePaimentMeansServ, TherapeutSettingsServ, ZipCodeServ) {
     "use strict";
 
     $scope.zipcode_completion_enabled = {};
-    TherapeutSettingsServ.get_by_user().$promise.then(function(data) {
+    TherapeutSettingsServ.get_by_user().$promise.then(function (data) {
       $scope.therapeutSettings = data;
     });
 
-    var updateMedicalDocumentReports = function(docs) {
+    var updateMedicalDocumentReports = function (docs) {
       var medicalReportsDoc = [];
-      angular.forEach(docs, function(value, key) {
+      angular.forEach(docs, function (value, key) {
         if (value.attachment_type == 5) { // Medical reports
           this.push(value.document);
           value.document.expand = false;
@@ -194,7 +203,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
     $scope.patient = PatientServ.get({
       patientId: $stateParams.patientId
-    }, function(p) {
+    }, function (p) {
       p.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
       p.medical_reports_doc(updateMedicalDocumentReports);
     });
@@ -202,7 +211,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     $scope.form = {};
 
     // Display the formated age
-    $scope.get_age = function() {
+    $scope.get_age = function () {
       var birthDate = $scope.patient.birth_date;
       if (birthDate) {
         var todate = new Date();
@@ -244,11 +253,11 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     };
     $scope.age = $scope.get_age();
 
-    $scope.$watch('patient.birth_date', function(newValue, oldValue) {
+    $scope.$watch('patient.birth_date', function (newValue, oldValue) {
       $scope.age = $scope.get_age();
     });
 
-    $scope.zipcodeLookup = function(val) {
+    $scope.zipcodeLookup = function (val) {
       if ($scope.therapeutSettings.zipcode_completion_enabled) {
         return ZipCodeServ.lookup(val)
       } else {
@@ -256,14 +265,14 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     }
 
-    $scope.onZipcodeSelect = function(item) {
+    $scope.onZipcodeSelect = function (item) {
       $scope.patient.address_city = item.city;
     }
 
-    $scope.updateComponentPolyfill = function() {
+    $scope.updateComponentPolyfill = function () {
       // To be compliant with all browser.
       var els = angular.element(".polyfill-updatable");
-      angular.forEach(els, function(el) {
+      angular.forEach(els, function (el) {
         var jqEl = $(el);
         if (jqEl.is(':visible')) {
           jqEl.updatePolyfill();
@@ -272,18 +281,18 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     }
 
     // Handle the patient object to be saved.
-    $scope.savePatient = function() {
+    $scope.savePatient = function () {
       // Be sure that the birth_date has a correct format to be registered.
       var model = angular.copy($scope.patient);
       model.birth_date = $filter('date')($scope.patient.birth_date, 'yyyy-MM-dd');
       return PatientServ.save({
         patientId: $scope.patient.id
-      }, model, function(data) {
+      }, model, function (data) {
         // Should reload the patient
         $scope.patient = data;
         $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(data.birth_date));
         $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
-      }, function(data) {
+      }, function (data) {
         // Should display the error
         if (data.data.detail) {
           growl.addErrorMessage(data.data.detail);
@@ -294,7 +303,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         }
         $scope.patient = PatientServ.get({
           patientId: $stateParams.patientId
-        }, function(p) {
+        }, function (p) {
           $scope.patient.birth_date = convertUTCDateToLocalDate(new Date(p.birth_date));
           $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
         });
@@ -303,12 +312,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
     //Handle examinations
 
-    $scope.getOrderedExaminations = function(patientId) {
+    $scope.getOrderedExaminations = function (patientId) {
       var examinationsList = PatientExaminationsServ.get({
         patient: patientId
-      }, function(data) {
+      }, function (data) {
         examinationsList = data;
-        angular.forEach(examinationsList, function(value, index, obj) {
+        angular.forEach(examinationsList, function (value, index, obj) {
           value.date = loadExamination(value).date;
           value.order = examinationsList.length - index;
         });
@@ -328,12 +337,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       newExaminationDisplayTab: false,
     };
 
-    $scope.$watch('patient.id', function(newValue, oldValue) {
+    $scope.$watch('patient.id', function (newValue, oldValue) {
       $scope.updateDeleteTrigger();
       loEditFormManager.available = true;
     });
 
-    $scope.updateDeleteTrigger = function() {
+    $scope.updateDeleteTrigger = function () {
       if ($scope.patient == null) {
         $scope.triggerEditFormPatient.delete = false;
         return;
@@ -345,7 +354,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         $scope.triggerEditFormPatient.delete = false;
       }
     };
-    $scope.onTabChange = function(tabChangeEvent) {
+    $scope.onTabChange = function (tabChangeEvent) {
       var viewChangeEvent = $scope.$broadcast('uiTabChange');
       if (viewChangeEvent.defaultPrevented) {
         tabChangeEvent.preventDefault();
@@ -353,7 +362,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     };
 
 
-    $scope.startExamination = function() {
+    $scope.startExamination = function () {
       $scope.currentExaminationManager();
 
       $scope.newExamination = {
@@ -383,15 +392,15 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     };
 
     // Handle the examination object to be saved.
-    $scope.saveExamination = function(examinationToSave) {
+    $scope.saveExamination = function (examinationToSave) {
       //$scope.examination.date = $filter('date')($scope.examination.date, 'yyyy-MM-dd');
       if (!examinationToSave) {
         examinationToSave = $scope.newExamination;
       }
       var localExamination;
       if (!examinationToSave.id) {
-        localExamination = ExaminationServ.add(examinationToSave, function(value) {
-          Object.keys(value).forEach(function(key) {
+        localExamination = ExaminationServ.add(examinationToSave, function (value) {
+          Object.keys(value).forEach(function (key) {
             $scope.newExamination[key] = value[key];
           });
           $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
@@ -400,7 +409,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       } else {
         if (examinationToSave.date == null) {
           // restore the previous date
-          angular.forEach($scope.examinations, function(value, key) {
+          angular.forEach($scope.examinations, function (value, key) {
             if (value.id == examinationToSave.id) {
               examinationToSave.date = value.date;
             }
@@ -408,7 +417,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
         }
         localExamination = ExaminationServ.save({
           examinationId: examinationToSave.id
-        }, examinationToSave, function(value) {
+        }, examinationToSave, function (value) {
           $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
         });
       }
@@ -418,52 +427,52 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
     };
 
     // Function which manage the current examination
-    $scope.currentExaminationManager = function() {
+    $scope.currentExaminationManager = function () {
       $scope.examinationsTab.newExaminationDisplay = true;
       $scope.indexTab = 6;
     };
 
     // Handle the invoice function
 
-    $scope.invoiceExamination = function(examination, handleClose, invoice_only, allow_amount_change) {
+    $scope.invoiceExamination = function (examination, handleClose, invoice_only, allow_amount_change) {
       var modalInstance = $uibModal.open({
         templateUrl: 'web-view/partials/invoice-modal',
         controller: InvoiceFormCtrl,
         resolve: {
-          examination: function() {
+          examination: function () {
             return examination;
           },
-          invoice_only: function() {
+          invoice_only: function () {
             return invoice_only || false;
           },
-          allow_amount_override: function() {
+          allow_amount_override: function () {
             return allow_amount_change || false;
           }
         }
       });
 
 
-      modalInstance.result.then(function(invoicing) {
+      modalInstance.result.then(function (invoicing) {
         handleClose(examination, invoicing);
       });
     };
 
-    $scope.reloadExaminations = function(examination) {
+    $scope.reloadExaminations = function (examination) {
       // Reload the examinations list
       $scope.examinations = $scope.getOrderedExaminations($stateParams.patientId);
       $scope.previousExamination.data = ExaminationServ.get({
-          examinationId: examination.id
-        },
-        function(data) {
+        examinationId: examination.id
+      },
+        function (data) {
           $scope.previousExamination.data = loadExamination(data);
         });
     };
 
-    $scope.close = function(examination, invoicing) {
+    $scope.close = function (examination, invoicing) {
 
       ExaminationServ.close({
         examinationId: examination.id
-      }, invoicing, function() {
+      }, invoicing, function () {
         if ($scope.examinationsTab.newExaminationDisplay) {
           // Hide the in progress examination
           $scope.newExamination = {};
@@ -471,7 +480,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
           $scope.indexTab = 5;
         }
         $scope.reloadExaminations(examination);
-      }, function(reason) {
+      }, function (reason) {
         if (reason.data.detail) {
           growl.addErrorMessage(reason.data.detail);
         } else {
@@ -482,17 +491,17 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       });
     };
 
-    $scope.examinationDeleted = function(examination) {
+    $scope.examinationDeleted = function (examination) {
       if (examination.id) {
         growl.addSuccessMessage(gettext("Examination deleted"));
-        $scope.examinations = $scope.examinations.filter(function(el) {
+        $scope.examinations = $scope.examinations.filter(function (el) {
           return el.id !== examination.id;
         });
 
       }
       if ($scope.examinationsTab.newExaminationDisplay) {
         // Hide the in progress examination
-        Object.keys($scope.newExamination).forEach(function(key) {
+        Object.keys($scope.newExamination).forEach(function (key) {
           delete $scope.newExamination[key];
         });
         $scope.examinationsTab.newExaminationDisplay = false;
@@ -512,13 +521,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       $scope.indexTab = 5;
 
       $scope.previousExamination.data = ExaminationServ.get({
-          examinationId: $state.params.examinationId
-        },
-        function(data) {
+        examinationId: $state.params.examinationId
+      },
+        function (data) {
           loEditFormManager.available = true;
           $scope.previousExamination.data = loadExamination(data);
         },
-        function(error) {
+        function (error) {
           $scope.previousExamination.data = null;
           $state.go('patient.examinations');
         });
@@ -528,13 +537,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
     // Load the values for the sex
     $scope.sexes = [{
-        value: 'M',
-        text: gettext('Male')
-      },
-      {
-        value: 'F',
-        text: gettext('Female')
-      },
+      value: 'M',
+      text: gettext('Male')
+    },
+    {
+      value: 'F',
+      text: gettext('Female')
+    },
     ];
 
 
@@ -548,7 +557,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       delete: true,
     };
 
-    $scope.$watch('form.patientForm.$visible', function(newValue, oldValue) {
+    $scope.$watch('form.patientForm.$visible', function (newValue, oldValue) {
       if (newValue === true) {
         $scope.triggerEditFormPatient.edit = false;
         $scope.triggerEditFormPatient.save = true;
@@ -560,26 +569,26 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     });
 
-    $scope.editPatient = function() {
+    $scope.editPatient = function () {
 
       $scope.form.patientForm.$show();
     };
 
-    $scope.saveEditPatient = function() {
+    $scope.saveEditPatient = function () {
       $scope.form.patientForm.$save();
     };
 
-    $scope.delete = function() {
-      var deleteFunction = function(isGdpr) {
+    $scope.delete = function () {
+      var deleteFunction = function (isGdpr) {
         var delete_impl = PatientServ.delete;
         if (isGdpr) {
           delete_impl = PatientServ.delete_gdpr;
         }
         delete_impl({
           patientId: $scope.patient.id
-        }, function(resultOk) {
+        }, function (resultOk) {
           $state.go('dashboard');
-        }, function(resultNok) {
+        }, function (resultNok) {
           console.log(resultNok);
           growl.addErrorMessage("This operation is not available");
         });
@@ -588,13 +597,13 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       if ($scope.patient.id) {
         var examinationsList = PatientExaminationsServ.get({
           patient: $scope.patient.id
-        }, function(data) {
+        }, function (data) {
           if (data.length != 0) {
             var modalInstance = $uibModal.open({
               templateUrl: 'web-view/partials/confirmation-modal',
               controller: ConfirmationCtrl,
               resolve: {
-                message: function() {
+                message: function () {
                   return $sce.trustAsHtml("<p>" +
                     gettext("For GDPR conformity, patient can ask to delete all information. This function delete all information without trace except invoices. You can find invoices into Accounting function. Are you agree with that ?") +
                     "</p>" +
@@ -602,12 +611,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
                     gettext("I understand that it means") +
                     "</label></div>");
                 },
-                defaultIsOk: function() {
+                defaultIsOk: function () {
                   return false;
                 }
               }
             });
-            modalInstance.result.then(function() {
+            modalInstance.result.then(function () {
               deleteFunction(true);
             });
           } else {
@@ -624,7 +633,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       delete: false,
     };
 
-    $scope.$watch('form.historyForm.$visible', function(newValue, oldValue) {
+    $scope.$watch('form.historyForm.$visible', function (newValue, oldValue) {
       if (oldValue === false && newValue === true) {
         $scope.triggerEditFormHistory.edit = false;
         $scope.triggerEditFormHistory.save = true;
@@ -634,12 +643,12 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     });
 
-    $scope.editHistory = function() {
+    $scope.editHistory = function () {
 
       $scope.form.historyForm.$show();
     };
 
-    $scope.saveHistory = function() {
+    $scope.saveHistory = function () {
       $scope.form.historyForm.$save();
     };
 
@@ -650,7 +659,7 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       delete: false,
     };
 
-    $scope.$watch('form.medicalForm.$visible', function(newValue, oldValue) {
+    $scope.$watch('form.medicalForm.$visible', function (newValue, oldValue) {
       if (oldValue === false && newValue === true) {
         $scope.triggerEditFormMedical.edit = false;
         $scope.triggerEditFormMedical.save = true;
@@ -660,16 +669,16 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       }
     });
 
-    $scope.editMedical = function() {
+    $scope.editMedical = function () {
 
       $scope.form.medicalForm.$show();
     };
 
-    $scope.saveMedical = function() {
+    $scope.saveMedical = function () {
       $scope.form.medicalForm.$save();
     };
 
-    $scope.fillInfoFiles = function(files) {
+    $scope.fillInfoFiles = function (files) {
       if (files && files.length) {
         $scope.fileContext.files(files);
         $scope.fileContext.patient($scope.patient);
@@ -678,22 +687,22 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 
     $scope.fileContext = loFileManager.createFileContext();
 
-    $scope.fileContext.setDocumentAddedCb(function() {
+    $scope.fileContext.setDocumentAddedCb(function () {
       $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
     });
 
-    $scope.expand = function(document_view, flag) {
+    $scope.expand = function (document_view, flag) {
       document_view.expand = flag;
     };
 
-    $scope.edit_doc = function(document_view, flag) {
+    $scope.edit_doc = function (document_view, flag) {
       document_view.edit = flag;
       document_view.expand = false;
       if (!flag)
         $scope.patient.medical_reports_doc(updateMedicalDocumentReports);
     };
 
-    $scope.save_doc = function(document_view) {
+    $scope.save_doc = function (document_view) {
       document_view.edit = false;
       var date_tostr = $filter('date')(document_view.document_date, 'yyyy-MM-dd');
       var document_tosave = {
@@ -704,51 +713,51 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
       };
       FileServ.save({
         patientDocId: document_view.id
-      }, document_tosave, function(value) {
+      }, document_tosave, function (value) {
         growl.addSuccessMessage(gettext("Update success"));
       });
     };
 
-    $scope.delete_doc = function(document_view) {
+    $scope.delete_doc = function (document_view) {
       var modalInstance = $uibModal.open({
         templateUrl: 'web-view/partials/confirmation-modal',
         controller: ConfirmationCtrl,
         resolve: {
-          message: function() {
+          message: function () {
             return "<p>" + gettext("Are you sure to delete this document ?") + "</p>";
           },
-          defaultIsOk: function() {
+          defaultIsOk: function () {
             return true;
           }
         }
       });
-      modalInstance.result.then(function() {
+      modalInstance.result.then(function () {
         FileServ.delete({
           patientDocId: document_view.id
-        }, function(value) {
-          $scope.patient.medicalReportsDoc = $scope.patient.medicalReportsDoc.filter(function(el) {
+        }, function (value) {
+          $scope.patient.medicalReportsDoc = $scope.patient.medicalReportsDoc.filter(function (el) {
             return el.id !== document_view.id;
           });
         });
       });
     };
 
-    $scope.consent_confirmed = function() {
+    $scope.consent_confirmed = function () {
       PatientServ.save_partial(
         {
           patientId: $scope.patient.id
-        }, { consent_check: true }, function(data) {
+        }, { consent_check: true }, function (data) {
           $scope.patient.consent = new Date(data.consent);
           $scope.patient.consent_check = data.consent_check;
-        }, function(error) {
-        // Should display the error
-        if (error.data.detail) {
-          growl.addErrorMessage(error.data.detail);
-        } else {
-          growl.addErrorMessage(formatGrowlError(error.data), {
-            enableHtml: true
-          });
-        }
+        }, function (error) {
+          // Should display the error
+          if (error.data.detail) {
+            growl.addErrorMessage(error.data.detail);
+          } else {
+            growl.addErrorMessage(formatGrowlError(error.data), {
+              enableHtml: true
+            });
+          }
 
         });
     }
@@ -756,20 +765,20 @@ patient.controller('PatientCtrl', ['$scope', '$state', '$stateParams', '$filter'
 ]);
 
 
-var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
+var ConfirmationCtrl = function ($scope, $uibModalInstance, message, defaultIsOk) {
   $scope.message = message;
-  $scope.ok = function() {
+  $scope.ok = function () {
     $uibModalInstance.close();
   };
 
   $scope.isOk = defaultIsOk;
 
-  $scope.cancel = function() {
+  $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
 }
 
-var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, OfficePaimentMeansServ, examination, invoice_only, allow_amount_override) {
+var InvoiceFormCtrl = function ($scope, $uibModalInstance, OfficeSettingsServ, OfficePaimentMeansServ, examination, invoice_only, allow_amount_override) {
   "use strict";
   $scope.invoicing = {
     status: null,
@@ -790,9 +799,9 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     $scope.invoicing.status = 'invoiced';
     $scope.invoicing.amount = $scope.examinationToInvoice.last_invoice.amount;
   } else {
-    OfficeSettingsServ.get(function(settings) {
+    OfficeSettingsServ.get(function (settings) {
       const selectedArray = settings.find(s => s.selected);
-      $scope.officesettings = Array.isArray(selectedArray)? selectedArray[0]:selectedArray || {amount: null};
+      $scope.officesettings = Array.isArray(selectedArray) ? selectedArray[0] : selectedArray || { amount: null };
       $scope.invoicing.amount = $scope.officesettings.amount;
     });
   }
@@ -801,9 +810,9 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     $scope.invoicing.status = 'invoiced';
   }
 
-  OfficePaimentMeansServ.query(function(paimentmeans) {
+  OfficePaimentMeansServ.query(function (paimentmeans) {
     var enabledPm = [];
-    angular.forEach(paimentmeans, function(value, key) {
+    angular.forEach(paimentmeans, function (value, key) {
       if (value.enable) {
         enabledPm.push(value);
       }
@@ -811,37 +820,37 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     $scope.paimentmeans = enabledPm;
   });
 
-  $scope.ok = function() {
+  $scope.ok = function () {
     $uibModalInstance.close($scope.invoicing);
   };
 
-  $scope.cancel = function() {
+  $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
 
-  $scope.validateStatus = function(value) {
+  $scope.validateStatus = function (value) {
     return value != null;
   }
 
-  $scope.validateReason = function(value) {
+  $scope.validateReason = function (value) {
     if ($scope.invoicing.status == 'notinvoiced') {
       return value != null && value.length != 0;
     }
     return true;
   };
 
-  $scope.validateAmount = function(value) {
+  $scope.validateAmount = function (value) {
     if ($scope.invoicing.status == 'invoiced') {
       return value != null && value > 0;
     }
     return true;
   };
 
-  $scope.validatePaimentMode = function(value) {
+  $scope.validatePaimentMode = function (value) {
     return value != null;
   }
 
-  $scope.validateBank = function(value) {
+  $scope.validateBank = function (value) {
     /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
     {
         return value != null && value.length != 0;
@@ -849,7 +858,7 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     return true;
   };
 
-  $scope.validatePayer = function(value) {
+  $scope.validatePayer = function (value) {
     /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
     {
         return value != null && value.length != 0;
@@ -857,7 +866,7 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
     return true;
   };
 
-  $scope.validateNumber = function(value) {
+  $scope.validateNumber = function (value) {
     /*if($scope.invoicing.status == 'invoiced' && $scope.invoicing.paiment_mode == 'check')
     {
         return value != null && value.length != 0;
@@ -868,17 +877,17 @@ var InvoiceFormCtrl = function($scope, $uibModalInstance, OfficeSettingsServ, Of
 
 
 patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'PatientServ', '$filter',
-  function($scope, $location, growl, $sce, PatientServ, $filter) {
+  function ($scope, $location, growl, $sce, PatientServ, $filter) {
     "use strict";
 
-    $scope.initPatient = function(patient) {
+    $scope.initPatient = function (patient) {
       var model = angular.copy(patient);
       model.birth_date = $filter('date')(patient.birth_date, 'yyyy-MM-dd');
 
-      PatientServ.add(model, function(data) {
-          $location.path('/patient/' + data.id);
-        },
-        function(data) {
+      PatientServ.add(model, function (data) {
+        $location.path('/patient/' + data.id);
+      },
+        function (data) {
           // Should display the error
           if (data.data.birth_date && data.data.birth_date.birth_date) {
             growl.addErrorMessage(data.data.birth_date.birth_date);
@@ -896,7 +905,7 @@ patient.controller('AddPatientCtrl', ['$scope', '$location', 'growl', '$sce', 'P
 
 
 patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
-  function($scope) {
+  function ($scope) {
     "use strict";
     $scope.previousExamination = {
       data: null,
@@ -906,16 +915,16 @@ patient.controller('DisplayArchiveExaminationCtrl', ['$scope',
 
 /** Given a laterality code, provides the translated verbose name
  */
-patient.filter('verboseLaterality', function(PatientServ) {
-  return function(value) {
+patient.filter('verboseLaterality', function (PatientServ) {
+  return function (value) {
     var t = PatientServ.lateralitiesMap[value];
     return t || gettext('not documented');
   };
 });
 
 
-patient.filter('verboseSex', function(PatientServ) {
-  return function(value) {
+patient.filter('verboseSex', function (PatientServ) {
+  return function (value) {
     var t = PatientServ.sexMap[value];
     return t || gettext('not documented');
   };

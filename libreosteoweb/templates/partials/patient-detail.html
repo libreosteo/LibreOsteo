@@ -163,12 +163,13 @@
                         </div>
                         <div class="col-md-5 left-bordered-col">
                             {{ patient.job }} :
-                            <div e-name="job"
-                                  editable-text="patient.job"
-                                  e-placeholder="{{ patient.job }}"
+                            <div name="job"
+                                 hallo-editor
+                                  placeholder="{{ patient.job }}"
                                   tooltip="{{ patient.job }}"
                                   tooltip-trigger="mouseenter"
                                   e-width="200px"
+                                  is-editable="form.patientForm.$visible"
                             >{$ patient.job || "{% trans 'not documented' %}" $}</div>
                         </div>
                     </div>

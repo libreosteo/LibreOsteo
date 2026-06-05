@@ -61,6 +61,8 @@ jobs:
             output.xml
             selenium-screenshot-*.png
             data/db.sqlite3
+            data/whoosh_index/*
+            data/media/*
             access.log
             errors.log
             console.log

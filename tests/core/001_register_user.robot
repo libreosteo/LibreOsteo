@@ -41,4 +41,5 @@ Login Page Should Be Open
 
 Clear database
   Remove File   data/db.sqlite3
+  Remove Directory  data/whoosh_index    recursive=True
   Run   python ./manage.py migrate

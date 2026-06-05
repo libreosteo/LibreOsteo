@@ -4,6 +4,8 @@
 {{ object.address_zipcode }}
 {{ object.address_city }}
 {{ object.phone }}
+{{ object.job | safe}}
+{{ object.hobbies | safe}}
 {{ object.doctor.family_name}}
 {{ object.mobile_phone }}
 {{ object.important_info|safe }}

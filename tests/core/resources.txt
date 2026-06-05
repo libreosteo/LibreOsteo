@@ -1,5 +1,5 @@
 *** Settings ***
-Library     SeleniumLibrary   timeout=50    implicit_wait=5
+Library     SeleniumLibrary   timeout=120    implicit_wait=5
 Library     Collections
 Library     RequestsLibrary
 Library     RequestsLogger

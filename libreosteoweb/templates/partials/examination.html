@@ -68,6 +68,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3" ng-show="model.status > 0 && model.status == 3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>{% trans 'Not invoiced' %}</span>
+                </div>
+                <div class="panel-body row" style="margin-left: 5px; margin-right: 5px">
+                  {$ model.status_reason $}
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">

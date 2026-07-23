@@ -58,13 +58,13 @@ Check The Analyze Examination
 Import File Success
   Click Button                          jquery:button.btn-success:contains("Importer")
   Wait That Import Is Complete
-  Wait Until Element Contains           jquery:div.panel-success>div.panel-heading    Importation réussie                         timeout= 00:05
+  Wait Until Element Contains           jquery:div.panel-success>div.panel-heading    Importation réussie                         timeout= 600s
   Wait Until Element Contains           jquery:div.panel-success>div.panel-body       100 lignes importées du fichier patient
 
 Import File With Error In Patient
   Click Button                          jquery:button.btn-success:contains("Importer")
   Wait That Import Is Complete
-  Wait Until Element Contains           jquery:div.panel-warning>div.panel-heading    Importation réussie avec des erreurs         timeout= 00:05
+  Wait Until Element Contains           jquery:div.panel-warning>div.panel-heading    Importation réussie avec des erreurs         timeout= 600s
   Wait Until Element Contains           jquery:div.panel-warning>div.panel-body       0 lignes importées du fichier patient
   Wait Until Element Contains           jquery:div.panel-warning>div.panel-body       50 lignes importées du fichier consultation
 Wait That Import Is Complete

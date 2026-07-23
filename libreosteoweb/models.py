@@ -465,6 +465,7 @@ class OfficeSettings(models.Model):
     UPDATE_INVOICE_SEQUENCE = 1
     DOWNLOAD_FULL_DB = 2
     DOWNLOAD_PATIENT_LIST = 3
+    DOWNLOAD_EXAMINATION_LIST = 4
 
 
 class TherapeutSettings(models.Model):

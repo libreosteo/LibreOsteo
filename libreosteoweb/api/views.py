@@ -88,6 +88,7 @@ from libreosteoweb.api.events.settings import (
     settings_event_tracer,
     full_db_download,
     full_retrieve_patient_list,
+    full_retrieve_examination_list,
 )
 from django.core.files.storage import default_storage
 from libreosteoweb.api.signals import post_reload_db
@@ -217,8 +218,24 @@ class PatientViewSet(viewsets.ModelViewSet, XLSXFileMixin):
     filename = "patients.xsls"
 
     def list(self, request, *args, **kwargs):
-        full_retrieve_patient_list(request.user)
-        return super().list(request, args, kwargs)
+        with connection.cursor() as cursor:
+            # Try to acquire a lock (non-blocking)
+            if connection.vendor == "postgresql":
+                cursor.execute("SELECT pg_try_advisory_lock(1);")
+                locked = cursor.fetchone()[0]
+            else:
+                locked = True
+
+            if not locked:
+                raise Exception("Operation already in progress")
+
+            try:
+                full_retrieve_patient_list(request.user)
+                response_list = super().list(request, args, kwargs)
+            finally:
+                if connection.vendor == "postgresql":
+                    cursor.execute("SELECT pg_advisory_unlock(1);")
+        return response_list
 
     @action(detail=True, methods=["get"])
     def examinations(self, request, pk=None):
@@ -413,6 +430,26 @@ class ExaminationViewSet(viewsets.ModelViewSet, XLSXFileMixin):
         return Response(
             apiserializers.ExaminationSerializer(unpaid_examinations, many=True).data
         )
+
+    def list(self, request, *args, **kwargs):
+        with connection.cursor() as cursor:
+            # Try to acquire a lock (non-blocking)
+            if connection.vendor == "postgresql":
+                cursor.execute("SELECT pg_try_advisory_lock(1);")
+                locked = cursor.fetchone()[0]
+            else:
+                locked = True
+
+            if not locked:
+                raise Exception("Operation already in progress")
+
+            try:
+                full_retrieve_examination_list(request.user)
+                response_list = super().list(request, args, kwargs)
+            finally:
+                if connection.vendor == "postgresql":
+                    cursor.execute("SELECT pg_advisory_unlock(1);")
+        return response_list
 
 
 class UserViewSet(viewsets.ModelViewSet):

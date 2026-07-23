@@ -53,7 +53,9 @@ Check That All Is Deleted
   ${resp} =           GET On Session   restapi     /api/events
   RequestsLogger.Write log       ${resp}
   Should Be Equal As Strings     ${resp.status_code}         200
-  Should Be Empty     ${resp.json()}
+  ${length} =         Get Length           ${resp.json()}
+  Should Be Equal as Integers    ${length}        1
+  Should Contain      ${resp.json()[0]['type']}     4
   ${resp} =           GET On Session   restapi     /api/invoices
   RequestsLogger.Write log       ${resp}
   ${length} =         Get Length           ${resp.json()}

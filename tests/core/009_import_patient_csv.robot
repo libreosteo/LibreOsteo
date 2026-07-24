@@ -1,5 +1,6 @@
 # -*- coding: robot -*-
 *** Settings ***
+Library           OperatingSystem
 Test Setup        Open session      test    test
 Test Teardown     Close session
 Resource          resources.txt
@@ -67,6 +68,7 @@ Import File With Error In Patient
   Wait Until Element Contains           jquery:div.panel-warning>div.panel-heading    Importation réussie avec des erreurs         timeout= 600s
   Wait Until Element Contains           jquery:div.panel-warning>div.panel-body       0 lignes importées du fichier patient
   Wait Until Element Contains           jquery:div.panel-warning>div.panel-body       50 lignes importées du fichier consultation
+  Run       python ./manage.py rebuild_index --noinput    
 Wait That Import Is Complete
   Wait Until Element Is Not Visible     loading-bar         2 min
 

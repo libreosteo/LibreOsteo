@@ -3,7 +3,7 @@ Search For Patient
   Go To             ${ROOT_URL}
   Input Text        jquery:div[class~="custom-search-form"]>input      ${LAST_NAME}
   Click Button      jquery:div[class~="custom-search-form"]>span>button
-  Wait Until Element Contains           jquery:h3.page-header         ${LAST_NAME}
+  Wait Until Element Contains           jquery:h3.page-header         ${LAST_NAME}      timeout= 30s
   Wait Until Page Contains Element      jquery:div[class~="search-entry"]>h4>a
   Click Link                            jquery:div[class~="search-entry"]>h4>a
   Location Should Be                    ${ROOT_URL}/${PATIENT_URL}

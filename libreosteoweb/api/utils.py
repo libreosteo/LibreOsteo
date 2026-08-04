@@ -34,8 +34,7 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton,
-                                        cls).__call__(*args, **kwargs)
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
 
 
@@ -46,13 +45,12 @@ except NameError:
     _unicode = lambda s: str(s)
 
 
-class NetworkHelper():
-
+class NetworkHelper:
     def get_all_addresses(self):
         addresses = []
         try:
             addresses = [
-                netifaces.ifaddresses(it)[netifaces.AF_INET][0]['addr']
+                netifaces.ifaddresses(it)[netifaces.AF_INET][0]["addr"]
                 for it in netifaces.interfaces()
                 if netifaces.AF_INET in netifaces.ifaddresses(it)
             ]
@@ -74,7 +72,7 @@ class NetworkHelper():
 def convert_to_long(value, strip_string_prefix=False):
     value_to_convert = value
     if strip_string_prefix:
-        value_to_convert = re.sub(r'^[A-Za-z]*', '', value)
+        value_to_convert = re.sub(r"^[A-Za-z]*", "", value)
     try:
         return long(value_to_convert)
     except:
@@ -82,7 +80,6 @@ def convert_to_long(value, strip_string_prefix=False):
 
 
 class LoggerWriter:
-
     def __init__(self, logger_func):
         self._logger = logger_func
 
@@ -91,3 +88,7 @@ class LoggerWriter:
 
     def flush(self):
         pass
+
+
+def send_invoice_dummy(request, pk=None):
+    raise NotImplementedError("send_invoice_dummy is not implemented yet")

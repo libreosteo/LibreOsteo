@@ -28,61 +28,59 @@ import logging
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+new_version = None
+new_version_available = False
+
 
 def filter_fields(f):
     return f is not None and f.formfield() is not None
 
 
 class GenericDisplay(ModelForm):
-
     class Meta:
         model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
 
     def display_fields(self):
-        return dict([
-            (f.name, f.formfield().label)
-            for f in filter(filter_fields, self.Meta.model._meta.fields)
-        ])
+        return dict(
+            [
+                (f.name, f.formfield().label)
+                for f in filter(filter_fields, self.Meta.model._meta.fields)
+            ]
+        )
 
 
 class PatientDisplay(GenericDisplay):
-
     class Meta:
         model = models.Patient
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class RegularDoctorDisplay(GenericDisplay):
-
     class Meta:
         model = models.RegularDoctor
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class ExaminationDisplay(GenericDisplay):
-
     class Meta:
         model = models.Examination
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class UserDisplay(GenericDisplay):
-
     class Meta:
         model = get_user_model()
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class TherapeutSettingsDisplay(GenericDisplay):
-
     class Meta:
         model = models.TherapeutSettings
         fields = [f.name for f in model._meta.fields if f.editable]
 
 
 class OfficeSettingsDisplay(GenericDisplay):
-
     class Meta:
         model = models.OfficeSettings
         fields = [f.name for f in model._meta.fields if f.editable]
@@ -93,65 +91,81 @@ def display_invoices(request):
 
 
 def display_index(request):
-    new_version_available, new_version = version.ask_for_new_version()
+    global new_version, new_version_available
+    if new_version is None:
+        new_version_available, new_version = version.ask_for_new_version()
     return render(
-        request, 'index.html', {
-            'version': libreosteoweb.__version__,
-            'request': request,
-            'new_version_available': new_version_available,
-            'new_version': new_version
-        })
+        request,
+        "index.html",
+        {
+            "version": libreosteoweb.__version__,
+            "request": request,
+            "new_version_available": new_version_available,
+            "new_version": new_version,
+        },
+    )
 
 
 def display_patient(request):
     display = PatientDisplay()
     displayExamination = ExaminationDisplay()
     return render(
-        request, 'partials/patient-detail.html', {
-            'patient': display.display_fields(),
-            'examination': displayExamination.display_fields()
-        })
+        request,
+        "partials/patient-detail.html",
+        {
+            "patient": display.display_fields(),
+            "examination": displayExamination.display_fields(),
+        },
+    )
 
 
 def display_newpatient(request):
     display = PatientDisplay()
-    return render(request, 'partials/add-patient.html',
-                  {'patient': display.display_fields()})
+    return render(
+        request, "partials/add-patient.html", {"patient": display.display_fields()}
+    )
 
 
 def display_doctor(request):
     display = RegularDoctorDisplay()
-    return render(request, 'partials/doctor-modal-add.html',
-                  {'doctor': display.display_fields()})
+    return render(
+        request, "partials/doctor-modal-add.html", {"doctor": display.display_fields()}
+    )
 
 
 def select_doctor(request):
     display = RegularDoctorDisplay()
-    return render(request, 'partials/doctor-selector.html',
-                  {'doctor': display.display_fields()})
+    return render(
+        request, "partials/doctor-selector.html", {"doctor": display.display_fields()}
+    )
 
 
 def display_examination_timeline(request):
     display = ExaminationDisplay()
-    return render(request, 'partials/timeline.html',
-                  {'examination': display.display_fields()})
+    return render(
+        request, "partials/timeline.html", {"examination": display.display_fields()}
+    )
 
 
 def display_examination(request):
     displayExamination = ExaminationDisplay()
     displayPatient = PatientDisplay()
     therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
-        user=request.user)
+        user=request.user
+    )
     return render(
-        request, 'partials/examination.html', {
-            'examination': displayExamination.display_fields(),
-            'patient': displayPatient.display_fields(),
-            'therapeutsettings': therapeut_settings,
-        })
+        request,
+        "partials/examination.html",
+        {
+            "examination": displayExamination.display_fields(),
+            "patient": displayPatient.display_fields(),
+            "therapeutsettings": therapeut_settings,
+        },
+    )
 
 
 def display_search_result(request):
-    return render(request, 'partials/search-result.html', {})
+    return render(request, "partials/search-result.html", {})
 
 
 def display_userprofile(request):
@@ -159,78 +173,91 @@ def display_userprofile(request):
     displayTherapeutSettings = TherapeutSettingsDisplay()
     office_settings = request.officesettings
     return render(
-        request, 'partials/user-profile.html', {
-            'user': displayUser.display_fields(),
-            'therapeutsettings': displayTherapeutSettings.display_fields(),
-            'officesettings': office_settings,
-            'optional_modules': models.TherapeutSettings.MODULES_FIELDS,
-            'DEMONSTRATION': settings.DEMONSTRATION
-        })
+        request,
+        "partials/user-profile.html",
+        {
+            "user": displayUser.display_fields(),
+            "therapeutsettings": displayTherapeutSettings.display_fields(),
+            "officesettings": office_settings,
+            "optional_modules": models.TherapeutSettings.MODULES_FIELDS,
+            "DEMONSTRATION": settings.DEMONSTRATION,
+        },
+    )
 
 
 def display_dashboard(request):
     therapeut_settings, _ = models.TherapeutSettings.objects.get_or_create(
-        user=request.user)
-    return render(request, 'partials/dashboard.html', {
-        'therapeutsettings': therapeut_settings,
-    })
+        user=request.user
+    )
+    return render(
+        request,
+        "partials/dashboard.html",
+        {
+            "therapeutsettings": therapeut_settings,
+        },
+    )
 
 
 def display_officeevent(request):
-    return render(request, 'partials/officeevent.html', {})
+    return render(request, "partials/officeevent.html", {})
 
 
 def display_invoicing(request):
-    return render(request, 'partials/invoice-modal.html', {})
+    return render(request, "partials/invoice-modal.html", {})
+
+
+def display_send_invoice(request):
+    return render(request, "partials/invoice-send-modal.html", {})
 
 
 def display_officesettings(request):
     displayOfficeSettings = OfficeSettingsDisplay()
     return render(
-        request, 'partials/office-settings.html', {
-            'officesettings': displayOfficeSettings.display_fields,
-            'user': request.user
-        })
+        request,
+        "partials/office-settings.html",
+        {"officesettings": displayOfficeSettings.display_fields, "user": request.user},
+    )
 
 
 def display_adduser(request):
-    return render(request, 'partials/add-user-modal.html', {})
+    return render(request, "partials/add-user-modal.html", {})
 
 
 def display_setpassword(request):
-    return render(request, 'partials/set-password-user-modal.html', {})
+    return render(request, "partials/set-password-user-modal.html", {})
 
 
 def display_import_files(request):
     return render(
-        request, 'partials/import-file.html', {
-            'request':
-            request,
-            'allow_data_dump':
-            request.user.is_superuser
-            or request.user.has_perm('libreosteoweb.patient.data_dump')
-        })
+        request,
+        "partials/import-file.html",
+        {
+            "request": request,
+            "allow_data_dump": request.user.is_superuser
+            or request.user.has_perm("libreosteoweb.patient.data_dump"),
+        },
+    )
 
 
 def display_rebuild_index(request):
-    return render(request, 'partials/rebuild-index.html', {'request': request})
+    return render(request, "partials/rebuild-index.html", {"request": request})
 
 
 def display_file_manager(request):
-    return render(request, 'partials/filemanager.html', {'request': request})
+    return render(request, "partials/filemanager.html", {"request": request})
 
 
 def display_confirmation(request):
-    return render(request, 'partials/confirmation.html')
+    return render(request, "partials/confirmation.html")
 
 
 @never_cache
 @maintenance_available
 def display_restore(request):
-    return render(request, 'partials/restore.html', {'request': request})
+    return render(request, "partials/restore.html", {"request": request})
 
 
 @never_cache
 @maintenance_available
 def display_register(request):
-    return render(request, 'partials/register.html', {'request': request})
+    return render(request, "partials/register.html", {"request": request})

@@ -97,6 +97,7 @@ from drf_excel.mixins import XLSXFileMixin
 from drf_excel.renderers import XLSXRenderer
 import uuid
 from io import StringIO
+import importlib
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -581,6 +582,15 @@ class InvoiceViewSet(XLSXFileMixin, viewsets.ReadOnlyModelViewSet):
             return Response(response, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=["post"])
+    def send(self, request, pk=None):
+        settings.SEND_INVOICE_FUNC
+
+        mod_name, func_name = settings.SEND_INVOICE_FUNC.rsplit(".", 1)
+        mod = importlib.import_module(mod_name)
+        func = getattr(mod, func_name)
+        return func(request, pk)
 
 
 class OfficeEventViewSet(viewsets.ReadOnlyModelViewSet):

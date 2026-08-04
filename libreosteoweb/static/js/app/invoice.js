@@ -17,205 +17,227 @@
 var invoices = angular.module('loInvoice', ['ngResource', 'daterangepicker', 'loUser', 'loOfficeSettings']);
 
 invoices.factory('InvoiceService', ['$resource', function ($resource) {
-    "use strict";
-    return $resource('api/invoices/:invoiceId', null, {
-        query: {method: 'GET' , isArray: true},
-        get : {method: 'GET', params: {invoiceId: 'invoiceId'}},
-        cancel : {
-          method: 'POST',
-          params:{invoiceId: 'invoiceId'},
-          url : 'api/invoices/:invoiceId/cancel'
-        }
-    });
+  "use strict";
+  return $resource('api/invoices/:invoiceId', null, {
+    query: { method: 'GET', isArray: true },
+    get: { method: 'GET', params: { invoiceId: 'invoiceId' } },
+    cancel: {
+      method: 'POST',
+      params: { invoiceId: 'invoiceId' },
+      url: 'api/invoices/:invoiceId/cancel'
+    },
+    send: {
+      method: 'POST',
+      params: { invoiceId: 'invoiceId' },
+      url: 'api/invoices/:invoiceId/send'
+    }
+  });
 }]);
 
 
 /** Localize daterangepicker using django built-in mechanisms
  */
 function localizeDaterangePicker() {
-    return {
-            customRangeLabel: django.gettext("Custom range"),
-            daysOfWeek: [
-                django.gettext("Su"),
-                django.gettext("Mo"),
-                django.gettext("Tu"),
-                django.gettext("We"),
-                django.gettext("Th"),
-                django.gettext("Fr"),
-                django.gettext("Sa")
-            ],
-            monthNames: [
-                django.gettext("January"),
-                django.gettext("February"),
-                django.gettext("March"),
-                django.gettext("April"),
-                django.gettext("May"),
-                django.gettext("June"),
-                django.gettext("July"),
-                django.gettext("August"),
-                django.gettext("September"),
-                django.gettext("October"),
-                django.gettext("November"),
-                django.gettext("December")
-            ],
-            firstDay: django.get_format('FIRST_DAY_OF_WEEK'),
-    };
+  return {
+    customRangeLabel: django.gettext("Custom range"),
+    daysOfWeek: [
+      django.gettext("Su"),
+      django.gettext("Mo"),
+      django.gettext("Tu"),
+      django.gettext("We"),
+      django.gettext("Th"),
+      django.gettext("Fr"),
+      django.gettext("Sa")
+    ],
+    monthNames: [
+      django.gettext("January"),
+      django.gettext("February"),
+      django.gettext("March"),
+      django.gettext("April"),
+      django.gettext("May"),
+      django.gettext("June"),
+      django.gettext("July"),
+      django.gettext("August"),
+      django.gettext("September"),
+      django.gettext("October"),
+      django.gettext("November"),
+      django.gettext("December")
+    ],
+    firstDay: django.get_format('FIRST_DAY_OF_WEEK'),
+  };
 }
 
-invoices.controller('InvoiceListCtrl', ['$scope','InvoiceService', 'MyUserIdServ', 'OfficeUsersServ','$uibModal','OfficeSettingsServ',
-    function($scope, InvoiceService, MyUserIdServ, OfficeUsersServ, $uibModal, OfficeSettingsServ) {
-        "use strict";
+invoices.controller('InvoiceListCtrl', ['$scope', 'InvoiceService', 'MyUserIdServ', 'OfficeUsersServ', '$uibModal', 'OfficeSettingsServ',
+  function ($scope, InvoiceService, MyUserIdServ, OfficeUsersServ, $uibModal, OfficeSettingsServ) {
+    "use strict";
 
-        function buildAPIFilter() {
-            return {
-                date__lte: $scope.filters.dateRange.endDate.toISOString(),
-                date__gte: $scope.filters.dateRange.startDate.toISOString(),
-		            therapeut_id : $scope.filters.therapeut_id == 0?null:$scope.filters.therapeut_id,
-                office_settings_id: $scope.filters.office_settings_id
-            };
-        }
-
-        function getInvoices() {
-            InvoiceService.query(buildAPIFilter(), function(result) {
-                $scope.invoices = result;
-                var invoices_to_delete = $scope.invoices.filter((invoice) => invoice.replace != null).map((invoice)=> invoice.replace);
-                var listToSum = $scope.invoices.filter((invoice) => invoices_to_delete.findIndex((n) => n === invoice.number) == -1);
-                $scope.total_amount = listToSum.reduce((acc, invoice) => acc + invoice.amount, 0);
-            });
-        }
-
-        /** Prepare pre-defined ranges for daterangepicker
-         *
-         *  http://www.daterangepicker.com/#ex4
-         */
-        function makeMomentRanges() {
-            var ranges = {}
-            ranges[moment().format('MMMM YYYY')] = [
-                moment().startOf('month'),
-                moment().endOf('month')
-            ];
-            ranges[moment().format('YYYY')] = [
-                moment().startOf('year'),
-                moment().endOf('year')
-            ]
-            ranges[moment().subtract(1, 'year').format('YYYY')] = [
-                moment().subtract(1, 'year').startOf('year'),
-                moment().subtract(1, 'year').endOf('year')
-            ];
-            return ranges;
-        }
-
-	      $scope.user = MyUserIdServ.then(function(result) {
-          $scope.user = result;
-          if ($scope.filters)
-          {
-            $scope.filters.therapeut_id = $scope.user.id;
-            getInvoices();
-          }
-        });
-        $scope.users = OfficeUsersServ.query(function(results){
-          results.push({ username : '', id:0, last_name: 'Tous', first_name:''});
-        });
-        console.log($scope.users);
-
-        $scope.invoices = [];
-
-        OfficeSettingsServ.get(function(settings){
-          $scope.officesettings = settings.find(x => x.selected);
-          $scope.filters.office_settings_id = $scope.officesettings.id;
-          getInvoices();
-          $scope.list_office_settings = settings;
-          $scope.multiple_office = Array.isArray(settings) && settings.length > 1;
-        });
-
-
-
-        // Daterangepicker configuration
-        // http://www.daterangepicker.com/#options
-        $scope.daterangePickerOptions = {
-            opens: 'center',
-            ranges: makeMomentRanges(),
-            autoApply: true,
-            locale: localizeDaterangePicker()
-        }
-
-        $scope.filters = {
-            dateRange: {
-                startDate: moment().startOf('month'),
-                endDate: moment().endOf('month')
-            },
-          therapeut_id : $scope.user.id,
-          office_settings_id : 1
-        };
-
-        // Refresh & filter from API on new date selection
-        $scope.$watch('filters.dateRange', getInvoices);
-
-        $scope.openCalendar = function(){
-            // This is a hack to open the calendar programatically
-            angular.element('input#billing-period').triggerHandler('click');
-        }
-
-       $scope.buildXlsxUrl = function(fields) {
-            var queryDict = buildAPIFilter();
-            var url = '/api/invoices?format=xlsx&';
-
-            if (fields) {
-                queryDict.fields = fields
-            }
-
-            for (var key in queryDict) {
-                if (queryDict[key] != null) {
-                  url += key + '=' + queryDict[key]+'&'
-                }
-            }
-            return url.slice(0, -1)
-        }
-
-      $scope.changeTherapeut = function(user) {
-        $scope.user = user;
-        $scope.filters.therapeut_id = user.id;
-        getInvoices();
-      };
-
-      $scope.changeOffice = function(office) {
-        $scope.officesettings = office;
-        $scope.filters.office_settings_id = office.id;
-        getInvoices();
-      }
-
-      $scope.cancelInvoice = function(invoice) {
-        var modalInstance = $uibModal.open({
-          templateUrl: 'web-view/partials/confirmation-modal',
-          controller : ConfirmationCtrl,
-          resolve : {
-            message : function() {
-              return "<p>"+gettext("Are you sure to cancel this invoice ?")+"</p>";
-            },
-            defaultIsOk : function() {
-              return true;
-            }
-          }
-        });
-        modalInstance.result.then(function (){
-          InvoiceService.cancel({invoiceId : invoice.id },null, function (result) {
-            getInvoices();
-          });
-        });
+    function buildAPIFilter() {
+      return {
+        date__lte: $scope.filters.dateRange.endDate.toISOString(),
+        date__gte: $scope.filters.dateRange.startDate.toISOString(),
+        therapeut_id: $scope.filters.therapeut_id == 0 ? null : $scope.filters.therapeut_id,
+        office_settings_id: $scope.filters.office_settings_id
       };
     }
+
+    function getInvoices() {
+      InvoiceService.query(buildAPIFilter(), function (result) {
+        $scope.invoices = result;
+        var invoices_to_delete = $scope.invoices.filter((invoice) => invoice.replace != null).map((invoice) => invoice.replace);
+        var listToSum = $scope.invoices.filter((invoice) => invoices_to_delete.findIndex((n) => n === invoice.number) == -1);
+        $scope.total_amount = listToSum.reduce((acc, invoice) => acc + invoice.amount, 0);
+      });
+    }
+
+    /** Prepare pre-defined ranges for daterangepicker
+     *
+     *  http://www.daterangepicker.com/#ex4
+     */
+    function makeMomentRanges() {
+      var ranges = {}
+      ranges[moment().format('MMMM YYYY')] = [
+        moment().startOf('month'),
+        moment().endOf('month')
+      ];
+      ranges[moment().format('YYYY')] = [
+        moment().startOf('year'),
+        moment().endOf('year')
+      ]
+      ranges[moment().subtract(1, 'year').format('YYYY')] = [
+        moment().subtract(1, 'year').startOf('year'),
+        moment().subtract(1, 'year').endOf('year')
+      ];
+      return ranges;
+    }
+
+    $scope.user = MyUserIdServ.then(function (result) {
+      $scope.user = result;
+      if ($scope.filters) {
+        $scope.filters.therapeut_id = $scope.user.id;
+        getInvoices();
+      }
+    });
+    $scope.users = OfficeUsersServ.query(function (results) {
+      results.push({ username: '', id: 0, last_name: 'Tous', first_name: '' });
+    });
+    console.log($scope.users);
+
+    $scope.invoices = [];
+
+    OfficeSettingsServ.get(function (settings) {
+      $scope.officesettings = settings.find(x => x.selected);
+      $scope.filters.office_settings_id = $scope.officesettings.id;
+      getInvoices();
+      $scope.list_office_settings = settings;
+      $scope.multiple_office = Array.isArray(settings) && settings.length > 1;
+    });
+
+
+
+    // Daterangepicker configuration
+    // http://www.daterangepicker.com/#options
+    $scope.daterangePickerOptions = {
+      opens: 'center',
+      ranges: makeMomentRanges(),
+      autoApply: true,
+      locale: localizeDaterangePicker()
+    }
+
+    $scope.filters = {
+      dateRange: {
+        startDate: moment().startOf('month'),
+        endDate: moment().endOf('month')
+      },
+      therapeut_id: $scope.user.id,
+      office_settings_id: 1
+    };
+
+    // Refresh & filter from API on new date selection
+    $scope.$watch('filters.dateRange', getInvoices);
+
+    $scope.openCalendar = function () {
+      // This is a hack to open the calendar programatically
+      angular.element('input#billing-period').triggerHandler('click');
+    }
+
+    $scope.buildXlsxUrl = function (fields) {
+      var queryDict = buildAPIFilter();
+      var url = '/api/invoices?format=xlsx&';
+
+      if (fields) {
+        queryDict.fields = fields
+      }
+
+      for (var key in queryDict) {
+        if (queryDict[key] != null) {
+          url += key + '=' + queryDict[key] + '&'
+        }
+      }
+      return url.slice(0, -1)
+    }
+
+    $scope.changeTherapeut = function (user) {
+      $scope.user = user;
+      $scope.filters.therapeut_id = user.id;
+      getInvoices();
+    };
+
+    $scope.changeOffice = function (office) {
+      $scope.officesettings = office;
+      $scope.filters.office_settings_id = office.id;
+      getInvoices();
+    }
+
+    $scope.cancelInvoice = function (invoice) {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'web-view/partials/confirmation-modal',
+        controller: ConfirmationCtrl,
+        resolve: {
+          message: function () {
+            return "<p>" + gettext("Are you sure to cancel this invoice ?") + "</p>";
+          },
+          defaultIsOk: function () {
+            return true;
+          }
+        }
+      });
+      modalInstance.result.then(function () {
+        InvoiceService.cancel({ invoiceId: invoice.id }, null, function (result) {
+          getInvoices();
+        });
+      });
+    };
+  }
 ]);
 
-var ConfirmationCtrl = function($scope, $uibModalInstance, message, defaultIsOk) {
-    $scope.message = message;
-    $scope.ok = function () {
-      $uibModalInstance.close();
-    };
+var InvoiceSendCtrl = function ($scope, $uibModalInstance, message, email) {
+  $scope.message = message;
+  $scope.email = email;
 
-    $scope.isOk = defaultIsOk;
+  $scope.ok = function () {
+    $uibModalInstance.close($scope.email);
+  };
 
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.validateEmail = function (email) {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return pattern.test(email);
+  }
+}
+
+var ConfirmationCtrl = function ($scope, $uibModalInstance, message, defaultIsOk) {
+  $scope.message = message;
+  $scope.ok = function () {
+    $uibModalInstance.close();
+  };
+
+  $scope.isOk = defaultIsOk;
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 }
 

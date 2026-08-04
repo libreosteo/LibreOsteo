@@ -307,3 +307,4 @@ PROTECTED_MEDIA_AS_DOWNLOADS = (
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+SEND_INVOICE_FUNC = "libreosteoweb.api.utils.send_invoice_dummy"

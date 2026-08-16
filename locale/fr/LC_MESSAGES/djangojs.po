@@ -152,3 +152,11 @@ msgstr ""
 
 msgid "Symbol."
 msgstr ""
+
+msgid "Sending invoice"
+msgstr "Envoi de la facture"
+
+msgid "Are your sure to send this invoice ?"
+msgstr "Êtes-vous sûr de vouloir envoyer cette facture ?"
+
+

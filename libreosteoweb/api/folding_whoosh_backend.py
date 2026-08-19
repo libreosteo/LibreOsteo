@@ -15,7 +15,7 @@ folding_analyzer = (
     | CharsetFilter(accent_map)
     | StopFilter()
     | StemFilter()
-    | NgramFilter(minsize=2, maxsize=15)
+    | NgramFilter(minsize=3, maxsize=15)
 )
 
 

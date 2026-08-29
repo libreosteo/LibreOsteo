@@ -15,10 +15,14 @@
 from haystack.signals import BaseSignalProcessor
 from django.db import transaction
 
+from haystack.signals import BaseSignalProcessor
+from django.db import transaction
+from haystack import connections
+
 class SingleIndexSignalProcessor(BaseSignalProcessor):
     """
     Empêche les indexations multiples lors d'un même cycle de sauvegarde.
-    Compatible Whoosh + Haystack.
+    Compatible Django 4.2, Haystack, Whoosh.
     """
 
     def setup(self):
@@ -30,6 +34,18 @@ class SingleIndexSignalProcessor(BaseSignalProcessor):
         from django.db.models.signals import post_save, post_delete
         post_save.disconnect(self.handle_save)
         post_delete.disconnect(self.handle_delete)
+
+    def should_update(self, sender):
+        """
+        Reproduit le comportement de RealtimeSignalProcessor :
+        - n'indexe que les modèles gérés par Haystack
+        - ignore les autres modèles
+        """
+        for using in connections.connections_info.keys():
+            backend = connections[using].get_backend()
+            if sender in backend.index_models:
+                return True
+        return False
 
     def handle_save(self, sender, instance, **kwargs):
         if not self.should_update(sender):

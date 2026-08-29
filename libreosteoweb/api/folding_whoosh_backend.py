@@ -29,6 +29,8 @@ class FoldingWhooshSearchBackend(WhooshSearchBackend):
             FoldingWhooshSearchBackend, self
         ).build_schema(fields)
         for name, field in schema.items():
+            if name == "id":
+                continue
             if hasattr(field, "analyzer"):
                 field.analyzer = folding_analyzer
         return content_field_name, schema

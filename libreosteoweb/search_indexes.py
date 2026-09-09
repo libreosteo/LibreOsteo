@@ -47,17 +47,3 @@ class PatientIndex(indexes.SearchIndex, indexes.Indexable):
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects
-
-
-class DocumentIndex(indexes.SearchIndex, indexes.Indexable):
-    text = indexes.CharField(document=True, use_template=True)
-    title = indexes.CharField(model_attr="title")
-    notes = indexes.CharField(model_attr="notes", null=True)
-    document_date = indexes.CharField(model_attr="document_date", null=True)
-
-    def get_model(self):
-        return models.Document
-
-    def index_queryset(self, using=None):
-        """Used when the entire index for model is updated."""
-        return self.get_model().objects

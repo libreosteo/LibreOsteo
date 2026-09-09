@@ -232,6 +232,7 @@ NO_REROUTE_PATTERN_URL = [
     r"^jsi18n",
     r"^web-view/partials/restore",
     r"^web-view/partials/register",
+    r"^accounts/logout",
 ]
 
 INVOICE_TEMPLATE = "invoice/invoice-result.html"

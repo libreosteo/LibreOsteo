@@ -16,4 +16,29 @@
 
 import django.dispatch
 
+
+from haystack.signals import RealtimeSignalProcessor
+import logging
+
+logger = logging.getLogger(__name__)
+
 post_reload_db = django.dispatch.Signal()
+
+
+class SafeRealtimeSignalProcessor(RealtimeSignalProcessor):
+    """
+    Signal processor Haystack qui ignore les sauvegardes raw=True
+    (cas des loaddata, fixtures, etc.).
+    """
+
+    def handle_save(self, sender, instance, **kwargs):
+        # Django loaddata passe raw=True → on n'indexe pas
+        if kwargs.get("raw"):
+            return
+        return super().handle_save(sender, instance, **kwargs)
+
+    def handle_delete(self, sender, instance, **kwargs):
+        # Même logique si tu veux être cohérent sur les deletes raw
+        if kwargs.get("raw"):
+            return
+        return super().handle_delete(sender, instance, **kwargs)
